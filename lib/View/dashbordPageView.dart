@@ -334,17 +334,17 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>  VisitPageView(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) =>  VisitPageView(),
+                        //   ),
+                        // );
                       },
                       child: Text(
                         "View All",
                         style: GoogleFonts.poppins(
-                            fontSize: 15,
+                            fontSize: 12,
                             color:Colors.blue,
                             fontWeight: FontWeight.bold
                         ),
@@ -354,97 +354,114 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                 ),
               ),
               SizedBox(
-                height: height * 0.1,
+                height: height * 0.4,
                 width: MediaQuery.of(context).size.width,
                 child:ListOfLeads.isNotEmpty ?
                 Scrollbar(
                   thickness: 8.5,
                   thumbVisibility: true,
-                  child: ListView.builder(
+                  child:
+
+                  ListView.builder(
                     itemCount: ListOfLeads.length > 4 ? 4 : ListOfLeads.length,
                     itemBuilder: (context, index) {
                       ListOfLeads.sort((a, b) => DateTime.parse(b['visitDate']).compareTo(DateTime.parse(a['visitDate'])));
-                      return Card(
-                        elevation: 0.5,
-                        child: Container(
-                          color: Colors.white,
-                          margin: EdgeInsets.all(8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Stack(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                      return (ListOfLeads[index]["LeadID"] ?? "").length <= 1 && ListOfLeads[index]["customerStatus"] == "Interested" ?
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewLeadPageView(
+                                      isNewActivity: false,
+                                      isUpdateActivity: true,
+                                      docId: ListOfLeads[index].id,
+                                    )));
+                          },
+                          child: Card(
+                          elevation: 0.5,
+                          child: Container(
+                            color: Colors.white,
+                            margin: EdgeInsets.all(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("Name : ",
+                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                              )),
+                                          Text(ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
+                                              style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
+                                                decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.calendar_month),
+                                          Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
+                                          Text(
+                                          formatDate(ListOfLeads[index]["visitDate"])
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          Text("Customer Status : ",
+                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                              )),
+                                          Text( ListOfLeads[index]["customerStatus"] ?? "",
+                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                               //   (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
+                                  Positioned(
+                                    top: 10,
+                                    right: 20,
+                                    child: Column(
                                       children: [
-                                        Text("Name : ",
-                                            style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                            )),
-                                        Text(ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
-                                            style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
-                                              decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.calendar_month),
-                                        Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
+                                        Image.asset(
+                                          'assets/images/next.png',
+                                          width: 30,
+                                        ),
                                         Text(
-                                        formatDate(ListOfLeads[index]["visitDate"])
+                                          'Convert',
+                                          style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        Text("Customer Status : ",
-                                            style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                            )),
-                                        Text( ListOfLeads[index]["customerStatus"] ?? "",
-                                            style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
-                                Positioned(
-                                  top: 10,
-                                  right: 20,
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/next.png',
-                                        width: 30,
-                                      ),
-                                      Text(
-                                        'Convert',
-                                        style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ) :    Positioned(
-                                  top: 10,
-                                  right: 20,
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/images/Correct.png',
-                                        width: 25,
-                                      ),
-                                      Text(
-                                        'Converted',
-                                        style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                  )
+                                  //     :
+                                  // Positioned(
+                                  //   top: 10,
+                                  //   right: 20,
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Image.asset(
+                                  //         'assets/images/Correct.png',
+                                  //         width: 25,
+                                  //       ),
+                                  //       Text(
+                                  //         'Converted',
+                                  //         style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
+                                                ),
+                        ) : SizedBox.shrink();
                     },
                   ),
                 )

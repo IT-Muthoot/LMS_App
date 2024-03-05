@@ -67,7 +67,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar:  AppBar(
-        backgroundColor: StyleData.appBarColor,
+        backgroundColor: StyleData.appBarColor2,
         leading: Padding(
           padding: const EdgeInsets.all(19.0),
           child: GestureDetector(

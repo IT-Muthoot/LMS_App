@@ -12,6 +12,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
+import 'package:lead_management_system/View/dashbordPageView.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -405,7 +406,7 @@ class _FormPageViewState extends State<FormPageView> {
     );
     SharedPreferences pref =
     await SharedPreferences.getInstance();
-    var userId = pref.getString("token");
+    var userId = pref.getString("userID");
     DateTime now = DateTime.now();
     print("Hello");
     Map<String, dynamic> params = {
@@ -1523,7 +1524,7 @@ class _FormPageViewState extends State<FormPageView> {
                                                       });
                                                     },
                                                     decoration: InputDecoration(
-                                                      labelText: 'District',
+                                                      labelText: 'District *',
                                                       hintText: 'Enter District',
                                                       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                    //   border: InputBorder.none,
@@ -1898,7 +1899,7 @@ class _FormPageViewState extends State<FormPageView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VisitPageView(),
+                          builder: (context) => HomePageView(),
                         ),
                       );
                     },
