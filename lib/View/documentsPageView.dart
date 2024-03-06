@@ -40,49 +40,13 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         centerTitle: true,
 
       ),
-      body: Column(
+      body: Row(
         children: [
-          Column(
-            children: checkboxValues.keys.map((String key) {
-              return Row(
-                children: [
-                  Checkbox(
-                    value: checkboxValues[key],
-                    activeColor: StyleData.appBarColor,
-                    onChanged: (value) {
-                      setState(() {
-                        checkboxValues[key] = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    key,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              );
-            }).toList(),
+          Expanded(
+            child: buildCheckboxColumn('Mandatory', checkboxValues),
           ),
-          Column(
-            children: optionalCheckboxes.keys.map((String key) {
-              return Row(
-                children: [
-                  Checkbox(
-                    value: optionalCheckboxes[key],
-                    activeColor: StyleData.appBarColor,
-                    onChanged: (value) {
-                      setState(() {
-                        optionalCheckboxes[key] = value!;
-                      });
-                    },
-                  ),
-                  Text(
-                    key,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ],
-              );
-            }).toList(),
+          Expanded(
+            child: buildCheckboxColumn('Optional', optionalCheckboxes),
           ),
         ],
       ),
@@ -93,6 +57,40 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       //   child: Icon(Icons.save),
       // ),
     )
+    );
+  }
+
+  Widget buildCheckboxColumn(String title, Map<String, bool> checkboxes) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        ...checkboxes.keys.map((String key) {
+          return Row(
+            children: [
+              Checkbox(
+                value: checkboxes[key],
+                activeColor: StyleData.appBarColor,
+                onChanged: (value) {
+                  setState(() {
+                    checkboxes[key] = value!;
+                  });
+                },
+              ),
+              Text(
+                key,
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
+          );
+        }).toList(),
+      ],
     );
   }
 }
