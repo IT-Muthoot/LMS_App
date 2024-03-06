@@ -287,7 +287,6 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? leadSource;
 
   String? DSAConnectorName;
-  String? DSAConnectorCode;
   String? DSAConnectorCode1;
   List<dynamic> _PostcodeList = [];
   String? selectedPostCode;
@@ -320,9 +319,11 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         DSAConnectorName = docData["leadSource"] == "DSA"
             ? docData["dsaName"] ?? ""
             : docData["connectorName"] ?? "";
+        DSAConnectorCode1 = docData["DSAConnectorCode"] ?? "";
         print("Lead Source value");
       //  print(_leadSource.text);
         print(DSAConnectorName);
+        print(DSAConnectorCode1);
 
         setState(() {
 
@@ -377,7 +378,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "Product": selectedProductValue,
       "Purpose": selectedProdut ?? "",
       "DSAorConnectorName": DSAConnectorName,
-      "DSAorConnectorCode":"626",
+      "DSAorConnectorCode":DSAConnectorCode1,
       "Interest": customerStatus,
       "Amount": _leadAmount.text,
       "DateOfBirth": _dateOfBirth.text,
@@ -541,59 +542,59 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   }
 
-  Future<void> getDropdownDSAData() async {
-    var collectionReference = FirebaseFirestore.instance.collection('dsaName').doc('dsaName');
-    try {
-      collectionReference.get().then((ListOfDSANames1) {
-
-        var listData = ListOfDSANames1.data() as Map<String,dynamic> ;
-        var id = listData['dsaName'].where((dsa) {
-          // var dsa = dsa1.data()["id"];
-
-          print(dsa["title"]);
-          print("title");
-          print(DSAConnectorName);
-          if(dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase()){
-            setState(() {
-              DSAConnectorCode = dsa["id"];
-              print(DSAConnectorCode);
-            });
-          }
-          return dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase();
-        }).toList();
-      });
-    } catch (error) {
-      print('Error fetching data: $error');
-    }
-  }
-  Future<void> getDropdownConnectorData() async {
-    var collectionReference = FirebaseFirestore.instance.collection('connectorName').doc('connectorName');
-    try {
-      collectionReference.get().then((ListOfDSANames1) {
-
-        var listData = ListOfDSANames1.data() as Map<String,dynamic> ;
-        var id = listData['connectorName'].where((dsa) {
-          // var dsa = dsa1.data()["id"];
-
-          print(dsa["title"]);
-          print("title");
-          print(DSAConnectorName);
-          if(dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase()){
-            setState(() {
-
-              print("selectedData");
-              print(dsa);
-              DSAConnectorCode1 = dsa["id"];
-              print(DSAConnectorCode1);
-            });
-          }
-          return dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase();
-        }).toList();
-      });
-    } catch (error) {
-      print('Error fetching data: $error');
-    }
-  }
+  // Future<void> getDropdownDSAData() async {
+  //   var collectionReference = FirebaseFirestore.instance.collection('dsaName').doc('dsaName');
+  //   try {
+  //     collectionReference.get().then((ListOfDSANames1) {
+  //
+  //       var listData = ListOfDSANames1.data() as Map<String,dynamic> ;
+  //       var id = listData['dsaName'].where((dsa) {
+  //         // var dsa = dsa1.data()["id"];
+  //
+  //         print(dsa["title"]);
+  //         print("title");
+  //         print(DSAConnectorName);
+  //         if(dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase()){
+  //           setState(() {
+  //             DSAConnectorCode = dsa["id"];
+  //             print(DSAConnectorCode);
+  //           });
+  //         }
+  //         return dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase();
+  //       }).toList();
+  //     });
+  //   } catch (error) {
+  //     print('Error fetching data: $error');
+  //   }
+  // }
+  // Future<void> getDropdownConnectorData() async {
+  //   var collectionReference = FirebaseFirestore.instance.collection('connectorName').doc('connectorName');
+  //   try {
+  //     collectionReference.get().then((ListOfDSANames1) {
+  //
+  //       var listData = ListOfDSANames1.data() as Map<String,dynamic> ;
+  //       var id = listData['connectorName'].where((dsa) {
+  //         // var dsa = dsa1.data()["id"];
+  //
+  //         print(dsa["title"]);
+  //         print("title");
+  //         print(DSAConnectorName);
+  //         if(dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase()){
+  //           setState(() {
+  //
+  //             print("selectedData");
+  //             print(dsa);
+  //             DSAConnectorCode1 = dsa["id"];
+  //             print(DSAConnectorCode1);
+  //           });
+  //         }
+  //         return dsa["title"].toString().toLowerCase() == DSAConnectorName.toString().toLowerCase();
+  //       }).toList();
+  //     });
+  //   } catch (error) {
+  //     print('Error fetching data: $error');
+  //   }
+  // }
 
    initState() {
     // TODO: implement initState
@@ -602,8 +603,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     getDropDownProductsData();
     getDropDownSalutationData();
     getdata();
-    getDropdownDSAData();
-    getDropdownConnectorData();
+    //getDropdownConnectorData();
     getDropDownEmpCategoryData();
     getDropDownCustProfileData();
   }

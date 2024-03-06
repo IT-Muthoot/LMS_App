@@ -96,6 +96,10 @@ class _FormPageViewState extends State<FormPageView> {
     });
   }
   String? _selectedDSA;
+  String? selectedDSACode;
+  String? ConnectorCode;
+  String? selectedDSACode1;
+  String? ConnectorCode1;
   final List<DropDownData> _leadDSAList = [];
 
   getDropDownCampaignData() {
@@ -366,7 +370,7 @@ class _FormPageViewState extends State<FormPageView> {
   void checkAddressFieldsFilled() {
     if (_addressLine1.text.isNotEmpty &&
         _addressLine2.text.isNotEmpty  && _addressLine3.text.isNotEmpty &&
-    _city.text.isNotEmpty  && selectedPostCode != null && _pincode.text.isNotEmpty) {
+    _city.text.isNotEmpty  && _pincode.text.isNotEmpty) {
       setState(() {
         areAddressFieldsFilled = true;
       });
@@ -434,6 +438,7 @@ class _FormPageViewState extends State<FormPageView> {
       'compaignName': _selectedCampaign,
       'purposeVisit' : selectedPurpose,
       'customerStatus' : selectedCustomerStatus,
+      'DSAConnectorCode' : _selectedLeadSource == 'DSA' ? selectedDSACode1 : ConnectorCode1,
       'latitude' : latitude,
       'longitude' : longitude,
       'address': locationController.text,
@@ -441,6 +446,14 @@ class _FormPageViewState extends State<FormPageView> {
       'userId': userId,
       'createdDateTime':Timestamp.fromDate(now),
     };
+    // if (_selectedLeadSource == 'DSA') {
+    //   params['DSAConnectorCode'] = _selectedDSACode;
+    // } else if (_selectedLeadSource == 'Connector') {
+    //   params['DSAConnectorCode'] = _selectedConnectorCode;
+    // } else {
+    //   // Handle other cases if needed
+    //   params['DSAConnectorCode'] = null; // Set to null or handle accordingly
+    // }
     leadsCreation.add(params).then((value) {
       print("Data added successfully");
       // Navigate to the VisitPageView upon successful data addition
@@ -709,8 +722,19 @@ class _FormPageViewState extends State<FormPageView> {
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     _selectedDSA = newValue;
+
+                                    DropDownData selectedDSAData = _leadDSAList.firstWhere(
+                                          (item) => item.title == newValue,
+                                    );
+                                    // Fetch and print the selected title's ID
+                                    print('DSAID: ${selectedDSAData.id}');
+                                    selectedDSACode = selectedDSAData.id.toString();
+
                                   });
-                                  print('DSAID : $_selectedDSAID');
+                                  setState(() {
+                                    selectedDSACode1 = selectedDSACode;
+                                  });
+                                  print(selectedDSACode1);
                                 },
                                // focusNode: _customerNameFocus,
                                 validator: (value) {
@@ -779,7 +803,18 @@ class _FormPageViewState extends State<FormPageView> {
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     _selectedConnector = newValue;
+                                    DropDownData selectedConnectorData = _leadConnectorList.firstWhere(
+                                          (item) => item.title == newValue,
+
+                                    );
+                                    // Fetch and print the selected title's ID
+                                    print('DSAID: ${selectedConnectorData.id}');
+                                    ConnectorCode = selectedConnectorData.id.toString();
                                   });
+                                  setState(() {
+                                    ConnectorCode1 = ConnectorCode;
+                                  });
+                                  print(ConnectorCode1);
                                 },
                               //  focusNode: _customerNameFocus,
                                 validator: (value) {
@@ -1527,9 +1562,9 @@ class _FormPageViewState extends State<FormPageView> {
                                                   TextFormField(
                                                     controller: _landMark,
                                                     onChanged: (value) {
-                                                      setState(() {
-                                                        checkAddressFieldsFilled();
-                                                      });
+                                                      // setState(() {
+                                                      //   checkAddressFieldsFilled();
+                                                      // });
                                                     },
                                                     decoration: InputDecoration(
                                                       labelText: 'Landmark',
@@ -1643,7 +1678,7 @@ class _FormPageViewState extends State<FormPageView> {
                                                     },
                                                     value: selectedPostCode,
                                                     onChanged: (value) {
-                                                      checkAddressFieldsFilled();
+                                                     // checkAddressFieldsFilled();
                                                       setState(() {
                                                         selectedPostCode = value as String?;
                                                       });
