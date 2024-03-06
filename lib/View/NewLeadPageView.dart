@@ -209,8 +209,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   TextEditingController _landMark = TextEditingController();
   TextEditingController _district = TextEditingController();
   TextEditingController _state = TextEditingController();
-  TextEditingController _postOffice = TextEditingController();
   TextEditingController _pincode = TextEditingController();
+  TextEditingController _postOffice = TextEditingController();
   TextEditingController _leadSource = TextEditingController();
   TextEditingController _homeFinBranchCode = TextEditingController(text: 'KALY037');
   TextEditingController _leadAmount = TextEditingController();
@@ -244,7 +244,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   void checkAddressFieldsFilled() {
     if (_addressLine1.text.isNotEmpty &&
         _addressLine2.text.isNotEmpty  && _addressLine3.text.isNotEmpty &&
-        _city.text.isNotEmpty  && selectedPostCode != null && _pincode.text.isNotEmpty) {
+        _city.text.isNotEmpty ) {
       setState(() {
         areAddressFieldsFilled = true;
       });
@@ -313,7 +313,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         _city.text = docData["city"] ?? "";
         _state.text= docData["state"] ?? "";
         _district.text= docData["district"] ?? "";
-        selectedPostCode = docData["postOffice"] ?? "";
+        _postOffice.text = docData["postOffice"] ?? "";
         _pincode.text= docData["pincode"] ?? "";
         _leadSource.text= docData["leadSource"] ?? "";
         customerStatus= docData["customerStatus"] ?? "";
@@ -490,7 +490,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'landmark':_landMark.text,
         'state':_state.text,
         'district':_district.text,
-        'postOffice':selectedPostCode ?? "",
+        'postOffice':_postOffice.text,
         'pincode':_pincode.text,
         'residentialType':_selectedResidentialType ?? "",
         'residentialStatus':_selectedResidentialStatus ?? "",
@@ -1120,59 +1120,60 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                   TextFormField(
                                                     controller: _pincode,
                                                     onChanged: (value) async {
-                                                      setState(() {
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                      if (value.length == 6) {
-                                                        final String jsonContent = await rootBundle
-                                                            .loadString('assets/jsons/citylist.json');
-
-                                                        final List<dynamic> jsonData =
-                                                        json.decode(jsonContent);
-
-                                                        var listSearchData = jsonData
-                                                            .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
-                                                            .toList();
-
-                                                        print("Helloooooooooo");
-                                                        print(listSearchData);
-                                                        if (listSearchData.isNotEmpty) {
-                                                          selectedPostCode = null;
-                                                          setState(() {
-                                                            _PostcodeList =
-                                                                listSearchData.map((e) => e).toList();
-                                                          });
-
-                                                          print("List Drop Data");
-                                                          var districtNames = listSearchData
-                                                              .map((e) => e["D"].toString())
-                                                              .toSet() // Convert to a set to remove duplicates
-                                                              .first;  // Take the first element
-
-                                                          print(districtNames);
-
-                                                          var stateName = listSearchData
-                                                              .map((e) => e["S"].toString())
-                                                              .toSet() // Convert to a set to remove duplicates
-                                                              .first;  // Take the first element
-
-                                                          print(stateName);
-                                                          setState(() {
-                                                            _district.text = districtNames;
-                                                            _state.text = stateName;
-                                                          });
-
-                                                        } else {
-                                                          _PostcodeList.clear();
-                                                          //  showToastMessage('Enter correct pincode');
-                                                        }
-                                                      }
+                                                      // setState(() {
+                                                      //   checkAddressFieldsFilled();
+                                                      // });
+                                                      // if (value.length == 6) {
+                                                      //   final String jsonContent = await rootBundle
+                                                      //       .loadString('assets/jsons/citylist.json');
+                                                      //
+                                                      //   final List<dynamic> jsonData =
+                                                      //   json.decode(jsonContent);
+                                                      //
+                                                      //   var listSearchData = jsonData
+                                                      //       .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
+                                                      //       .toList();
+                                                      //
+                                                      //   print("Helloooooooooo");
+                                                      //   print(listSearchData);
+                                                      //   if (listSearchData.isNotEmpty) {
+                                                      //     selectedPostCode = null;
+                                                      //     setState(() {
+                                                      //       _PostcodeList =
+                                                      //           listSearchData.map((e) => e).toList();
+                                                      //     });
+                                                      //
+                                                      //     print("List Drop Data");
+                                                      //     var districtNames = listSearchData
+                                                      //         .map((e) => e["D"].toString())
+                                                      //         .toSet() // Convert to a set to remove duplicates
+                                                      //         .first;  // Take the first element
+                                                      //
+                                                      //     print(districtNames);
+                                                      //
+                                                      //     var stateName = listSearchData
+                                                      //         .map((e) => e["S"].toString())
+                                                      //         .toSet() // Convert to a set to remove duplicates
+                                                      //         .first;  // Take the first element
+                                                      //
+                                                      //     print(stateName);
+                                                      //     setState(() {
+                                                      //       _district.text = districtNames;
+                                                      //       _state.text = stateName;
+                                                      //     });
+                                                      //
+                                                      //   } else {
+                                                      //     _PostcodeList.clear();
+                                                      //     //  showToastMessage('Enter correct pincode');
+                                                      //   }
+                                                      // }
                                                     },
                                                     keyboardType: TextInputType.phone,
                                                     inputFormatters: [
                                                       FilteringTextInputFormatter.singleLineFormatter,
                                                       LengthLimitingTextInputFormatter(6),
                                                     ],
+                                                    readOnly: true,
                                                     decoration: InputDecoration(
                                                       labelText: 'Pincode *',
                                                       hintText: 'Enter Pincode',
@@ -1190,72 +1191,102 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                       return null;
                                                     },
                                                   ),
-                                                  DropdownButtonFormField2(
-                                                    dropdownStyleData:DropdownStyleData(
-                                                      decoration: BoxDecoration(
-                                                        //     color: StyleData.buttonColor,
-                                                          borderRadius: BorderRadius.circular(10)
-
-                                                      ),
-                                                      maxHeight: 200,
-                                                    ) ,
-                                                    // isExpanded: true,
-                                                    // isDense: true,
+                                                  TextFormField(
+                                                    controller: _postOffice,
+                                                    readOnly: true,
+                                                    // onChanged: (value) async {
+                                                    //   setState(() {
+                                                    //     checkAddressFieldsFilled();
+                                                    //   });
+                                                    // },
+                                                    keyboardType: TextInputType.phone,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter.singleLineFormatter,
+                                                      LengthLimitingTextInputFormatter(6),
+                                                    ],
                                                     decoration: InputDecoration(
-                                                      labelText: 'Post Office *',
-                                                      hintText: 'Select an option',
+                                                      labelText: 'PostOffice *',
+                                                    //  hintText: 'Enter Pincode',
                                                       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //  border: InputBorder.none,
                                                       focusedBorder: focus,
                                                       enabledBorder: enb,
                                                       filled: true,
                                                       fillColor: StyleData.textFieldColor,
                                                     ),
                                                     validator: (value) {
-                                                      if (selectedPostCode == null) {
-                                                        return "Select Post Office";
+                                                      if (value == null || value.isEmpty) {
+                                                        return 'Please enter postoffice';
                                                       }
                                                       return null;
                                                     },
-                                                    value: selectedPostCode,
-                                                    onChanged: (value) {
-                                                      checkAddressFieldsFilled();
-                                                      setState(() {
-                                                        selectedPostCode = value as String?;
-                                                      });
-                                                    },
-
-                                                    items: _PostcodeList.map((dynamic item) {
-                                                      return DropdownMenuItem(
-                                                        value: item["PO"],
-                                                        child: Text(
-                                                          item["PO"],
-                                                          style: const TextStyle(
-                                                            color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 15,
-                                                      fontFamily: 'Poppins',
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-
-                                                    // items:
-                                                    //     _PostcodeList.map((dynamic item) {
-                                                    //   return DropdownMenuItem<dynamic>(
-                                                    //     value: item,
-                                                    //     child: Text(
-                                                    //       item,
-                                                    //       style: const TextStyle(color: Colors.white),
-                                                    //     ),
-                                                    //   );
-                                                    // }).toList(),
                                                   ),
+                                                  // DropdownButtonFormField2(
+                                                  //   dropdownStyleData:DropdownStyleData(
+                                                  //     decoration: BoxDecoration(
+                                                  //       //     color: StyleData.buttonColor,
+                                                  //         borderRadius: BorderRadius.circular(10)
+                                                  //
+                                                  //     ),
+                                                  //     maxHeight: 200,
+                                                  //   ) ,
+                                                  //   // isExpanded: true,
+                                                  //   // isDense: true,
+                                                  //   decoration: InputDecoration(
+                                                  //     labelText: 'Post Office *',
+                                                  //     hintText: 'Select an option',
+                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                  //     focusedBorder: focus,
+                                                  //     enabledBorder: enb,
+                                                  //     filled: true,
+                                                  //     fillColor: StyleData.textFieldColor,
+                                                  //   ),
+                                                  //   validator: (value) {
+                                                  //     if (selectedPostCode == null) {
+                                                  //       return "Select Post Office";
+                                                  //     }
+                                                  //     return null;
+                                                  //   },
+                                                  //   value: selectedPostCode,
+                                                  //   onChanged: (value) {
+                                                  //     checkAddressFieldsFilled();
+                                                  //     setState(() {
+                                                  //       selectedPostCode = value as String?;
+                                                  //     });
+                                                  //   },
+                                                  //
+                                                  //   items: _PostcodeList.map((dynamic item) {
+                                                  //     return DropdownMenuItem(
+                                                  //       value: item["PO"],
+                                                  //       child: Text(
+                                                  //         item["PO"],
+                                                  //         style: const TextStyle(
+                                                  //           color: Color(0xFF393939),
+                                                  //           fontSize: 15,
+                                                  //           fontFamily: 'Poppins',
+                                                  //           fontWeight: FontWeight.w400,
+                                                  //         ),
+                                                  //       ),
+                                                  //     );
+                                                  //   }).toList(),
+                                                  //   style: const TextStyle(
+                                                  //     color: Color(0xFF393939),
+                                                  //     fontSize: 15,
+                                                  //     fontFamily: 'Poppins',
+                                                  //     fontWeight: FontWeight.w400,
+                                                  //   ),
+                                                  //
+                                                  //   // items:
+                                                  //   //     _PostcodeList.map((dynamic item) {
+                                                  //   //   return DropdownMenuItem<dynamic>(
+                                                  //   //     value: item,
+                                                  //   //     child: Text(
+                                                  //   //       item,
+                                                  //   //       style: const TextStyle(color: Colors.white),
+                                                  //   //     ),
+                                                  //   //   );
+                                                  //   // }).toList(),
+                                                  // ),
                                                   TextFormField(
                                                     controller: _district,
                                                     readOnly: true,
