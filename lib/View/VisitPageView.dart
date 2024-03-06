@@ -504,6 +504,7 @@ class _VisitPageViewState extends State<VisitPageView> {
               SizedBox(
                 height: height * 0.03,
               ),
+
               Container(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -522,21 +523,21 @@ class _VisitPageViewState extends State<VisitPageView> {
                           borderSide: BorderSide(color:Colors.black54)),
                       contentPadding: const EdgeInsets.only(left: 1,),
                       hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
-                      suffixIcon: IconButton(
-                         icon:    SizedBox(
-                         //  height: 60,
-                           child: Image.asset(
-                             'assets/images/filter.png',
-                             width: width * 0.06,
-                             height: height * 0.02,
-                             color: Colors.black87
-                           ),
-                         ),
-                          onPressed: () {
-                         //   _showFilterBottomSheet();
-                            _scaffoldKey.currentState!.openDrawer();
-                    },
-                      ),
+                    //   suffixIcon: IconButton(
+                    //      icon:    SizedBox(
+                    //      //  height: 60,
+                    //        child: Image.asset(
+                    //          'assets/images/filter.png',
+                    //          width: width * 0.06,
+                    //          height: height * 0.02,
+                    //          color: Colors.black87
+                    //        ),
+                    //      ),
+                    //       onPressed: () {
+                    //      //   _showFilterBottomSheet();
+                    //         _scaffoldKey.currentState!.openDrawer();
+                    // },
+                    //   ),
                       prefixIcon: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: () {},
@@ -570,7 +571,7 @@ class _VisitPageViewState extends State<VisitPageView> {
                       ListOfLeads.sort((a, b) =>
                           (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                       // ListOfLeads.sort((a, b) => DateTime.parse(b['createdDateTime']).compareTo(DateTime.parse(a['createdDateTime'])));
-      
+
                       return
                         (ListOfLeads[index]["LeadID"] ?? "").length <= 1 &&  ListOfLeads[index]["customerStatus"] == "Interested"  ?
                         InkWell(

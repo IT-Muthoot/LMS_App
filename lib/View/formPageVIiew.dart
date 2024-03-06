@@ -133,11 +133,7 @@ class _FormPageViewState extends State<FormPageView> {
     });
   }
 
-  final List<String> _stateselect = [
-    'Kerala',
-    'Karnataka',
-    'Andhra Pradesh',
-  ];
+  final List<String> _stateselect = [];
   String? _selectedState;
 
   final List<String> purposeVisit = [
@@ -246,6 +242,7 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _landMark = TextEditingController();
   TextEditingController _district = TextEditingController();
   TextEditingController _postOffice = TextEditingController();
+  TextEditingController _state = TextEditingController();
   TextEditingController _pincode = TextEditingController();
 
   //Additional details
@@ -254,6 +251,9 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _employeeName = TextEditingController();
   TextEditingController _employeeCode = TextEditingController();
 
+
+  List<dynamic> _PostcodeList = [];
+  String? selectedPostCode;
 
 //Functions
   Future<void> _selectDate(BuildContext context) async {
@@ -366,7 +366,7 @@ class _FormPageViewState extends State<FormPageView> {
   void checkAddressFieldsFilled() {
     if (_addressLine1.text.isNotEmpty &&
         _addressLine2.text.isNotEmpty  && _addressLine3.text.isNotEmpty &&
-    _city.text.isNotEmpty && _selectedState != null && _district.text.isNotEmpty && _postOffice.text.isNotEmpty && _pincode.text.isNotEmpty) {
+    _city.text.isNotEmpty  && selectedPostCode != null && _pincode.text.isNotEmpty) {
       setState(() {
         areAddressFieldsFilled = true;
       });
@@ -422,9 +422,9 @@ class _FormPageViewState extends State<FormPageView> {
       'addressLine3': _addressLine3.text,
       'city': _city.text,
       'landmark':_landMark.text,
-      'state':_selectedState,
+      'state':_state.text,
       'district':_district.text,
-      'postOffice':_postOffice.text,
+      'postOffice':selectedPostCode,
       'pincode':_pincode.text,
       'customerName':_customerName.text,
       'CustomerMobile':_customerMobileNumber.text,
@@ -505,8 +505,82 @@ class _FormPageViewState extends State<FormPageView> {
       print("Location permission denied");
     }
   }
+  List<String> stateValues = [];
+  List<String> districts  = [];
+  List<String> postOffice  = [];
 
-  @override
+  // void getCity() async {
+  //   try {
+  //     final String jsonContent = await rootBundle.loadString('assets/jsons/citylist.json');
+  //     print(jsonContent);
+  //
+  //     // Explicitly cast the decoded JSON to List<Map<String, dynamic>>
+  //     List<Map<String, dynamic>> jsonDataList = (jsonDecode(jsonContent) as List)
+  //         .map((item) => item as Map<String, dynamic>)
+  //         .toList();
+  //
+  //     stateValues = jsonDataList.map((item) => item["S"].toString()).toSet().toList();
+  //     print("StateList");
+  //     print(stateValues);
+  //     setState(() {
+  //       // Set initial value or perform other actions after loading data
+  //       _selectedState = stateValues.isNotEmpty ? stateValues[0] : '';
+  //       print(_selectedState);
+  //     });
+  //   } catch (e) {
+  //     // Handle errors, e.g., log the error or throw it again
+  //     print('Error fetching city data: $e');
+  //
+  //     // You can set a default value or show an error message to the user
+  //     setState(() {
+  //       _selectedState = 'Default State'; // Set a default value
+  //     });
+  //   }
+  // }
+  //
+  // String? _selectedDistrict;
+  // String? _selectedPostOffice;
+  // List<Map<String, dynamic>> jsonDataList = [];
+  // List<Map<String, dynamic>> filterDataByState(String selectedState) {
+  //   return jsonDataList.where((item) => item['S'] == selectedState).toList();
+  // }
+  //
+  //
+  // void updateDistrictsAndPlaces(String selectedState) {
+  //   try {
+  //     List<Map<String, dynamic>> filteredData = filterDataByState(selectedState);
+  //
+  //     print(filteredData); // Print filtered data for debugging
+  //
+  //     districts = filteredData.map((item) => item['D'].toString()).toSet().toList();
+  //     postOffice = filteredData.map((item) => item['PO'].toString()).toSet().toList();
+  //
+  //     print(districts);
+  //     print("Districts");
+  //
+  //     // Update your dropdowns or do anything else with the districts and places
+  //     // For example, you can update the districts and places dropdowns:
+  //     setState(() {
+  //       _selectedDistrict = districts.isNotEmpty ? districts[0] : '';
+  //       _selectedPostOffice = postOffice.isNotEmpty ? postOffice[0] : '';
+  //     });
+  //   } catch (e) {
+  //     // Handle errors, e.g., log the error or throw it again
+  //     print('Error updating districts and places: $e');
+  //
+  //     // You can set default values or show an error message to the user
+  //     setState(() {
+  //       _selectedDistrict = 'Default District'; // Set a default value for district
+  //       _selectedPostOffice = 'Default Post Office'; // Set a default value for post office
+  //     });
+  //   }
+  // }
+
+
+
+
+
+
   void initState() {
     // TODO: implement initState
     getDropDownSalutationData();
@@ -1468,33 +1542,124 @@ class _FormPageViewState extends State<FormPageView> {
                                                       fillColor: StyleData.textFieldColor,
                                                     ),
                                                   ),
-              
-                                                  DropdownButtonFormField2<String>(
-                                                    value:_selectedState,
-                                                    onChanged: (String? newValue) {
+                                                  TextFormField(
+                                                    controller: _pincode,
+                                                    onChanged: (value) async {
                                                       setState(() {
-                                                        _selectedState = newValue;
                                                         checkAddressFieldsFilled();
                                                       });
+                                                      if (value.length == 6) {
+                                                        final String jsonContent = await rootBundle
+                                                            .loadString('assets/jsons/citylist.json');
+
+                                                        final List<dynamic> jsonData =
+                                                        json.decode(jsonContent);
+
+                                                        var listSearchData = jsonData
+                                                            .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
+                                                            .toList();
+
+                                                        print("Helloooooooooo");
+                                                        print(listSearchData);
+                                                        if (listSearchData.isNotEmpty) {
+                                                          selectedPostCode = null;
+                                                          setState(() {
+                                                            _PostcodeList =
+                                                                listSearchData.map((e) => e).toList();
+                                                          });
+
+                                                          print("List Drop Data");
+                                                          var districtNames = listSearchData
+                                                              .map((e) => e["D"].toString())
+                                                              .toSet() // Convert to a set to remove duplicates
+                                                              .first;  // Take the first element
+
+                                                          print(districtNames);
+
+                                                          var stateName = listSearchData
+                                                              .map((e) => e["S"].toString())
+                                                              .toSet() // Convert to a set to remove duplicates
+                                                              .first;  // Take the first element
+
+                                                          print(stateName);
+                                                          setState(() {
+                                                            _district.text = districtNames;
+                                                            _state.text = stateName;
+                                                          });
+
+                                                        } else {
+                                                          _PostcodeList.clear();
+                                                          //  showToastMessage('Enter correct pincode');
+                                                        }
+                                                      }
                                                     },
+                                                    keyboardType: TextInputType.phone,
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter.singleLineFormatter,
+                                                      LengthLimitingTextInputFormatter(6),
+                                                    ],
+                                                    decoration: InputDecoration(
+                                                      labelText: 'Pincode *',
+                                                      hintText: 'Enter Pincode',
+                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //  border: InputBorder.none,
+                                                      focusedBorder: focus,
+                                                      enabledBorder: enb,
+                                                      filled: true,
+                                                      fillColor: StyleData.textFieldColor,
+                                                    ),
                                                     validator: (value) {
                                                       if (value == null || value.isEmpty) {
-                                                        return 'Please select a state';
+                                                        return 'Please enter pincode';
                                                       }
-                                                      return null; // Return null if the value is valid
+                                                      return null;
                                                     },
-                                                    items: _stateselect
-                                                        .map((String item){
+                                                  ),
+                                                  DropdownButtonFormField2(
+                                                    dropdownStyleData:DropdownStyleData(
+                                                      decoration: BoxDecoration(
+                                                        //     color: StyleData.buttonColor,
+                                                          borderRadius: BorderRadius.circular(10)
+
+                                                      ),
+                                                      maxHeight: 200,
+                                                    ) ,
+                                                    // isExpanded: true,
+                                                    // isDense: true,
+                                                    decoration: InputDecoration(
+                                                      labelText: 'Post Office *',
+                                                      hintText: 'Select an option',
+                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      focusedBorder: focus,
+                                                      enabledBorder: enb,
+                                                      filled: true,
+                                                      fillColor: StyleData.textFieldColor,
+                                                    ),
+                                                    validator: (value) {
+                                                      if (selectedPostCode == null) {
+                                                        return "Select Post Office";
+                                                      }
+                                                      return null;
+                                                    },
+                                                    value: selectedPostCode,
+                                                    onChanged: (value) {
+                                                      checkAddressFieldsFilled();
+                                                      setState(() {
+                                                        selectedPostCode = value as String?;
+                                                      });
+                                                    },
+
+                                                    items: _PostcodeList.map((dynamic item) {
                                                       return DropdownMenuItem(
-                                                        value: item,
+                                                        value: item["PO"],
                                                         child: Text(
-                                                          item.toString(),
-                                                          style: const TextStyle(
+                                                          item["PO"],
+                                                           style: const TextStyle(
                                                             color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
+                                                        fontSize: 15,
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
                                                         ),
                                                       );
                                                     }).toList(),
@@ -1504,30 +1669,31 @@ class _FormPageViewState extends State<FormPageView> {
                                                       fontFamily: 'Poppins',
                                                       fontWeight: FontWeight.w400,
                                                     ),
-                                                    //   hint: const Text('Select an option'),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'State *',
-                                                      hintText: 'Select an option',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                     // border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
+
+                                                    // items:
+                                                    //     _PostcodeList.map((dynamic item) {
+                                                    //   return DropdownMenuItem<dynamic>(
+                                                    //     value: item,
+                                                    //     child: Text(
+                                                    //       item,
+                                                    //       style: const TextStyle(color: Colors.white),
+                                                    //     ),
+                                                    //   );
+                                                    // }).toList(),
                                                   ),
                                                   TextFormField(
                                                     controller: _district,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                    },
+                                                    readOnly: true,
+                                                    // onChanged: (value) {
+                                                    //   setState(() {
+                                                    //     checkAddressFieldsFilled();
+                                                    //   });
+                                                    // },
                                                     decoration: InputDecoration(
                                                       labelText: 'District *',
                                                       hintText: 'Enter District',
                                                       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                   //   border: InputBorder.none,
+                                                      //   border: InputBorder.none,
                                                       focusedBorder: focus,
                                                       enabledBorder: enb,
                                                       filled: true,
@@ -1541,17 +1707,18 @@ class _FormPageViewState extends State<FormPageView> {
                                                     },
                                                   ),
                                                   TextFormField(
-                                                    controller: _postOffice,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                    },
+                                                    controller: _state,
+                                                    readOnly: true,
+                                                    // onChanged: (value) {
+                                                    //   setState(() {
+                                                    //     checkAddressFieldsFilled();
+                                                    //   });
+                                                    // },
                                                     decoration: InputDecoration(
-                                                      labelText: 'Post Office *',
-                                                      hintText: 'Enter post office',
+                                                      labelText: 'State *',
+                                                      hintText: '',
                                                       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                   //   border: InputBorder.none,
+                                                      //   border: InputBorder.none,
                                                       focusedBorder: focus,
                                                       enabledBorder: enb,
                                                       filled: true,
@@ -1559,40 +1726,14 @@ class _FormPageViewState extends State<FormPageView> {
                                                     ),
                                                     validator: (value) {
                                                       if (value == null || value.isEmpty) {
-                                                        return 'Please enter your post office';
+                                                        return 'Please enter your State';
                                                       }
                                                       return null;
                                                     },
                                                   ),
-                                                  TextFormField(
-                                                    controller: _pincode,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                    },
-                                                    keyboardType: TextInputType.phone,
-                                                    inputFormatters: [
-                                                      FilteringTextInputFormatter.digitsOnly,
-                                                      LengthLimitingTextInputFormatter(6),
-                                                    ],
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Pincode *',
-                                                      hintText: 'Enter Pincode',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                    //  border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter pincode';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
+
+
+
                                                   SizedBox(height: height * 0.02),
                                                   Visibility(
                                                     visible: areAddressFieldsFilled,

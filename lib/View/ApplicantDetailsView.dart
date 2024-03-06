@@ -53,6 +53,24 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
       });
     }
   }
+  List<DocumentSnapshot> searchListOfLeads = [];
+  void _runFilter(String enteredKeyword) {
+    var data = ListOfLeads.where((row) => (row["firstName"]
+        .toString()
+        .toUpperCase()
+        .contains(enteredKeyword.toUpperCase())||
+        row["LeadID"]
+            .toString()
+            .toUpperCase()
+            .contains(enteredKeyword.toUpperCase()) || row["productCategory"]
+        .toString()
+        .toUpperCase()
+        .contains(enteredKeyword.toUpperCase()))).toList();
+    setState(() {
+      searchListOfLeads = data;
+    });
+  }
+
 
   @override
   void initState() {
@@ -165,7 +183,7 @@ actions: [
                        borderSide: new BorderSide(color: Colors.grey)),
                  ),
                  onChanged: (value) {
-               //    _runFilter(value);
+                  _runFilter(value);
                  },
                ),
              ),
@@ -178,9 +196,12 @@ actions: [
              width: MediaQuery.of(context).size.width,
              child:ListOfLeads.isNotEmpty ?
              ListView.builder(
-               itemCount:
-                   ListOfLeads.length,
+               itemCount: searchKEY.text.isEmpty
+                   ? ListOfLeads.length
+                   : searchListOfLeads.length,
                itemBuilder: (context, index) {
+                 ListOfLeads.sort((a, b) =>
+                     (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                  return InkWell(
                    onTap: () {
                      // Navigator.push(
@@ -233,8 +254,11 @@ actions: [
                              ],
                            ),
                            Center(
+
                              child: Text(
-                               ListOfLeads[index]["LeadID"],
+                               searchKEY.text.isEmpty
+                                   ? ListOfLeads[index]["LeadID"]
+                                   : searchListOfLeads[index]["LeadID"],
                                style: TextStyle(
                                  color: Colors.black54,
                                  fontSize: 14.0,
@@ -266,7 +290,9 @@ actions: [
                                      ],
                                    ),
                                    Text(
-                                     ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
+                                     searchKEY.text.isEmpty
+                                         ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
+                                         : searchListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
                                      style: TextStyle(
                                        color: Colors.black54,
                                        fontSize: 14.0,
@@ -291,7 +317,9 @@ actions: [
                                      ],
                                    ),
                                    Text(
-                                     ListOfLeads[index]["productCategory"],
+                                     searchKEY.text.isEmpty
+                                         ? ListOfLeads[index]["productCategory"]
+                                         : searchListOfLeads[index]["productCategory"],
                                      style: TextStyle(
                                        color: Colors.black54,
                                        fontSize: 14.0,

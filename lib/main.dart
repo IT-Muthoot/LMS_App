@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'Utils/SaveData.dart';
 import 'View/HomePageView.dart';
 import 'View/SplashView.dart';
 import 'View/VisitPageView.dart';
@@ -14,16 +15,16 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // runApp(
-  //
-  //     DevicePreview(
-  //       enabled: !kReleaseMode,
-  //       builder: (context) => MyApp(),
-  //     )
-  // );
   runApp(
-     MyApp(),
+
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(),
+      )
   );
+  // runApp(
+  //    MyApp(),
+  // );
 
 }
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:
-      SplashView(),
+     SplashView(),
       // ,));
     //  HomePageView(),
      //FormPageView(),
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
     //  VisitPageView()
       //FormPageView(),
      //   LoginScreen(),
-     // SaveData(),
+   //  SaveData(),
     );
   }
 }

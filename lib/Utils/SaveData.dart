@@ -101,29 +101,34 @@ class _SaveDataState extends State<SaveData> {
     {"title": "Not Working(NA)", "id": 7},
   ];
 
-  List<Map<String, dynamic>> campaignName = [
-    {"id": "001", "title": "Auto Announcement Activity"},
-    {"id": "002", "title": "Builders Meet"},
-    {"id": "003", "title": "Canopy Activity"},
-    {"id": "004", "title": "CSR Tie Up With Hospitals, Police Stations Etc , Doing BTL Activities"},
-    {"id": "005", "title": "Doctor Campaign"},
-    {"id": "006", "title": "Exhibitions Participations Activity"},
-    {"id": "007", "title": "Festival Related Or Special Offer / Product Campaign ( 360 Deg )"},
-    {"id": "008", "title": "Leaflet Distribution"},
-    {"id": "009", "title": "Loan Mela"},
-    {"id": "010", "title": "Local Market Day Activity"},
-    {"id": "011", "title": "Market Day Activity"},
-    {"id": "012", "title": "News Paper Activity"},
-    {"id": "013", "title": "Promotional EDM"},
-    {"id": "014", "title": "Road Show/ Canter/ Van Activity"},
-    {"id": "015", "title": "Sandwich Board Activity"},
-    {"id": "016", "title": "Society Activities"},
-    {"id": "017", "title": "Spot Sanction Day"},
-    {"id": "018", "title": "Stall Activity At Builder End"},
-    {"id": "019", "title": "Wall Painting"},
-    {"id": "020", "title": "Pre-Approved_Top-Up"},
-    {"id": "021", "title": "Blaze Campaign Lead"},
-    {"id": "022", "title": "Blaze OBD Campaign"}
+
+  List<Map<String, dynamic>> stateList = [
+    {"id": 1, "title": "ANDHRA PRADESH"},
+    {"id": 2, "title": "ASSAM"},
+    {"id": 3, "title": "BIHAR"},
+    {"id": 4, "title": "CHANDIGARH"},
+    {"id": 5, "title": "CHHATTISGARH"},
+    {"id": 6, "title": "DELHI"},
+    {"id": 7, "title": "GOA"},
+    {"id": 8, "title": "GUJARAT"},
+    {"id": 9, "title": "HARYANA"},
+    {"id": 10, "title": "HIMACHAL PRADESH"},
+    {"id": 11, "title": "JAMMU AND KASHMIR"},
+    {"id": 12, "title": "JHARKHAND"},
+    {"id": 13, "title": "KARNATAKA"},
+    {"id": 14, "title": "KERALA"},
+    {"id": 15, "title": "LADAKH"},
+    {"id": 16, "title": "MADHYA PRADESH"},
+    {"id": 17, "title": "MAHARASHTRA"},
+    {"id": 18, "title": "ODISHA"},
+    {"id": 19, "title": "PUDUCHERRY"},
+    {"id": 20, "title": "PUNJAB"},
+    {"id": 21, "title": "RAJASTHAN"},
+    {"id": 22, "title": "TAMIL NADU"},
+    {"id": 23, "title": "TELANGANA"},
+    {"id": 24, "title": "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU"},
+    {"id": 25, "title": "UTTAR PRADESH"},
+    {"id": 26, "title": "UTTARAKHAND"}
   ];
 
 
@@ -148,9 +153,9 @@ class _SaveDataState extends State<SaveData> {
   // }
   void pushData() async {
     FirebaseFirestore.instance
-        .collection("campaignName")
-        .doc("campaignName")
-        .update({"campaignName": FieldValue.arrayUnion(campaignName)});
+        .collection("stateList")
+        .doc("stateList")
+        .update({"stateList": FieldValue.arrayUnion(stateList)});
     print("hi");
   }
 
