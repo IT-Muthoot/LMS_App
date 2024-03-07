@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -378,7 +379,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "Product": selectedProductValue,
       "Purpose": selectedProdut ?? "",
       "DSAorConnectorName": DSAConnectorName,
-      "DSAorConnectorCode":DSAConnectorCode1,
+      "DSAorConnectorCode":DSAConnectorCode1 ?? "",
       "Interest": customerStatus,
       "Amount": _leadAmount.text,
       "DateOfBirth": _dateOfBirth.text,
@@ -418,13 +419,20 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         setState(() {
           LeadID = sfLeadId;
         });
+         updateDataToFirestore();
 
-   updateDataToFirestore();
       //  _showAlertDialogSuccess(context);
       }
-      //Navigator.pop(context);
+      else {
+        Navigator.pop(context);
+        print("hjdjnvfv");
+        _showToast('Error: ${response.statusCode}');
+      //  _showAlertDialogSuccess1(context);
+      }
     } catch (e) {
-      _showAlertDialogSuccess1(context);
+      Navigator.pop(context);
+      print("hjdjnvfv");
+      _showToast('Error: $e');
       print("Error: $e");
     }
     //
@@ -432,6 +440,18 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     //   Navigator.pop(context);
     //   print(response.statusMessage);
     // }
+  }
+
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   Future<void> updateDataToVisitFirestore() async {
@@ -505,6 +525,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'monthlyIncome' : monthlyIncomeOfApplicant.text,
         'aadharNumber' : aadharCardNumber.text,
         'panCardNumber' : panCardNumber.text,
+        'ConsentCRIF' :consentCRIF,
+        'ConsentKYC' : consentKYC,
         'LeadID' : LeadID ?? "",
         'userId': userId,
         'createdDateTime':Timestamp.fromDate(now),
@@ -1532,6 +1554,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                       filled: true,
                                                       fillColor: StyleData.textFieldColor,
                                                     ),
+                                                    keyboardType: TextInputType.number,
                                                     validator: (value) {
                                                       if (value == null || value.isEmpty) {
                                                         return 'Please enter Lead Amount';
@@ -1853,11 +1876,16 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                               hintText: 'Enter monthly income',
                                                               //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                               // border: InputBorder.none,
+
                                                               focusedBorder: focus,
                                                               enabledBorder: enb,
                                                               filled: true,
                                                               fillColor: StyleData.textFieldColor,
                                                             ),
+                                                            keyboardType: TextInputType.number,
+                                                            // inputFormatters: [
+                                                            // FilteringTextInputFormatter.digitsOnly,
+                                                            // LengthLimitingTextInputFormatter(12),]
                                                           ),
                                                           SizedBox(height: height * 0.01,),
                                                           TextFormField(

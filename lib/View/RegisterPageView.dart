@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
 import '../background.dart';
@@ -24,6 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
+  TextEditingController branchcode = TextEditingController();
   final registerformKey = GlobalKey<FormState>();
 
   final List<String> userType = [
@@ -31,6 +36,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'RM',
   ];
   String? selectedUserType;
+
+
+  List<DocumentSnapshot> ListOfUsers = [];
+  var userType1;
+  String? employeeName;
+
+  Future<void> checkEmployeeCode(String enteredCode) async {
+    try {
+      DocumentSnapshot employeeListDoc =
+      await FirebaseFirestore.instance.collection('employeeList').doc(enteredCode).get();
+       print(employeeListDoc);
+      if (employeeListDoc.exists) {
+        // Assuming 'branchCode' is the field in the document containing the branch code
+        setState(() {
+          branchcode = employeeListDoc['branchCode'];
+          print(branchcode);
+        });
+        // Employee code found, do something with the branch code
+        print('Branch Code: $branchcode');
+      } else {
+        print('Employee code not found in employeeList collection');
+        // Handle the case where the employee code is not found
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+   // fetchData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +105,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: TextFormField(
-                        controller: empNameController,
+                        controller: empCodeController,
                         decoration: InputDecoration(
-                            labelText: "Employee Name *"
+                            labelText: "Employee Code *"
                         ),
+                        onChanged: (value) {
+                          checkEmployeeCode(value);
+                        },
                         validator: (isusernamevalid) {
                           if (isusernamevalid.toString().isNotEmpty)
                             return null;
                           else
-                            return 'Enter valid user name';
+                            return 'Enter valid Employee code';
                         },
                       ),
                     ),
@@ -80,16 +124,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: TextFormField(
-                        controller: empCodeController,
+                        controller: empNameController,
+                        readOnly: true,
                         decoration: InputDecoration(
-                            labelText: "Employee Code *"
+                            labelText: "Employee Name *"
                         ),
-                        validator: (isusernamevalid) {
-                          if (isusernamevalid.toString().isNotEmpty)
-                            return null;
-                          else
-                            return 'Enter valid Employee code';
-                        },
+                        // validator: (isusernamevalid) {
+                        //   if (isusernamevalid.toString().isNotEmpty)
+                        //     return null;
+                        //   else
+                        //     return 'Enter valid user name';
+                        // },
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(horizontal: 40),
+                      child: TextFormField(
+                        controller: branchcode,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                            labelText: "Branch Code *"
+                        ),
                       ),
                     ),
                     Container(

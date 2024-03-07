@@ -15,16 +15,16 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-
-      DevicePreview(
-        enabled: !kReleaseMode,
-        builder: (context) => MyApp(),
-      )
-  );
   // runApp(
-  //    MyApp(),
+  //
+  //     DevicePreview(
+  //       enabled: !kReleaseMode,
+  //       builder: (context) => MyApp(),
+  //     )
   // );
+  runApp(
+     MyApp(),
+  );
 
 }
 
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
     //  VisitPageView()
       //FormPageView(),
      //   LoginScreen(),
-   //  SaveData(),
+   // SaveData(),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
 import 'NewLeadPageView.dart';
+import 'documentsPageView.dart';
 
 class ApplicantDetailsView extends StatefulWidget {
   const ApplicantDetailsView({super.key});
@@ -229,107 +230,116 @@ actions: [
                      ),
                      child: Padding(
                        padding: EdgeInsets.all(8.0),
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                             children: [
-                               Icon(
-                                 Icons.star,
-                                 color: Colors.yellow.shade800
-                               ),
-                               Text(
-                                 "Lead ID",
+                       child: GestureDetector(
+                         onTap: () {
+                           Navigator.push(
+                               context,
+                               MaterialPageRoute(
+                                   builder: (context) => DocumentPageView(
+                                   )));
+                         },
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [
+                                 Icon(
+                                   Icons.star,
+                                   color: Colors.yellow.shade800
+                                 ),
+                                 Text(
+                                   "Lead ID",
+                                   style: TextStyle(
+                                     color: StyleData.appBarColor2,
+                                     fontSize: 18.0,
+                                     fontWeight: FontWeight.bold,
+                                   ),
+                                 ),
+                                 Icon(
+                                   Icons.visibility,
+                                     color: Colors.red.shade300
+                                 ),
+                               ],
+                             ),
+                             Center(
+
+                               child: Text(
+                                 searchKEY.text.isEmpty
+                                     ? ListOfLeads[index]["LeadID"]
+                                     : searchListOfLeads[index]["LeadID"],
                                  style: TextStyle(
-                                   color: StyleData.appBarColor2,
-                                   fontSize: 18.0,
-                                   fontWeight: FontWeight.bold,
+                                   color: Colors.black54,
+                                   fontSize: 14.0,
+                                   fontFamily: 'Poppins',
                                  ),
                                ),
-                               Icon(
-                                 Icons.visibility,
-                                   color: Colors.red.shade300
-                               ),
-                             ],
-                           ),
-                           Center(
-
-                             child: Text(
-                               searchKEY.text.isEmpty
-                                   ? ListOfLeads[index]["LeadID"]
-                                   : searchListOfLeads[index]["LeadID"],
-                               style: TextStyle(
-                                 color: Colors.black54,
-                                 fontSize: 14.0,
-                                 fontFamily: 'Poppins',
-                               ),
                              ),
-                           ),
-                           Divider(
-                             color: StyleData.appBarColor2,
-                             thickness: 0.3,
-                           ),
-                           Row(
-                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                             children: [
-                               Column(
-                                 children: [
-                                   Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       Text(
-                                         "Applicant Name",
-                                         style: TextStyle(
-                                           color: Colors.red.shade300,
-                                           fontSize: 16.0,
-                                           fontWeight: FontWeight.bold,
-                                           fontFamily: 'Poppins',
+                             Divider(
+                               color: StyleData.appBarColor2,
+                               thickness: 0.3,
+                             ),
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                               children: [
+                                 Column(
+                                   children: [
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children: [
+                                         Text(
+                                           "Applicant Name",
+                                           style: TextStyle(
+                                             color: Colors.red.shade300,
+                                             fontSize: 16.0,
+                                             fontWeight: FontWeight.bold,
+                                             fontFamily: 'Poppins',
+                                           ),
                                          ),
-                                       ),
-                                     ],
-                                   ),
-                                   Text(
-                                     searchKEY.text.isEmpty
-                                         ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
-                                         : searchListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
-                                     style: TextStyle(
-                                       color: Colors.black54,
-                                       fontSize: 14.0,
+                                       ],
                                      ),
-                                   ),
-                                 ],
-                               ),
-                               Column(
-                                 children: [
-                                   Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       Text(
-                                         "Product Category",
-                                         style: TextStyle(
-                                           color: Colors.red.shade300,
-                                           fontSize: 16.0,
-                                           fontWeight: FontWeight.bold,
-                                           fontFamily: 'Poppins',
+                                     Text(
+                                       searchKEY.text.isEmpty
+                                           ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
+                                           : searchListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"],
+                                       style: TextStyle(
+                                         color: Colors.black54,
+                                         fontSize: 14.0,
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                                 Column(
+                                   children: [
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children: [
+                                         Text(
+                                           "Product Category",
+                                           style: TextStyle(
+                                             color: Colors.red.shade300,
+                                             fontSize: 16.0,
+                                             fontWeight: FontWeight.bold,
+                                             fontFamily: 'Poppins',
+                                           ),
                                          ),
-                                       ),
-                                     ],
-                                   ),
-                                   Text(
-                                     searchKEY.text.isEmpty
-                                         ? ListOfLeads[index]["productCategory"]
-                                         : searchListOfLeads[index]["productCategory"],
-                                     style: TextStyle(
-                                       color: Colors.black54,
-                                       fontSize: 14.0,
+                                       ],
                                      ),
-                                   ),
-                                 ],
-                               )
-                             ],
-                           )
-                         ],
+                                     Text(
+                                       searchKEY.text.isEmpty
+                                           ? ListOfLeads[index]["productCategory"]
+                                           : searchListOfLeads[index]["productCategory"],
+                                       style: TextStyle(
+                                         color: Colors.black54,
+                                         fontSize: 14.0,
+                                       ),
+                                     ),
+                                   ],
+                                 )
+                               ],
+                             )
+                           ],
+                         ),
                        ),
                      ),
                    ),
