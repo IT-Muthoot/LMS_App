@@ -42,27 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var userType1;
   String? employeeName;
 
-  Future<void> checkEmployeeCode(String enteredCode) async {
-    try {
-      DocumentSnapshot employeeListDoc =
-      await FirebaseFirestore.instance.collection('employeeList').doc(enteredCode).get();
-       print(employeeListDoc);
-      if (employeeListDoc.exists) {
-        // Assuming 'branchCode' is the field in the document containing the branch code
-        setState(() {
-          branchcode = employeeListDoc['branchCode'];
-          print(branchcode);
-        });
-        // Employee code found, do something with the branch code
-        print('Branch Code: $branchcode');
-      } else {
-        print('Employee code not found in employeeList collection');
-        // Handle the case where the employee code is not found
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
+
 
 
 
@@ -109,8 +89,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                             labelText: "Employee Code *"
                         ),
-                        onChanged: (value) {
-                          checkEmployeeCode(value);
+                        inputFormatters: [
+                          FilteringTextInputFormatter.singleLineFormatter,
+                          LengthLimitingTextInputFormatter(7),
+                        ],
+                        onChanged: (value) async {
+                      //   checkEmployeeCode(value);
+
+
+                      //     if (value.length == 7) {
+                      //       final String jsonContent = await rootBundle
+                      //           .loadString('assets/jsons/EmployeeList.json');
+                      //
+                      //       final List<dynamic> jsonData = json.decode(jsonContent);
+                      //
+                      //       // Find the employee in the list based on the entered code
+                      //       var employeeData = jsonData.firstWhere(
+                      //             (item) => item['EMP_CODE'] == value,
+                      //         orElse: () => null,
+                      //       );
+                      //       // var employeeName = jsonData.firstWhere(
+                      //       //       (item) => item['NAME'] == value,
+                      //       //   orElse: () => null,
+                      //       // );
+                      //
+                      //       if (employeeData != null) {
+                      //         // Employee found, extract the branch code
+                      //         var branchCode = employeeData["BRANCH CODE"].toString();
+                      //         var EmpName = employeeData["NAME"].toString();
+                      //
+                      //         // Update the UI or state with the branch code
+                      //         setState(() {
+                      //           // Assuming branchCodeTextController is a TextEditingController
+                      //           branchcode.text = branchCode;
+                      //           empNameController.text = EmpName;
+                      //         });
+                      //         print(branchcode.text);
+                      //         SharedPreferences prefs = await SharedPreferences.getInstance();
+                      //         prefs.setString('branchCode', branchcode.text);
+                      //       } else {
+                      //         setState(() {
+                      //           branchcode.text = '';
+                      //           empNameController.text = '';
+                      //         });
+                      //       }
+                      //     }
                         },
                         validator: (isusernamevalid) {
                           if (isusernamevalid.toString().isNotEmpty)
@@ -153,6 +176,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: TextFormField(
                         controller: mobileNumber,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         decoration: InputDecoration(
                             labelText: "Mobile Number *"
                         ),
@@ -262,6 +290,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           "MobileNumber": mobileNumber.text,
                           "email": emailController.text,
                           "password": passwordController.text,
+                          "branchCode": branchcode.text,
+                          "confirmPassword": confirmpasswordController.text,
                           "userId": credential.user!.uid,
                           "createdDate": Timestamp.now(),
                           "userType": "user",

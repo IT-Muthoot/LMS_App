@@ -286,6 +286,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   var docData;
   bool isFetching = true;
   String? leadSource;
+  String? branchCode;
 
   String? DSAConnectorName;
   String? DSAConnectorCode1;
@@ -297,7 +298,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     if (!widget.isNewActivity) {
       CollectionReference users =
       FirebaseFirestore.instance.collection('LeadCreation');
-      users.doc(widget.docId).get().then((value) {
+      users.doc(widget.docId).get().then((value) async {
         setState(() {
           docData = value.data();
         });
@@ -325,10 +326,15 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       //  print(_leadSource.text);
         print(DSAConnectorName);
         print(DSAConnectorCode1);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        print( prefs.getString('branchCode'));
+
+
 
         setState(() {
 
            leadSource = _leadSource.text;
+           branchCode = prefs.getString('branchCode') ?? "";
            print("Lead SOurce");
            print(leadSource);
         });
@@ -375,7 +381,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "Salutation": _selectedSalutation ?? "",
       "Email": _email.text,
       "Phone": customerNumber.text,
-      "HfinBranchcode": "KALY037",
+      "HfinBranchcode": branchCode,
       "Product": selectedProductValue,
       "Purpose": selectedProdut ?? "",
       "DSAorConnectorName": DSAConnectorName,
@@ -1524,11 +1530,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                     ),
                                                   ),
                                                   TextFormField(
-                                                    controller: _homeFinBranchCode,
+                                                  //  controller: branchCode,
+                                                    initialValue: branchCode,
                                                     readOnly: true,
                                                     decoration: InputDecoration(
                                                       labelText: 'Home Fin Branch Code',
-                                                      hintText: 'KALY037',
+                                                      hintText: '',
                                                       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                       //  border: InputBorder.none,
                                                       focusedBorder: focus,

@@ -15,16 +15,15 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // runApp(
-  //
-  //     DevicePreview(
-  //       enabled: !kReleaseMode,
-  //       builder: (context) => MyApp(),
-  //     )
-  // );
   runApp(
-     MyApp(),
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(),
+      )
   );
+  // runApp(
+  //    MyApp(),
+  // );
 
 }
 
@@ -39,8 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home:
-     SplashView(),
+      home: SplashView(),
       // ,));
     //  HomePageView(),
      //FormPageView(),
