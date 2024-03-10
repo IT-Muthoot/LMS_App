@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lead_management_system/login1.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
 import '../background.dart';
@@ -18,6 +20,45 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   final passwordformKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
 
+  List<DocumentSnapshot> ListOfUsers = [];
+  var userType;
+  String? email;
+
+  void getUserData(String email) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var userId = pref.getString("token");
+    setState(() {
+      userType = pref.getString("logintype");
+    });
+    print(userType);
+    if (userType == "user") {
+      users.where("userId", isEqualTo: userId).get().then((value) {
+        setState(() {
+          ListOfUsers = value.docs;
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(value.docs[i].data());
+          print(ListOfUsers[i]['email']);
+        }
+      });
+    } else {
+      users.get().then((value) {
+        setState(() {
+          ListOfUsers = value.docs;
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(ListOfUsers[i]['email']);
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +96,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         decoration: InputDecoration(
                             labelText: "Useremail"
                         ),
+                        onChanged: (value) {
+                          getUserData(value);
+                        },
                         validator: (value) {
                           String p =
                               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';

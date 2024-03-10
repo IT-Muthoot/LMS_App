@@ -38,11 +38,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? selectedUserType;
 
 
-  List<DocumentSnapshot> ListOfUsers = [];
-  var userType1;
-  String? employeeName;
+  List employeeList = [];
+  List outputList1 = [];
 
 
+  getEmployeeDetails(String emp) async {
+    FirebaseFirestore.instance
+        .collection("employeeList")
+        .doc("employeeList")
+        .get()
+        .then((value) async {
+      for (var element in value.data()!["employeeList"]) {
+        setState(() {
+          employeeList.add(element);
+        });
+      }
+      setState(() {
+        outputList1 =
+            employeeList.where((o) => o['EMP_CODE'] == empCodeController.text).toList();
+        empNameController.text = outputList1[0]['NAME'];
+        branchcode.text = outputList1[0]['BRANCH CODE'];
+      });
+      print("Output List " + outputList1.toString());
+
+    });
+  }
 
 
 
@@ -93,47 +113,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           FilteringTextInputFormatter.singleLineFormatter,
                           LengthLimitingTextInputFormatter(7),
                         ],
-                        onChanged: (value) async {
-                      //   checkEmployeeCode(value);
-
-
-                      //     if (value.length == 7) {
-                      //       final String jsonContent = await rootBundle
-                      //           .loadString('assets/jsons/EmployeeList.json');
-                      //
-                      //       final List<dynamic> jsonData = json.decode(jsonContent);
-                      //
-                      //       // Find the employee in the list based on the entered code
-                      //       var employeeData = jsonData.firstWhere(
-                      //             (item) => item['EMP_CODE'] == value,
-                      //         orElse: () => null,
-                      //       );
-                      //       // var employeeName = jsonData.firstWhere(
-                      //       //       (item) => item['NAME'] == value,
-                      //       //   orElse: () => null,
-                      //       // );
-                      //
-                      //       if (employeeData != null) {
-                      //         // Employee found, extract the branch code
-                      //         var branchCode = employeeData["BRANCH CODE"].toString();
-                      //         var EmpName = employeeData["NAME"].toString();
-                      //
-                      //         // Update the UI or state with the branch code
-                      //         setState(() {
-                      //           // Assuming branchCodeTextController is a TextEditingController
-                      //           branchcode.text = branchCode;
-                      //           empNameController.text = EmpName;
-                      //         });
-                      //         print(branchcode.text);
-                      //         SharedPreferences prefs = await SharedPreferences.getInstance();
-                      //         prefs.setString('branchCode', branchcode.text);
-                      //       } else {
-                      //         setState(() {
-                      //           branchcode.text = '';
-                      //           empNameController.text = '';
-                      //         });
-                      //       }
-                      //     }
+                        onChanged: (empCode) {
+                          // Call the fetchEmployeeDetails function when the code is entered
+                          getEmployeeDetails(empCode);
                         },
                         validator: (isusernamevalid) {
                           if (isusernamevalid.toString().isNotEmpty)
@@ -152,12 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                             labelText: "Employee Name *"
                         ),
-                        // validator: (isusernamevalid) {
-                        //   if (isusernamevalid.toString().isNotEmpty)
-                        //     return null;
-                        //   else
-                        //     return 'Enter valid user name';
-                        // },
+
                       ),
                     ),
                     Container(
@@ -254,7 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
               ),
-             
+
 
               GestureDetector(
                 onTap: () async {

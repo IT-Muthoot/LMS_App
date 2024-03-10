@@ -215,9 +215,10 @@ class _SplashViewState extends State<SplashView> {
                             child: Lottie.asset('assets/jsons/spalsh.json',))),
                       ),
                     SizedBox(
-                        height: height * 0.025,
                         child: Image.asset(
-                          'assets/images/QuickLead.png',
+                          'assets/images/HomeFin.png',
+                          height: height * 0.1,
+                          fit: BoxFit.fill,
                         )),
                     SizedBox(
                       height: height * 0.08,

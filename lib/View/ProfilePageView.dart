@@ -52,7 +52,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                       width: width * 0.04,
                     ),
                     Text(
-                      "Manisha Bianca Benny",
+                      "",
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         color: Colors.black,

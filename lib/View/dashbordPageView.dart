@@ -26,6 +26,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
   List<DocumentSnapshot> ListOfUsers = [];
   var userType;
   String? employeeName;
+  String? branchCode;
 
   void fetchdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
@@ -75,7 +76,10 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           print(ListOfUsers[i]['EmployeeName']);
        setState(() {
          employeeName = ListOfUsers[i]['EmployeeName'];
+         branchCode = ListOfUsers[i]['branchCode'];
+         pref.setString("branchcode", ListOfUsers[i]['branchCode']);
          print(employeeName);
+         print(branchCode);
        });
         }
       });
