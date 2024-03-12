@@ -38,6 +38,7 @@ class _VisitPageViewState extends State<VisitPageView> {
   DateTime toDate = DateTime.now();
 
 
+
   bool isleadConverted = false;
 
   final List<String> _vistType= [
@@ -190,36 +191,38 @@ class _VisitPageViewState extends State<VisitPageView> {
     filteredList.clear();
   }
 
+
   Future<void> _selectDate(BuildContext context, int type) async {
-    DateTime? picked = await showDatePicker(
+    final DateTime now = DateTime.now();
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: fromDate,
+      initialDate: now, // Set the initialDate to today
       firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2101),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-              primaryColor: Colors.white,
-              dialogBackgroundColor: Colors.white,
-              hintColor: Colors.white,
-              colorScheme: ColorScheme.light(
-                  primary: StyleData.buttonColor, background: Colors.white),
-              buttonTheme:
-              const ButtonThemeData(textTheme: ButtonTextTheme.primary),
-              backgroundColor: Colors.white),
+            primaryColor: Colors.blue, // Your custom yellow color
+            hintColor: Color(0xff973232),
+            colorScheme: ColorScheme.light(primary: Color(0xff973232)),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Color(0xff973232),
+              ),
+            ),
+          ),
           child: child!,
         );
       },
     );
 
-    if (picked != null && picked != (type == 1 ? fromDate : toDate)) {
+    if (pickedDate != null) {
       setState(() {
         if (type == 1) {
-          // _selectedDate.toLocal().toString().split(' ')[0];
-
-          fromDate = picked;
+          _startDateController.text = formatDate(pickedDate.toLocal().toString());
         } else {
-          toDate = picked;
+          _endDateController.text = formatDate(pickedDate.toLocal().toString());
         }
       });
     }
@@ -227,6 +230,7 @@ class _VisitPageViewState extends State<VisitPageView> {
 
 
 
+  bool applyDateFilter = false;
 
   @override
   void initState() {
@@ -236,610 +240,684 @@ class _VisitPageViewState extends State<VisitPageView> {
     print("Access token");
     print(widget.accessToken);
     super.initState();
+    _startDateController.text = formatDate(DateTime.now().toLocal().toString());
+    _endDateController.text = formatDate(DateTime.now().toLocal().toString());
   }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        drawer: Drawer(
-          backgroundColor: Colors.white,
-          child: Container(
-            height: height * 1,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: height * 0.015,
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawer: Drawer(
+            backgroundColor: Colors.white,
+            child: Container(
+              height: height * 1,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: height * 0.015,
+                    ),
+                    Row(
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child:
+                            const Icon(Icons.arrow_back, color: Colors.black54)),
+                        SizedBox(
+                          width: width * 0.03,
+                        ),
+                        Text("Filter by",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: StyleData.boldFont,
+                                color: Colors.black54)),
+                      //  const Spacer(),
+                        // SizedBox(
+                        //     height: 24,
+                        //     child: Image.asset("assets/images/filter_icon.png")),
+                        SizedBox(
+                          width: width * 0.01,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    const Text(
+                      "From & To Date",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: height * 0.015,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        InkWell(
                           onTap: () {
+                            _selectDate(context, 1);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: width * 0.35,
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.black12),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  formatDate(fromDate.toLocal().toString()),
+                                  style: TextStyle(color: Colors.black87, fontSize: 13),
+                                ),
+                                SizedBox(
+                                  width: width * 0.02,
+                                ),
+                                Icon(
+                                  Ionicons.calendar_outline,
+                                  color: StyleData.appBarColor2,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   width: width * 0.01,
+                        // ),
+                        InkWell(
+                          onTap: () {
+                            _selectDate(context, 2);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: width * 0.35,
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.black12),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  formatDate(toDate.toLocal().toString()),
+                                  style: TextStyle(color: Colors.black, fontSize: 13),
+                                ),
+                                SizedBox(
+                                  width: width * 0.02,
+                                ),
+                                Icon(
+                                  Ionicons.calendar_outline,
+                                  color: StyleData.appBarColor2,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: height * 0.035,
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        InkWell(
+                          onTap: () {
+                            clearFilter();
                             Navigator.pop(context);
                           },
-                          child:
-                          const Icon(Icons.arrow_back, color: Colors.black54)),
-                      SizedBox(
-                        width: width * 0.03,
-                      ),
-                      Text("Filter by",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: StyleData.boldFont,
-                              color: Colors.black54)),
-                    //  const Spacer(),
-                      // SizedBox(
-                      //     height: 24,
-                      //     child: Image.asset("assets/images/filter_icon.png")),
-                      SizedBox(
-                        width: width * 0.01,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  const Text(
-                    "From & To Date",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    height: height * 0.015,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          _selectDate(context, 1);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: width * 0.35,
-                          decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.black12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                formatDate(fromDate.toLocal().toString()),
-                                style: TextStyle(color: Colors.black87, fontSize: 13),
-                              ),
-                              SizedBox(
-                                width: width * 0.02,
-                              ),
-                              Icon(
-                                Ionicons.calendar_outline,
-                                color: StyleData.appBarColor2,
-                                size: 20,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      // SizedBox(
-                      //   width: width * 0.01,
-                      // ),
-                      InkWell(
-                        onTap: () {
-                          _selectDate(context, 2);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: width * 0.35,
-                          decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.black12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                formatDate(toDate.toLocal().toString()),
+                          child: Container(
+                            height: 40,
+                            width: width * 0.3,
+                            decoration: BoxDecoration(
+                              // color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                Border.all(color: Colors.black26, width: 0.5)),
+                            child: const Center(
+                              child: Text(
+                                "Reset",
                                 style: TextStyle(color: Colors.black, fontSize: 13),
                               ),
-                              SizedBox(
-                                width: width * 0.02,
-                              ),
-                              Icon(
-                                Ionicons.calendar_outline,
-                                color: StyleData.appBarColor2,
-                                size: 20,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * 0.035,
-                  ),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      InkWell(
-                        onTap: () {
-                          clearFilter();
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                            // color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(20),
-                              border:
-                              Border.all(color: Colors.black26, width: 0.5)),
-                          child: const Center(
-                            child: Text(
-                              "Reset",
-                              style: TextStyle(color: Colors.black, fontSize: 13),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: width * 0.02,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          filterData();
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                              color: StyleData.buttonColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: const Center(
-                            child: Text(
-                              "Apply",
-                              style: TextStyle(color: Colors.white, fontSize: 13),
+                        SizedBox(
+                          width: width * 0.02,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            filterData();
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: width * 0.3,
+                            decoration: BoxDecoration(
+                                color: StyleData.buttonColor,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: const Center(
+                              child: Text(
+                                "Apply",
+                                style: TextStyle(color: Colors.white, fontSize: 13),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: width * 0.006,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: height * 0.08,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: StyleData.appBarColor2,
-                  // borderRadius: BorderRadius.only(
-                  //   bottomLeft: Radius.circular(20.0),
-                  //   bottomRight: Radius.circular(20.0),
-                  // ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // SizedBox(
-                    //   width: width * 0.00,
-                    // ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
-                            onTap: (){
-                              // SimpleHiddenDrawerController.of(context).open();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      FormPageView(),
-                                ),
-                              );
-                            },
-                            child:  Image.asset(
-                              'assets/images/add.png',
-                              width: width * 0.1,
-                            ),),
-                ),
-                    Text("Visits",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
-      
-      
-                Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: width * 0.05,
-                            ),
-                            Container(
-                              width: width * 0.08,
-                              height: height * 0.036,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.white24,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  searchKEY.text.isEmpty
-                                      ? ListOfLeads.length.toString()
-                                      : searchListOfLeads.length.toString(),
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        SizedBox(
+                          width: width * 0.006,
                         ),
-                      ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: height * 0.03,
-              ),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: height * 0.08,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: StyleData.appBarColor2,
+                    // borderRadius: BorderRadius.only(
+                    //   bottomLeft: Radius.circular(20.0),
+                    //   bottomRight: Radius.circular(20.0),
+                    // ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // SizedBox(
+                      //   width: width * 0.00,
+                      // ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GestureDetector(
+                              onTap: (){
+                                // SimpleHiddenDrawerController.of(context).open();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        FormPageView(),
+                                  ),
+                                );
+                              },
+                              child:  Image.asset(
+                                'assets/images/add.png',
+                                width: width * 0.1,
+                              ),),
+                  ),
+                      Text("Visits",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
 
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: searchKEY,
-                    style: const TextStyle(fontSize: 14,color: Colors.black54),
-                    cursorColor: Colors.black87,
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      labelStyle: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color:Colors.black54)),
-                      contentPadding: const EdgeInsets.only(left: 1,),
-                      hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
-                    //   suffixIcon: IconButton(
-                    //      icon:    SizedBox(
-                    //      //  height: 60,
-                    //        child: Image.asset(
-                    //          'assets/images/filter.png',
-                    //          width: width * 0.06,
-                    //          height: height * 0.02,
-                    //          color: Colors.black87
-                    //        ),
-                    //      ),
-                    //       onPressed: () {
-                    //      //   _showFilterBottomSheet();
-                    //         _scaffoldKey.currentState!.openDrawer();
-                    // },
-                    //   ),
-                      prefixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {},
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: new BorderSide(color: Colors.grey)),
-                    ),
-                    onChanged: (value) {
-                      _runFilter(value);
-                    },
+
+                  Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: width * 0.05,
+                              ),
+                              Container(
+                                width: width * 0.08,
+                                height: height * 0.036,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white24,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    searchKEY.text.isEmpty
+                                        ? ListOfLeads.length.toString()
+                                        : searchListOfLeads.length.toString(),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(height: height * 0.01),
-      
-              SizedBox(
-                height: height * 0.65,
-                width: MediaQuery.of(context).size.width,
-                child:ListOfLeads.isNotEmpty ?
-                Scrollbar(
-                  thickness: 8.5,
-                  thumbVisibility: true,
-                  radius: const Radius.circular(8),
-                  controller: ScrollController(),
-                  child: ListView.builder(
-                    itemCount: searchKEY.text.isEmpty
-                        ? ListOfLeads.length
-                        : searchListOfLeads.length,
-                    itemBuilder: (context, index) {
-                      ListOfLeads.sort((a, b) =>
-                          (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
-                      // ListOfLeads.sort((a, b) => DateTime.parse(b['createdDateTime']).compareTo(DateTime.parse(a['createdDateTime'])));
+                SizedBox(
+                  height: height * 0.03,
+                ),
 
-                      return
-                        (ListOfLeads[index]["LeadID"] ?? "").length <= 1 &&  ListOfLeads[index]["customerStatus"] == "Interested"  ?
-                        InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NewLeadPageView(
-                                    isNewActivity: false,
-                                    isUpdateActivity: true,
-                                    docId: ListOfLeads[index].id,
-                                  )));
-                        },
-                        child: Card(
-                          elevation: 0.5,
-                          child: Container(
-                            color: Colors.white,
-                            margin: EdgeInsets.all(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text("Name : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                           )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
-                                              : searchListOfLeads[index]
-                                          ["firstName"],
-                                            style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
-                                            decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.calendar_month),
-                                          Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
-                                          Text(searchKEY.text.isEmpty
-                                              ?
-                                          formatDate(ListOfLeads[index]["visitDate"])
-                                              :
-                                          formatDate(searchListOfLeads[index]
-                                          ["visitDate"])
-                                                 ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Visibility(
-                                         visible: ListOfLeads[index]["LeadID"] != null,
-                                        child: Row(
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: searchKEY,
+                      style: const TextStyle(fontSize: 14,color: Colors.black54),
+                      cursorColor: Colors.black87,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        labelStyle: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color:Colors.black54)),
+                        contentPadding: const EdgeInsets.only(left: 1,),
+                        hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
+                      //   suffixIcon: IconButton(
+                      //      icon:    SizedBox(
+                      //      //  height: 60,
+                      //        child: Image.asset(
+                      //          'assets/images/filter.png',
+                      //          width: width * 0.06,
+                      //          height: height * 0.02,
+                      //          color: Colors.black87
+                      //        ),
+                      //      ),
+                      //       onPressed: () {
+                      //      //   _showFilterBottomSheet();
+                      //         _scaffoldKey.currentState!.openDrawer();
+                      // },
+                      //   ),
+                        prefixIcon: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {},
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: new BorderSide(color: Colors.grey)),
+                      ),
+                      onChanged: (value) {
+                        _runFilter(value);
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: height * 0.01),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    height: height * 0.04,
+                    width: width * 0.35,
+                    decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        gradient: new LinearGradient(
+                            colors: [
+                              // Color.fromARGB(255, 168, 2, 2),
+                              // Color.fromARGB(255, 206, 122, 122)
+                              Color.fromARGB(255, 236, 225, 215),
+                              Color.fromARGB(255, 227, 222, 215)
+                            ]
+                        )
+                    ),
+                    child: TextFormField(
+                      controller: _startDateController,
+                      readOnly: true,
+                      onTap: () => _selectDate(context, 1),
+                      decoration: InputDecoration(
+                        labelText: '',
+                        suffixIcon: Icon(Icons.calendar_today, size: 20,),
+                        focusedBorder: InputBorder.none,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: height * 0.04,
+                    width: width * 0.35,
+                    decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        gradient: new LinearGradient(
+                            colors: [
+                              // Color.fromARGB(255, 168, 2, 2),
+                              // Color.fromARGB(255, 206, 122, 122)
+                              Color.fromARGB(255, 236, 225, 215),
+                              Color.fromARGB(255, 227, 222, 215)
+                            ]
+                        )
+                    ),
+                    child: TextFormField(
+                      controller: _endDateController,
+                      readOnly: true,
+
+                      onTap: () => _selectDate(context,2),
+                      decoration: InputDecoration(
+                        labelText: '',
+                        suffixIcon: Icon(Icons.calendar_today,size: 20,),
+                          border: InputBorder.none
+                        //  filled: true,
+                        //  fillColor: Colors.grey[200],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+                SizedBox(
+                  height: height * 0.65,
+                  width: MediaQuery.of(context).size.width,
+                  child:ListOfLeads.isNotEmpty ?
+                  Scrollbar(
+                    thickness: 8.5,
+                    thumbVisibility: true,
+                    radius: const Radius.circular(8),
+                    controller: ScrollController(),
+                    child: ListView.builder(
+                      itemCount: searchKEY.text.isEmpty
+                          ? ListOfLeads.length
+                          : searchListOfLeads.length,
+                      itemBuilder: (context, index) {
+                        ListOfLeads.sort((a, b) =>
+                            (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
+                        // ListOfLeads.sort((a, b) => DateTime.parse(b['createdDateTime']).compareTo(DateTime.parse(a['createdDateTime'])));
+                       // DateTime visitDate = ListOfLeads[index]["visitDate"];
+                        DateTime visitDate = DateTime.parse(ListOfLeads[index]["visitDate"]);
+                        bool isDateInRange = true;
+                        if (_startDateController.text.isNotEmpty && _endDateController.text.isNotEmpty) {
+                          DateTime startDate = DateTime.parse(_startDateController.text);
+                          DateTime endDate = DateTime.parse(_endDateController.text);
+
+                          isDateInRange = visitDate.isAtSameMomentAs(startDate) ||
+                              visitDate.isAfter(startDate) && visitDate.isBefore(endDate.add(Duration(days: 1)));
+                        }
+
+
+                        return
+                          isDateInRange ?  (ListOfLeads[index]["LeadID"] ?? "").length <= 1 &&  ListOfLeads[index]["customerStatus"] == "Interested"  ?
+                          InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewLeadPageView(
+                                      isNewActivity: false,
+                                      isUpdateActivity: true,
+                                      docId: ListOfLeads[index].id,
+                                    )));
+                          },
+                          child: Card(
+                            elevation: 0.5,
+                            child: Container(
+                              color: Colors.white,
+                              margin: EdgeInsets.all(8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Stack(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
-                                            Text("Lead ID : ",
+                                            Text("Name : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                             )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
+                                                : searchListOfLeads[index]
+                                            ["firstName"],
+                                              style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
+                                              decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.calendar_month),
+                                            Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
+                                            Text(searchKEY.text.isEmpty
+                                                ?
+                                            formatDate(ListOfLeads[index]["visitDate"])
+                                                :
+                                            formatDate(searchListOfLeads[index]
+                                            ["visitDate"])
+                                                   ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Visibility(
+                                           visible: ListOfLeads[index]["LeadID"] != null,
+                                          child: Row(
+                                            children: [
+                                              Text("Lead ID : ",
+                                                  style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                  )),
+                                              Text(searchKEY.text.isEmpty
+                                                  ? ListOfLeads[index]["LeadID"] ?? ""
+                                                  : searchListOfLeads[index]
+                                              ["LeadID"] ?? "",
+                                                  style: TextStyle(fontSize: 16, color: Colors.black87,)),
+                                            ],
+                                          ),
+                                        ) ,
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Customer Status : ",
                                                 style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
                                                 )),
                                             Text(searchKEY.text.isEmpty
-                                                ? ListOfLeads[index]["LeadID"] ?? ""
+                                                ? ListOfLeads[index]["customerStatus"] ?? ""
                                                 : searchListOfLeads[index]
-                                            ["LeadID"] ?? "",
-                                                style: TextStyle(fontSize: 16, color: Colors.black87,)),
+                                            ["customerStatus"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
                                           ],
                                         ),
-                                      ) ,
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Customer Status : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["customerStatus"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["customerStatus"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Lead Source       : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["leadSource"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["leadSource"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Purpose of Visit : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["purposeVisit"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["purposeVisit"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Positioned(
-                                    top: 10,
-                                    right: 20,
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/next.png',
-                                          width: 35,
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Lead Source       : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["leadSource"] ?? ""
+                                                : searchListOfLeads[index]
+                                            ["leadSource"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
                                         ),
-                                        Text(
-                                          'Convert',
-                                          style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Purpose of Visit : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["purposeVisit"] ?? ""
+                                                : searchListOfLeads[index]
+                                            ["purposeVisit"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ) :
-                        Card(
-                          elevation: 0.5,
-                          child: Container(
-                            color: Colors.white,
-                            margin: EdgeInsets.all(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Column(
                                         children: [
-                                          Text("Name : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
-                                              : searchListOfLeads[index]
-                                          ["firstName"],
-                                              style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
-                                                decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.calendar_month),
-                                          Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
-                                          Text(searchKEY.text.isEmpty
-                                              ?
-                                          formatDate(ListOfLeads[index]["visitDate"])
-                                              :
-                                          formatDate(searchListOfLeads[index]
-                                          ["visitDate"])
+                                          Image.asset(
+                                            'assets/images/next.png',
+                                            width: 35,
+                                          ),
+                                          Text(
+                                            'Convert',
+                                            style: TextStyle(fontSize: 12,color: StyleData.appBarColor,fontWeight: FontWeight.bold),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 8),
-                                      Visibility(
-                                        visible: ListOfLeads[index]["LeadID"] != null,
-                                        child: Row(
-                                          children: [
-                                            Text("Lead ID : ",
-                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                                )),
-                                            Text(searchKEY.text.isEmpty
-                                                ? ListOfLeads[index]["LeadID"] ?? ""
-                                                : searchListOfLeads[index]
-                                            ["LeadID"] ?? "",
-                                                style: TextStyle(fontSize: 16, color: StyleData.appBarColor2,)),
-                                          ],
-                                        ),
-                                      ) ,
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Customer Status : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["customerStatus"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["customerStatus"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Lead Source       : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["leadSource"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["leadSource"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text("Purpose of Visit : ",
-                                              style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                              )),
-                                          Text(searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]["purposeVisit"] ?? ""
-                                              : searchListOfLeads[index]
-                                          ["purposeVisit"] ?? "",
-                                              style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  ListOfLeads[index]["customerStatus"] == "Interested" ?
-                                  Positioned(
-                                    top: 10,
-                                    right: 20,
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/Correct.png',
-                                          width: 30,
-                                        ),
-                                      ],
                                     ),
-                                  ) :
-                                  Positioned(
-                                    top: 10,
-                                    right: 20,
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/notInterested.png',
-                                          width: 30,
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        );
-                    },
-                  ),
-                )
-                    : Center(
-                      child: const Text(
-                                      'No results found',
-                                      style: TextStyle(fontSize: 24),
+                        ) :
+                          Card(
+                            elevation: 0.5,
+                            child: Container(
+                              color: Colors.white,
+                              margin: EdgeInsets.all(8),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Stack(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("Name : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["firstName"] + " " + ListOfLeads[index]["lastName"]
+                                                : searchListOfLeads[index]
+                                            ["firstName"],
+                                                style: TextStyle(fontSize: 16, color: StyleData.appBarColor,decoration: TextDecoration.underline,decorationColor: StyleData.appBarColor, // Optional: Set the underline color
+                                                  decorationThickness: 1.0, decorationStyle: TextDecorationStyle.solid,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.calendar_month),
+                                            Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
+                                            Text(searchKEY.text.isEmpty
+                                                ?
+                                            formatDate(ListOfLeads[index]["visitDate"])
+                                                :
+                                            formatDate(searchListOfLeads[index]
+                                            ["visitDate"])
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Visibility(
+                                          visible: ListOfLeads[index]["LeadID"] != null,
+                                          child: Row(
+                                            children: [
+                                              Text("Lead ID : ",
+                                                  style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                  )),
+                                              Text(searchKEY.text.isEmpty
+                                                  ? ListOfLeads[index]["LeadID"] ?? ""
+                                                  : searchListOfLeads[index]
+                                              ["LeadID"] ?? "",
+                                                  style: TextStyle(fontSize: 16, color: StyleData.appBarColor2,)),
+                                            ],
+                                          ),
+                                        ) ,
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Customer Status : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["customerStatus"] ?? ""
+                                                : searchListOfLeads[index]
+                                            ["customerStatus"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Lead Source       : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["leadSource"] ?? ""
+                                                : searchListOfLeads[index]
+                                            ["leadSource"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Purpose of Visit : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text(searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]["purposeVisit"] ?? ""
+                                                : searchListOfLeads[index]
+                                            ["purposeVisit"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
+                                      ],
                                     ),
+                                    ListOfLeads[index]["customerStatus"] == "Interested" ?
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/Correct.png',
+                                            width: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    ) :
+                                    Positioned(
+                                      top: 10,
+                                      right: 20,
+                                      child: Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/images/notInterested.png',
+                                            width: 30,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ) : Container();
+                      },
                     ),
-              ),
-            ],
+                  )
+                      : Center(
+                        child: const Text(
+                                        'No results found',
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

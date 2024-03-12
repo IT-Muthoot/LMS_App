@@ -143,13 +143,9 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return SafeArea(child: WillPopScope(
-      onWillPop: () async {
-        // Exit the app when the back button is pressed
-        SystemNavigator.pop();
-        return false; // Prevents default back button behavior
-      },
-      child: Scaffold(
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: SafeArea(child: Scaffold(
         appBar:  AppBar(
           backgroundColor: StyleData.appBarColor2,
           title: Text("Applicant Detail",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
@@ -385,8 +381,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         //   },
         //   child: Icon(Icons.save),
         // ),
+      )
       ),
-    )
     );
   }
 }
