@@ -73,14 +73,19 @@ class _DashboardPageViewState extends State<DashboardPageView> {
         });
         for (var i = 0; value.docs.length > i; i++) {
           print(value.docs[i].data());
+          print("hgdhgjd");
           print(ListOfUsers[i]['EmployeeName']);
-       setState(() {
-         employeeName = ListOfUsers[i]['EmployeeName'];
-         branchCode = ListOfUsers[i]['branchCode'];
-         pref.setString("branchcode", ListOfUsers[i]['branchCode']);
-         print(employeeName);
-         print(branchCode);
-       });
+          if( pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode'])
+            {
+              setState(() {
+                employeeName = ListOfUsers[i]['EmployeeName'];
+                branchCode = ListOfUsers[i]['branchCode'];
+                pref.setString("branchcode", ListOfUsers[i]['branchCode']);
+                print("EMployee Name");
+                print(employeeName);
+                print(branchCode);
+              });
+            }
         }
       });
     } else {
@@ -89,7 +94,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfUsers = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(ListOfUsers[i]['EmployeeName']);
+        //  print(ListOfUsers[i]['EmployeeName']);
         }
       });
     }

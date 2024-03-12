@@ -31,6 +31,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController branchcode = TextEditingController();
   final registerformKey = GlobalKey<FormState>();
 
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
+
   final List<String> userType = [
     'RO',
     'RM',
@@ -112,6 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.singleLineFormatter,
                           LengthLimitingTextInputFormatter(7),
+                          UppercaseInputFormatter(),
                         ],
                         onChanged: (empCode) {
                           // Call the fetchEmployeeDetails function when the code is entered
@@ -148,27 +152,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.symmetric(horizontal: 40),
-                      child: TextFormField(
-                        controller: mobileNumber,
-                        keyboardType: TextInputType.phone,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(10),
-                        ],
-                        decoration: InputDecoration(
-                            labelText: "Mobile Number *"
-                        ),
-                        validator: (isusernamevalid) {
-                          if (isusernamevalid.toString().isNotEmpty)
-                            return null;
-                          else
-                            return 'Enter valid mobile Number';
-                        },
-                      ),
-                    ),
+                    // Container(
+                    //   alignment: Alignment.center,
+                    //   margin: EdgeInsets.symmetric(horizontal: 40),
+                    //   child: TextFormField(
+                    //     controller: mobileNumber,
+                    //     keyboardType: TextInputType.phone,
+                    //     inputFormatters: [
+                    //       FilteringTextInputFormatter.digitsOnly,
+                    //       LengthLimitingTextInputFormatter(10),
+                    //     ],
+                    //     decoration: InputDecoration(
+                    //         labelText: "Mobile Number *"
+                    //     ),
+                    //     validator: (isusernamevalid) {
+                    //       if (isusernamevalid.toString().isNotEmpty)
+                    //         return null;
+                    //       else
+                    //         return 'Enter valid mobile Number';
+                    //     },
+                    //   ),
+                    // ),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(horizontal: 40),
@@ -196,9 +200,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextFormField(
                         controller: passwordController,
                         decoration: InputDecoration(
-                            labelText: "Password *"
+                            labelText: "Password *",
+                          suffixIcon: IconButton(
+                        icon: Icon(
+                        isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.black54,
                         ),
-                        obscureText: true,
+                        onPressed: () {
+                          // Toggle the password visibility
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                      ),
+                        ),
+                        obscureText: !isPasswordVisible,
                         validator: (ispasswordvalid) {
                           if (ispasswordvalid.toString().isNotEmpty)
                             return null;
@@ -213,9 +229,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: TextFormField(
                         controller: confirmpasswordController,
                         decoration: InputDecoration(
-                            labelText: "Confirm Password *"
+                            labelText: "Confirm Password *",
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              // Toggle the password visibility
+                              setState(() {
+                                isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                              });
+                            },
+                          ),
                         ),
-                        obscureText: true,
+                        obscureText: !isConfirmPasswordVisible,
                         validator: (isconfirmpasswordvalid) {
                           if (isconfirmpasswordvalid.toString().isNotEmpty)
                             return null;
@@ -236,66 +264,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
               GestureDetector(
                 onTap: () async {
                   print("Helloo");
-                  if (registerformKey.currentState!.validate()) {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: SpinKitFadingCircle(
-                            color: Colors.redAccent, // choose your preferred color
-                            size: 50.0,
-                          ),
+                  if (registerformKey.currentState!.validate() ) {
+                    if(passwordController.text == confirmpasswordController.text)
+                      {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return Center(
+                              child: SpinKitFadingCircle(
+                                color: Colors.redAccent, // choose your preferred color
+                                size: 50.0,
+                              ),
+                            );
+                          },
                         );
-                      },
-                    );
-                    try {
-                      final credential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      );
-                      print("Helloo");
-                      if (credential.user!.uid != "") {
-                        CollectionReference users = FirebaseFirestore
-                            .instance
-                            .collection('users');
+                        try {
+                          final credential = await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                          print("Helloo");
+                          if (credential.user!.uid != "") {
+                            CollectionReference users = FirebaseFirestore
+                                .instance
+                                .collection('users');
 
-                        Map<String, dynamic> params = {
-                          "EmployeeName": empNameController.text,
-                          "EmployeeCode": empCodeController.text,
-                          "MobileNumber": mobileNumber.text,
-                          "email": emailController.text,
-                          "password": passwordController.text,
-                          "branchCode": branchcode.text,
-                          "confirmPassword": confirmpasswordController.text,
-                          "userId": credential.user!.uid,
-                          "createdDate": Timestamp.now(),
-                          "userType": "user",
-                        };
-                        users.add(params);
-                        customSuccessSnackBar("Registered Successfully");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginScreen(),
-                          ),
-                        );
+                            Map<String, dynamic> params = {
+                              "EmployeeName": empNameController.text,
+                              "EmployeeCode": empCodeController.text,
+                           //   "MobileNumber": mobileNumber.text,
+                              "email": emailController.text,
+                              "password": passwordController.text,
+                              "branchCode": branchcode.text,
+                              "confirmPassword": confirmpasswordController.text,
+                              "userId": credential.user!.uid,
+                              "createdDate": Timestamp.now(),
+                              "userType": "user",
+                            };
+                            users.add(params);
+                            customSuccessSnackBar("Registered Successfully");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                          Navigator.pop(context);
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'weak-password') {
+                            customSuccessSnackBar("The password provided is too weak.");
+                          } else if (e.code == 'email-already-in-use') {
+                            customSuccessSnackBar("The account already exists for that email.");
+                          }
+                          Navigator.pop(context);
+                        } catch (e) {
+                          customSuccessSnackBar("Something went wrong, try again later");
+                          print(e);
+                        }
                         Navigator.pop(context);
                       }
-                      Navigator.pop(context);
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'weak-password') {
-                        customSuccessSnackBar("The password provided is too weak.");
-                      } else if (e.code == 'email-already-in-use') {
-                        customSuccessSnackBar("The account already exists for that email.");
-                      }
-                      Navigator.pop(context);
-                    } catch (e) {
-                      customSuccessSnackBar("Something went wrong, try again later");
-                      print(e);
+                    else
+                    {
+                      customSuccessSnackBar("Password & Confirm password must be same");
                     }
-                    Navigator.pop(context);
                   }
                 },
                 child: Container(
@@ -406,6 +441,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: const Color(0xfff88405),
         // backgroundColor: const Color(0xffee5b5b),
       ),
+    );
+  }
+}
+
+class UppercaseInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text!.toUpperCase(),
+      selection: newValue.selection,
     );
   }
 }
