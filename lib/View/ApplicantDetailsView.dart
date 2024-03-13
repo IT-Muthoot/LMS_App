@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:lead_management_system/View/dashbordPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,12 +73,63 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     });
   }
 
+  TextEditingController _startDateController = TextEditingController();
+  TextEditingController _endDateController = TextEditingController();
+  Future<void> _selectDate(BuildContext context, int type) async {
+    final DateTime now = DateTime.now();
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now, // Set the initialDate to today
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blue, // Your custom yellow color
+            hintColor: Color(0xff973232),
+            colorScheme: ColorScheme.light(primary: Color(0xff973232)),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Color(0xff973232),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        if (type == 1) {
+          _startDateController.text = formatDate(pickedDate.toLocal().toString());
+        } else {
+          _endDateController.text = formatDate(pickedDate.toLocal().toString());
+        }
+      });
+    }
+  }
+  String formatDate(String dateString) {
+    try {
+      // Assuming dateString is in the format 'yyyy-MM-dd HH:mm:ss.SSS'
+      DateTime date = DateTime.parse(dateString);
+
+      final formatter = DateFormat('yyyy-MM-dd');
+      return formatter.format(date);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return " --";
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     fetchdata();
     super.initState();
+    // _startDateController.text = formatDate(DateTime.now().toLocal().toString());
+    // _endDateController.text = formatDate(DateTime.now().toLocal().toString());
   }
 
   @override
@@ -85,13 +137,23 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        // Navigate to ApplicantDetailsView when back button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePageView(),
+          ),
+        );
+        // Prevent the default back navigation
+        return false;
+      },
       child: Scaffold(
         appBar:  AppBar(
           backgroundColor: StyleData.appBarColor2,
           leading: Padding(
             padding: const EdgeInsets.all(19.0),
-            child: GestureDetector(
+            child: InkWell(
                 onTap: (){
                   Navigator.push(
                     context,
@@ -101,11 +163,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                     ),
                   );
                 },
-                child:  Container(
-                  child: Image.asset(
-                    'assets/images/arrow.png',
-                  ),
-                ),),
+                child:  Icon(Icons.home, size: 30,color: Colors.white,),),
           ),
           title: Text("Lead Details",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
           centerTitle: true,
@@ -117,23 +175,33 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
           SizedBox(
             width: width * 0.05,
           ),
-          Container(
-            width: width * 0.08,
-            height: height * 0.036,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white24,
-            ),
-            child: Center(
-              child: Text(ListOfLeads.length.toString(),
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontFamily: 'Poppins',
+          Builder(
+            builder: (context) {
+              String countText = searchKEY.text.isEmpty ? ListOfLeads.length.toString() : searchListOfLeads.length.toString();
+              double textWidth = countText.length * 8.0; // Adjust 8.0 based on your font size and preference
+
+              return Container(
+                width: textWidth + 20, // Adjust padding as needed
+                height: height * 0.036,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white24,
                 ),
-              ),
-            ),
+                child: Center(
+                  child: Text(
+                    countText,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
+
+
         ],
       ),
         ),
@@ -193,8 +261,81 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                  ),
                ),
                SizedBox(
-                 height: height * 0.03,
+                 height: height * 0.01,
                ),
+               // Row(
+               //   mainAxisAlignment: MainAxisAlignment.end,
+               //   children: [
+               //     Padding(
+               //       padding: EdgeInsets.only(right: 8.0), // Adjust the right padding as needed
+               //       child: Container(
+               //         height: height * 0.04,
+               //         width: width * 0.4,
+               //         decoration: BoxDecoration(
+               //           borderRadius: BorderRadius.circular(30.0),
+               //           gradient: LinearGradient(
+               //             colors: [
+               //               Color.fromARGB(255, 236, 225, 215),
+               //               Color.fromARGB(255, 227, 222, 215)
+               //             ],
+               //           ),
+               //         ),
+               //         child: Padding(
+               //           padding: EdgeInsets.symmetric(horizontal: 8.0),
+               //           child: TextFormField(
+               //             controller: _startDateController,
+               //             readOnly: true,
+               //             onTap: () => _selectDate(context, 1),
+               //             decoration: InputDecoration(
+               //               labelText: '',
+               //               suffixIcon: Icon(Icons.calendar_today, size: 20,),
+               //               focusedBorder: InputBorder.none,
+               //               border: InputBorder.none,
+               //             ),
+               //           ),
+               //         ),
+               //       ),
+               //     ),
+               //
+               //     Padding(
+               //       padding: EdgeInsets.only(right: 8.0),
+               //       child: Container(
+               //         height: height * 0.04,
+               //         width: width * 0.4,
+               //         decoration: new BoxDecoration(
+               //             borderRadius: BorderRadius.circular(30.0),
+               //             gradient: new LinearGradient(
+               //                 colors: [
+               //                   // Color.fromARGB(255, 168, 2, 2),
+               //                   // Color.fromARGB(255, 206, 122, 122)
+               //                   Color.fromARGB(255, 236, 225, 215),
+               //                   Color.fromARGB(255, 227, 222, 215)
+               //                 ]
+               //             )
+               //         ),
+               //         child: Padding(
+               //           padding: EdgeInsets.symmetric(horizontal: 8.0),
+               //           child: TextFormField(
+               //             controller: _endDateController,
+               //             readOnly: true,
+               //
+               //             onTap: () => _selectDate(context,2),
+               //             decoration: InputDecoration(
+               //                 labelText: '',
+               //                 suffixIcon: Icon(Icons.calendar_today,size: 20,),
+               //                 border: InputBorder.none
+               //               //  filled: true,
+               //               //  fillColor: Colors.grey[200],
+               //             ),
+               //           ),
+               //         ),
+               //       ),
+               //     ),
+               //   ],
+               // ),
+               // SizedBox(
+               //   height: height * 0.01,
+               // ),
                SizedBox(
                  height: height * 0.65,
                  width: MediaQuery.of(context).size.width,
@@ -344,7 +485,8 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                              ),
                                            ),
                                          ],
-                                       )
+                                       ),
+
                                      ],
                                    )
                                  ],

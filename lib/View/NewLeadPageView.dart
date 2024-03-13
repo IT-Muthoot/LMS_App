@@ -721,7 +721,17 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        // Navigate to ApplicantDetailsView when back button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePageView(),
+          ),
+        );
+        // Prevent the default back navigation
+        return false;
+      },
       child: SafeArea(
         child: Scaffold(
           appBar:  AppBar(
@@ -1229,12 +1239,18 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                                       TextFormField(
                                                                         controller: _landMark,
                                                                         onChanged: (value) {
-                                                                          // setState(() {
-                                                                          //   checkAddressFieldsFilled();
-                                                                          // });
+                                                                          setState(() {
+                                                                            checkAddressFieldsFilled();
+                                                                          });
+                                                                        },
+                                                                        validator: (value) {
+                                                                          if (value == null || value.isEmpty) {
+                                                                            return 'Please enter landmark';
+                                                                          }
+                                                                          return null;
                                                                         },
                                                                         decoration: InputDecoration(
-                                                                          labelText: 'Landmark',
+                                                                          labelText: 'Landmark *',
                                                                           hintText: 'Enter Landmark',
                                                                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                                           //   border: InputBorder.none,
@@ -2553,64 +2569,67 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0, // No shadow
-          content: Container(
-            height:190,
-            width: 190,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child:
-                  Container(
-                    height: 80,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle
-                    ),
-                    child: Center(
-                      child: Icon(Icons.done,color: Colors.white,),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text('Lead created successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                //  SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
-                    Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(height: 5),
-                SizedBox(
-                  height: 25,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ApplicantDetailsView(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0, // No shadow
+            content: Container(
+              height:190,
+              width: 190,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child:
+                    Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle
+                      ),
+                      child: Center(
+                        child: Icon(Icons.done,color: Colors.white,),
                       ),
                     ),
-                    child: Text('OK', style: TextStyle(color: Colors.white)),
                   ),
-                ),
-              ],
+                  SizedBox(height: 8),
+                  Text('Lead created successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  //  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                      Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  SizedBox(
+                    height: 25,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ApplicantDetailsView(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text('OK', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

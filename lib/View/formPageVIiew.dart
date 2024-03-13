@@ -723,7 +723,17 @@ async {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        // Navigate to ApplicantDetailsView when back button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePageView(),
+          ),
+        );
+        // Prevent the default back navigation
+        return false;
+      },
       child: Scaffold(
         appBar:  AppBar(
           backgroundColor: StyleData.appBarColor2,

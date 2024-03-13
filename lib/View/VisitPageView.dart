@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -228,9 +229,8 @@ class _VisitPageViewState extends State<VisitPageView> {
     }
   }
 
-
-
   bool applyDateFilter = false;
+
 
   @override
   void initState() {
@@ -249,7 +249,17 @@ class _VisitPageViewState extends State<VisitPageView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        // Navigate to ApplicantDetailsView when back button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePageView(),
+          ),
+        );
+        // Prevent the default back navigation
+        return false;
+      },
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
@@ -484,7 +494,40 @@ class _VisitPageViewState extends State<VisitPageView> {
                                 width: width * 0.05,
                               ),
                               Container(
-                                width: width * 0.08,
+                                width: (() {
+                                  String countText = (() {
+                                    if (searchKEY.text.isEmpty && _startDateController.text.isEmpty && _endDateController.text.isEmpty) {
+                                      return ListOfLeads.length.toString();
+                                    } else {
+                                      int count = 0;
+                                      for (int i = 0; i < ListOfLeads.length; i++) {
+                                        DateTime visitDate = DateTime.parse(ListOfLeads[i]["visitDate"]);
+                                        bool isDateInRange = true;
+
+                                        if (_startDateController.text.isNotEmpty && _endDateController.text.isNotEmpty) {
+                                          DateTime startDate = DateTime.parse(_startDateController.text);
+                                          DateTime endDate = DateTime.parse(_endDateController.text);
+
+                                          isDateInRange = visitDate.isAtSameMomentAs(startDate) ||
+                                              visitDate.isAfter(startDate) && visitDate.isBefore(endDate.add(Duration(days: 1)));
+                                        }
+
+                                        if (searchKEY.text.isEmpty && isDateInRange) {
+                                          count++;
+                                        } else if ((ListOfLeads[i]["firstName"].toLowerCase().contains(searchKEY.text.toLowerCase()) ||
+                                            ListOfLeads[i]["purposeVisit"].toString().toUpperCase().contains(searchKEY.text.toUpperCase()) ||
+                                            ListOfLeads[i]["LeadID"].toString().toUpperCase().contains(searchKEY.text.toUpperCase()) ||
+                                            ListOfLeads[i]["leadSource"].toString().toUpperCase().contains(searchKEY.text.toUpperCase())) &&
+                                            isDateInRange) {
+                                          count++;
+                                        }
+                                      }
+                                      return count.toString();
+                                    }
+                                  })();
+
+                                  return (countText.length * 8.0) + 20; // Adjust padding as needed
+                                })(),
                                 height: height * 0.036,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -492,9 +535,36 @@ class _VisitPageViewState extends State<VisitPageView> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    searchKEY.text.isEmpty
-                                        ? ListOfLeads.length.toString()
-                                        : searchListOfLeads.length.toString(),
+                                    (() {
+                                      if (searchKEY.text.isEmpty && _startDateController.text.isEmpty && _endDateController.text.isEmpty) {
+                                        return ListOfLeads.length.toString();
+                                      } else {
+                                        int count = 0;
+                                        for (int i = 0; i < ListOfLeads.length; i++) {
+                                          DateTime visitDate = DateTime.parse(ListOfLeads[i]["visitDate"]);
+                                          bool isDateInRange = true;
+
+                                          if (_startDateController.text.isNotEmpty && _endDateController.text.isNotEmpty) {
+                                            DateTime startDate = DateTime.parse(_startDateController.text);
+                                            DateTime endDate = DateTime.parse(_endDateController.text);
+
+                                            isDateInRange = visitDate.isAtSameMomentAs(startDate) ||
+                                                visitDate.isAfter(startDate) && visitDate.isBefore(endDate.add(Duration(days: 1)));
+                                          }
+
+                                          if (searchKEY.text.isEmpty && isDateInRange) {
+                                            count++;
+                                          } else if ((ListOfLeads[i]["firstName"].toLowerCase().contains(searchKEY.text.toLowerCase()) ||
+                                              ListOfLeads[i]["purposeVisit"].toString().toUpperCase().contains(searchKEY.text.toUpperCase()) ||
+                                              ListOfLeads[i]["LeadID"].toString().toUpperCase().contains(searchKEY.text.toUpperCase()) ||
+                                              ListOfLeads[i]["leadSource"].toString().toUpperCase().contains(searchKEY.text.toUpperCase())) &&
+                                              isDateInRange) {
+                                            count++;
+                                          }
+                                        }
+                                        return count.toString();
+                                      }
+                                    })(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,
@@ -502,126 +572,141 @@ class _VisitPageViewState extends State<VisitPageView> {
                                     ),
                                   ),
                                 ),
-                              ),
+                              )
+
+
+
+
                             ],
                           ),
                         ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.03,
-                ),
-
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: searchKEY,
-                      style: const TextStyle(fontSize: 14,color: Colors.black54),
-                      cursorColor: Colors.black87,
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        labelStyle: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black54
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color:Colors.black54)),
-                        contentPadding: const EdgeInsets.only(left: 1,),
-                        hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
-                      //   suffixIcon: IconButton(
-                      //      icon:    SizedBox(
-                      //      //  height: 60,
-                      //        child: Image.asset(
-                      //          'assets/images/filter.png',
-                      //          width: width * 0.06,
-                      //          height: height * 0.02,
-                      //          color: Colors.black87
-                      //        ),
-                      //      ),
-                      //       onPressed: () {
-                      //      //   _showFilterBottomSheet();
-                      //         _scaffoldKey.currentState!.openDrawer();
-                      // },
-                      //   ),
-                        prefixIcon: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () {},
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: new BorderSide(color: Colors.grey)),
-                      ),
-                      onChanged: (value) {
-                        _runFilter(value);
-                      },
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   height: height * 0.03,
+                // ),
+                //
+                // Container(
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: TextField(
+                //       controller: searchKEY,
+                //       style: const TextStyle(fontSize: 14,color: Colors.black54),
+                //       cursorColor: Colors.black87,
+                //       decoration: InputDecoration(
+                //         hintText: 'Search...',
+                //         labelStyle: TextStyle(
+                //             fontSize: 16,
+                //             color: Colors.black54
+                //         ),
+                //         focusedBorder: OutlineInputBorder(
+                //             borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                //             borderSide: BorderSide(color:Colors.black54)),
+                //         contentPadding: const EdgeInsets.only(left: 1,),
+                //         hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
+                //       //   suffixIcon: IconButton(
+                //       //      icon:    SizedBox(
+                //       //      //  height: 60,
+                //       //        child: Image.asset(
+                //       //          'assets/images/filter.png',
+                //       //          width: width * 0.06,
+                //       //          height: height * 0.02,
+                //       //          color: Colors.black87
+                //       //        ),
+                //       //      ),
+                //       //       onPressed: () {
+                //       //      //   _showFilterBottomSheet();
+                //       //         _scaffoldKey.currentState!.openDrawer();
+                //       // },
+                //       //   ),
+                //         prefixIcon: IconButton(
+                //           icon: Icon(Icons.search),
+                //           onPressed: () {},
+                //         ),
+                //         border: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(20.0),
+                //             borderSide: new BorderSide(color: Colors.grey)),
+                //       ),
+                //       onChanged: (value) {
+                //         _runFilter(value);
+                //       },
+                //     ),
+                //   ),
+                // ),
                 SizedBox(height: height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    height: height * 0.04,
-                    width: width * 0.35,
-                    decoration: new BoxDecoration(
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0), // Adjust the right padding as needed
+                    child: Container(
+                      height: height * 0.04,
+                      width: width * 0.4,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30.0),
-                        gradient: new LinearGradient(
-                            colors: [
-                              // Color.fromARGB(255, 168, 2, 2),
-                              // Color.fromARGB(255, 206, 122, 122)
-                              Color.fromARGB(255, 236, 225, 215),
-                              Color.fromARGB(255, 227, 222, 215)
-                            ]
-                        )
-                    ),
-                    child: TextFormField(
-                      controller: _startDateController,
-                      readOnly: true,
-                      onTap: () => _selectDate(context, 1),
-                      decoration: InputDecoration(
-                        labelText: '',
-                        suffixIcon: Icon(Icons.calendar_today, size: 20,),
-                        focusedBorder: InputBorder.none,
-                        border: InputBorder.none,
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 236, 225, 215),
+                            Color.fromARGB(255, 227, 222, 215)
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextFormField(
+                          controller: _startDateController,
+                          readOnly: true,
+                          onTap: () => _selectDate(context, 1),
+                          decoration: InputDecoration(
+                            labelText: '',
+                            suffixIcon: Icon(Icons.calendar_today, size: 20,),
+                            focusedBorder: InputBorder.none,
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    height: height * 0.04,
-                    width: width * 0.35,
-                    decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        gradient: new LinearGradient(
-                            colors: [
-                              // Color.fromARGB(255, 168, 2, 2),
-                              // Color.fromARGB(255, 206, 122, 122)
-                              Color.fromARGB(255, 236, 225, 215),
-                              Color.fromARGB(255, 227, 222, 215)
-                            ]
-                        )
-                    ),
-                    child: TextFormField(
-                      controller: _endDateController,
-                      readOnly: true,
 
-                      onTap: () => _selectDate(context,2),
-                      decoration: InputDecoration(
-                        labelText: '',
-                        suffixIcon: Icon(Icons.calendar_today,size: 20,),
-                          border: InputBorder.none
-                        //  filled: true,
-                        //  fillColor: Colors.grey[200],
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      height: height * 0.04,
+                      width: width * 0.4,
+                      decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          gradient: new LinearGradient(
+                              colors: [
+                                // Color.fromARGB(255, 168, 2, 2),
+                                // Color.fromARGB(255, 206, 122, 122)
+                                Color.fromARGB(255, 236, 225, 215),
+                                Color.fromARGB(255, 227, 222, 215)
+                              ]
+                          )
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextFormField(
+                          controller: _endDateController,
+                          readOnly: true,
+
+                          onTap: () => _selectDate(context,2),
+                          decoration: InputDecoration(
+                            labelText: '',
+                            suffixIcon: Icon(Icons.calendar_today,size: 20,),
+                              border: InputBorder.none
+                            //  filled: true,
+                            //  fillColor: Colors.grey[200],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
                 SizedBox(
-                  height: height * 0.65,
+                  height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty ?
                   Scrollbar(
@@ -637,7 +722,7 @@ class _VisitPageViewState extends State<VisitPageView> {
                         ListOfLeads.sort((a, b) =>
                             (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                         // ListOfLeads.sort((a, b) => DateTime.parse(b['createdDateTime']).compareTo(DateTime.parse(a['createdDateTime'])));
-                       // DateTime visitDate = ListOfLeads[index]["visitDate"];
+                     //  DateTime visitDate = ListOfLeads[index]["visitDate"];
                         DateTime visitDate = DateTime.parse(ListOfLeads[index]["visitDate"]);
                         bool isDateInRange = true;
                         if (_startDateController.text.isNotEmpty && _endDateController.text.isNotEmpty) {
@@ -876,7 +961,7 @@ class _VisitPageViewState extends State<VisitPageView> {
                                         ),
                                       ],
                                     ),
-                                    ListOfLeads[index]["customerStatus"] == "Interested" ?
+                                  ListOfLeads[index]["customerStatus"] == "Interested" ?
                                     Positioned(
                                       top: 10,
                                       right: 20,
@@ -905,7 +990,8 @@ class _VisitPageViewState extends State<VisitPageView> {
                                 ),
                               ),
                             ),
-                          ) : Container();
+                          )
+                        : Container();
                       },
                     ),
                   )

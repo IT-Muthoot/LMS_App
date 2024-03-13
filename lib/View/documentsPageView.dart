@@ -144,7 +144,17 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () async {
+        // Navigate to ApplicantDetailsView when back button is pressed
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ApplicantDetailsView(),
+          ),
+        );
+        // Prevent the default back navigation
+        return false;
+      },
       child: SafeArea(child: Scaffold(
         appBar:  AppBar(
           backgroundColor: StyleData.appBarColor2,

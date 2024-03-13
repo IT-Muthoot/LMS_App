@@ -344,12 +344,12 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) =>  VisitPageView(),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>  VisitPageView(),
+                            ),
+                          );
                         },
                         child: Text(
                           "View All",
