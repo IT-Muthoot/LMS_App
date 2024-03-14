@@ -385,7 +385,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                      context,
                                      MaterialPageRoute(
                                          builder: (context) => DocumentPageView(
-                                           docId: ListOfLeads[index].id,
+                                           docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id
                                          )));
                                },
                                child: Column(

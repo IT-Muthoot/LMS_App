@@ -1044,47 +1044,47 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                           ),
                                         ),
                                       ),
-                    SizedBox(
-                      height:  height * 0.46,
-                    ),
-                    Container(
-                      height: 55,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: StyleData.appBarColor2,
-                      ),
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: () {
 
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            elevation: 0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.save_outlined, color: Colors.white,),
-                              SizedBox(width: width * 0.025,),
-                              Text(
-                                'Submit',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
                                     ],
                                   ),
                   )),
               //
+              SizedBox(
+                height:  height * 0.5,
+              ),
+              Container(
+                height: 55,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: StyleData.appBarColor2,
+                ),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
 
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.save_outlined, color: Colors.white,),
+                        SizedBox(width: width * 0.025,),
+                        Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -1129,33 +1129,33 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                             maxWidth: 820,
                             imageQuality: 60);
                         print(pickedFile);
-                        if (applicationFormClicked) {
-                          print("Yessss");
-                          uploadOnDMS(pickedFile, "Application_Form");
-                        } else if (bankPassbookClicked) {
-                          uploadOnDMS(pickedFile, "Bank_Passbook");
-                        }
-                        else if (dateOfBirthClicked) {
-                          uploadOnDMS(pickedFile, "Date_Of_Birth");
-                        } else if (loginFeeChequeClicked) {
-                          uploadOnDMS(pickedFile, "Login_Fee_Check");
-                        } else if (passportSizePhotoClicked) {
-                          uploadOnDMS(pickedFile, "Passport_Size_Photo");
-                        } else if (photoIdProofClicked) {
-                          uploadOnDMS(pickedFile, "Photo_Id_Proof");
-                        } else if (residenceProofClicked) {
-                          uploadOnDMS(pickedFile, "Residence_Proof");
-                        } else if (salarySlipClicked) {
-                          uploadOnDMS(pickedFile, "Salary_Slip");
-                        } else if (signatureProofClicked) {
-                          uploadOnDMS(pickedFile, "Signature_Proof");
-                        } else if (copyOfPropertyClicked) {
-                          uploadOnDMS(pickedFile, "Copy_Of_Property");
-                        }else if (totalWorkExpClicked) {
-                          uploadOnDMS(pickedFile, "Total_Work_Experience");
-                        }else if (WorkExpClicked) {
-                          uploadOnDMS(pickedFile, "Work_Experience");
-                        }
+                        // if (applicationFormClicked) {
+                        //   print("Yessss");
+                        //   uploadOnDMS(pickedFile, "Application_Form");
+                        // } else if (bankPassbookClicked) {
+                        //   uploadOnDMS(pickedFile, "Bank_Passbook");
+                        // }
+                        // else if (dateOfBirthClicked) {
+                        //   uploadOnDMS(pickedFile, "Date_Of_Birth");
+                        // } else if (loginFeeChequeClicked) {
+                        //   uploadOnDMS(pickedFile, "Login_Fee_Check");
+                        // } else if (passportSizePhotoClicked) {
+                        //   uploadOnDMS(pickedFile, "Passport_Size_Photo");
+                        // } else if (photoIdProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Photo_Id_Proof");
+                        // } else if (residenceProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Residence_Proof");
+                        // } else if (salarySlipClicked) {
+                        //   uploadOnDMS(pickedFile, "Salary_Slip");
+                        // } else if (signatureProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Signature_Proof");
+                        // } else if (copyOfPropertyClicked) {
+                        //   uploadOnDMS(pickedFile, "Copy_Of_Property");
+                        // }else if (totalWorkExpClicked) {
+                        //   uploadOnDMS(pickedFile, "Total_Work_Experience");
+                        // }else if (WorkExpClicked) {
+                        //   uploadOnDMS(pickedFile, "Work_Experience");
+                        // }
                       },
                       trailing: Icon(
                         Icons.arrow_circle_right_rounded,
@@ -1191,33 +1191,33 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                             source: ImageSource.gallery,
                             maxHeight: 1800,
                             maxWidth: 1080);
-
-                        if (applicationFormClicked) {
-                          uploadOnDMS(pickedFile, "Application_Form");
-                        } else if (bankPassbookClicked) {
-                          uploadOnDMS(pickedFile, "Bank_PassBook");
-                        }
-                        else if (dateOfBirthClicked) {
-                          uploadOnDMS(pickedFile, "Date_Of_Birth");
-                        } else if (loginFeeChequeClicked) {
-                          uploadOnDMS(pickedFile, "Login_Fee_Check");
-                        } else if (passportSizePhotoClicked) {
-                          uploadOnDMS(pickedFile, "Passport_Size_Photo");
-                        } else if (photoIdProofClicked) {
-                          uploadOnDMS(pickedFile, "Photo_Id_Proof");
-                        } else if (residenceProofClicked) {
-                          uploadOnDMS(pickedFile, "Residence_Proof");
-                        } else if (salarySlipClicked) {
-                          uploadOnDMS(pickedFile, "Salary_Slip");
-                        } else if (signatureProofClicked) {
-                          uploadOnDMS(pickedFile, "Signature_Proof");
-                        } else if (copyOfPropertyClicked) {
-                          uploadOnDMS(pickedFile, "Copy_Of_Property");
-                        }else if (totalWorkExpClicked) {
-                          uploadOnDMS(pickedFile, "Total_Work_Experience");
-                        }else if (WorkExpClicked) {
-                          uploadOnDMS(pickedFile, "Work_Experience");
-                        }
+                        //
+                        // if (applicationFormClicked) {
+                        //   uploadOnDMS(pickedFile, "Application_Form");
+                        // } else if (bankPassbookClicked) {
+                        //   uploadOnDMS(pickedFile, "Bank_PassBook");
+                        // }
+                        // else if (dateOfBirthClicked) {
+                        //   uploadOnDMS(pickedFile, "Date_Of_Birth");
+                        // } else if (loginFeeChequeClicked) {
+                        //   uploadOnDMS(pickedFile, "Login_Fee_Check");
+                        // } else if (passportSizePhotoClicked) {
+                        //   uploadOnDMS(pickedFile, "Passport_Size_Photo");
+                        // } else if (photoIdProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Photo_Id_Proof");
+                        // } else if (residenceProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Residence_Proof");
+                        // } else if (salarySlipClicked) {
+                        //   uploadOnDMS(pickedFile, "Salary_Slip");
+                        // } else if (signatureProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Signature_Proof");
+                        // } else if (copyOfPropertyClicked) {
+                        //   uploadOnDMS(pickedFile, "Copy_Of_Property");
+                        // }else if (totalWorkExpClicked) {
+                        //   uploadOnDMS(pickedFile, "Total_Work_Experience");
+                        // }else if (WorkExpClicked) {
+                        //   uploadOnDMS(pickedFile, "Work_Experience");
+                        // }
                       },
                       trailing: Icon(
                         Icons.arrow_circle_right_rounded,
@@ -1231,167 +1231,167 @@ class _DocumentPageViewState extends State<DocumentPageView> {
           );
         });
   }
-  void uploadOnDMS(var pickedFile, String title) async {
-    //New Implementation for saving application PDF
-print("bhjkjhlknl");
-    Dialogs.materialDialog(
-        msg: 'Are you sure you want to upload this document?',
-        title: "Alert",
-        msgStyle:
-        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
-        titleStyle: const TextStyle(color: Colors.white),
-        color: StyleData.appBarColor2,
-        context: context,
-        titleAlign: TextAlign.center,
-        msgAlign: TextAlign.center,
-        barrierDismissible: false,
-        dialogWidth: kIsWeb ? 0.3 : null,
-        onClose: (value) {},
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: InkWell(
-              onTap: () async {
-                Navigator.pop(context);
-              SmartDialog.showLoading(msg: "Uploading Document");
-                var dio = Dio();
-                try {
-                  FormData formData = FormData.fromMap({
-                    "File": await MultipartFile.fromFile(
-                      pickedFile!.path,
-                      filename: pickedFile.name,
-                      contentType: MediaType("pdf", "jpg"), //add this
-                    ),
-                    "Title": "HomeFin",
-                    "Description": "Document verification",
-                    "Tags": "HomeFin",
-                    "IsPasswordProtected": "0",
-                    "Password": "0",
-                    "LUSR": "HomeFin",
-                  });
-                  formData.files.addAll([
-                    MapEntry(
-                        "File",
-                        await MultipartFile.fromFile(pickedFile!.path,
-                            filename: pickedFile.name,
-                            contentType: MediaType('application', 'pdf')))
-                  ]);
-                  (dio.httpClientAdapter as DefaultHttpClientAdapter)
-                      .onHttpClientCreate = (client) {
-                    client.badCertificateCallback =
-                        (X509Certificate cert, String host, int port) => true;
-                  };
-                  dio.options.headers['Content-Type'] = 'multipart/form-data';
-                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
-
-                  var response = await dio.post(
-                    ApiUrls().uploadDoc,
-                    data: formData,
-                    onSendProgress: (int sent, int total) {
-                      debugPrint("sent${sent.toString()}" +
-                          " total${total.toString()}");
-                    },
-                  ).whenComplete(() {
-                    debugPrint("complete:");
-                  }).catchError((onError) {
-                    debugPrint("complete1");
-                    SmartDialog.dismiss();
-                  });
-                  print(response);
-                  var data = json.decode(response.toString());
-                  print(data);
-                  FirebaseFirestore.instance
-                      .collection("convertedLeads")
-                      .doc(widget.docId)
-                      .set({
-                    title: data["docId"].toString(),
-                  }, SetOptions(merge: true));
-                  SmartDialog.dismiss();
-                  if (applicationFormClicked) {
-                    setState(() {
-                      applicationForm = "Uploaded";
-                    });
-                  } else if (bankPassbookClicked) {
-                    setState(() {
-                      bankPassbook = "Uploaded";
-                    });
-                  }
-                  else if (dateOfBirthClicked) {
-                    setState(() {
-                      dateOfBirthProof = "Uploaded";
-                    });
-                  } else if (loginFeeChequeClicked) {
-                    setState(() {
-                      loginFeeCheque = "Uploaded";
-                    });
-                  } else if (passportSizePhotoClicked) {
-                    setState(() {
-                      passportSizePhoto = "Uploaded";
-                    });
-                  } else if (photoIdProofClicked) {
-                    setState(() {
-                      photoIdProof = "Uploaded";
-                    });
-                  } else if (residenceProofClicked) {
-                    setState(() {
-                      residenceProof = "Uploaded";
-                    });
-                  } else if (salarySlipClicked) {
-                    setState(() {
-                      salarySlip = "Uploaded";
-                    });
-                  } else if (signatureProofClicked) {
-                    setState(() {
-                      signatureProof = "Uploaded";
-                    });
-                  } else if (copyOfPropertyClicked) {
-                    setState(() {
-                      copyOfProperty = "Uploaded";
-                    });
-                  }
-                } catch (e) {
-                  SmartDialog.dismiss();
-                  debugPrint(e.toString());
-                }
-              },
-              child: Container(
-                height: 40,
-                width: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Center(
-                    child: Text('Yes',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: StyleData.boldFont,
-                            fontSize: 12))),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                height: 40,
-                width: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(5)),
-                child: Center(
-                    child: Text('Cancel',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: StyleData.boldFont,
-                            fontSize: 12))),
-              ),
-            ),
-          )
-        ]);
-  }
+//   void uploadOnDMS(var pickedFile, String title) async {
+//     //New Implementation for saving application PDF
+// print("bhjkjhlknl");
+//     Dialogs.materialDialog(
+//         msg: 'Are you sure you want to upload this document?',
+//         title: "Alert",
+//         msgStyle:
+//         TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+//         titleStyle: const TextStyle(color: Colors.white),
+//         color: StyleData.appBarColor2,
+//         context: context,
+//         titleAlign: TextAlign.center,
+//         msgAlign: TextAlign.center,
+//         barrierDismissible: false,
+//         dialogWidth: kIsWeb ? 0.3 : null,
+//         onClose: (value) {},
+//         actions: [
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 30),
+//             child: InkWell(
+//               onTap: () async {
+//                 Navigator.pop(context);
+//               SmartDialog.showLoading(msg: "Uploading Document");
+//                 var dio = Dio();
+//                 try {
+//                   FormData formData = FormData.fromMap({
+//                     "File": await MultipartFile.fromFile(
+//                       pickedFile!.path,
+//                       filename: pickedFile.name,
+//                       contentType: MediaType("pdf", "jpg"), //add this
+//                     ),
+//                     "Title": "HomeFin",
+//                     "Description": "Document verification",
+//                     "Tags": "HomeFin",
+//                     "IsPasswordProtected": "0",
+//                     "Password": "0",
+//                     "LUSR": "HomeFin",
+//                   });
+//                   formData.files.addAll([
+//                     MapEntry(
+//                         "File",
+//                         await MultipartFile.fromFile(pickedFile!.path,
+//                             filename: pickedFile.name,
+//                             contentType: MediaType('application', 'pdf')))
+//                   ]);
+//                   (dio.httpClientAdapter as DefaultHttpClientAdapter)
+//                       .onHttpClientCreate = (client) {
+//                     client.badCertificateCallback =
+//                         (X509Certificate cert, String host, int port) => true;
+//                   };
+//                   dio.options.headers['Content-Type'] = 'multipart/form-data';
+//                   // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
+//
+//                   var response = await dio.post(
+//                     ApiUrls().uploadDoc,
+//                     data: formData,
+//                     onSendProgress: (int sent, int total) {
+//                       debugPrint("sent${sent.toString()}" +
+//                           " total${total.toString()}");
+//                     },
+//                   ).whenComplete(() {
+//                     debugPrint("complete:");
+//                   }).catchError((onError) {
+//                     debugPrint("complete1");
+//                     SmartDialog.dismiss();
+//                   });
+//                   print(response);
+//                   var data = json.decode(response.toString());
+//                   print(data);
+//                   FirebaseFirestore.instance
+//                       .collection("convertedLeads")
+//                       .doc(widget.docId)
+//                       .set({
+//                     title: data["docId"].toString(),
+//                   }, SetOptions(merge: true));
+//                   SmartDialog.dismiss();
+//                   if (applicationFormClicked) {
+//                     setState(() {
+//                       applicationForm = "Uploaded";
+//                     });
+//                   } else if (bankPassbookClicked) {
+//                     setState(() {
+//                       bankPassbook = "Uploaded";
+//                     });
+//                   }
+//                   else if (dateOfBirthClicked) {
+//                     setState(() {
+//                       dateOfBirthProof = "Uploaded";
+//                     });
+//                   } else if (loginFeeChequeClicked) {
+//                     setState(() {
+//                       loginFeeCheque = "Uploaded";
+//                     });
+//                   } else if (passportSizePhotoClicked) {
+//                     setState(() {
+//                       passportSizePhoto = "Uploaded";
+//                     });
+//                   } else if (photoIdProofClicked) {
+//                     setState(() {
+//                       photoIdProof = "Uploaded";
+//                     });
+//                   } else if (residenceProofClicked) {
+//                     setState(() {
+//                       residenceProof = "Uploaded";
+//                     });
+//                   } else if (salarySlipClicked) {
+//                     setState(() {
+//                       salarySlip = "Uploaded";
+//                     });
+//                   } else if (signatureProofClicked) {
+//                     setState(() {
+//                       signatureProof = "Uploaded";
+//                     });
+//                   } else if (copyOfPropertyClicked) {
+//                     setState(() {
+//                       copyOfProperty = "Uploaded";
+//                     });
+//                   }
+//                 } catch (e) {
+//                   SmartDialog.dismiss();
+//                   debugPrint(e.toString());
+//                 }
+//               },
+//               child: Container(
+//                 height: 40,
+//                 width: 50,
+//                 decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(5)),
+//                 child: Center(
+//                     child: Text('Yes',
+//                         style: TextStyle(
+//                             color: Colors.black,
+//                             fontFamily: StyleData.boldFont,
+//                             fontSize: 12))),
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 30),
+//             child: InkWell(
+//               onTap: () {
+//                 Navigator.pop(context);
+//               },
+//               child: Container(
+//                 height: 40,
+//                 width: 50,
+//                 decoration: BoxDecoration(
+//                     color: Colors.white,
+//                     borderRadius: BorderRadius.circular(5)),
+//                 child: Center(
+//                     child: Text('Cancel',
+//                         style: TextStyle(
+//                             color: Colors.black,
+//                             fontFamily: StyleData.boldFont,
+//                             fontSize: 12))),
+//               ),
+//             ),
+//           )
+//         ]);
+//   }
 }
 
 // const Text(

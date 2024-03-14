@@ -57,7 +57,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? _selectedResidentialType;
   final List<String> _residentialStatus= [
     'Resident',
-    'Non-Resident',
+    'Non Resident',
   ];
   String? _selectedResidentialStatus;
 
@@ -118,7 +118,6 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   final List<String> _gender= [
     'Male',
     'Female',
-    'Transgender',
   ];
   String? _selectedGender;
 
@@ -219,6 +218,9 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   TextEditingController _leadSource = TextEditingController();
   TextEditingController _homeFinBranchCode = TextEditingController(text: 'KALY037');
   TextEditingController _leadAmount = TextEditingController();
+
+  String? StateId;
+  String? DistrictID;
 
   //Additional details
 
@@ -413,9 +415,10 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "Address2": _addressLine2.text,
       "Address3": _addressLine3.text,
       "City": _city.text,
-      "State":  _state.text,
-      "District": _district.text,
+      "State":  StateId,
+      "District":DistrictID,
       "PostalName": _postOffice.text,
+      "Country":"1",
       "Pincode": _pincode.text,
       "Latitude": latitue.toString(),
       "Longitude": longitude.toString(),
@@ -429,7 +432,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
    print(data);
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd--uat.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
+      'https://muthootltd--muthoothom.sandbox.my.salesforce.com/services/apexrest/LeadCreation/',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -663,18 +666,18 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     var headers = {
       'X-PrettyPrint': '1',
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
+      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
       'grant_type': 'password',
-      'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
-      'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
-      'username': 'itkrishnaprasad@muthootgroup.com',
-      'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+      'client_id': '3MVG9znNpg3WgIM43.cUHYaiTVJ3_r1M7ctxpkB4fP9szswZDrCsSnqN4hYzk8kTI1dhRu1S_8hUWzhHpUQgR',
+      'client_secret': '135DF649055938443F25EE397F495408F30961BBE7E77563AABA59D08A0EBEDC',
+      'username': 'salesappuser@muthoothomefin.com',
+      'password': 'Pass@123456VZ2hdqBshd3CHPUfBOd8gVWMq'
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://test.salesforce.com/services/oauth2/token',
+      'https://muthootltd--muthoothom.sandbox.my.salesforce.com/services/oauth2/token',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -1013,8 +1016,20 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                       if (value == null || value.isEmpty) {
                                                         return 'Please enter Date of Birth';
                                                       }
+                                                      // Parsing the selected date
+                                                      DateTime selectedDate = DateTime.parse(value);
+
+                                                      // Calculating age
+                                                      int age = DateTime.now().year - selectedDate.year;
+
+                                                      // Checking if age falls within the specified range
+                                                      if (age < 18 || age > 70) {
+                                                        return 'Age should fall between 18 and 70 years old.';
+                                                      }
+
                                                       return null;
                                                     },
+
                                                   ),
                                                   DropdownButtonFormField2<String>(
                                                     value: _selectedGender,
@@ -1290,19 +1305,32 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                                               var districtNames = listSearchData
                                                                                   .map((e) => e["D"].toString())
                                                                                   .toSet() // Convert to a set to remove duplicates
-                                                                                  .first;  // Take the first element
+                                                                                  .first;
+                                                                              var districtID = listSearchData
+                                                                                  .map((e) => e["DI"].toString())
+                                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                                  .first; // Take the first element
 
                                                                               print(districtNames);
+                                                                              print(districtID);
 
                                                                               var stateName = listSearchData
                                                                                   .map((e) => e["S"].toString())
                                                                                   .toSet() // Convert to a set to remove duplicates
-                                                                                  .first;  // Take the first element
+                                                                                  .first;
+                                                                              var stateID = listSearchData
+                                                                                  .map((e) => e["SI"].toString())
+                                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                                  .first; // Take the first element
 
                                                                               print(stateName);
+                                                                              print(stateID);
+
                                                                               setState(() {
                                                                                 _district.text = districtNames;
                                                                                 _state.text = stateName;
+                                                                                StateId = stateID;
+                                                                                DistrictID = districtID;
                                                                               });
 
                                                                             } else {
@@ -2060,6 +2088,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                             checkLeadsFieldsFilled();
                                                           });
                                                         },
+                                                         validator: (value) {
+                                                           if (value == null || value.isEmpty) {
+                                                             return 'Please select product';
+                                                           }
+                                                           return null;
+                                                         },
                                                         items: _productsList.where((item) => item.type == 1)
                                                             .map((DropDownProductData item){
                                                           return DropdownMenuItem(
@@ -2106,6 +2140,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                             selectedProdut = newValue;
                                                             checkLeadsFieldsFilled();
                                                           });
+                                                        },
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please select product';
+                                                          }
+                                                          return null;
                                                         },
                                                         items: _productsList.where((item) => item.type == 2)
                                                             .map((DropDownProductData item){
@@ -2235,6 +2275,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                                 checkProfileFieldsFilled();
                                                               });
                                                             },
+                                                            validator: (value) {
+                                                              if (value == null || value.isEmpty) {
+                                                                return 'Please select customer profile';
+                                                              }
+                                                              return null;
+                                                            },
                                                             items: _customerProfileList
                                                                 .map((DropDownData item){
                                                               return DropdownMenuItem(
@@ -2276,6 +2322,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                                 checkProfileFieldsFilled();
                                                               });
                                                             },
+                                                            validator: (value) {
+                                                              if (value == null || value.isEmpty) {
+                                                                return 'Please select Employee category';
+                                                              }
+                                                              return null;
+                                                            },
                                                             items: _employeeCategoryList
                                                                 .map((DropDownData item){
                                                               return DropdownMenuItem(
@@ -2315,6 +2367,12 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                               setState(() {
                                                                 checkProfileFieldsFilled();
                                                               });
+                                                            },
+                                                            validator: (value) {
+                                                              if (value == null || value.isEmpty) {
+                                                                return 'Please enter monthly income';
+                                                              }
+                                                              return null;
                                                             },
                                                             decoration: InputDecoration(
                                                               labelText: 'Monthly Income Of the Applicant *',
@@ -2384,6 +2442,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                     inputFormatters: [
                                                       FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9]+$')), // Allow only alphanumeric characters
                                                       LengthLimitingTextInputFormatter(10),
+                                                      UppercaseTextInputFormatter(),
                                                     ],
                                                     validator: (value) {
                                                       if (value == null || value.isEmpty) {
@@ -2661,4 +2720,13 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   //   RegExp panCardRegex = RegExp(r'^[A-Za-z]{5}\d{4}[A-Za-z]$');
   //   return panCardRegex.hasMatch(panCardNumber);
   // }
+}
+class UppercaseTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text!.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
 }

@@ -68,6 +68,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   open_file: ^3.3.2
   flutter_smart_dialog: ^4.9.6
+  flutter_charts: ^0.5.2
 
 
 

@@ -304,7 +304,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               "userType": "user",
                             };
                             users.add(params);
-                            customSuccessSnackBar("Registered Successfully");
+                            customSuccessSnackBar1("Registered Successfully");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -382,6 +382,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+  void customSuccessSnackBar1(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        action: SnackBarAction(
+          label: '',
+          onPressed: () {
+            // Code to execute.
+          },
+        ),
+        content: Container(
+
+          // margin: const EdgeInsets.only(left: 10),
+          // decoration: BoxDecoration(
+          //   border: Border.all(color: Colors.white)
+          // ),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 40,
+                    width: 27,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white)
+                    ),
+                    child: const Icon(
+                      Icons.done_outline,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                      width: 230,
+                      child: Text(msg)),
+                  const SizedBox(
+                    width: 10,
+                  ),
+
+                  // Icon(Icons.done,color: Colors.white,)
+                ])),
+        duration: const Duration(seconds: 2),
+        // width:MediaQuery.of(context).size. width * 0.9, // Width of the SnackBar.
+        // padding: const EdgeInsets.symmetric(
+        //   horizontal: 8.0, // Inner padding for SnackBar content.
+        // ),
+        // behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        backgroundColor: Colors.green,
+        // backgroundColor: const Color(0xffee5b5b),
       ),
     );
   }

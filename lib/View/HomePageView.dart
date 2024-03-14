@@ -6,8 +6,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/ApplicantDetailsView.dart';
 import 'package:lead_management_system/View/VisitPageView.dart';
-
-import 'LoginPage.dart';
 import 'ProfilePageView.dart';
 import 'dashbordPageView.dart';
 import 'formPageVIiew.dart';

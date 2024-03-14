@@ -574,9 +574,6 @@ class _VisitPageViewState extends State<VisitPageView> {
                                 ),
                               )
 
-
-
-
                             ],
                           ),
                         ),
