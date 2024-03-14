@@ -4551,36 +4551,22 @@ class _SaveDataState extends State<SaveData> {
   ];
 
 
-  List<Map<String, dynamic>> stateList = [
-    {"id": 1, "title": "ANDHRA PRADESH"},
-    {"id": 2, "title": "ASSAM"},
-    {"id": 3, "title": "BIHAR"},
-    {"id": 4, "title": "CHANDIGARH"},
-    {"id": 5, "title": "CHHATTISGARH"},
-    {"id": 6, "title": "DELHI"},
-    {"id": 7, "title": "GOA"},
-    {"id": 8, "title": "GUJARAT"},
-    {"id": 9, "title": "HARYANA"},
-    {"id": 10, "title": "HIMACHAL PRADESH"},
-    {"id": 11, "title": "JAMMU AND KASHMIR"},
-    {"id": 12, "title": "JHARKHAND"},
-    {"id": 13, "title": "KARNATAKA"},
-    {"id": 14, "title": "KERALA"},
-    {"id": 15, "title": "LADAKH"},
-    {"id": 16, "title": "MADHYA PRADESH"},
-    {"id": 17, "title": "MAHARASHTRA"},
-    {"id": 18, "title": "ODISHA"},
-    {"id": 19, "title": "PUDUCHERRY"},
-    {"id": 20, "title": "PUNJAB"},
-    {"id": 21, "title": "RAJASTHAN"},
-    {"id": 22, "title": "TAMIL NADU"},
-    {"id": 23, "title": "TELANGANA"},
-    {"id": 24, "title": "THE DADRA AND NAGAR HAVELI AND DAMAN AND DIU"},
-    {"id": 25, "title": "UTTAR PRADESH"},
-    {"id": 26, "title": "UTTARAKHAND"}
+  List<Map<String, dynamic>> documentList = [
+    {"id": 1, "title": "Application Form"},
+    {"id": 2, "title": "Bank Passbook(Latest 6 months)"},
+    {"id": 3, "title": "Date of Birth Proof"},
+    {"id": 4, "title": "Login Fee Cheque"},
+    {"id": 5, "title": "Passport Size Color Photograph"},
+    {"id": 6, "title": "Photo ID Proof"},
+    {"id": 7, "title": "Residence Proof"},
+    {"id": 8, "title": "Salary Slip 3 Month"},
+    {"id": 9, "title": "Signature Proof"},
+    {"id": 10, "title": "Copy of Property"},
+    {"id": 11, "title": "Qualification proof"},
+    {"id": 12, "title": "Sector Employee From 16 for Pvt"},
+    {"id": 13, "title": "Total Work Experience Proof(Min 3 years)"},
+    {"id": 14, "title": "Work Experience Proof(1 years)"},
   ];
-
-
 
 
 
@@ -4602,9 +4588,9 @@ class _SaveDataState extends State<SaveData> {
   // }
   void pushData() async {
     FirebaseFirestore.instance
-        .collection("employeeList")
-        .doc("employeeList")
-        .update({"employeeList": FieldValue.arrayUnion(employeeList)});
+        .collection("documentList")
+        .doc("documentList")
+        .update({"documentList": FieldValue.arrayUnion(documentList)});
     print("hi");
   }
 

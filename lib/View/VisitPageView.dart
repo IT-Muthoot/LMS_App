@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 import '../Utils/StyleData.dart';
 import '../login1.dart';
@@ -635,86 +635,110 @@ class _VisitPageViewState extends State<VisitPageView> {
                 //   ),
                 // ),
                 SizedBox(height: height * 0.01),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 8.0), // Adjust the right padding as needed
-                    child: Container(
-                      height: height * 0.04,
-                      width: width * 0.4,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 236, 225, 215),
-                            Color.fromARGB(255, 227, 222, 215)
-                          ],
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextFormField(
-                          controller: _startDateController,
-                          readOnly: true,
-                          onTap: () => _selectDate(context, 1),
-                          decoration: InputDecoration(
-                            labelText: '',
-                            suffixIcon: Icon(Icons.calendar_today, size: 20,),
-                            focusedBorder: InputBorder.none,
-                            border: InputBorder.none,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // Text(
+                          //   'From',
+                          //   style: TextStyle(
+                          //     fontSize: 16,
+                          //  //   fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
+                          // SizedBox(height: 4), // Adjust spacing as needed
+                          Container(
+                            height: height * 0.04,
+                            width: width * 0.4,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(255, 236, 225, 215),
+                                  Color.fromARGB(255, 227, 222, 215)
+                                ],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: TextFormField(
+                                controller: _startDateController,
+                                readOnly: true,
+                                onTap: () => _selectDate(context, 1),
+                                decoration: InputDecoration(
+                                  labelText: '',
+                                  suffixIcon: Icon(Icons.calendar_today, size: 20,),
+                                  focusedBorder: InputBorder.none,
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ),
 
-                  Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: Container(
-                      height: height * 0.04,
-                      width: width * 0.4,
-                      decoration: new BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          gradient: new LinearGradient(
-                              colors: [
-                                // Color.fromARGB(255, 168, 2, 2),
-                                // Color.fromARGB(255, 206, 122, 122)
-                                Color.fromARGB(255, 236, 225, 215),
-                                Color.fromARGB(255, 227, 222, 215)
-                              ]
-                          )
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: TextFormField(
-                          controller: _endDateController,
-                          readOnly: true,
-
-                          onTap: () => _selectDate(context,2),
-                          decoration: InputDecoration(
-                            labelText: '',
-                            suffixIcon: Icon(Icons.calendar_today,size: 20,),
-                              border: InputBorder.none
-                            //  filled: true,
-                            //  fillColor: Colors.grey[200],
+                    Padding(
+                      padding: EdgeInsets.only(right: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          // Text(
+                          //   'To',
+                          //   style: TextStyle(
+                          //     fontSize: 16,
+                          //   //  fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
+                          // SizedBox(height: 4), // Adjust spacing as needed
+                          Container(
+                            height: height * 0.04,
+                            width: width * 0.4,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color.fromARGB(255, 236, 225, 215),
+                                  Color.fromARGB(255, 227, 222, 215)
+                                ],
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: TextFormField(
+                                controller: _endDateController,
+                                readOnly: true,
+                                onTap: () => _selectDate(context,2),
+                                decoration: InputDecoration(
+                                    labelText: '',
+                                    suffixIcon: Icon(Icons.calendar_today,size: 20,),
+                                    border: InputBorder.none
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+
                 SizedBox(
                   height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
+
                   child:ListOfLeads.isNotEmpty ?
                   Scrollbar(
                     thickness: 8.5,
                     thumbVisibility: true,
                     radius: const Radius.circular(8),
                     controller: ScrollController(),
-                    child: ListView.builder(
+                    child:
+                   ListView.builder(
                       itemCount: searchKEY.text.isEmpty
                           ? ListOfLeads.length
                           : searchListOfLeads.length,

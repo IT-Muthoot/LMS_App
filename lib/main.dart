@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'Utils/SaveData.dart';
 import 'View/HomePageView.dart';
 import 'View/SplashView.dart';
@@ -34,11 +35,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [FlutterSmartDialog.observer],
+      builder: FlutterSmartDialog.init(),
       title: 'Flutter Demo',
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SplashView(),
+      home:
+     SplashView(),
       // ,));
     //  HomePageView(),
      //FormPageView(),
@@ -46,7 +50,7 @@ class MyApp extends StatelessWidget {
     //  VisitPageView()
       //FormPageView(),
      //   LoginScreen(),
-   // SaveData(),
+  //SaveData(),
     );
   }
 }

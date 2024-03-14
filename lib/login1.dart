@@ -218,23 +218,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
                             LengthLimitingTextInputFormatter(7),
+                            // Convert input to uppercase
+                            UppercaseTextInputFormatter(),
                           ],
-                        //  maxLength: 7,
-                          style: const TextStyle(fontSize: 13,color: Colors.black54),
+                          style: const TextStyle(fontSize: 13, color: Colors.black54),
                           textInputAction: TextInputAction.next,
                           cursorColor: Colors.black87,
                           decoration: InputDecoration(
                             labelText: "Employee Code",
                             labelStyle: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black54
+                              fontSize: 16,
+                              color: Colors.black54,
                             ),
-
-                            prefixIcon: Icon(Icons.person_3_outlined,size: 18,color: Colors.black54),
+                            prefixIcon: Icon(Icons.person_3_outlined, size: 18, color: Colors.black54),
                             focusedBorder: focus,
                             enabledBorder: enb,
                             contentPadding: const EdgeInsets.only(left: 5,),
-                            hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
+                            hintStyle: const TextStyle(fontSize: 14, color: Colors.black54),
                           ),
                           validator: (isusercodevalid) {
                             if (isusercodevalid.toString().isNotEmpty)
@@ -244,6 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                       ),
+
                       SizedBox(height:height * 0.03),
                       Container(
                         alignment: Alignment.center,
@@ -499,3 +500,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
+class UppercaseTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text!.toUpperCase(),
+      selection: newValue.selection,
+    );
+  }
+}
