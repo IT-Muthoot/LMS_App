@@ -21,6 +21,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
 
   bool consentCRIF = true;
   bool consentKYC = true;
+  ScrollController _scrollController = ScrollController();
 
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
@@ -344,8 +345,9 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                    thickness: 8.5,
                    thumbVisibility: true,
                    radius: const Radius.circular(8),
-                   controller: ScrollController(),
+                   controller: _scrollController,
                    child: ListView.builder(
+                     controller: _scrollController,
                      itemCount: searchKEY.text.isEmpty
                          ? ListOfLeads.length
                          : searchListOfLeads.length,

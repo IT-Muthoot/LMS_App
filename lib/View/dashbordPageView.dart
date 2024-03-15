@@ -27,6 +27,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
   var userType;
   String? employeeName;
   String? branchCode;
+  ScrollController _scrollController = ScrollController();
 
   void fetchdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
@@ -370,9 +371,11 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                   Scrollbar(
                     thickness: 8.5,
                     thumbVisibility: true,
+                    controller: _scrollController,
                     child:
             
                     ListView.builder(
+                      controller: _scrollController,
                       itemCount: ListOfLeads.length > 4 ? 4 : ListOfLeads.length,
                       itemBuilder: (context, index) {
                         ListOfLeads.sort((a, b) => DateTime.parse(b['visitDate']).compareTo(DateTime.parse(a['visitDate'])));

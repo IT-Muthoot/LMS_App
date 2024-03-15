@@ -1191,7 +1191,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                             source: ImageSource.gallery,
                             maxHeight: 1800,
                             maxWidth: 1080);
-                        //
+
                         // if (applicationFormClicked) {
                         //   uploadOnDMS(pickedFile, "Application_Form");
                         // } else if (bankPassbookClicked) {

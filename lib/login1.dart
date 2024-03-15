@@ -48,14 +48,14 @@ class _LoginScreenState extends State<LoginScreen> {
     };
     var data = {
       'grant_type': 'password',
-      'client_id': '3MVG9znNpg3WgIM43.cUHYaiTVJ3_r1M7ctxpkB4fP9szswZDrCsSnqN4hYzk8kTI1dhRu1S_8hUWzhHpUQgR',
-      'client_secret': '135DF649055938443F25EE397F495408F30961BBE7E77563AABA59D08A0EBEDC',
+      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
       'username': 'salesappuser@muthoothomefin.com',
-      'password': 'Pass@123456VZ2hdqBshd3CHPUfBOd8gVWMq'
+      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd--muthoothom.sandbox.my.salesforce.com/services/oauth2/token',
+      'https://muthootltd.my.salesforce.com/services/oauth2/token',
       options: Options(
         method: 'POST',
         headers: headers,

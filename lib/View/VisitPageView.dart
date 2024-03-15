@@ -37,7 +37,7 @@ class _VisitPageViewState extends State<VisitPageView> {
   TextEditingController _endDateController = TextEditingController();
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
-
+  ScrollController _scrollController = ScrollController();
 
 
   bool isleadConverted = false;
@@ -733,9 +733,10 @@ class _VisitPageViewState extends State<VisitPageView> {
                     thickness: 8.5,
                     thumbVisibility: true,
                     radius: const Radius.circular(8),
-                    controller: ScrollController(),
+                    controller: _scrollController,
                     child:
                    ListView.builder(
+                     controller: _scrollController,
                       itemCount: searchKEY.text.isEmpty
                           ? ListOfLeads.length
                           : searchListOfLeads.length,
