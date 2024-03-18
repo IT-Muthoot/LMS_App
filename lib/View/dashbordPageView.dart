@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/formPageVIiew.dart';
@@ -82,6 +80,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                 employeeName = ListOfUsers[i]['EmployeeName'];
                 branchCode = ListOfUsers[i]['branchCode'];
                 pref.setString("branchcode", ListOfUsers[i]['branchCode']);
+                pref.setString("employeeName", ListOfUsers[i]['EmployeeName']);
                 print("EMployee Name");
                 print(employeeName);
                 print(branchCode);
@@ -338,7 +337,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                     children: [
                       Text(
                         "Latest Visits",
-                        style: GoogleFonts.poppins(
+                        style:TextStyle(
                           fontSize: 18,
                           color:Colors.black,
                         ),
@@ -354,7 +353,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                         },
                         child: Text(
                           "View All",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                               fontSize: 12,
                               color:Colors.blue,
                               fontWeight: FontWeight.bold

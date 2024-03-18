@@ -131,6 +131,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   String? selectedProductValue;
   final List<DropDownProductData> _productsList = [];
+// final List<DropDownData> _productsList = [];
   String? selectedProdut;
   getDropDownProductsData() {
     FirebaseFirestore.instance
@@ -146,6 +147,21 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       }
     });
   }
+
+  // getDropDownProductsData() {
+  //   FirebaseFirestore.instance
+  //       .collection("products")
+  //       .doc('products')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.data()!['products']) {
+  //       setState(() {
+  //         _productsList
+  //             .add(DropDownData(element['id'], element['title']));
+  //       });
+  //     }
+  //   });
+  // }
 
   bool consentCRIF = false;
   bool consentKYC = false;
@@ -218,6 +234,10 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   TextEditingController _leadSource = TextEditingController();
   TextEditingController _homeFinBranchCode = TextEditingController(text: 'KALY037');
   TextEditingController _leadAmount = TextEditingController();
+
+  TextEditingController _customerStatusController = TextEditingController();
+
+
 
   String? StateId;
   String? DistrictID;
@@ -324,6 +344,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         // _pincode.text= docData["pincode"] ?? "";
         _leadSource.text= docData["leadSource"] ?? "";
         customerStatus= docData["customerStatus"] ?? "";
+        _customerStatusController.text= docData["customerStatus"] ?? "";
         latitue= docData["latitude"] ?? "";
         longitude= docData["longitude"] ?? "";
         scheduledDate= docData["visitDate"] ?? "";
@@ -572,6 +593,9 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'ConsentKYC' : consentKYC,
         'LeadID' : LeadID ?? "",
         'userId': userId,
+        'EmployeeName': pref.getString("employeeName"),
+        'EmployeeCode':  pref.getString("employeeCode"),
+        'EmployeeBranchCode': pref.getString("branchcode"),
         'createdDateTime':Timestamp.fromDate(now),
       };
       // convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
@@ -772,1336 +796,103 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                         Column(
                           children: [
                             SizedBox(height: height * 0.01),
-                            Card(
-                              elevation: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    isCustomerInfo = !isCustomerInfo;
-                                    isAddressInfo = false;
-                                    isLeadInfo = false;
-                                    isProfileInfo = false;
-                                  });
-                                },
-                                child: Container(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height * 0.05,
-                                            width: width * 1,
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/icons8-customer-48.png',
-                                                  width: width * 0.08,
-                                                  height: height * 0.04,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                SizedBox(
-                                                  width: width * 0.05,
-                                                ),
-                                                Text("Customer Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
-                                                Spacer(),
-                                                areCustomerFieldsFilled
-                                                    ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
-                                                    : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
-                                              ],
-                                            ),
-                                          ),
-                                          // SizedBox(height: height * 0.015),
-                                          Visibility(
-                                              visible:  isCustomerInfo == true,
-                                              child: Column(
-                                                children: [
-                                                  DropdownButtonFormField2<String>(
-                                                    value: _selectedSalutation,
-                                                    onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        _selectedSalutation = newValue;
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    items: _salutationList
-                                                        .map((DropDownData item){
-                                                      return DropdownMenuItem(
-                                                        value: item.title,
-                                                        child: Text(
-                                                          item.title,
-                                                          style: const TextStyle(
-                                                            color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 15,
-                                                      fontFamily: 'Poppins',
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                    //   hint: const Text('Select an option'),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Salutation *',
-                                                      hintText: 'Select an option',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  TextFormField(
-                                                    controller: firstName,
-                                                    readOnly: true,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'First Name *',
-                                                      hintText: 'Enter First Name',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter your first name';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    controller: middleName,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Middle Name',
-                                                      hintText: 'Enter Middle Name',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    // validator: (value) {
-                                                    //   if (value == null || value.isEmpty) {
-                                                    //     return 'Please enter your middle name';
-                                                    //   }
-                                                    //   return null;
-                                                    // },
-                                                  ),
-                                                  TextFormField(
-                                                    controller: lastName,
-                                                    readOnly: true,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Last Name *',
-                                                      hintText: 'Enter Last Name',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      // border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter your last name';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    controller: customerNumber,
-                                                    readOnly: true,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Customer Phone *',
-                                                      hintText: 'Enter Customer Phone',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      //  border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter your mobile number';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                  TextFormField(
-                                                    controller: _email,
-
-                                                    // onChanged: (value) {
-                                                    //   setState(() {
-                                                    //    checkCustomerFieldsFilled();
-                                                    //   });
-                                                    // },
-                                                    // validator: (value) {
-                                                    //   if (value!.isEmpty) {
-                                                    //     return 'Enter email';
-                                                    //   }
-                                                    //   return null;
-                                                    // },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Email',
-                                                      hintText: 'Enter email',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  TextFormField(
-                                                    controller: _additionalPhoneNumber,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        // checkFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Additional Phone Number',
-                                                      hintText: 'Enter Phone Number',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  TextFormField(
-                                                    //   focusNode: _dateFocus,
-                                                    controller: _dateOfBirth,
-                                                    readOnly: true,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-                                                    onTap: () => _selectDate(context),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Date Of Birth *',
-                                                      suffixIcon: Icon(Icons.calendar_today),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter Date of Birth';
-                                                      }
-                                                      // Parsing the selected date
-                                                      DateTime selectedDate = DateTime.parse(value);
-
-                                                      // Calculating age
-                                                      int age = DateTime.now().year - selectedDate.year;
-
-                                                      // Checking if age falls within the specified range
-                                                      if (age < 18 || age > 70) {
-                                                        return 'Age should fall between 18 and 70 years old.';
-                                                      }
-
-                                                      return null;
-                                                    },
-
-                                                  ),
-                                                  DropdownButtonFormField2<String>(
-                                                    value: _selectedGender,
-                                                    onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        _selectedGender = newValue;
-                                                        if (_selectedSalutation == "Mr") {
-                                                          _selectedGender = "Male";
-                                                        } else if (_selectedSalutation == "Mrs" || _selectedSalutation == "Miss." || _selectedSalutation == "Ms." || _selectedSalutation == "Smt." ||  _selectedSalutation == "Kumari."  ) {
-                                                          _selectedGender = "Female";
-                                                        }
-                                                        checkCustomerFieldsFilled();
-                                                      });
-                                                    },
-
-                                                    items: _gender
-                                                        .map((String item){
-                                                      return DropdownMenuItem(
-                                                        value: item,
-                                                        child: Text(
-                                                          item.toString(),
-                                                          style: const TextStyle(
-                                                            color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 15,
-                                                      fontFamily: 'Poppins',
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                    //   hint: const Text('Select an option'),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Gender *',
-                                                      hintText: 'Select an option',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: height * 0.02),
-                                                  Visibility(
-                                                    visible: areCustomerFieldsFilled,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        if(areCustomerFieldsFilled)
-                                                        {
-                                                          setState(() {
-                                                            isAddressInfo = !isAddressInfo;
-                                                            isCustomerInfo = false;
-                                                            isLeadInfo = false;
-                                                            isProfileInfo = false;
-                                                          });
-                                                        }},
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: Icon(
-                                                          Icons.arrow_circle_down,
-                                                          color: Colors.yellow.shade800, // Set your desired arrow color
-                                                          size: 22,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                        ],
-                                      ),
-                                    )),
-                              ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: consentCRIF,
+                                  activeColor: StyleData.appBarColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      consentCRIF = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Consent for getting CRIF',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
                             ),
-                            Card(
-                              elevation: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  if(areCustomerFieldsFilled)
-                                    {
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: consentKYC,
+                                  activeColor: StyleData.appBarColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      consentKYC = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Consent for getting KYC',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: height * 0.03),
+                            Visibility(
+                              visible: consentCRIF == true && consentKYC == true,
+                                child: Column(
+                              children: [
+                                Card(
+                                  elevation: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
                                       setState(() {
-                                        isAddressInfo = !isAddressInfo;
-                                        isCustomerInfo = false;
+                                        isCustomerInfo = !isCustomerInfo;
+                                        isAddressInfo = false;
                                         isLeadInfo = false;
                                         isProfileInfo = false;
                                       });
-                                    }
-                                },
-                                child: Container(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height * 0.05,
-                                            width: width * 1,
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/address.png',
-                                                  width: width * 0.08,
-                                                  height: height * 0.04,
-                                                  fit: BoxFit.cover,
+                                    },
+                                    child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: height * 0.05,
+                                                width: width * 1,
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons8-customer-48.png',
+                                                      width: width * 0.08,
+                                                      height: height * 0.04,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    SizedBox(
+                                                      width: width * 0.05,
+                                                    ),
+                                                    Text("Customer Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                                                    Spacer(),
+                                                    areCustomerFieldsFilled
+                                                        ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
+                                                        : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
+                                                  ],
                                                 ),
-                                                SizedBox(
-                                                  width: width * 0.05,
-                                                ),
-                                                Text("Address Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
-                                                Spacer(),
-                                                areAddressFieldsFilled
-                                                    ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
-                                                    : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
-                                              ],
-                                            ),
-                                          ),
-                                          // SizedBox(height: height * 0.015),
-                                          Visibility(
-                                              visible:  isAddressInfo == true,
-                                              child: Column(
-                                                children: [
-                                                            TextFormField(
-                                                                        controller: _addressLine1,
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Address Line 1 *',
-                                                                          hintText: 'Enter Adress Line 1',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter Address Line 1';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _addressLine2,
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Address Line 2 *',
-                                                                          hintText: 'Enter Address Line 2',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter address line 2';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _addressLine3,
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Address Line 3 *',
-                                                                          hintText: 'Enter Address Line 3',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter address line 3';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _city,
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'City/Town/Village *',
-                                                                          hintText: 'Enter City/Town/Village',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter your City/Town/Village';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _landMark,
-                                                                        onChanged: (value) {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                        },
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter landmark';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Landmark *',
-                                                                          hintText: 'Enter Landmark',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _pincode,
-                                                                        onChanged: (value) async {
-                                                                          setState(() {
-                                                                            checkAddressFieldsFilled();
-                                                                          });
-                                                                   if (value.length == 6) {
-                                                                            final String jsonContent = await rootBundle
-                                                                                .loadString('assets/jsons/citylist.json');
-
-                                                                            final List<dynamic> jsonData =
-                                                                            json.decode(jsonContent);
-
-                                                                            var listSearchData = jsonData
-                                                                                .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
-                                                                                .toList();
-
-                                                                            print("Helloooooooooo");
-                                                                            print(listSearchData);
-                                                                            if (listSearchData.isNotEmpty) {
-                                                                              selectedPostCode = null;
-                                                                              setState(() {
-                                                                                _PostcodeList =
-                                                                                    listSearchData.map((e) => e).toList();
-                                                                              });
-
-                                                                              print("List Drop Data");
-                                                                              var districtNames = listSearchData
-                                                                                  .map((e) => e["D"].toString())
-                                                                                  .toSet() // Convert to a set to remove duplicates
-                                                                                  .first;
-                                                                              var districtID = listSearchData
-                                                                                  .map((e) => e["DI"].toString())
-                                                                                  .toSet() // Convert to a set to remove duplicates
-                                                                                  .first; // Take the first element
-
-                                                                              print(districtNames);
-                                                                              print(districtID);
-
-                                                                              var stateName = listSearchData
-                                                                                  .map((e) => e["S"].toString())
-                                                                                  .toSet() // Convert to a set to remove duplicates
-                                                                                  .first;
-                                                                              var stateID = listSearchData
-                                                                                  .map((e) => e["SI"].toString())
-                                                                                  .toSet() // Convert to a set to remove duplicates
-                                                                                  .first; // Take the first element
-
-                                                                              print(stateName);
-                                                                              print(stateID);
-
-                                                                              setState(() {
-                                                                                _district.text = districtNames;
-                                                                                _state.text = stateName;
-                                                                                StateId = stateID;
-                                                                                DistrictID = districtID;
-                                                                              });
-
-                                                                            } else {
-                                                                              _PostcodeList.clear();
-                                                                              //  showToastMessage('Enter correct pincode');
-                                                                            }
-                                                                        }
-                                                                        },
-                                                                        keyboardType: TextInputType.phone,
-                                                                        inputFormatters: [
-                                                                          FilteringTextInputFormatter.singleLineFormatter,
-                                                                          LengthLimitingTextInputFormatter(6),
-                                                                        ],
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Pincode *',
-                                                                          hintText: 'Enter Pincode',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //  border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter pincode';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      DropdownButtonFormField2(
-                                                                        dropdownStyleData:DropdownStyleData(
-                                                                          decoration: BoxDecoration(
-                                                                            //     color: StyleData.buttonColor,
-                                                                              borderRadius: BorderRadius.circular(10)
-
-                                                                          ),
-                                                                          maxHeight: 200,
-                                                                        ) ,
-                                                                        // isExpanded: true,
-                                                                        // isDense: true,
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'Post Office *',
-                                                                          hintText: 'Select an option',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (selectedPostCode == null) {
-                                                                            return "Select Post Office";
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                        value: selectedPostCode,
-                                                                        onChanged: (value) {
-                                                                         // checkAddressFieldsFilled();
-                                                                          setState(() {
-                                                                            selectedPostCode = value as String?;
-                                                                          });
-                                                                        },
-
-                                                                        items: _PostcodeList.map((dynamic item) {
-                                                                          return DropdownMenuItem(
-                                                                            value: item["PO"],
-                                                                            child: Text(
-                                                                              item["PO"],
-                                                                               style: const TextStyle(
-                                                                                color: Color(0xFF393939),
-                                                                            fontSize: 15,
-                                                                            fontFamily: 'Poppins',
-                                                                            fontWeight: FontWeight.w400,
-                                                                          ),
-                                                                            ),
-                                                                          );
-                                                                        }).toList(),
-                                                                        style: const TextStyle(
-                                                                          color: Color(0xFF393939),
-                                                                          fontSize: 15,
-                                                                          fontFamily: 'Poppins',
-                                                                          fontWeight: FontWeight.w400,
-                                                                        ),
-
-                                                                        // items:
-                                                                        //     _PostcodeList.map((dynamic item) {
-                                                                        //   return DropdownMenuItem<dynamic>(
-                                                                        //     value: item,
-                                                                        //     child: Text(
-                                                                        //       item,
-                                                                        //       style: const TextStyle(color: Colors.white),
-                                                                        //     ),
-                                                                        //   );
-                                                                        // }).toList(),
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _district,
-                                                                        readOnly: true,
-                                                                        // onChanged: (value) {
-                                                                        //   setState(() {
-                                                                        //     checkAddressFieldsFilled();
-                                                                        //   });
-                                                                        // },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'District *',
-                                                                          hintText: 'Enter District',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter your district';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                                      TextFormField(
-                                                                        controller: _state,
-                                                                        readOnly: true,
-                                                                        // onChanged: (value) {
-                                                                        //   setState(() {
-                                                                        //     checkAddressFieldsFilled();
-                                                                        //   });
-                                                                        // },
-                                                                        decoration: InputDecoration(
-                                                                          labelText: 'State *',
-                                                                          hintText: '',
-                                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                                          //   border: InputBorder.none,
-                                                                          focusedBorder: focus,
-                                                                          enabledBorder: enb,
-                                                                          filled: true,
-                                                                          fillColor: StyleData.textFieldColor,
-                                                                        ),
-                                                                        validator: (value) {
-                                                                          if (value == null || value.isEmpty) {
-                                                                            return 'Please enter your State';
-                                                                          }
-                                                                          return null;
-                                                                        },
-                                                                      ),
-                                                  // TextFormField(
-                                                  //   controller: _addressLine1,
-                                                  //   onChanged: (value) {
-                                                  //     setState(() {
-                                                  //       checkAddressFieldsFilled();
-                                                  //     });
-                                                  //   },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Address Line 1 *',
-                                                  //     hintText: 'Enter Adress Line 1',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter Address Line 1';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _addressLine2,
-                                                  //   onChanged: (value) {
-                                                  //     setState(() {
-                                                  //       checkAddressFieldsFilled();
-                                                  //     });
-                                                  //   },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Address Line 2 *',
-                                                  //     hintText: 'Enter Address Line 2',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter address line 2';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _addressLine3,
-                                                  //   onChanged: (value) {
-                                                  //     setState(() {
-                                                  //       checkAddressFieldsFilled();
-                                                  //     });
-                                                  //   },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Address Line 3 *',
-                                                  //     hintText: 'Enter Address Line 3',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter address line 3';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _city,
-                                                  //   onChanged: (value) {
-                                                  //     setState(() {
-                                                  //       checkAddressFieldsFilled();
-                                                  //     });
-                                                  //   },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'City/Town/Village *',
-                                                  //     hintText: 'Enter City/Town/Village',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter your City/Town/Village';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _landMark,
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Landmark',
-                                                  //     hintText: 'Enter Landmark',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter your landmark';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _pincode,
-                                                  //   onChanged: (value) async {
-                                                  //     // setState(() {
-                                                  //     //   checkAddressFieldsFilled();
-                                                  //     // });
-                                                  //     // if (value.length == 6) {
-                                                  //     //   final String jsonContent = await rootBundle
-                                                  //     //       .loadString('assets/jsons/citylist.json');
-                                                  //     //
-                                                  //     //   final List<dynamic> jsonData =
-                                                  //     //   json.decode(jsonContent);
-                                                  //     //
-                                                  //     //   var listSearchData = jsonData
-                                                  //     //       .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
-                                                  //     //       .toList();
-                                                  //     //
-                                                  //     //   print("Helloooooooooo");
-                                                  //     //   print(listSearchData);
-                                                  //     //   if (listSearchData.isNotEmpty) {
-                                                  //     //     selectedPostCode = null;
-                                                  //     //     setState(() {
-                                                  //     //       _PostcodeList =
-                                                  //     //           listSearchData.map((e) => e).toList();
-                                                  //     //     });
-                                                  //     //
-                                                  //     //     print("List Drop Data");
-                                                  //     //     var districtNames = listSearchData
-                                                  //     //         .map((e) => e["D"].toString())
-                                                  //     //         .toSet() // Convert to a set to remove duplicates
-                                                  //     //         .first;  // Take the first element
-                                                  //     //
-                                                  //     //     print(districtNames);
-                                                  //     //
-                                                  //     //     var stateName = listSearchData
-                                                  //     //         .map((e) => e["S"].toString())
-                                                  //     //         .toSet() // Convert to a set to remove duplicates
-                                                  //     //         .first;  // Take the first element
-                                                  //     //
-                                                  //     //     print(stateName);
-                                                  //     //     setState(() {
-                                                  //     //       _district.text = districtNames;
-                                                  //     //       _state.text = stateName;
-                                                  //     //     });
-                                                  //     //
-                                                  //     //   } else {
-                                                  //     //     _PostcodeList.clear();
-                                                  //     //     //  showToastMessage('Enter correct pincode');
-                                                  //     //   }
-                                                  //     // }
-                                                  //   },
-                                                  //   keyboardType: TextInputType.phone,
-                                                  //   inputFormatters: [
-                                                  //     FilteringTextInputFormatter.singleLineFormatter,
-                                                  //     LengthLimitingTextInputFormatter(6),
-                                                  //   ],
-                                                  //   readOnly: true,
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Pincode *',
-                                                  //     hintText: 'Enter Pincode',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //  border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter pincode';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _postOffice,
-                                                  //   readOnly: true,
-                                                  //   // onChanged: (value) async {
-                                                  //   //   setState(() {
-                                                  //   //     checkAddressFieldsFilled();
-                                                  //   //   });
-                                                  //   // },
-                                                  //   keyboardType: TextInputType.phone,
-                                                  //   inputFormatters: [
-                                                  //     FilteringTextInputFormatter.singleLineFormatter,
-                                                  //     LengthLimitingTextInputFormatter(6),
-                                                  //   ],
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'PostOffice *',
-                                                  //   //  hintText: 'Enter Pincode',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //  border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter postoffice';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // DropdownButtonFormField2(
-                                                  //   dropdownStyleData:DropdownStyleData(
-                                                  //     decoration: BoxDecoration(
-                                                  //       //     color: StyleData.buttonColor,
-                                                  //         borderRadius: BorderRadius.circular(10)
-                                                  //
-                                                  //     ),
-                                                  //     maxHeight: 200,
-                                                  //   ) ,
-                                                  //   // isExpanded: true,
-                                                  //   // isDense: true,
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'Post Office *',
-                                                  //     hintText: 'Select an option',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (selectedPostCode == null) {
-                                                  //       return "Select Post Office";
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  //   value: selectedPostCode,
-                                                  //   onChanged: (value) {
-                                                  //     checkAddressFieldsFilled();
-                                                  //     setState(() {
-                                                  //       selectedPostCode = value as String?;
-                                                  //     });
-                                                  //   },
-                                                  //
-                                                  //   items: _PostcodeList.map((dynamic item) {
-                                                  //     return DropdownMenuItem(
-                                                  //       value: item["PO"],
-                                                  //       child: Text(
-                                                  //         item["PO"],
-                                                  //         style: const TextStyle(
-                                                  //           color: Color(0xFF393939),
-                                                  //           fontSize: 15,
-                                                  //           fontFamily: 'Poppins',
-                                                  //           fontWeight: FontWeight.w400,
-                                                  //         ),
-                                                  //       ),
-                                                  //     );
-                                                  //   }).toList(),
-                                                  //   style: const TextStyle(
-                                                  //     color: Color(0xFF393939),
-                                                  //     fontSize: 15,
-                                                  //     fontFamily: 'Poppins',
-                                                  //     fontWeight: FontWeight.w400,
-                                                  //   ),
-                                                  //
-                                                  //   // items:
-                                                  //   //     _PostcodeList.map((dynamic item) {
-                                                  //   //   return DropdownMenuItem<dynamic>(
-                                                  //   //     value: item,
-                                                  //   //     child: Text(
-                                                  //   //       item,
-                                                  //   //       style: const TextStyle(color: Colors.white),
-                                                  //   //     ),
-                                                  //   //   );
-                                                  //   // }).toList(),
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _district,
-                                                  //   readOnly: true,
-                                                  //   // onChanged: (value) {
-                                                  //   //   setState(() {
-                                                  //   //     checkAddressFieldsFilled();
-                                                  //   //   });
-                                                  //   // },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'District *',
-                                                  //     hintText: 'Enter District',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter your district';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  // TextFormField(
-                                                  //   controller: _state,
-                                                  //   readOnly: true,
-                                                  //   // onChanged: (value) {
-                                                  //   //   setState(() {
-                                                  //   //     checkAddressFieldsFilled();
-                                                  //   //   });
-                                                  //   // },
-                                                  //   decoration: InputDecoration(
-                                                  //     labelText: 'State *',
-                                                  //     hintText: '',
-                                                  //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                  //     //   border: InputBorder.none,
-                                                  //     focusedBorder: focus,
-                                                  //     enabledBorder: enb,
-                                                  //     filled: true,
-                                                  //     fillColor: StyleData.textFieldColor,
-                                                  //   ),
-                                                  //   validator: (value) {
-                                                  //     if (value == null || value.isEmpty) {
-                                                  //       return 'Please enter your State';
-                                                  //     }
-                                                  //     return null;
-                                                  //   },
-                                                  // ),
-                                                  DropdownButtonFormField2<String>(
-                                                    value:_selectedResidentialType,
-                                                    onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        _selectedResidentialType = newValue;
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                    },
-                                                    items: _residentialType
-                                                        .map((String item){
-                                                      return DropdownMenuItem(
-                                                        value: item,
-                                                        child: Text(
-                                                          item.toString(),
-                                                          style: const TextStyle(
-                                                            color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 15,
-                                                      fontFamily: 'Poppins',
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                    //   hint: const Text('Select an option'),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Residential Type *',
-                                                      hintText: 'Select an option',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      // border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  DropdownButtonFormField2<String>(
-                                                    value:_selectedResidentialStatus,
-                                                    onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        _selectedResidentialStatus = newValue;
-                                                        checkAddressFieldsFilled();
-                                                      });
-                                                    },
-                                                    items: _residentialStatus
-                                                        .map((String item){
-                                                      return DropdownMenuItem(
-                                                        value: item,
-                                                        child: Text(
-                                                          item.toString(),
-                                                          style: const TextStyle(
-                                                            color: Color(0xFF393939),
-                                                            fontSize: 15,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight: FontWeight.w400,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF393939),
-                                                      fontSize: 15,
-                                                      fontFamily: 'Poppins',
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                    //   hint: const Text('Select an option'),
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Residential Status *',
-                                                      hintText: 'Select an option',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      // border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: height * 0.02),
-                                                  Visibility(
-                                                    visible: areAddressFieldsFilled,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        if(areAddressFieldsFilled)
-                                                        {
-                                                          setState(() {
-                                                            isLeadInfo = !isLeadInfo;
-                                                            isCustomerInfo = false;
-                                                            isAddressInfo = false;
-                                                            isProfileInfo = false;
-                                                          });
-                                                        }},
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: Icon(
-                                                          Icons.arrow_circle_down,
-                                                          color: Colors.yellow.shade800, // Set your desired arrow color
-                                                          size: 22,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Card(
-                              elevation: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  if(areAddressFieldsFilled)
-                                  setState(() {
-                                    isLeadInfo = !isLeadInfo;
-                                    isCustomerInfo = false;
-                                    isAddressInfo = false;
-                                    isProfileInfo = false;
-                                  });
-                                },
-                                child: Container(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height * 0.05,
-                                            width: width * 1,
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/icons8-details-48.png',
-                                                  width: width * 0.08,
-                                                  height: height * 0.04,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                SizedBox(
-                                                  width: width * 0.05,
-                                                ),
-                                                Text("Lead Details",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
-                                                Spacer(),
-                                                areLeadsFieldsFilled
-                                                    ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
-                                                    : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
-                                              ],
-                                            ),
-                                          ),
-                                          // SizedBox(height: height * 0.015),
-                                          Visibility(
-                                              visible:  isLeadInfo == true,
-                                              child: Column(
-                                                children: [
-                                                  TextFormField(
-                                                    controller: _leadSource,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Lead Source',
-                                                      hintText: '',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      //  border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  TextFormField(
-                                                  //  controller: branchCode,
-                                                    initialValue: branchCode,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Home Fin Branch Code',
-                                                      hintText: '',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      //  border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                  ),
-                                                  TextFormField(
-                                                    controller: _leadAmount,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        checkLeadsFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Lead Amount *',
-                                                      hintText: 'Enter Lead Amount',
-                                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                      //  border: InputBorder.none,
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    keyboardType: TextInputType.number,
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Please enter Lead Amount';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                              ),
+                                              // SizedBox(height: height * 0.015),
+                                              Visibility(
+                                                  visible:  isCustomerInfo == true,
+                                                  child: Column(
                                                     children: [
-                                                      Text(
-                                                        'Product Category *',
-                                                        style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          Radio(
-                                                            value: 'Home Loan',
-                                                            groupValue: selectedProductValue,
-                                                            onChanged: (value) {
-                                                              setState(() {
-                                                                selectedProductValue = 'Home Loan';
-                                                                selectedProdut = null; // Reset selectedProdut when switching categories
-                                                                checkLeadsFieldsFilled();
-                                                              });
-                                                            },
-                                                            activeColor: StyleData.appBarColor,
-                                                          ),
-                                                          Text(
-                                                            'Home Loan',
-                                                            style: TextStyle(fontSize: 16),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          Radio(
-                                                            value: 'Non-Home Loan',
-                                                            groupValue: selectedProductValue,
-                                                            onChanged: (value) {
-                                                              setState(() {
-                                                                selectedProductValue = 'Non-Home Loan';
-                                                                selectedProdut = null; // Reset selectedProdut when switching categories
-                                                                checkLeadsFieldsFilled();
-                                                              });
-                                                            },
-                                                            activeColor: StyleData.appBarColor,
-                                                          ),
-                                                          Text(
-                                                            'Non-Home Loan',
-                                                            style: TextStyle(fontSize: 18),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-
-                                                  selectedProductValue == 'Home Loan'  ?
-                                                     SizedBox(
-                                                       width: width * 1,
-                                                       child: DropdownButtonFormField2<String>(
-                                                        value: selectedProdut,
+                                                      DropdownButtonFormField2<String>(
+                                                        value: _selectedSalutation,
                                                         onChanged: (String? newValue) {
                                                           setState(() {
-                                                            selectedProdut = newValue;
-                                                            checkLeadsFieldsFilled();
+                                                            _selectedSalutation = newValue;
+                                                            checkCustomerFieldsFilled();
                                                           });
                                                         },
-                                                         validator: (value) {
-                                                           if (value == null || value.isEmpty) {
-                                                             return 'Please select product';
-                                                           }
-                                                           return null;
-                                                         },
-                                                        items: _productsList.where((item) => item.type == 1)
-                                                            .map((DropDownProductData item){
+                                                        items: _salutationList
+                                                            .map((DropDownData item){
                                                           return DropdownMenuItem(
                                                             value: item.title,
                                                             child: Text(
-                                                              item.title.length > 30
-                                                            ? item.title.substring(0, 31) + '...'  // adjust the length as needed
-                                                                : item.title,
+                                                              item.title,
                                                               style: const TextStyle(
                                                                 color: Color(0xFF393939),
                                                                 fontSize: 15,
@@ -2119,42 +910,998 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                         ),
                                                         //   hint: const Text('Select an option'),
                                                         decoration: InputDecoration(
-                                                          labelText: 'Product *',
+                                                          labelText: 'Salutation *',
                                                           hintText: 'Select an option',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: firstName,
+                                                        readOnly: true,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'First Name *',
+                                                          hintText: 'Enter First Name',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your first name';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: middleName,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Middle Name',
+                                                          hintText: 'Enter Middle Name',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        // validator: (value) {
+                                                        //   if (value == null || value.isEmpty) {
+                                                        //     return 'Please enter your middle name';
+                                                        //   }
+                                                        //   return null;
+                                                        // },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: lastName,
+                                                        readOnly: true,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Last Name *',
+                                                          hintText: 'Enter Last Name',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          // border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your last name';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: customerNumber,
+                                                        readOnly: true,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Customer Phone *',
+                                                          hintText: 'Enter Customer Phone',
                                                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                           //  border: InputBorder.none,
                                                           focusedBorder: focus,
                                                           enabledBorder: enb,
                                                           filled: true,
-                                                          fillColor:StyleData.textFieldColor,
+                                                          fillColor: StyleData.textFieldColor,
                                                         ),
-                                                                                                         ),
-                                                     )
-                                                 :
-                                                    SizedBox(
-                                                      width: width * 1,
-                                                      child: DropdownButtonFormField2<String>(
-                                                        value: selectedProdut,
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your mobile number';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _email,
+
+                                                        // onChanged: (value) {
+                                                        //   setState(() {
+                                                        //    checkCustomerFieldsFilled();
+                                                        //   });
+                                                        // },
+                                                        // validator: (value) {
+                                                        //   if (value!.isEmpty) {
+                                                        //     return 'Enter email';
+                                                        //   }
+                                                        //   return null;
+                                                        // },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Email',
+                                                          hintText: 'Enter email',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _additionalPhoneNumber,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            // checkFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Additional Phone Number',
+                                                          hintText: 'Enter Phone Number',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        //   focusNode: _dateFocus,
+                                                        controller: _dateOfBirth,
+                                                        readOnly: true,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+                                                        onTap: () => _selectDate(context),
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Date Of Birth *',
+                                                          suffixIcon: Icon(Icons.calendar_today),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter Date of Birth';
+                                                          }
+                                                          // Parsing the selected date
+                                                          DateTime selectedDate = DateTime.parse(value);
+
+                                                          // Calculating age
+                                                          int age = DateTime.now().year - selectedDate.year;
+
+                                                          // Checking if age falls within the specified range
+                                                          if (age < 18 || age > 70) {
+                                                            return 'Age should fall between 18 and 70 years old.';
+                                                          }
+
+                                                          return null;
+                                                        },
+
+                                                      ),
+                                                      DropdownButtonFormField2<String>(
+                                                        value: _selectedGender,
                                                         onChanged: (String? newValue) {
                                                           setState(() {
-                                                            selectedProdut = newValue;
-                                                            checkLeadsFieldsFilled();
+                                                            _selectedGender = newValue;
+                                                            if (_selectedSalutation == "Mr") {
+                                                              _selectedGender = "Male";
+                                                            } else if (_selectedSalutation == "Mrs" || _selectedSalutation == "Miss." || _selectedSalutation == "Ms." || _selectedSalutation == "Smt." ||  _selectedSalutation == "Kumari."  ) {
+                                                              _selectedGender = "Female";
+                                                            }
+                                                            checkCustomerFieldsFilled();
+                                                          });
+                                                        },
+
+                                                        items: _gender
+                                                            .map((String item){
+                                                          return DropdownMenuItem(
+                                                            value: item,
+                                                            child: Text(
+                                                              item.toString(),
+                                                              style: const TextStyle(
+                                                                color: Color(0xFF393939),
+                                                                fontSize: 15,
+                                                                fontFamily: 'Poppins',
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                        style: const TextStyle(
+                                                          color: Color(0xFF393939),
+                                                          fontSize: 15,
+                                                          fontFamily: 'Poppins',
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                        //   hint: const Text('Select an option'),
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Gender *',
+                                                          hintText: 'Select an option',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _customerStatusController,
+                                                        //  initialValue: selectedDSACode1,
+                                                        readOnly: true,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Customer Status',
+                                                          hintText: '',
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: height * 0.02),
+                                                      Visibility(
+                                                        visible: areCustomerFieldsFilled,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            if(areCustomerFieldsFilled)
+                                                            {
+                                                              setState(() {
+                                                                isAddressInfo = !isAddressInfo;
+                                                                isCustomerInfo = false;
+                                                                isLeadInfo = false;
+                                                                isProfileInfo = false;
+                                                              });
+                                                            }},
+                                                          child: Align(
+                                                            alignment: Alignment.bottomRight,
+                                                            child: Icon(
+                                                              Icons.arrow_circle_down,
+                                                              color: Colors.yellow.shade800, // Set your desired arrow color
+                                                              size: 22,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Card(
+                                  elevation: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if(areCustomerFieldsFilled)
+                                      {
+                                        setState(() {
+                                          isAddressInfo = !isAddressInfo;
+                                          isCustomerInfo = false;
+                                          isLeadInfo = false;
+                                          isProfileInfo = false;
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: height * 0.05,
+                                                width: width * 1,
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/address.png',
+                                                      width: width * 0.08,
+                                                      height: height * 0.04,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    SizedBox(
+                                                      width: width * 0.05,
+                                                    ),
+                                                    Text("Address Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                                                    Spacer(),
+                                                    areAddressFieldsFilled
+                                                        ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
+                                                        : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
+                                                  ],
+                                                ),
+                                              ),
+                                              // SizedBox(height: height * 0.015),
+                                              Visibility(
+                                                  visible:  isAddressInfo == true,
+                                                  child: Column(
+                                                    children: [
+                                                      TextFormField(
+                                                        controller: _addressLine1,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Address Line 1 *',
+                                                          hintText: 'Enter Adress Line 1',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter Address Line 1';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _addressLine2,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Address Line 2 *',
+                                                          hintText: 'Enter Address Line 2',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter address line 2';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _addressLine3,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Address Line 3 *',
+                                                          hintText: 'Enter Address Line 3',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter address line 3';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _city,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'City/Town/Village *',
+                                                          hintText: 'Enter City/Town/Village',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your City/Town/Village';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _landMark,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
                                                           });
                                                         },
                                                         validator: (value) {
                                                           if (value == null || value.isEmpty) {
-                                                            return 'Please select product';
+                                                            return 'Please enter landmark';
                                                           }
                                                           return null;
                                                         },
-                                                        items: _productsList.where((item) => item.type == 2)
-                                                            .map((DropDownProductData item){
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Landmark *',
+                                                          hintText: 'Enter Landmark',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _pincode,
+                                                        onChanged: (value) async {
+                                                          setState(() {
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                          if (value.length == 6) {
+                                                            final String jsonContent = await rootBundle
+                                                                .loadString('assets/jsons/citylist.json');
+
+                                                            final List<dynamic> jsonData =
+                                                            json.decode(jsonContent);
+
+                                                            var listSearchData = jsonData
+                                                                .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
+                                                                .toList();
+
+                                                            print("Helloooooooooo");
+                                                            print(listSearchData);
+                                                            if (listSearchData.isNotEmpty) {
+                                                              selectedPostCode = null;
+                                                              setState(() {
+                                                                _PostcodeList =
+                                                                    listSearchData.map((e) => e).toList();
+                                                              });
+
+                                                              print("List Drop Data");
+                                                              var districtNames = listSearchData
+                                                                  .map((e) => e["D"].toString())
+                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                  .first;
+                                                              var districtID = listSearchData
+                                                                  .map((e) => e["DI"].toString())
+                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                  .first; // Take the first element
+
+                                                              print(districtNames);
+                                                              print(districtID);
+
+                                                              var stateName = listSearchData
+                                                                  .map((e) => e["S"].toString())
+                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                  .first;
+                                                              var stateID = listSearchData
+                                                                  .map((e) => e["SI"].toString())
+                                                                  .toSet() // Convert to a set to remove duplicates
+                                                                  .first; // Take the first element
+
+                                                              print(stateName);
+                                                              print(stateID);
+
+                                                              setState(() {
+                                                                _district.text = districtNames;
+                                                                _state.text = stateName;
+                                                                StateId = stateID;
+                                                                DistrictID = districtID;
+                                                              });
+
+                                                            } else {
+                                                              _PostcodeList.clear();
+                                                              //  showToastMessage('Enter correct pincode');
+                                                            }
+                                                          }
+                                                        },
+                                                        keyboardType: TextInputType.phone,
+                                                        inputFormatters: [
+                                                          FilteringTextInputFormatter.singleLineFormatter,
+                                                          LengthLimitingTextInputFormatter(6),
+                                                        ],
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Pincode *',
+                                                          hintText: 'Enter Pincode',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //  border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter pincode';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      DropdownButtonFormField2(
+                                                        dropdownStyleData:DropdownStyleData(
+                                                          decoration: BoxDecoration(
+                                                            //     color: StyleData.buttonColor,
+                                                              borderRadius: BorderRadius.circular(10)
+
+                                                          ),
+                                                          maxHeight: 200,
+                                                        ) ,
+                                                        // isExpanded: true,
+                                                        // isDense: true,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Post Office *',
+                                                          hintText: 'Select an option',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (selectedPostCode == null) {
+                                                            return "Select Post Office";
+                                                          }
+                                                          return null;
+                                                        },
+                                                        value: selectedPostCode,
+                                                        onChanged: (value) {
+                                                          // checkAddressFieldsFilled();
+                                                          setState(() {
+                                                            selectedPostCode = value as String?;
+                                                          });
+                                                        },
+
+                                                        items: _PostcodeList.map((dynamic item) {
                                                           return DropdownMenuItem(
-                                                            value: item.title,
+                                                            value: item["PO"],
                                                             child: Text(
-                                                              item.title.length > 20
-                                                                  ? item.title.substring(0, 27) + '...'  // adjust the length as needed
-                                                                  : item.title,
+                                                              item["PO"],
+                                                              style: const TextStyle(
+                                                                color: Color(0xFF393939),
+                                                                fontSize: 15,
+                                                                fontFamily: 'Poppins',
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                        style: const TextStyle(
+                                                          color: Color(0xFF393939),
+                                                          fontSize: 15,
+                                                          fontFamily: 'Poppins',
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+
+                                                        // items:
+                                                        //     _PostcodeList.map((dynamic item) {
+                                                        //   return DropdownMenuItem<dynamic>(
+                                                        //     value: item,
+                                                        //     child: Text(
+                                                        //       item,
+                                                        //       style: const TextStyle(color: Colors.white),
+                                                        //     ),
+                                                        //   );
+                                                        // }).toList(),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _district,
+                                                        readOnly: true,
+                                                        // onChanged: (value) {
+                                                        //   setState(() {
+                                                        //     checkAddressFieldsFilled();
+                                                        //   });
+                                                        // },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'District *',
+                                                          hintText: 'Enter District',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your district';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _state,
+                                                        readOnly: true,
+                                                        // onChanged: (value) {
+                                                        //   setState(() {
+                                                        //     checkAddressFieldsFilled();
+                                                        //   });
+                                                        // },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'State *',
+                                                          hintText: '',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //   border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter your State';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                      // TextFormField(
+                                                      //   controller: _addressLine1,
+                                                      //   onChanged: (value) {
+                                                      //     setState(() {
+                                                      //       checkAddressFieldsFilled();
+                                                      //     });
+                                                      //   },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Address Line 1 *',
+                                                      //     hintText: 'Enter Adress Line 1',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter Address Line 1';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _addressLine2,
+                                                      //   onChanged: (value) {
+                                                      //     setState(() {
+                                                      //       checkAddressFieldsFilled();
+                                                      //     });
+                                                      //   },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Address Line 2 *',
+                                                      //     hintText: 'Enter Address Line 2',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter address line 2';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _addressLine3,
+                                                      //   onChanged: (value) {
+                                                      //     setState(() {
+                                                      //       checkAddressFieldsFilled();
+                                                      //     });
+                                                      //   },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Address Line 3 *',
+                                                      //     hintText: 'Enter Address Line 3',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter address line 3';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _city,
+                                                      //   onChanged: (value) {
+                                                      //     setState(() {
+                                                      //       checkAddressFieldsFilled();
+                                                      //     });
+                                                      //   },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'City/Town/Village *',
+                                                      //     hintText: 'Enter City/Town/Village',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter your City/Town/Village';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _landMark,
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Landmark',
+                                                      //     hintText: 'Enter Landmark',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter your landmark';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _pincode,
+                                                      //   onChanged: (value) async {
+                                                      //     // setState(() {
+                                                      //     //   checkAddressFieldsFilled();
+                                                      //     // });
+                                                      //     // if (value.length == 6) {
+                                                      //     //   final String jsonContent = await rootBundle
+                                                      //     //       .loadString('assets/jsons/citylist.json');
+                                                      //     //
+                                                      //     //   final List<dynamic> jsonData =
+                                                      //     //   json.decode(jsonContent);
+                                                      //     //
+                                                      //     //   var listSearchData = jsonData
+                                                      //     //       .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
+                                                      //     //       .toList();
+                                                      //     //
+                                                      //     //   print("Helloooooooooo");
+                                                      //     //   print(listSearchData);
+                                                      //     //   if (listSearchData.isNotEmpty) {
+                                                      //     //     selectedPostCode = null;
+                                                      //     //     setState(() {
+                                                      //     //       _PostcodeList =
+                                                      //     //           listSearchData.map((e) => e).toList();
+                                                      //     //     });
+                                                      //     //
+                                                      //     //     print("List Drop Data");
+                                                      //     //     var districtNames = listSearchData
+                                                      //     //         .map((e) => e["D"].toString())
+                                                      //     //         .toSet() // Convert to a set to remove duplicates
+                                                      //     //         .first;  // Take the first element
+                                                      //     //
+                                                      //     //     print(districtNames);
+                                                      //     //
+                                                      //     //     var stateName = listSearchData
+                                                      //     //         .map((e) => e["S"].toString())
+                                                      //     //         .toSet() // Convert to a set to remove duplicates
+                                                      //     //         .first;  // Take the first element
+                                                      //     //
+                                                      //     //     print(stateName);
+                                                      //     //     setState(() {
+                                                      //     //       _district.text = districtNames;
+                                                      //     //       _state.text = stateName;
+                                                      //     //     });
+                                                      //     //
+                                                      //     //   } else {
+                                                      //     //     _PostcodeList.clear();
+                                                      //     //     //  showToastMessage('Enter correct pincode');
+                                                      //     //   }
+                                                      //     // }
+                                                      //   },
+                                                      //   keyboardType: TextInputType.phone,
+                                                      //   inputFormatters: [
+                                                      //     FilteringTextInputFormatter.singleLineFormatter,
+                                                      //     LengthLimitingTextInputFormatter(6),
+                                                      //   ],
+                                                      //   readOnly: true,
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Pincode *',
+                                                      //     hintText: 'Enter Pincode',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //  border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter pincode';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _postOffice,
+                                                      //   readOnly: true,
+                                                      //   // onChanged: (value) async {
+                                                      //   //   setState(() {
+                                                      //   //     checkAddressFieldsFilled();
+                                                      //   //   });
+                                                      //   // },
+                                                      //   keyboardType: TextInputType.phone,
+                                                      //   inputFormatters: [
+                                                      //     FilteringTextInputFormatter.singleLineFormatter,
+                                                      //     LengthLimitingTextInputFormatter(6),
+                                                      //   ],
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'PostOffice *',
+                                                      //   //  hintText: 'Enter Pincode',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //  border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter postoffice';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // DropdownButtonFormField2(
+                                                      //   dropdownStyleData:DropdownStyleData(
+                                                      //     decoration: BoxDecoration(
+                                                      //       //     color: StyleData.buttonColor,
+                                                      //         borderRadius: BorderRadius.circular(10)
+                                                      //
+                                                      //     ),
+                                                      //     maxHeight: 200,
+                                                      //   ) ,
+                                                      //   // isExpanded: true,
+                                                      //   // isDense: true,
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'Post Office *',
+                                                      //     hintText: 'Select an option',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (selectedPostCode == null) {
+                                                      //       return "Select Post Office";
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      //   value: selectedPostCode,
+                                                      //   onChanged: (value) {
+                                                      //     checkAddressFieldsFilled();
+                                                      //     setState(() {
+                                                      //       selectedPostCode = value as String?;
+                                                      //     });
+                                                      //   },
+                                                      //
+                                                      //   items: _PostcodeList.map((dynamic item) {
+                                                      //     return DropdownMenuItem(
+                                                      //       value: item["PO"],
+                                                      //       child: Text(
+                                                      //         item["PO"],
+                                                      //         style: const TextStyle(
+                                                      //           color: Color(0xFF393939),
+                                                      //           fontSize: 15,
+                                                      //           fontFamily: 'Poppins',
+                                                      //           fontWeight: FontWeight.w400,
+                                                      //         ),
+                                                      //       ),
+                                                      //     );
+                                                      //   }).toList(),
+                                                      //   style: const TextStyle(
+                                                      //     color: Color(0xFF393939),
+                                                      //     fontSize: 15,
+                                                      //     fontFamily: 'Poppins',
+                                                      //     fontWeight: FontWeight.w400,
+                                                      //   ),
+                                                      //
+                                                      //   // items:
+                                                      //   //     _PostcodeList.map((dynamic item) {
+                                                      //   //   return DropdownMenuItem<dynamic>(
+                                                      //   //     value: item,
+                                                      //   //     child: Text(
+                                                      //   //       item,
+                                                      //   //       style: const TextStyle(color: Colors.white),
+                                                      //   //     ),
+                                                      //   //   );
+                                                      //   // }).toList(),
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _district,
+                                                      //   readOnly: true,
+                                                      //   // onChanged: (value) {
+                                                      //   //   setState(() {
+                                                      //   //     checkAddressFieldsFilled();
+                                                      //   //   });
+                                                      //   // },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'District *',
+                                                      //     hintText: 'Enter District',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter your district';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      // TextFormField(
+                                                      //   controller: _state,
+                                                      //   readOnly: true,
+                                                      //   // onChanged: (value) {
+                                                      //   //   setState(() {
+                                                      //   //     checkAddressFieldsFilled();
+                                                      //   //   });
+                                                      //   // },
+                                                      //   decoration: InputDecoration(
+                                                      //     labelText: 'State *',
+                                                      //     hintText: '',
+                                                      //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                      //     //   border: InputBorder.none,
+                                                      //     focusedBorder: focus,
+                                                      //     enabledBorder: enb,
+                                                      //     filled: true,
+                                                      //     fillColor: StyleData.textFieldColor,
+                                                      //   ),
+                                                      //   validator: (value) {
+                                                      //     if (value == null || value.isEmpty) {
+                                                      //       return 'Please enter your State';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      // ),
+                                                      DropdownButtonFormField2<String>(
+                                                        value:_selectedResidentialType,
+                                                        onChanged: (String? newValue) {
+                                                          setState(() {
+                                                            _selectedResidentialType = newValue;
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        items: _residentialType
+                                                            .map((String item){
+                                                          return DropdownMenuItem(
+                                                            value: item,
+                                                            child: Text(
+                                                              item.toString(),
                                                               style: const TextStyle(
                                                                 color: Color(0xFF393939),
                                                                 fontSize: 15,
@@ -2172,387 +1919,684 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
                                                         ),
                                                         //   hint: const Text('Select an option'),
                                                         decoration: InputDecoration(
-                                                          labelText: 'Product *',
+                                                          labelText: 'Residential Type *',
                                                           hintText: 'Select an option',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          // border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      DropdownButtonFormField2<String>(
+                                                        value:_selectedResidentialStatus,
+                                                        onChanged: (String? newValue) {
+                                                          setState(() {
+                                                            _selectedResidentialStatus = newValue;
+                                                            checkAddressFieldsFilled();
+                                                          });
+                                                        },
+                                                        items: _residentialStatus
+                                                            .map((String item){
+                                                          return DropdownMenuItem(
+                                                            value: item,
+                                                            child: Text(
+                                                              item.toString(),
+                                                              style: const TextStyle(
+                                                                color: Color(0xFF393939),
+                                                                fontSize: 15,
+                                                                fontFamily: 'Poppins',
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }).toList(),
+                                                        style: const TextStyle(
+                                                          color: Color(0xFF393939),
+                                                          fontSize: 15,
+                                                          fontFamily: 'Poppins',
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
+                                                        //   hint: const Text('Select an option'),
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Residential Status *',
+                                                          hintText: 'Select an option',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          // border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: height * 0.02),
+                                                      Visibility(
+                                                        visible: areAddressFieldsFilled,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            if(areAddressFieldsFilled)
+                                                            {
+                                                              setState(() {
+                                                                isLeadInfo = !isLeadInfo;
+                                                                isCustomerInfo = false;
+                                                                isAddressInfo = false;
+                                                                isProfileInfo = false;
+                                                              });
+                                                            }},
+                                                          child: Align(
+                                                            alignment: Alignment.bottomRight,
+                                                            child: Icon(
+                                                              Icons.arrow_circle_down,
+                                                              color: Colors.yellow.shade800, // Set your desired arrow color
+                                                              size: 22,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                Card(
+                                  elevation: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if(areAddressFieldsFilled)
+                                        setState(() {
+                                          isLeadInfo = !isLeadInfo;
+                                          isCustomerInfo = false;
+                                          isAddressInfo = false;
+                                          isProfileInfo = false;
+                                        });
+                                    },
+                                    child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: height * 0.05,
+                                                width: width * 1,
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/icons8-details-48.png',
+                                                      width: width * 0.08,
+                                                      height: height * 0.04,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    SizedBox(
+                                                      width: width * 0.05,
+                                                    ),
+                                                    Text("Lead Details",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                                                    Spacer(),
+                                                    areLeadsFieldsFilled
+                                                        ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
+                                                        : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
+                                                  ],
+                                                ),
+                                              ),
+                                              // SizedBox(height: height * 0.015),
+                                              Visibility(
+                                                  visible:  isLeadInfo == true,
+                                                  child: Column(
+                                                    children: [
+                                                      TextFormField(
+                                                        controller: _leadSource,
+                                                        readOnly: true,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Lead Source',
+                                                          hintText: '',
                                                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                           //  border: InputBorder.none,
                                                           focusedBorder: focus,
                                                           enabledBorder: enb,
                                                           filled: true,
-                                                          fillColor:StyleData.textFieldColor,
+                                                          fillColor: StyleData.textFieldColor,
                                                         ),
                                                       ),
-                                                    ),
-                                                  SizedBox(height: height * 0.02),
-                                                  Visibility(
-                                                    visible: areLeadsFieldsFilled,
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        if(areLeadsFieldsFilled)
-                                                        {
+                                                      TextFormField(
+                                                        //  controller: branchCode,
+                                                        initialValue: branchCode,
+                                                        readOnly: true,
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Home Fin Branch Code',
+                                                          hintText: '',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //  border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                      ),
+                                                      TextFormField(
+                                                        controller: _leadAmount,
+                                                        onChanged: (value) {
                                                           setState(() {
-                                                            isProfileInfo = !isProfileInfo;
-                                                            isLeadInfo = false;
-                                                            isCustomerInfo = false;
-                                                            isAddressInfo = false;
+                                                            checkLeadsFieldsFilled();
                                                           });
-                                                        }},
-                                                      child: Align(
-                                                        alignment: Alignment.bottomRight,
-                                                        child: Icon(
-                                                          Icons.arrow_circle_down,
-                                                          color: Colors.yellow.shade800, // Set your desired arrow color
-                                                          size: 22,
+                                                        },
+                                                        decoration: InputDecoration(
+                                                          labelText: 'Lead Amount *',
+                                                          hintText: 'Enter Lead Amount',
+                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                          //  border: InputBorder.none,
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
                                                         ),
+                                                        keyboardType: TextInputType.number,
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter Lead Amount';
+                                                          }
+                                                          return null;
+                                                        },
                                                       ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            Card(
-                              elevation: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  if(areLeadsFieldsFilled)
-                                  {
-                                    setState(() {
-                                      isProfileInfo = !isProfileInfo;
-                                      isLeadInfo = false;
-                                      isCustomerInfo = false;
-                                      isAddressInfo = false;
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: height * 0.05,
-                                            width: width * 1,
-                                            child: Row(
-                                              children: [
-                                                Image.asset(
-                                                  'assets/images/profiling.png',
-                                                  width: width * 0.08,
-                                                  height: height * 0.04,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                SizedBox(
-                                                  width: width * 0.05,
-                                                ),
-                                                Text("Profiling Stage",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
-                                                Spacer(),
-                                                areProfileFieldsFilled
-                                                    ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
-                                                    : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: height * 0.005),
-                                          Visibility(
-                                            visible:  isProfileInfo == true,
-                                            child: Container(
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Column(
-                                                    children: [
+
                                                       Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          DropdownButtonFormField2<String>(
-                                                            value: _selectedCustomerProfile,
-                                                            onChanged: (String? newValue) {
-                                                              setState(() {
-                                                                _selectedCustomerProfile = newValue;
-                                                                checkProfileFieldsFilled();
-                                                              });
-                                                            },
-                                                            validator: (value) {
-                                                              if (value == null || value.isEmpty) {
-                                                                return 'Please select customer profile';
-                                                              }
-                                                              return null;
-                                                            },
-                                                            items: _customerProfileList
-                                                                .map((DropDownData item){
-                                                              return DropdownMenuItem(
-                                                                value: item.title,
-                                                                child: Text(
-                                                                  item.title,
-                                                                  style: const TextStyle(
-                                                                    color: Color(0xFF393939),
-                                                                    fontSize: 15,
-                                                                    fontFamily: 'Poppins',
-                                                                    fontWeight: FontWeight.w400,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                            style: const TextStyle(
-                                                              color: Color(0xFF393939),
-                                                              fontSize: 15,
-                                                              fontFamily: 'Poppins',
-                                                              fontWeight: FontWeight.w400,
-                                                            ),
-                                                            //   hint: const Text('Select an option'),
-                                                            decoration: InputDecoration(
-                                                              labelText: 'Customer Profile *',
-                                                              hintText: 'Select an option',
-                                                              //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                              focusedBorder: focus,
-                                                              enabledBorder: enb,
-                                                              filled: true,
-                                                              fillColor: StyleData.textFieldColor,
-                                                            ),
+                                                          Text(
+                                                            'Product Category *',
+                                                            style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                                                           ),
-                                                          SizedBox(height: height * 0.01,),
-                                                          DropdownButtonFormField2<String>(
-                                                            value: _selectedEmployeeCategory,
-                                                            onChanged: (String? newValue) {
-                                                              setState(() {
-                                                                _selectedEmployeeCategory = newValue;
-                                                                checkProfileFieldsFilled();
-                                                              });
-                                                            },
-                                                            validator: (value) {
-                                                              if (value == null || value.isEmpty) {
-                                                                return 'Please select Employee category';
-                                                              }
-                                                              return null;
-                                                            },
-                                                            items: _employeeCategoryList
-                                                                .map((DropDownData item){
-                                                              return DropdownMenuItem(
-                                                                value: item.title,
-                                                                child: Text(
-                                                                  item.title,
-                                                                  style: const TextStyle(
-                                                                    color: Color(0xFF393939),
-                                                                    fontSize: 15,
-                                                                    fontFamily: 'Poppins',
-                                                                    fontWeight: FontWeight.w400,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                            style: const TextStyle(
-                                                              color: Color(0xFF393939),
-                                                              fontSize: 15,
-                                                              fontFamily: 'Poppins',
-                                                              fontWeight: FontWeight.w400,
-                                                            ),
-                                                            //   hint: const Text('Select an option'),
-                                                            decoration: InputDecoration(
-                                                              labelText: 'Employee Category *',
-                                                              hintText: 'Select an option',
-                                                              //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                              focusedBorder: focus,
-                                                              enabledBorder: enb,
-                                                              filled: true,
-                                                              fillColor: StyleData.textFieldColor,
-                                                            ),
-                                                          ),
-                                                          SizedBox(height: height * 0.01,),
-                                                          TextFormField(
-                                                            controller: monthlyIncomeOfApplicant,
-                                                            onChanged: (String? newValue) {
-                                                              setState(() {
-                                                                checkProfileFieldsFilled();
-                                                              });
-                                                            },
-                                                            validator: (value) {
-                                                              if (value == null || value.isEmpty) {
-                                                                return 'Please enter monthly income';
-                                                              }
-                                                              return null;
-                                                            },
-                                                            decoration: InputDecoration(
-                                                              labelText: 'Monthly Income Of the Applicant *',
-                                                              hintText: 'Enter monthly income',
-                                                              //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                              // border: InputBorder.none,
-
-                                                              focusedBorder: focus,
-                                                              enabledBorder: enb,
-                                                              filled: true,
-                                                              fillColor: StyleData.textFieldColor,
-                                                            ),
-                                                            keyboardType: TextInputType.number,
-                                                            // inputFormatters: [
-                                                            // FilteringTextInputFormatter.digitsOnly,
-                                                            // LengthLimitingTextInputFormatter(12),]
-                                                          ),
-                                                          SizedBox(height: height * 0.01,),
-                                                          TextFormField(
-                                                            controller: aadharCardNumber,
-                                                            onChanged: (String? newValue) {
-                                                              setState(() {
-                                                                checkProfileFieldsFilled();
-                                                              });
-                                                            },
-                                                            decoration: InputDecoration(
-                                                              labelText: 'Aadhar Card Number *',
-                                                              hintText: 'Enter Aadhar number',
-                                                              //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                              // border: InputBorder.none,
-                                                              focusedBorder: focus,
-                                                              enabledBorder: enb,
-                                                              filled: true,
-                                                              fillColor: StyleData.textFieldColor,
-                                                            ),
-                                                            keyboardType: TextInputType.number,
-                                                            inputFormatters: [
-                                                              FilteringTextInputFormatter.digitsOnly,
-                                                              LengthLimitingTextInputFormatter(12),
-                                                            ],
-                                                            validator: (value) {
-                                                              if (value == null || value.isEmpty) {
-                                                                return 'Aadhar Card Number is required';
-                                                              } else if (value.length != 12) {
-                                                                return 'Aadhar Card Number must be 12 digits';
-                                                              }
-                                                              return null;
-                                                            },
-                                                          ),
-                                                          SizedBox(height: height * 0.01,),
-                                                  TextFormField(
-                                                    controller: panCardNumber,
-                                                    onChanged: (String? newValue) {
-                                                      setState(() {
-                                                        checkProfileFieldsFilled();
-                                                      });
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Pan Card Number *',
-                                                      hintText: 'Enter Pan number',
-                                                      focusedBorder: focus,
-                                                      enabledBorder: enb,
-                                                      filled: true,
-                                                      fillColor: StyleData.textFieldColor,
-                                                    ),
-                                                    keyboardType: TextInputType.text,
-                                                    inputFormatters: [
-                                                      FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9]+$')), // Allow only alphanumeric characters
-                                                      LengthLimitingTextInputFormatter(10),
-                                                      UppercaseTextInputFormatter(),
-                                                    ],
-                                                    validator: (value) {
-                                                      if (value == null || value.isEmpty) {
-                                                        return 'Pan Card Number is required';
-                                                      } else if (!isValidPanCard(value)) {
-                                                        return 'Invalid Pan Card Number';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-
-                                                  SizedBox(height: height * 0.01,),
                                                           Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
                                                             children: [
-                                                              Checkbox(
-                                                                value: consentCRIF,
-                                                                activeColor: StyleData.appBarColor,
+                                                              Radio(
+                                                                value: 'Home Loan',
+                                                                groupValue: selectedProductValue,
                                                                 onChanged: (value) {
                                                                   setState(() {
-                                                                    consentCRIF = value!;
+                                                                    selectedProductValue = 'Home Loan';
+                                                                    selectedProdut = null; // Reset selectedProdut when switching categories
+                                                                    checkLeadsFieldsFilled();
                                                                   });
                                                                 },
+                                                                activeColor: StyleData.appBarColor,
                                                               ),
                                                               Text(
-                                                                'Consent for getting CRIF',
-                                                                style: TextStyle(fontSize: 18),
+                                                                'Home Loan',
+                                                                style: TextStyle(fontSize: 16),
                                                               ),
                                                             ],
                                                           ),
                                                           Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
                                                             children: [
-                                                              Checkbox(
-                                                                value: consentKYC,
-                                                                activeColor: StyleData.appBarColor,
+                                                              Radio(
+                                                                value: 'Non-Home Loan',
+                                                                groupValue: selectedProductValue,
                                                                 onChanged: (value) {
                                                                   setState(() {
-                                                                    consentKYC = value!;
+                                                                    selectedProductValue = 'Non-Home Loan';
+                                                                    selectedProdut = null; // Reset selectedProdut when switching categories
+                                                                    checkLeadsFieldsFilled();
                                                                   });
                                                                 },
+                                                                activeColor: StyleData.appBarColor,
                                                               ),
                                                               Text(
-                                                                'Consent for getting KYC',
+                                                                'Non-Home Loan',
                                                                 style: TextStyle(fontSize: 18),
                                                               ),
                                                             ],
-                                                          )
+                                                          ),
                                                         ],
                                                       ),
+                                                      selectedProductValue == 'Home Loan'  ?
+                                                      SizedBox(
+                                                        width: width * 1,
+                                                        child: DropdownButtonFormField2<String>(
+                                                          value: selectedProdut,
+                                                          onChanged: (String? newValue) {
+                                                            setState(() {
+                                                              selectedProdut = newValue;
+                                                              checkLeadsFieldsFilled();
+                                                            });
+                                                          },
+                                                          validator: (value) {
+                                                            if (value == null || value.isEmpty) {
+                                                              return 'Please select product';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          items: _productsList.where((item) => item.type == 1)
+                                                              .map((DropDownProductData item){
+                                                            return DropdownMenuItem(
+                                                              value: item.title,
+                                                              child: Text(
+                                                                item.title.length > 30
+                                                                    ? item.title.substring(0, 31) + '...'  // adjust the length as needed
+                                                                    : item.title,
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF393939),
+                                                            fontSize: 15,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          //   hint: const Text('Select an option'),
+                                                          decoration: InputDecoration(
+                                                            labelText: 'Product *',
+                                                            hintText: 'Select an option',
+                                                            //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                            //  border: InputBorder.none,
+                                                            focusedBorder: focus,
+                                                            enabledBorder: enb,
+                                                            filled: true,
+                                                            fillColor:StyleData.textFieldColor,
+                                                          ),
+                                                        ),
+                                                      )
+                                                          :
+                                                      SizedBox(
+                                                        width: width * 1,
+                                                        child: DropdownButtonFormField2<String>(
+                                                          value: selectedProdut,
+                                                          onChanged: (String? newValue) {
+                                                            setState(() {
+                                                              selectedProdut = newValue;
+                                                              checkLeadsFieldsFilled();
+                                                            });
+                                                          },
+                                                          validator: (value) {
+                                                            if (value == null || value.isEmpty) {
+                                                              return 'Please select product';
+                                                            }
+                                                            return null;
+                                                          },
+                                                          items: _productsList.where((item) => item.type == 2)
+                                                              .map((DropDownProductData item){
+                                                            return DropdownMenuItem(
+                                                              value: item.title,
+                                                              child: Text(
+                                                                item.title.length > 20
+                                                                    ? item.title.substring(0, 27) + '...'  // adjust the length as needed
+                                                                    : item.title,
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF393939),
+                                                            fontSize: 15,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          //   hint: const Text('Select an option'),
+                                                          decoration: InputDecoration(
+                                                            labelText: 'Product *',
+                                                            hintText: 'Select an option',
+                                                            //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                            //  border: InputBorder.none,
+                                                            focusedBorder: focus,
+                                                            enabledBorder: enb,
+                                                            filled: true,
+                                                            fillColor:StyleData.textFieldColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: height * 0.02),
+                                                      Visibility(
+                                                        visible: areLeadsFieldsFilled,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            if(areLeadsFieldsFilled)
+                                                            {
+                                                              setState(() {
+                                                                isProfileInfo = !isProfileInfo;
+                                                                isLeadInfo = false;
+                                                                isCustomerInfo = false;
+                                                                isAddressInfo = false;
+                                                              });
+                                                            }},
+                                                          child: Align(
+                                                            alignment: Alignment.bottomRight,
+                                                            child: Icon(
+                                                              Icons.arrow_circle_down,
+                                                              color: Colors.yellow.shade800, // Set your desired arrow color
+                                                              size: 22,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
-                                                  ),
-                                                )),
+                                                  )),
+                                            ],
                                           ),
+                                        )),
+                                  ),
+                                ),
+                                Card(
+                                  elevation: 3,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if(areLeadsFieldsFilled)
+                                      {
+                                        setState(() {
+                                          isProfileInfo = !isProfileInfo;
+                                          isLeadInfo = false;
+                                          isCustomerInfo = false;
+                                          isAddressInfo = false;
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: height * 0.05,
+                                                width: width * 1,
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/images/profiling.png',
+                                                      width: width * 0.08,
+                                                      height: height * 0.04,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    SizedBox(
+                                                      width: width * 0.05,
+                                                    ),
+                                                    Text("Profiling Stage",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
+                                                    Spacer(),
+                                                    areProfileFieldsFilled
+                                                        ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
+                                                        : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(height: height * 0.005),
+                                              Visibility(
+                                                visible:  isProfileInfo == true,
+                                                child: Container(
+                                                    color: Colors.white,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Column(
+                                                        children: [
+                                                          Column(
+                                                            children: [
+                                                              DropdownButtonFormField2<String>(
+                                                                value: _selectedCustomerProfile,
+                                                                onChanged: (String? newValue) {
+                                                                  setState(() {
+                                                                    _selectedCustomerProfile = newValue;
+                                                                    checkProfileFieldsFilled();
+                                                                  });
+                                                                },
+                                                                validator: (value) {
+                                                                  if (value == null || value.isEmpty) {
+                                                                    return 'Please select customer profile';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                                items: _customerProfileList
+                                                                    .map((DropDownData item){
+                                                                  return DropdownMenuItem(
+                                                                    value: item.title,
+                                                                    child: Text(
+                                                                      item.title,
+                                                                      style: const TextStyle(
+                                                                        color: Color(0xFF393939),
+                                                                        fontSize: 15,
+                                                                        fontFamily: 'Poppins',
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }).toList(),
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                                //   hint: const Text('Select an option'),
+                                                                decoration: InputDecoration(
+                                                                  labelText: 'Customer Profile *',
+                                                                  hintText: 'Select an option',
+                                                                  //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                                  focusedBorder: focus,
+                                                                  enabledBorder: enb,
+                                                                  filled: true,
+                                                                  fillColor: StyleData.textFieldColor,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: height * 0.01,),
+                                                              DropdownButtonFormField2<String>(
+                                                                value: _selectedEmployeeCategory,
+                                                                onChanged: (String? newValue) {
+                                                                  setState(() {
+                                                                    _selectedEmployeeCategory = newValue;
+                                                                    checkProfileFieldsFilled();
+                                                                  });
+                                                                },
+                                                                validator: (value) {
+                                                                  if (value == null || value.isEmpty) {
+                                                                    return 'Please select Employee category';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                                items: _employeeCategoryList
+                                                                    .map((DropDownData item){
+                                                                  return DropdownMenuItem(
+                                                                    value: item.title,
+                                                                    child: Text(
+                                                                      item.title,
+                                                                      style: const TextStyle(
+                                                                        color: Color(0xFF393939),
+                                                                        fontSize: 15,
+                                                                        fontFamily: 'Poppins',
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }).toList(),
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                                //   hint: const Text('Select an option'),
+                                                                decoration: InputDecoration(
+                                                                  labelText: 'Employee Category *',
+                                                                  hintText: 'Select an option',
+                                                                  //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                                  focusedBorder: focus,
+                                                                  enabledBorder: enb,
+                                                                  filled: true,
+                                                                  fillColor: StyleData.textFieldColor,
+                                                                ),
+                                                              ),
+                                                              SizedBox(height: height * 0.01,),
+                                                              TextFormField(
+                                                                controller: monthlyIncomeOfApplicant,
+                                                                onChanged: (String? newValue) {
+                                                                  setState(() {
+                                                                    checkProfileFieldsFilled();
+                                                                  });
+                                                                },
+                                                                validator: (value) {
+                                                                  if (value == null || value.isEmpty) {
+                                                                    return 'Please enter monthly income';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                                decoration: InputDecoration(
+                                                                  labelText: 'Monthly Income Of the Applicant *',
+                                                                  hintText: 'Enter monthly income',
+                                                                  //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                                  // border: InputBorder.none,
+
+                                                                  focusedBorder: focus,
+                                                                  enabledBorder: enb,
+                                                                  filled: true,
+                                                                  fillColor: StyleData.textFieldColor,
+                                                                ),
+                                                                keyboardType: TextInputType.number,
+                                                                // inputFormatters: [
+                                                                // FilteringTextInputFormatter.digitsOnly,
+                                                                // LengthLimitingTextInputFormatter(12),]
+                                                              ),
+                                                              SizedBox(height: height * 0.01,),
+                                                              TextFormField(
+                                                                controller: aadharCardNumber,
+                                                                onChanged: (String? newValue) {
+                                                                  setState(() {
+                                                                    checkProfileFieldsFilled();
+                                                                  });
+                                                                },
+                                                                decoration: InputDecoration(
+                                                                  labelText: 'Aadhar Card Number *',
+                                                                  hintText: 'Enter Aadhar number',
+                                                                  //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                                  // border: InputBorder.none,
+                                                                  focusedBorder: focus,
+                                                                  enabledBorder: enb,
+                                                                  filled: true,
+                                                                  fillColor: StyleData.textFieldColor,
+                                                                ),
+                                                                keyboardType: TextInputType.number,
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter.digitsOnly,
+                                                                  LengthLimitingTextInputFormatter(12),
+                                                                ],
+                                                                validator: (value) {
+                                                                  if (value == null || value.isEmpty) {
+                                                                    return 'Aadhar Card Number is required';
+                                                                  } else if (value.length != 12) {
+                                                                    return 'Aadhar Card Number must be 12 digits';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                              ),
+                                                              SizedBox(height: height * 0.01,),
+                                                              TextFormField(
+                                                                controller: panCardNumber,
+                                                                onChanged: (String? newValue) {
+                                                                  setState(() {
+                                                                    checkProfileFieldsFilled();
+                                                                  });
+                                                                },
+                                                                decoration: InputDecoration(
+                                                                  labelText: 'Pan Card Number *',
+                                                                  hintText: 'Enter Pan number',
+                                                                  focusedBorder: focus,
+                                                                  enabledBorder: enb,
+                                                                  filled: true,
+                                                                  fillColor: StyleData.textFieldColor,
+                                                                ),
+                                                                keyboardType: TextInputType.text,
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9]+$')), // Allow only alphanumeric characters
+                                                                  LengthLimitingTextInputFormatter(10),
+                                                                  UppercaseTextInputFormatter(),
+                                                                ],
+                                                                validator: (value) {
+                                                                  if (value == null || value.isEmpty) {
+                                                                    return 'Pan Card Number is required';
+                                                                  } else if (!isValidPanCard(value)) {
+                                                                    return 'Invalid Pan Card Number';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                              ),
+
+                                                              SizedBox(height: height * 0.01,),
+
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )),
+                                              ),
 
 
+                                            ],
+                                          ),
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height:  height * 0.46,
+                                ),
+                                Container(
+                                  height: 55,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: StyleData.appBarColor2,
+                                  ),
+                                  child: Center(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (_formKey.currentState!.validate() &&
+                                            areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
+                                            && areAddressFieldsFilled == true && areProfileFieldsFilled == true) {
+                                          leadCreation();
+                                        }
+                                        else {
+                                          CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.save_outlined, color: Colors.white,),
+                                          SizedBox(width: width * 0.025,),
+                                          Text(
+                                            'Submit',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ],
                                       ),
-                                    )),
-                              ),
-                            ),
-
-
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height:  height * 0.46,
-                ),
-                Container(
-                  height: 55,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: StyleData.appBarColor2,
-                  ),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                     if (_formKey.currentState!.validate() &&
-                         areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
-                         && areAddressFieldsFilled == true && areProfileFieldsFilled == true) {
-                       leadCreation();
-                     }
-                     else {
-                       CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
-                     }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.save_outlined, color: Colors.white,),
-                          SizedBox(width: width * 0.025,),
-                          Text(
-                            'Submit',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
+
 
               ],
             ),

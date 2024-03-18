@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -101,8 +100,12 @@ class _FormPageViewState extends State<FormPageView> {
   String? selectedDSACode;
   String? ConnectorCode;
   String? selectedDSACode1;
+  TextEditingController selectedDSACodeController = TextEditingController();
   String? ConnectorCode1;
+  TextEditingController ConnectorCodeController = TextEditingController();
   final List<DropDownData> _leadDSAList = [];
+
+  String? _searchTerm;
 
   getDropDownCampaignData() {
     FirebaseFirestore.instance
@@ -256,6 +259,7 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _customerMobileNumber = TextEditingController();
   TextEditingController _employeeName = TextEditingController();
   TextEditingController _employeeCode = TextEditingController();
+  TextEditingController _builderName = TextEditingController();
 
 
   List<dynamic> _PostcodeList = [];
@@ -490,6 +494,7 @@ class _FormPageViewState extends State<FormPageView> {
       // 'pincode':_pincode.text,
       'customerName':_customerName.text,
       'CustomerMobile':_customerMobileNumber.text,
+      'builderName':_builderName.text,
       'leadSource': _selectedLeadSource,
       'dsaName': _selectedDSA,
       'connectorName': _selectedConnector,
@@ -502,6 +507,9 @@ class _FormPageViewState extends State<FormPageView> {
       'address': locationController.text,
       'LeadID' : "-",
       'userId': userId,
+      'EmployeeName': pref.getString("employeeName"),
+      'EmployeeCode':  pref.getString("employeeCode"),
+      'EmployeeBranchCode': pref.getString("branchcode"),
       'createdDateTime':Timestamp.fromDate(now),
     };
     // if (_selectedLeadSource == 'DSA') {
@@ -832,46 +840,20 @@ async {
                               SizedBox(
                                 width: width * 0.95,
                                 child: DropdownButtonFormField2<String>(
-                                  value: _selectedDSA,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedDSA = newValue;
-
-                                      DropDownData selectedDSAData = _leadDSAList.firstWhere(
-                                            (item) => item.title == newValue,
-                                      );
-                                      // Fetch and print the selected title's ID
-                                      print('DSAID: ${selectedDSAData.id}');
-                                      selectedDSACode = selectedDSAData.id.toString();
-
-                                    });
-                                    setState(() {
-                                      selectedDSACode1 = selectedDSACode;
-                                    });
-                                    print(selectedDSACode1);
-                                  },
-                                 // focusNode: _customerNameFocus,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Choose DSA Name';
-                                    }
-                                    return null;
-                                  },
-                                  dropdownStyleData:DropdownStyleData(
-                                    decoration: BoxDecoration(
-                                      //     color: StyleData.buttonColor,
-                                        borderRadius: BorderRadius.circular(10)
-
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'Select option',
+                                    style: TextStyle(
+                                      fontSize: 15, // Adjusted font size to match second dropdown
+                                      color: Color(0xFF393939), // Changed text color to match second dropdown
                                     ),
-                                    maxHeight: 200,
-                                  ) ,
-                                  items: _leadDSAList
-                                      .map((DropDownData item){
+                                  ),
+                                  items: _leadDSAList.map((DropDownData item) {
                                     return DropdownMenuItem(
                                       value: item.title,
                                       child: Text(
                                         item.title.length > 25
-                                            ? item.title.substring(0, 26) + '.'  // adjust the length as needed
+                                            ? item.title.substring(0, 26) + '.'
                                             : item.title,
                                         style: const TextStyle(
                                           color: Color(0xFF393939),
@@ -882,17 +864,185 @@ async {
                                       ),
                                     );
                                   }).toList(),
+                                  value: _selectedDSA,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedDSA = newValue;
+                                      DropDownData selectedDSAData = _leadDSAList.firstWhere(
+                                            (item) => item.title == newValue,
+                                      );
+                                      print('DSAID: ${selectedDSAData.id}');
+                                      selectedDSACode = selectedDSAData.id.toString();
+                                    });
+                                    setState(() {
+                                      selectedDSACode1 = selectedDSACode;
+                                      selectedDSACodeController.text = selectedDSACode!;
+                                    });
+                                    print(selectedDSACode1);
+                                  },
+                                  validator: (newValue) {
+                                    if (newValue!.isEmpty) {
+                                      return 'Choose DSA Name';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Choose DSA *',
+                                    hintText: '',
+                                    //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                    focusedBorder: focus,
+                                    enabledBorder: enb,
+                                    filled: true,
+                                    fillColor: StyleData.textFieldColor,
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    maxHeight: 200,
+                                  ),
+                                  selectedItemBuilder: (BuildContext context) {
+                                    return _leadDSAList.map<Widget>((DropDownData item) {
+                                      return Text(
+                                        item.title,
+                                        style: const TextStyle(fontSize: 13, color: Colors.black),
+                                      );
+                                    }).toList();
+                                  },
+                                  buttonStyleData: ButtonStyleData(
+                                    padding: const EdgeInsets.only(left: 3),
+                                    width: width * 0.9,
+                                    // height: height * 0.07,
+                                  ),
                                   style: const TextStyle(
                                     color: Color(0xFF393939),
                                     fontSize: 15,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
                                   ),
-                                  //   hint: const Text('Select an option'),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                  ),
+                                  dropdownSearchData: DropdownSearchData(
+                                    searchController: textEditingController,
+                                    searchInnerWidgetHeight: 60,
+                                    searchInnerWidget: Container(
+                                      height: 60,
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: TextFormField(
+                                        expands: true,
+                                        maxLines: null,
+                                        controller: textEditingController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Search',
+                                          labelStyle: TextStyle(
+                                            color: Color(0xFF393939),
+                                            fontSize: 13,
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.black38),
+                                          ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.black38),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    searchMatchFn: (item, searchValue) {
+                                      return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
+                                    },
+                                  ),
+                                  onMenuStateChange: (isOpen) {
+                                    if (!isOpen) {
+                                      textEditingController.clear();
+                                    }
+                                  },
+                                ),
+                              ),
+                              //
+                              // SizedBox(
+                              //   width: width * 0.95,
+                              //   child: DropdownButtonFormField2<String>(
+                              //     value: _selectedDSA,
+                              //     onChanged: (String? newValue) {
+                              //       setState(() {
+                              //         _selectedDSA = newValue;
+                              //
+                              //         DropDownData selectedDSAData = _leadDSAList.firstWhere(
+                              //               (item) => item.title == newValue,
+                              //         );
+                              //         // Fetch and print the selected title's ID
+                              //         print('DSAID: ${selectedDSAData.id}');
+                              //         selectedDSACode = selectedDSAData.id.toString();
+                              //
+                              //       });
+                              //       setState(() {
+                              //         selectedDSACode1 = selectedDSACode;
+                              //         selectedDSACodeController.text = selectedDSACode!;
+                              //       });
+                              //       print(selectedDSACode1);
+                              //     },
+                              //    // focusNode: _customerNameFocus,
+                              //     validator: (value) {
+                              //       if (value!.isEmpty) {
+                              //         return 'Choose DSA Name';
+                              //       }
+                              //       return null;
+                              //     },
+                              //     dropdownStyleData:DropdownStyleData(
+                              //       decoration: BoxDecoration(
+                              //         //     color: StyleData.buttonColor,
+                              //           borderRadius: BorderRadius.circular(10)
+                              //
+                              //       ),
+                              //       maxHeight: 200,
+                              //     ) ,
+                              //     items: _leadDSAList
+                              //         .map((DropDownData item){
+                              //       return DropdownMenuItem(
+                              //         value: item.title,
+                              //         child: Text(
+                              //           item.title.length > 25
+                              //               ? item.title.substring(0, 26) + '.'  // adjust the length as needed
+                              //               : item.title,
+                              //           style: const TextStyle(
+                              //             color: Color(0xFF393939),
+                              //             fontSize: 15,
+                              //             fontFamily: 'Poppins',
+                              //             fontWeight: FontWeight.w400,
+                              //           ),
+                              //         ),
+                              //       );
+                              //     }).toList(),
+                              //     style: const TextStyle(
+                              //       color: Color(0xFF393939),
+                              //       fontSize: 15,
+                              //       fontFamily: 'Poppins',
+                              //       fontWeight: FontWeight.w400,
+                              //     ),
+                              //     //   hint: const Text('Select an option'),
+                              //     decoration: InputDecoration(
+                              //       labelText: 'Choose DSA *',
+                              //       hintText: '',
+                              //       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                              //       focusedBorder: focus,
+                              //       enabledBorder: enb,
+                              //       filled: true,
+                              //       fillColor: StyleData.textFieldColor,
+                              //     ),
+                              //   ),
+                              // ),
+                              SizedBox(
+                                width: width * 0.95,
+                                child: TextFormField(
+                                  controller: selectedDSACodeController,
+                                //  initialValue: selectedDSACode1,
+                                  readOnly: true,
                                   decoration: InputDecoration(
-                                    labelText: 'Choose DSA *',
+                                    labelText: 'DSA Code',
                                     hintText: '',
-                                    //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                     focusedBorder: focus,
                                     enabledBorder: enb,
                                     filled: true,
@@ -913,30 +1063,14 @@ async {
                               SizedBox(
                                 width: width * 0.95,
                                 child: DropdownButtonFormField2<String>(
-                                  value: _selectedConnector,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedConnector = newValue;
-                                      DropDownData selectedConnectorData = _leadConnectorList.firstWhere(
-                                            (item) => item.title == newValue,
-
-                                      );
-                                      // Fetch and print the selected title's ID
-                                      print('DSAID: ${selectedConnectorData.id}');
-                                      ConnectorCode = selectedConnectorData.id.toString();
-                                    });
-                                    setState(() {
-                                      ConnectorCode1 = ConnectorCode;
-                                    });
-                                    print(ConnectorCode1);
-                                  },
-                                //  focusNode: _customerNameFocus,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Select connector name';
-                                    }
-                                    return null;
-                                  },
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'Select option',
+                                    style: TextStyle(
+                                      fontSize: 15, // Adjusted font size to match second dropdown
+                                      color: Color(0xFF393939), // Changed text color to match second dropdown
+                                    ),
+                                  ),
                                   items: _leadConnectorList
                                       .map((DropDownData item){
                                     return DropdownMenuItem(
@@ -954,14 +1088,31 @@ async {
                                       ),
                                     );
                                   }).toList(),
-                                  dropdownStyleData:DropdownStyleData(
-                                    decoration: BoxDecoration(
-                                      //     color: StyleData.buttonColor,
-                                        borderRadius: BorderRadius.circular(10)
+                                  value: _selectedConnector,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _selectedConnector = newValue;
+                                      DropDownData selectedConnectorData = _leadConnectorList.firstWhere(
+                                            (item) => item.title == newValue,
 
-                                    ),
-                                    maxHeight: 200,
-                                  ) ,
+                                      );
+                                      // Fetch and print the selected title's ID
+                                      print('ConnectorID: ${selectedConnectorData.id}');
+                                      ConnectorCode = selectedConnectorData.id.toString();
+                                    });
+                                    setState(() {
+                                      ConnectorCode1 = ConnectorCode;
+                                      ConnectorCodeController.text = ConnectorCode!;
+                                    });
+                                    print(ConnectorCode1);
+                                  },
+                                  //  focusNode: _customerNameFocus,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Select connector name';
+                                    }
+                                    return null;
+                                  },
                                   style: const TextStyle(
                                     color: Color(0xFF393939),
                                     fontSize: 15,
@@ -973,6 +1124,151 @@ async {
                                     labelText: 'Choose Connector *',
                                     hintText: '',
                                     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                    focusedBorder: focus,
+                                    enabledBorder: enb,
+                                    filled: true,
+                                    fillColor: StyleData.textFieldColor,
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    maxHeight: 200,
+                                  ),
+                                  selectedItemBuilder: (BuildContext context) {
+                                    return _leadConnectorList.map<Widget>((DropDownData item) {
+                                      return Text(
+                                        item.title,
+                                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                                      );
+                                    }).toList();
+                                  },
+                                  buttonStyleData: ButtonStyleData(
+                                    padding: const EdgeInsets.only(left: 3),
+                                    width: width * 0.9,
+                                    // height: height * 0.07,
+                                  ),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                  ),
+                                  dropdownSearchData: DropdownSearchData(
+                                    searchController: textEditingController,
+                                    searchInnerWidgetHeight: 60,
+                                    searchInnerWidget: Container(
+                                      height: 60,
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: TextFormField(
+                                        expands: true,
+                                        maxLines: null,
+                                        controller: textEditingController,
+                                        decoration: InputDecoration(
+                                          labelText: 'Search',
+                                          labelStyle: TextStyle(
+                                            color: Color(0xFF393939),
+                                            fontSize: 13,
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.black38),
+                                          ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.black38),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    searchMatchFn: (item, searchValue) {
+                                      return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
+                                    },
+                                  ),
+                                  onMenuStateChange: (isOpen) {
+                                    if (!isOpen) {
+                                      textEditingController.clear();
+                                    }
+                                  },
+                                ),
+                              ),
+                              // SizedBox(
+                              //   width: width * 0.95,
+                              //   child: DropdownButtonFormField2<String>(
+                              //     value: _selectedConnector,
+                              //     onChanged: (String? newValue) {
+                              //       setState(() {
+                              //         _selectedConnector = newValue;
+                              //         DropDownData selectedConnectorData = _leadConnectorList.firstWhere(
+                              //               (item) => item.title == newValue,
+                              //
+                              //         );
+                              //         // Fetch and print the selected title's ID
+                              //         print('DSAID: ${selectedConnectorData.id}');
+                              //         ConnectorCode = selectedConnectorData.id.toString();
+                              //       });
+                              //       setState(() {
+                              //         ConnectorCode1 = ConnectorCode;
+                              //         ConnectorCodeController.text = ConnectorCode!;
+                              //       });
+                              //       print(ConnectorCode1);
+                              //     },
+                              //   //  focusNode: _customerNameFocus,
+                              //     validator: (value) {
+                              //       if (value!.isEmpty) {
+                              //         return 'Select connector name';
+                              //       }
+                              //       return null;
+                              //     },
+                              //     items: _leadConnectorList
+                              //         .map((DropDownData item){
+                              //       return DropdownMenuItem(
+                              //         value: item.title,
+                              //         child: Text(
+                              //           item.title.length > 30
+                              //               ? item.title.substring(0, 29) + '...'
+                              //               : item.title,
+                              //           style: const TextStyle(
+                              //             color: Color(0xFF393939),
+                              //             fontSize: 15,
+                              //             fontFamily: 'Poppins',
+                              //             fontWeight: FontWeight.w400,
+                              //           ),
+                              //         ),
+                              //       );
+                              //     }).toList(),
+                              //     dropdownStyleData:DropdownStyleData(
+                              //       decoration: BoxDecoration(
+                              //         //     color: StyleData.buttonColor,
+                              //           borderRadius: BorderRadius.circular(10)
+                              //
+                              //       ),
+                              //       maxHeight: 200,
+                              //     ) ,
+                              //     style: const TextStyle(
+                              //       color: Color(0xFF393939),
+                              //       fontSize: 15,
+                              //       fontFamily: 'Poppins',
+                              //       fontWeight: FontWeight.w400,
+                              //     ),
+                              //     //   hint: const Text('Select an option'),
+                              //     decoration: InputDecoration(
+                              //     labelText: 'Choose Connector *',
+                              //     hintText: '',
+                              //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                              //     focusedBorder: focus,
+                              //     enabledBorder: enb,
+                              //     filled: true,
+                              //     fillColor: StyleData.textFieldColor,
+                              //   ),
+                              //   ),
+                              // ),
+                              SizedBox(
+                                width: width * 0.95,
+                                child: TextFormField(
+                                  controller: ConnectorCodeController,
+                                  //  initialValue: selectedDSACode1,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Connector Code',
+                                    hintText: '',
                                     focusedBorder: focus,
                                     enabledBorder: enb,
                                     filled: true,
@@ -1186,6 +1482,43 @@ async {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter employee code';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: _selectedLeadSource == "Builder",
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: height * 0.01,
+                              ),
+                              SizedBox(
+                                width: width * 0.95,
+                                child: TextFormField(
+                                  controller: _builderName,
+                                  // onChanged: (value) {
+                                  //   setState(() {
+                                  //     checkCustomerFieldsFilled();
+                                  //   });
+                                  // },
+                                  //focusNode: _customerNameFocus,
+                                  decoration: InputDecoration(
+                                    labelText: 'Builder Name',
+                                    hintText: '',
+                                    //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                    focusedBorder: focus,
+                                    enabledBorder: enb,
+                                    filled: true,
+                                    fillColor: StyleData.textFieldColor,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter builder name';
                                     }
                                     return null;
                                   },
@@ -2184,63 +2517,66 @@ async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0, // No shadow
-          content: Container(
-            height:190,
-            width: 190,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child:
-                  Container(
-                    height: 80,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle
-                    ),
-                    child: Center(
-                      child: Icon(Icons.done,color: Colors.white,),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text('Visit created successfully', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87,fontSize: 16,),),
-                //  SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text('Visit ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87)),
-                    Text('$visitID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(height: 5),
-                SizedBox(
-                  height: 25,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePageView(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0, // No shadow
+            content: Container(
+              height:190,
+              width: 190,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child:
+                    Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle
+                      ),
+                      child: Center(
+                        child: Icon(Icons.done,color: Colors.white,),
                       ),
                     ),
-                    child: Text('OK', style: TextStyle(color: Colors.white)),
                   ),
-                ),
-              ],
+                  SizedBox(height: 8),
+                  Text('Visit created successfully', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87,fontSize: 16,),),
+                  //  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text('Visit ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87)),
+                      Text('$visitID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  SizedBox(
+                    height: 25,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageView(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text('OK', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

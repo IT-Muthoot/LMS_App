@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -153,7 +151,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
         child: Column(
           children: [
             Container(
-              color: HexColor("#F0EAD6"),
+              color: Colors.orangeAccent,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
