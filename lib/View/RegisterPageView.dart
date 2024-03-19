@@ -44,14 +44,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   List employeeList = [];
   List outputList1 = [];
 
+  String? Designation;
+  String? RegionName;
+  String? ReportingManagerName;
+  String? ReportingManagerCode;
+  String? Zone;
 
-  getEmployeeDetails(String emp) async {
+  //
+  // getEmployeeDetails(String emp) async {
+  //   FirebaseFirestore.instance
+  //       .collection("employeeList")
+  //       .doc("employeeList")
+  //       .get()
+  //       .then((value) async {
+  //     for (var element in value.data()!["employeeList"]) {
+  //       setState(() {
+  //         employeeList.add(element);
+  //       });
+  //     }
+  //     setState(() {
+  //       outputList1 =
+  //           employeeList.where((o) => o['EMP_CODE'] == empCodeController.text).toList();
+  //       empNameController.text = outputList1[0]['NAME'];
+  //       branchcode.text = outputList1[0]['BRANCH CODE'];
+  //     });
+  //     print("Output List " + outputList1.toString());
+  //
+  //   });
+  // }
+
+
+  getEmployee1Details(String emp) async {
     FirebaseFirestore.instance
-        .collection("employeeList")
-        .doc("employeeList")
+        .collection("employeeMapping")
+        .doc("employeeMapping")
         .get()
         .then((value) async {
-      for (var element in value.data()!["employeeList"]) {
+      for (var element in value.data()!["employeeMapping"]) {
         setState(() {
           employeeList.add(element);
         });
@@ -61,12 +90,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             employeeList.where((o) => o['EMP_CODE'] == empCodeController.text).toList();
         empNameController.text = outputList1[0]['NAME'];
         branchcode.text = outputList1[0]['BRANCH CODE'];
+        Designation = outputList1[0]['DSGN_NAME'];
+        RegionName = outputList1[0]['REGION'];
+        ReportingManagerName = outputList1[0]['Reporting Manager Name'];
+        ReportingManagerCode = outputList1[0]['Reporting Manager Code'];
+        Zone = outputList1[0]['ZONE'];
       });
       print("Output List " + outputList1.toString());
 
     });
   }
-
 
 
   @override
@@ -119,7 +152,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ],
                         onChanged: (empCode) {
                           // Call the fetchEmployeeDetails function when the code is entered
-                          getEmployeeDetails(empCode);
+                        //  getEmployeeDetails(empCode);
+                        getEmployee1Details(empCode);
                         },
                         validator: (isusernamevalid) {
                           if (isusernamevalid.toString().isNotEmpty)
@@ -299,6 +333,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               "password": passwordController.text,
                               "branchCode": branchcode.text,
                               "confirmPassword": confirmpasswordController.text,
+                              "designation": Designation,
+                              "Region": RegionName,
+                              "Zone": Zone,
+                              "ManagerName": ReportingManagerName,
+                              "ManagerCode": ReportingManagerCode,
                               "userId": credential.user!.uid,
                               "createdDate": Timestamp.now(),
                               "userType": "user",

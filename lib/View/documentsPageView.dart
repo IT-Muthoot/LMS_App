@@ -1044,47 +1044,288 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                           ),
                                         ),
                                       ),
+                                      SizedBox(
+                                        height: height * 0.05,
+                                      ),
+                                      Text(
+                                        "Optional Documents",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontFamily: StyleData.boldFont,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.02,
+                                      ),
+                                      const Text(
+                                        "Copy Of Property",
+                                        style: TextStyle(color: Colors.black38, fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.001,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            copyOfPropertyClicked = true;
+                                            applicationFormClicked= false;
+                                            bankPassbookClicked = false;
+                                            dateOfBirthClicked = false;
+                                            loginFeeChequeClicked = false;
+                                            passportSizePhotoClicked = false;
+                                            photoIdProofClicked = false;
+                                            residenceProofClicked = false;
+                                            salarySlipClicked = false;
+                                            signatureProofClicked = false;
+                                            qualificationProofClicked = false;
+                                            sectorEmployeePvtClicked = false;
+                                            totalWorkExpClicked = false;
+                                            WorkExpClicked = false;
+                                          });
+                                          selectSource(height, width);
+                                        },
+                                        child: DottedBorder(
+                                          color: Colors.black87,
+                                          borderType: BorderType.RRect,
+                                          radius: const Radius.circular(12),
+                                          padding: const EdgeInsets.all(6),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                            const BorderRadius.all(Radius.circular(12)),
+                                            child: Container(
+                                              height: height * 0.07,
+                                              width: width * 0.9,
+                                              color: Colors.grey[200],
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.camera_alt,
+                                                        color: Colors.black54,
+                                                        size: 26,
+                                                      ),
+                                                      Text(
+                                                        "/",
+                                                        style: TextStyle(  color: Colors.black54,),
+                                                      ),
+                                                      Icon(Icons.arrow_circle_up_rounded,
+                                                          color: Colors.black54, size: 26),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: height * 0.01),
+                                                  Text(
+                                                    copyOfProperty ?? "Copy Of Property",
+                                                    style: TextStyle(
+                                                      color: copyOfProperty != null ? Colors.red : Colors.grey,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
 
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ), // Change the splash color to red
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.006,
+                                      ),
+                                      const Text(
+                                        "Total work experience",
+                                        style: TextStyle(color: Colors.black38, fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.001,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            totalWorkExpClicked = true;
+                                            copyOfPropertyClicked = false;
+                                            applicationFormClicked= false;
+                                            bankPassbookClicked = false;
+                                            dateOfBirthClicked = false;
+                                            loginFeeChequeClicked = false;
+                                            passportSizePhotoClicked = false;
+                                            photoIdProofClicked = false;
+                                            residenceProofClicked = false;
+                                            salarySlipClicked = false;
+                                            signatureProofClicked = false;
+                                            qualificationProofClicked = false;
+                                            sectorEmployeePvtClicked = false;
+                                            WorkExpClicked = false;
+                                          });
+                                          selectSource(height, width);
+                                        },
+                                        child: DottedBorder(
+                                          color: Colors.black87,
+                                          borderType: BorderType.RRect,
+                                          radius: const Radius.circular(12),
+                                          padding: const EdgeInsets.all(6),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                            const BorderRadius.all(Radius.circular(12)),
+                                            child: Container(
+                                              height: height * 0.07,
+                                              width: width * 0.9,
+                                              color: Colors.grey[200],
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.camera_alt,
+                                                        color: Colors.black54,
+                                                        size: 26,
+                                                      ),
+                                                      Text(
+                                                        "/",
+                                                        style: TextStyle(  color: Colors.black54,),
+                                                      ),
+                                                      Icon(Icons.arrow_circle_up_rounded,
+                                                          color: Colors.black54, size: 26),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: height * 0.01),
+                                                  Text(
+                                                    totalWorkExp ?? "Total Work Experience",
+                                                    style: TextStyle(
+                                                      color: totalWorkExp != null ? Colors.red : Colors.grey,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ), // Change the splash color to red
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.006,
+                                      ),
+                                      const Text(
+                                        "Qualification Proof",
+                                        style: TextStyle(color: Colors.black38, fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.001,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            qualificationProofClicked = true;
+                                            totalWorkExpClicked = false;
+                                            copyOfPropertyClicked = false;
+                                            applicationFormClicked= false;
+                                            bankPassbookClicked = false;
+                                            dateOfBirthClicked = false;
+                                            loginFeeChequeClicked = false;
+                                            passportSizePhotoClicked = false;
+                                            photoIdProofClicked = false;
+                                            residenceProofClicked = false;
+                                            salarySlipClicked = false;
+                                            signatureProofClicked = false;
+                                            sectorEmployeePvtClicked = false;
+                                            WorkExpClicked = false;
+                                          });
+                                          selectSource(height, width);
+                                        },
+                                        child: DottedBorder(
+                                          color: Colors.black87,
+                                          borderType: BorderType.RRect,
+                                          radius: const Radius.circular(12),
+                                          padding: const EdgeInsets.all(6),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                            const BorderRadius.all(Radius.circular(12)),
+                                            child: Container(
+                                              height: height * 0.07,
+                                              width: width * 0.9,
+                                              color: Colors.grey[200],
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.camera_alt,
+                                                        color: Colors.black54,
+                                                        size: 26,
+                                                      ),
+                                                      Text(
+                                                        "/",
+                                                        style: TextStyle(  color: Colors.black54,),
+                                                      ),
+                                                      Icon(Icons.arrow_circle_up_rounded,
+                                                          color: Colors.black54, size: 26),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: height * 0.01),
+                                                  Text(
+                                                    qualificationProof ?? "Qualification Proof",
+                                                    style: TextStyle(
+                                                      color: qualificationProof != null ? Colors.red : Colors.grey,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ), // Change the splash color to red
+                                      ),
+                                      SizedBox(
+                                        height: height * 0.03,
+                                      ),
+                                      Container(
+                                        height: 55,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: StyleData.appBarColor2,
+                                        ),
+                                        child: Center(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.transparent,
+                                              elevation: 0,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.save_outlined, color: Colors.white,),
+                                                SizedBox(width: width * 0.025,),
+                                                Text(
+                                                  'Submit',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
                   )),
               //
-              SizedBox(
-                height:  height * 0.5,
-              ),
-              Container(
-                height: 55,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: StyleData.appBarColor2,
-                ),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.save_outlined, color: Colors.white,),
-                        SizedBox(width: width * 0.025,),
-                        Text(
-                          'Submit',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              // SizedBox(
+              //   height:  height * 0.5,
+              // ),
             ],
           ),
         ),
@@ -1155,6 +1396,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         //   uploadOnDMS(pickedFile, "Total_Work_Experience");
                         // }else if (WorkExpClicked) {
                         //   uploadOnDMS(pickedFile, "Work_Experience");
+                        // }else if (qualificationProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Qualification_Proof");
                         // }
                       },
                       trailing: Icon(
@@ -1217,6 +1460,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         //   uploadOnDMS(pickedFile, "Total_Work_Experience");
                         // }else if (WorkExpClicked) {
                         //   uploadOnDMS(pickedFile, "Work_Experience");
+                        // }else if (qualificationProofClicked) {
+                        //   uploadOnDMS(pickedFile, "Qualification_Proof");
                         // }
                       },
                       trailing: Icon(
@@ -1347,6 +1592,14 @@ class _DocumentPageViewState extends State<DocumentPageView> {
 //                   } else if (copyOfPropertyClicked) {
 //                     setState(() {
 //                       copyOfProperty = "Uploaded";
+//                     });
+//                   }else if (totalWorkExpClicked) {
+//                     setState(() {
+//                       totalWorkExp = "Uploaded";
+//                     });
+//                   }else if (qualificationProofClicked) {
+//                     setState(() {
+//                       qualificationProof = "Uploaded";
 //                     });
 //                   }
 //                 } catch (e) {

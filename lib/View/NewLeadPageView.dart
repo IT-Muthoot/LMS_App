@@ -596,8 +596,14 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'EmployeeName': pref.getString("employeeName"),
         'EmployeeCode':  pref.getString("employeeCode"),
         'EmployeeBranchCode': pref.getString("branchcode"),
+        'ManagerName': pref.getString("managerName"),
+        'ManagerCode': pref.getString("ManagerCode"),
+        'Region': pref.getString("Region"),
+        'Zone': pref.getString("Zone"),
+        'Designation': pref.getString("designation"),
         'createdDateTime':Timestamp.fromDate(now),
       };
+
       // convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
       //   if (querySnapshot.docs.isNotEmpty) {
       //     // If customerNumber exists, update the document

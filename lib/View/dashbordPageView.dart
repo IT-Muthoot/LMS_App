@@ -81,6 +81,12 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                 branchCode = ListOfUsers[i]['branchCode'];
                 pref.setString("branchcode", ListOfUsers[i]['branchCode']);
                 pref.setString("employeeName", ListOfUsers[i]['EmployeeName']);
+
+                pref.setString("managerName", ListOfUsers[i]['ManagerName']);
+                pref.setString("ManagerCode", ListOfUsers[i]['ManagerCode']);
+                pref.setString("Region", ListOfUsers[i]['Region']);
+                pref.setString("Zone", ListOfUsers[i]['Zone']);
+                pref.setString("designation", ListOfUsers[i]['designation']);
                 print("EMployee Name");
                 print(employeeName);
                 print(branchCode);
