@@ -318,6 +318,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? DSAConnectorCode1;
   List<dynamic> _PostcodeList = [];
   String? selectedPostCode;
+  String? visitID;
 
 
   getdata() {
@@ -353,6 +354,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
             ? docData["dsaName"] ?? ""
             : docData["connectorName"] ?? "";
         DSAConnectorCode1 = docData["DSAConnectorCode"] ?? "";
+        visitID = docData["visitID"] ?? "";
         print("Lead Source value");
       //  print(_leadSource.text);
         print(DSAConnectorName);
@@ -592,6 +594,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'ConsentCRIF' :consentCRIF,
         'ConsentKYC' : consentKYC,
         'LeadID' : LeadID ?? "",
+        'VisitID' : visitID ?? "",
         'userId': userId,
         'EmployeeName': pref.getString("employeeName"),
         'EmployeeCode':  pref.getString("employeeCode"),
@@ -603,7 +606,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'Designation': pref.getString("designation"),
         'createdDateTime':Timestamp.fromDate(now),
       };
-
+print(params);
       // convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
       //   if (querySnapshot.docs.isNotEmpty) {
       //     // If customerNumber exists, update the document

@@ -46,7 +46,7 @@ dependencies:
   dotted_border: ^2.1.0
   image_picker: ^1.0.4
   flutter_camera_overlay: ^0.1.1
-  file_picker: ^5.2.5
+  file_picker: ^6.2.0
   external_path: ^1.0.3
   lottie: ^2.7.0
   ionicons: ^0.1.2

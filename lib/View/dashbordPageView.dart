@@ -90,6 +90,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                 print("EMployee Name");
                 print(employeeName);
                 print(branchCode);
+                print(pref.getString("ManagerCode"));
               });
             }
         }
@@ -370,7 +371,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                   ),
                 ),
                 SizedBox(
-                  height: height * 0.4,
+                  height: height * 0.42,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty ?
                   Scrollbar(
@@ -435,6 +436,16 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                                 style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
                                                 )),
                                             Text( ListOfLeads[index]["customerStatus"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Visit ID : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text( ListOfLeads[index]["visitID"] ?? "",
                                                 style: TextStyle(fontSize: 16, color: Colors.black,)),
                                           ],
                                         ),

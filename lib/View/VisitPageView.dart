@@ -806,22 +806,22 @@ class _VisitPageViewState extends State<VisitPageView> {
                                                    ),
                                           ],
                                         ),
-                                        SizedBox(height: 8),
-                                        Visibility(
-                                           visible: ListOfLeads[index]["LeadID"] != null,
-                                          child: Row(
-                                            children: [
-                                              Text("Lead ID : ",
-                                                  style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                                  )),
-                                              Text(searchKEY.text.isEmpty
-                                                  ? ListOfLeads[index]["LeadID"] ?? ""
-                                                  : searchListOfLeads[index]
-                                              ["LeadID"] ?? "",
-                                                  style: TextStyle(fontSize: 16, color: Colors.black87,)),
-                                            ],
-                                          ),
-                                        ) ,
+                                        // SizedBox(height: 8),
+                                        // Visibility(
+                                        //    visible: ListOfLeads[index]["LeadID"] != null,
+                                        //   child: Row(
+                                        //     children: [
+                                        //       Text("Lead ID : ",
+                                        //           style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                        //           )),
+                                        //       Text(searchKEY.text.isEmpty
+                                        //           ? ListOfLeads[index]["LeadID"] ?? ""
+                                        //           : searchListOfLeads[index]
+                                        //       ["LeadID"] ?? "",
+                                        //           style: TextStyle(fontSize: 16, color: Colors.black87,)),
+                                        //     ],
+                                        //   ),
+                                        // ) ,
                                         SizedBox(height: 8),
                                         Row(
                                           children: [
@@ -858,6 +858,16 @@ class _VisitPageViewState extends State<VisitPageView> {
                                                 ? ListOfLeads[index]["purposeVisit"] ?? ""
                                                 : searchListOfLeads[index]
                                             ["purposeVisit"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text("Visit ID : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text( ListOfLeads[index]["visitID"] ?? "",
                                                 style: TextStyle(fontSize: 16, color: Colors.black,)),
                                           ],
                                         ),
