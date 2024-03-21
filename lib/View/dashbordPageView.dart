@@ -6,7 +6,7 @@ import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/formPageVIiew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../login1.dart';
+import 'LoginPageView.dart';
 import 'ApplicantDetailsView.dart';
 import 'NewLeadPageView.dart';
 import 'VisitPageView.dart';

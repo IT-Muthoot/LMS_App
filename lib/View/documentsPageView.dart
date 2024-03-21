@@ -89,51 +89,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       print(LeadID);
 
     });
-    // CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
-    // SharedPreferences pref = await SharedPreferences.getInstance();
-    // // var userId = pref.getString("token");
-    // var userId = pref.getString("userID");
-    // setState(() {
-    //   userType = pref.getString("logintype");
-    // });
-    // print(userType);
-    // if (userType == "user") {
-    //   users.where("userId", isEqualTo: userId).get().then((value) {
-    //     setState(() {
-    //       ListOfLeads = value.docs;
-    //     });
-    //     for (var i = 0; value.docs.length > i; i++) {
-    //       print(value.docs[i].data());
-    //       setState(() {
-    //         LeadID = ListOfLeads[i]['LeadID'];
-    //          ApplicantFirstName = ListOfLeads[i]['firstName'] ;
-    //          ApplicantLastName = ListOfLeads[i]['lastName'] ;
-    //         CustomerNumber = ListOfLeads[i]['customerNumber'];
-    //         DateOfBirth = ListOfLeads[i]['dateOfBirth'];
-    //         Gender = ListOfLeads[i]['gender'];
-    //         HomeFinBranchCode = ListOfLeads[i]['homeFinBranchCode'];
-    //         LeadAmount = ListOfLeads[i]['leadAmount'];
-    //         LeadSource = ListOfLeads[i]['leadSource'];
-    //         panCardNumber = ListOfLeads[i]['panCardNumber'];
-    //         salutation = ListOfLeads[i]['salutation'];
-    //         productCategory = ListOfLeads[i]['productCategory'];
-    //         products = ListOfLeads[i]['products'];
-    //         aadharNumber = ListOfLeads[i]['aadharNumber'];
-    //         print(LeadID);
-    //         print(ApplicantFirstName);
-    //       });
-    //     }
-    //   });
-    // } else {
-    //   users.get().then((value) {
-    //     setState(() {
-    //       ListOfLeads = value.docs;
-    //     });
-    //     for (var i = 0; value.docs.length > i; i++) {
-    //       print(value.docs[i].data());
-    //     }
-    //   });
-    // }
   }
 
   String? selectedDoc;
@@ -219,15 +174,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     });
   }
 
-  // void checkApplicationFormStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? status = prefs.getString("applicationFormStatus");
-  //   if (status != null && status == "Uploaded") {
-  //     setState(() {
-  //       applicationForm = "Uploaded";
-  //     });
-  //   }
-  // }
 
 
   @override
@@ -1321,70 +1267,12 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                         child: Center(
                                           child: ElevatedButton(
                                             onPressed: () {
-                                                  if(bankPassbookClicked == true && applicationFormClicked == true)
+                                                  if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
+                                                      && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
+                                                      && signatureProof == "Uploaded"
+                                                  )
                                                     {
-                                                      Dialogs.materialDialog(
-                                                          msg: 'Are you sure you want Submit the documents?',
-                                                          title: "Submit",
-                                                          msgStyle:
-                                                          TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
-                                                          titleStyle: const TextStyle(color: Colors.white),
-                                                          color: StyleData.appBarColor2,
-                                                          context: context,
-                                                          titleAlign: TextAlign.center,
-                                                          msgAlign: TextAlign.center,
-                                                          barrierDismissible: false,
-                                                          dialogWidth: kIsWeb ? 0.3 : null,
-                                                          onClose: (value) {},
-                                                          actions: [
-                                                            Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 30),
-                                                              child: InkWell(
-                                                                onTap: () async {
-                                                                //  Navigator.pop(context);
-                                                                  Navigator.push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) => ApplicantDetailsView()));
-                                                                //  SmartDialog.showLoading(msg: "Submitting");
-                                                                },
-                                                                child: Container(
-                                                                  height: 40,
-                                                                  width: 50,
-                                                                  decoration: BoxDecoration(
-                                                                      color: Colors.white,
-                                                                      borderRadius: BorderRadius.circular(5)),
-                                                                  child: Center(
-                                                                      child: Text('Yes',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontFamily: StyleData.boldFont,
-                                                                              fontSize: 12))),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 30),
-                                                              child: InkWell(
-                                                                onTap: () {
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: Container(
-                                                                  height: 40,
-                                                                  width: 50,
-                                                                  decoration: BoxDecoration(
-                                                                      color: Colors.white,
-                                                                      borderRadius: BorderRadius.circular(5)),
-                                                                  child: Center(
-                                                                      child: Text('Cancel',
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontFamily: StyleData.boldFont,
-                                                                              fontSize: 12))),
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ]);
+                                                      _showAlertDialogSuccess(context);
                                                     }
                                                   else
                                                     {
@@ -1524,10 +1412,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                       ),
                       onTap: () async {
                         Navigator.pop(context);
-                        // var pickedFiles = await ImagePicker().pickImage(
-                        //     source: ImageSource.gallery,
-                        //     maxHeight: 1800,
-                        //     maxWidth: 1080);
                         FilePickerResult? pickedFiles =
                         await FilePicker.platform.pickFiles(
                           type: FileType.custom,
@@ -1757,6 +1641,71 @@ print("bhjkjhlknl");
           )
         ]);
   }
+
+  void _showAlertDialogSuccess(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0, // No shadow
+            content: Container(
+              height:190,
+              width: 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child:
+                    Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle
+                      ),
+                      child: Center(
+                        child: Icon(Icons.done,color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('Documents uploaded Succesfully', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87,fontSize: 18,),),
+                  //  SizedBox(height: 8),
+                  SizedBox(height: 5),
+                  SizedBox(
+                    height: 25,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ApplicantDetailsView(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text('OK', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 MediaType _getContentType(String fileName) {
   String extension = fileName.split('.').last.toLowerCase();
@@ -1771,397 +1720,3 @@ MediaType _getContentType(String fileName) {
     return MediaType('application', 'octet-stream'); // Default content type
   }
 }
-// const Text(
-//   "Select Documents",
-//   style: TextStyle(color: Colors.white70, fontSize: 13),
-// ),
-// SizedBox(
-//   height: height * 0.006,
-// ),
-// SizedBox(
-//   width: width * 0.9,
-//   child: DropdownButtonFormField2(
-//     style: const TextStyle(color: Colors.black),
-//     dropdownStyleData: DropdownStyleData(
-//       decoration: BoxDecoration(
-//         borderRadius: BorderRadius.circular(14),
-//         // color: StyleData.backgroundDropdown,
-//       ),
-//     ),
-//     decoration: InputDecoration(
-//       enabledBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(10),
-//         borderSide: const BorderSide(color: Colors.white70),
-//       ),
-//       focusedBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(10),
-//         borderSide: const BorderSide(color: Colors.white70),
-//       ),
-//       hintText: "Select",
-//       filled: true,
-//       fillColor: Colors.grey[200],
-//       hintStyle: const TextStyle(color: Colors.black38),
-//     ),
-//     selectedItemBuilder: (BuildContext context) {
-//       return _DocumentList.map((DropDownData item) {
-//         return Container(
-//           alignment: Alignment.centerLeft,
-//           constraints: const BoxConstraints(minWidth: 100),
-//           child: Text(
-//             item.title,
-//             style: const TextStyle(
-//               color: Colors.black,
-//               fontWeight: FontWeight.w600,
-//             ),
-//           ),
-//         );
-//       }).toList();
-//     },
-//     items: _DocumentList.map((DropDownData item) {
-//       return DropdownMenuItem(
-//         value: item.title,
-//         child: Text(
-//           item.title,
-//           style: const TextStyle(color: Colors.black),
-//         ),
-//       );
-//     }).toList(),
-//     onChanged: (newVal) {
-//       setState(() {
-//         selectedDoc = newVal;
-//       });
-//     },
-//     value: selectedDoc,
-//   ),
-// ),
-// SizedBox(
-//   height: height * 0.02,
-// ),
-// InkWell(
-//   onTap: () async {
-//     // addReferenceBottomSheetForm(height,width,1);
-//     if (selectedDoc != null) {
-//       print(selectedDoc);
-//       FilePickerResult? result =
-//       await FilePicker.platform.pickFiles(
-//         type: FileType.custom,
-//         allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
-//         allowCompression: true,
-//         allowMultiple: false,
-//       );
-//       if (result != null) {
-//         Map<String, dynamic> data = {
-//           "title": selectedDoc,
-//           "file": result.paths.first,
-//           "name": result.names.first,
-//           "password": "",
-//         };
-//         setState(() {
-//           listOfOtherDocuments.add(data);
-//           selectedDoc = null;
-//         });
-//       } else {
-//         // User canceled the picker
-//       }
-//     } else {
-//       //  snackBar("Please any document", height, width);
-//     }
-//   },
-//   child: SizedBox(
-//     height: height * 0.17,
-//     width: width * 0.89,
-//     child: DottedBorder(
-//       color: Colors.white70,
-//       borderType: BorderType.RRect,
-//       radius: const Radius.circular(12),
-//       padding: const EdgeInsets.all(6),
-//       child: ClipRRect(
-//         borderRadius: const BorderRadius.all(Radius.circular(12)),
-//         child: Container(
-//           height: height * 0.17,
-//           width: width * 0.89,
-//           color: Colors.grey[200],
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   CircleAvatar(
-//                     radius: 15,
-//                     backgroundColor: Colors.black87,
-//                     child: const Center(
-//                       child: Icon(
-//                         Icons.arrow_upward_rounded,
-//                         color: Colors.white,
-//                         size: 18,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//               SizedBox(height: height * 0.01),
-//               const Text(
-//                 "Upload Documents",
-//                 style: TextStyle(color: Colors.black87, fontSize: 14),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     ),
-//   ),
-// ),
-// Visibility(
-//   visible: listOfOtherDocuments.isNotEmpty,
-//   child: SizedBox(
-//     height: height * 0.4,
-//     width: width * 0.9,
-//     child: SingleChildScrollView(
-//       child: Column(
-//         children: [
-//           const Divider(
-//             color: Colors.black38,
-//             thickness: 2,
-//           ),
-//           Flex(
-//             direction: Axis.vertical,
-//             children: [
-//               ListView.builder(
-//                 itemCount: listOfOtherDocuments.length,
-//                 shrinkWrap: true,
-//                 scrollDirection: Axis.vertical,
-//                 physics: const NeverScrollableScrollPhysics(),
-//                 itemBuilder: (BuildContext context, int index) {
-//                   return SizedBox(
-//                     height: height * 0.11,
-//                     width: width * 0.9,
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       children: [
-//                         Row(
-//                           children: [
-//                             SizedBox(width: width * 0.01),
-//                             Text(
-//                               listOfOtherDocuments[index]['title'],
-//                               style: const TextStyle(
-//                                 color: Colors.black87,
-//                                 fontSize: 14,
-//                               ),
-//                             ),
-//                             const Spacer(),
-//                             InkWell(
-//                               onTap: () {
-//                                 setState(() {
-//                                   listOfOtherDocuments.removeAt(index);
-//                                 });
-//                               },
-//                               child: Row(
-//                                 children: [
-//                                   Text(
-//                                     "Delete",
-//                                     style: TextStyle(
-//                                       color: Colors.redAccent,
-//                                       fontSize: 13,
-//                                     ),
-//                                   ),
-//                                   Icon(
-//                                     Icons.delete,
-//                                     size: 13,
-//                                     color: Colors.redAccent,
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                             SizedBox(width: width * 0.01),
-//                           ],
-//                         ),
-//                         SizedBox(height: height * 0.01),
-//                         SizedBox(
-//                           height: height * 0.07,
-//                           width: width * 0.9,
-//                           child: DottedBorder(
-//                             color: Colors.black87,
-//                             borderType: BorderType.RRect,
-//                             radius: const Radius.circular(12),
-//                             padding: const EdgeInsets.all(6),
-//                             child: ClipRRect(
-//                               borderRadius:
-//                               const BorderRadius.all(Radius.circular(12)),
-//                               child: Container(
-//                                 height: height * 0.07,
-//                                 width: width * 0.9,
-//                                 color: Colors.grey[200],
-//                                 child: Row(
-//                                   crossAxisAlignment: CrossAxisAlignment.center,
-//                                   children: [
-//                                     SizedBox(width: width * 0.03),
-//                                     CircleAvatar(
-//                                       radius: 10,
-//                                       backgroundColor: Colors.black87,
-//                                       child: const Center(
-//                                         child: Icon(
-//                                           Icons.file_copy,
-//                                           color: Colors.white,
-//                                           size: 10,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     SizedBox(width: width * 0.02),
-//                                     SizedBox(
-//                                       width: width * 0.6,
-//                                       child: Text(
-//                                         listOfOtherDocuments[index]['name'],
-//                                         style: const TextStyle(
-//                                           color: Colors.black87,
-//                                           fontSize: 14,
-//                                         ),
-//                                         overflow: TextOverflow.ellipsis,
-//                                         maxLines: 1,
-//                                       ),
-//                                     ),
-//                                     const Spacer(),
-//                                     InkWell(
-//                                       onTap: () {
-//                                         openFile(
-//                                             listOfOtherDocuments[index]["file"]);
-//                                       },
-//                                       child: const Icon(
-//                                         Icons.visibility,
-//                                         color: Colors.black54,
-//                                       ),
-//                                     ),
-//                                     Visibility(
-//                                       visible: listOfOtherDocuments[index]
-//                                       ['password'] ==
-//                                           ""
-//                                           ? false
-//                                           : true,
-//                                       child: const Icon(
-//                                         Icons.lock,
-//                                         color: Colors.black54,
-//                                       ),
-//                                     ),
-//                                     SizedBox(width: width * 0.02),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         )
-//                       ],
-//                     ),
-//                   );
-//                 },
-//               ),
-//             ],
-//           ),
-//           const Divider(
-//             color: Colors.black38,
-//             thickness: 2,
-//           ),
-//         ],
-//       ),
-//     ),
-//   ),
-// ),
-// Visibility(
-//   visible: isVerification,
-//   child: Padding(
-//     padding: const EdgeInsets.all(8.0),
-//     child: Column(
-//       children: [
-//         Text("Required Documents *",style: TextStyle(color: Colors.black87,fontSize: 16,fontFamily: StyleData.boldFont),),
-//         Card(
-//           child: Container(
-//             color: Colors.white,
-//             child: Column(
-//               children: checkboxValues.keys.map((String key) {
-//                 return Row(
-//                   children: [
-//
-//                     Checkbox(
-//                       value: checkboxValues[key],
-//                       activeColor: StyleData.appBarColor,
-//                       onChanged: (value) {
-//                         setState(() {
-//                           checkboxValues[key] = value!;
-//                         });
-//                       },
-//                     ),
-//                     Text(
-//                       key,
-//                       style: TextStyle(fontSize: 15),
-//                     ),
-//                   ],
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         ),
-//         Text("Optional Documents",style: TextStyle(color: Colors.black87,fontSize: 16,fontFamily: StyleData.boldFont),),
-//         Card(
-//           child: Container(
-//             color: Colors.white,
-//             child: Column(
-//               children: optionalCheckboxes.keys.map((String key) {
-//                 return Row(
-//                   children: [
-//                     Checkbox(
-//                       value: optionalCheckboxes[key],
-//                       activeColor: StyleData.appBarColor,
-//                       onChanged: (value) {
-//                         setState(() {
-//                           optionalCheckboxes[key] = value!;
-//                         });
-//                       },
-//                     ),
-//                     Text(
-//                       key,
-//                       style: TextStyle(fontSize: 15),
-//                     ),
-//                   ],
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   ),
-// ),
-// Visibility(
-//   visible: isVerification,
-//   child: Container(
-//     width: double.infinity,
-//     height: 55,
-//     decoration: BoxDecoration(
-//       color: StyleData.appBarColor2,
-//     ),
-//     child: Center(
-//       child: ElevatedButton(
-//         onPressed: () {
-//             Navigator.push(
-//               context,
-//               MaterialPageRoute(
-//                 builder: (context) =>
-//                     HomePageView(),
-//               ),
-//             );
-//         },
-//         style: ElevatedButton.styleFrom(
-//           primary: Colors.transparent,
-//           elevation: 0,
-//         ),
-//         child: Text(
-//           'Save',
-//           style: TextStyle(
-//             fontSize: 18,
-//             color: Colors.white,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ),
-//       ),
-//     ),
-//   ),
-// ),

@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lead_management_system/login1.dart';
+import 'package:lead_management_system/View/LoginPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
-import '../background.dart';
+import '../Utils/background.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});

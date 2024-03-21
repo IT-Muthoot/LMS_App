@@ -12,34 +12,15 @@ class StyleData {
   static Color cursorColor = Colors.black;
   static Color iconColor = Colors.lightBlueAccent;
 
-  // // dark blue
-  //
-  // static Color appBarColor = const Color(0xff000044);
-  // // dart green
-  // static Color buttonColor = Color(0xff000044);
-
-
   static Color appBarColor =  Color(0xff973232);
   static Color textFieldColor =  Color(0xfff2f2f2);
 
   static Color appBarColor2 = const Color(0xffa80202);
   static Color appBarColor3 = const Color(0xffd8b04a);
   static Color backgroundColor = const Color(0xffF0EAD6);
-  // static Color appBarColor2 = const Color(0xff750101);
-
   static Color buttonColor =  Color(0xff900000);
 
-  // static Color appBarColor = const Color(0xff750101);
-  // static Color appBarColor2 = const Color(0xff750101);
-  //
-  // static Color buttonColor = Color(0xff750101);
-
-
-
-
   static Color centerLayer = Color(0xffD2042D);
-
-
 
   static DateFormat dateTimeFormat = DateFormat('dd/MM/yyyy hh:mm:ss');
 

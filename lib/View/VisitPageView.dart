@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 import '../Utils/StyleData.dart';
-import '../login1.dart';
+import 'HomePageView.dart';
+import 'LoginPageView.dart';
 import 'NewLeadPageView.dart';
 import 'formPageVIiew.dart';
 
@@ -233,13 +233,17 @@ class _VisitPageViewState extends State<VisitPageView> {
   @override
   void initState() {
     // TODO: implement initState
+    final formatter = DateFormat('yyyy-MM-dd');
+    print("567698678979");
+    print(formatter.format(DateTime.now()));
+    _startDateController.text = formatter.format(DateTime.now()) ;
+    _endDateController.text = formatter.format(DateTime.now());
     fetchdata();
     fetchLeadsdata();
     print("Access token");
     print(widget.accessToken);
     super.initState();
-    _startDateController.text = formatDate(DateTime.now().toLocal().toString());
-    _endDateController.text = formatDate(DateTime.now().toLocal().toString());
+
   }
 
   @override
@@ -261,188 +265,6 @@ class _VisitPageViewState extends State<VisitPageView> {
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
-          drawer: Drawer(
-            backgroundColor: Colors.white,
-            child: Container(
-              height: height * 1,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: height * 0.015,
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child:
-                            const Icon(Icons.arrow_back, color: Colors.black54)),
-                        SizedBox(
-                          width: width * 0.03,
-                        ),
-                        Text("Filter by",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: StyleData.boldFont,
-                                color: Colors.black54)),
-                      //  const Spacer(),
-                        // SizedBox(
-                        //     height: 24,
-                        //     child: Image.asset("assets/images/filter_icon.png")),
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    const Text(
-                      "From & To Date",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: height * 0.015,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            _selectDate(context, 1);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.35,
-                            decoration: BoxDecoration(
-                              color: Colors.white30,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  formatDate(fromDate.toLocal().toString()),
-                                  style: TextStyle(color: Colors.black87, fontSize: 13),
-                                ),
-                                SizedBox(
-                                  width: width * 0.02,
-                                ),
-                                Icon(
-                                  Ionicons.calendar_outline,
-                                  color: StyleData.appBarColor2,
-                                  size: 20,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        // SizedBox(
-                        //   width: width * 0.01,
-                        // ),
-                        InkWell(
-                          onTap: () {
-                            _selectDate(context, 2);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.35,
-                            decoration: BoxDecoration(
-                              color: Colors.white30,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  formatDate(toDate.toLocal().toString()),
-                                  style: TextStyle(color: Colors.black, fontSize: 13),
-                                ),
-                                SizedBox(
-                                  width: width * 0.02,
-                                ),
-                                Icon(
-                                  Ionicons.calendar_outline,
-                                  color: StyleData.appBarColor2,
-                                  size: 20,
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.035,
-                    ),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        InkWell(
-                          onTap: () {
-                            clearFilter();
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                              // color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(20),
-                                border:
-                                Border.all(color: Colors.black26, width: 0.5)),
-                            child: const Center(
-                              child: Text(
-                                "Reset",
-                                style: TextStyle(color: Colors.black, fontSize: 13),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: width * 0.02,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            filterData();
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: width * 0.3,
-                            decoration: BoxDecoration(
-                                color: StyleData.buttonColor,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: const Center(
-                              child: Text(
-                                "Apply",
-                                style: TextStyle(color: Colors.white, fontSize: 13),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: width * 0.006,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
           body: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

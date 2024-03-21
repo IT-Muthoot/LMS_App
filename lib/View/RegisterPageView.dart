@@ -9,8 +9,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
-import '../background.dart';
-import '../login1.dart';
+import '../Utils/background.dart';
+import 'LoginPageView.dart';
 
 
 class RegisterScreen extends StatefulWidget {
@@ -50,30 +50,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? ReportingManagerCode;
   String? Zone;
 
-  //
-  // getEmployeeDetails(String emp) async {
-  //   FirebaseFirestore.instance
-  //       .collection("employeeList")
-  //       .doc("employeeList")
-  //       .get()
-  //       .then((value) async {
-  //     for (var element in value.data()!["employeeList"]) {
-  //       setState(() {
-  //         employeeList.add(element);
-  //       });
-  //     }
-  //     setState(() {
-  //       outputList1 =
-  //           employeeList.where((o) => o['EMP_CODE'] == empCodeController.text).toList();
-  //       empNameController.text = outputList1[0]['NAME'];
-  //       branchcode.text = outputList1[0]['BRANCH CODE'];
-  //     });
-  //     print("Output List " + outputList1.toString());
-  //
-  //   });
-  // }
 
-
+//getting employee details from employeeMapping Collection
   getEmployee1Details(String emp) async {
     FirebaseFirestore.instance
         .collection("employeeMapping")
@@ -105,7 +83,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     // TODO: implement initState
-   // fetchData();
     super.initState();
   }
 
@@ -151,8 +128,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           UppercaseInputFormatter(),
                         ],
                         onChanged: (empCode) {
-                          // Call the fetchEmployeeDetails function when the code is entered
-                        //  getEmployeeDetails(empCode);
                         getEmployee1Details(empCode);
                         },
                         validator: (isusernamevalid) {
@@ -186,27 +161,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   margin: EdgeInsets.symmetric(horizontal: 40),
-                    //   child: TextFormField(
-                    //     controller: mobileNumber,
-                    //     keyboardType: TextInputType.phone,
-                    //     inputFormatters: [
-                    //       FilteringTextInputFormatter.digitsOnly,
-                    //       LengthLimitingTextInputFormatter(10),
-                    //     ],
-                    //     decoration: InputDecoration(
-                    //         labelText: "Mobile Number *"
-                    //     ),
-                    //     validator: (isusernamevalid) {
-                    //       if (isusernamevalid.toString().isNotEmpty)
-                    //         return null;
-                    //       else
-                    //         return 'Enter valid mobile Number';
-                    //     },
-                    //   ),
-                    // ),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.symmetric(horizontal: 40),
@@ -434,11 +388,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         ),
         content: Container(
-
-          // margin: const EdgeInsets.only(left: 10),
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: Colors.white)
-          // ),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -468,11 +417,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Icon(Icons.done,color: Colors.white,)
                 ])),
         duration: const Duration(seconds: 2),
-        // width:MediaQuery.of(context).size. width * 0.9, // Width of the SnackBar.
-        // padding: const EdgeInsets.symmetric(
-        //   horizontal: 8.0, // Inner padding for SnackBar content.
-        // ),
-        // behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),

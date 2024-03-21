@@ -45,7 +45,43 @@ class _FormPageViewState extends State<FormPageView> {
   bool isLeadSourceSelected = false;
 
 
-//Dropdowns
+  //Textfields
+  TextEditingController textEditingController = TextEditingController();
+  TextEditingController firstName = TextEditingController();
+  TextEditingController middleName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController customerNumber = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
+  TextEditingController _addressLine1 = TextEditingController();
+  TextEditingController _addressLine2 = TextEditingController();
+  TextEditingController _addressLine3 = TextEditingController();
+  TextEditingController _city = TextEditingController();
+  TextEditingController _pincode = TextEditingController();
+
+  //Additional details
+  TextEditingController _customerName = TextEditingController();
+  TextEditingController _customerMobileNumber = TextEditingController();
+  TextEditingController _employeeName = TextEditingController();
+  TextEditingController _employeeCode = TextEditingController();
+  TextEditingController _builderName = TextEditingController();
+
+  UnderlineInputBorder enb =  UnderlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide:   const BorderSide(color:  Colors.black38)
+  );
+  UnderlineInputBorder focus =  UnderlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide:  const BorderSide(color: Color(0xff298b28))
+  );
+
+
+  List<DocumentSnapshot> ListOfLeads = [];
+  List outputList1 = [];
+  var userType;
+  String? fetchMobileNumber;
+
+//Dropdowns fetching from firebase
   getDropDownLeadData() {
     FirebaseFirestore.instance
         .collection("leadSource")
@@ -62,6 +98,7 @@ class _FormPageViewState extends State<FormPageView> {
   }
   String? _selectedLeadSource;
   final List<DropDownData> _leadSourceList = [];
+  final List<DropDownData> _leadDSAList = [];
 
   getDropDownConnectorData() {
     FirebaseFirestore.instance
@@ -78,9 +115,8 @@ class _FormPageViewState extends State<FormPageView> {
     });
   }
   String? _selectedConnector;
-  int? _selectedConnectorID;
-  int? _selectedDSAID;
   final List<DropDownData> _leadConnectorList = [];
+  String? ConnectorCode;
 
   getDropDownDSAData() {
     FirebaseFirestore.instance
@@ -98,14 +134,10 @@ class _FormPageViewState extends State<FormPageView> {
   }
   String? _selectedDSA;
   String? selectedDSACode;
-  String? ConnectorCode;
   String? selectedDSACode1;
   TextEditingController selectedDSACodeController = TextEditingController();
   String? ConnectorCode1;
   TextEditingController ConnectorCodeController = TextEditingController();
-  final List<DropDownData> _leadDSAList = [];
-
-  String? _searchTerm;
 
   getDropDownCampaignData() {
     FirebaseFirestore.instance
@@ -124,9 +156,6 @@ class _FormPageViewState extends State<FormPageView> {
   String? _selectedCampaign;
   final List<DropDownData> _leadCampaignList = [];
 
-  final List<DropDownData> _salutationList = [];
-
-  String? _selectedSalutation;
   getDropDownSalutationData() {
     FirebaseFirestore.instance
         .collection("salutation")
@@ -141,9 +170,8 @@ class _FormPageViewState extends State<FormPageView> {
       }
     });
   }
-
-  final List<String> _stateselect = [];
-  String? _selectedState;
+  final List<DropDownData> _salutationList = [];
+  String? _selectedSalutation;
 
   final List<String> purposeVisit = [
     'Document Pick up',
@@ -160,8 +188,8 @@ class _FormPageViewState extends State<FormPageView> {
   String? visitID;
   String? accesstoken;
 
-  //visit creation
 
+  //visit creation
   Future<String?> visitCreation() async {
     showDialog(
       context: context,
@@ -233,39 +261,9 @@ class _FormPageViewState extends State<FormPageView> {
     }
   }
 
-
-
-
-  //Textfields
-   TextEditingController textEditingController = TextEditingController();
-   TextEditingController firstName = TextEditingController();
-   TextEditingController middleName = TextEditingController();
-   TextEditingController lastName = TextEditingController();
-   TextEditingController customerNumber = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
-  TextEditingController _addressLine1 = TextEditingController();
-  TextEditingController _addressLine2 = TextEditingController();
-  TextEditingController _addressLine3 = TextEditingController();
-  TextEditingController _city = TextEditingController();
-  TextEditingController _landMark = TextEditingController();
-  TextEditingController _district = TextEditingController();
-  TextEditingController _postOffice = TextEditingController();
-  TextEditingController _state = TextEditingController();
-  TextEditingController _pincode = TextEditingController();
-
-  //Additional details
-  TextEditingController _customerName = TextEditingController();
-  TextEditingController _customerMobileNumber = TextEditingController();
-  TextEditingController _employeeName = TextEditingController();
-  TextEditingController _employeeCode = TextEditingController();
-  TextEditingController _builderName = TextEditingController();
-
-
-  List<dynamic> _PostcodeList = [];
   String? selectedPostCode;
 
-//Functions
+//Functions for selecting date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -307,6 +305,7 @@ class _FormPageViewState extends State<FormPageView> {
     }
   }
 
+  //Functions for selecting time
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
@@ -346,6 +345,7 @@ class _FormPageViewState extends State<FormPageView> {
     }
   }
 
+  //Function to check is all the fields are filled
   void checkCustomerFieldsFilled() {
     if (_selectedSalutation != null &&
         firstName.text.isNotEmpty &&
@@ -360,18 +360,6 @@ class _FormPageViewState extends State<FormPageView> {
       });
     }
   }
-  // void checkVisitFieldsFilled() {
-  //   if (_dateController.text.isNotEmpty &&
-  //       _timeController.text.isNotEmpty) {
-  //     setState(() {
-  //       areVisitFieldsFilled = true;
-  //     });
-  //   } else {
-  //     setState(() {
-  //       areVisitFieldsFilled = false;
-  //     });
-  //   }
-  // }
 
   void checkAddressFieldsFilled() {
     if (_addressLine1.text.isNotEmpty &&
@@ -400,11 +388,8 @@ class _FormPageViewState extends State<FormPageView> {
     }
   }
 
-  List<DocumentSnapshot> ListOfLeads = [];
-  List outputList1 = [];
-  var userType;
-  String? fetchMobileNumber;
 
+//fetching the visits details from leadcreation collection
   void fetchLeads() async {
     CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
 
@@ -418,6 +403,8 @@ class _FormPageViewState extends State<FormPageView> {
     });
   }
 
+
+  //to check if the customer already existing
   bool isCustomerMobileExist = false;
   void fetchAllCustomerMobile(String mobileNumber) {
     List<String> allCustomerMobiles = [];
@@ -446,16 +433,10 @@ class _FormPageViewState extends State<FormPageView> {
       // If mobile number doesn't exist, show custom message
       visitCreation();
     }
-
-    // Optionally, you can use setState here if needed
-    // setState(() {
-    //   // Set state or perform other actions based on isMobileExists
-    // });
   }
 
 
-
-
+  // adding visit data to the lead creation collection
   CollectionReference leadsCreation = FirebaseFirestore.instance.collection("LeadCreation");
   Future<void> addDataToFirestore() async {
     showDialog(
@@ -483,15 +464,6 @@ class _FormPageViewState extends State<FormPageView> {
       'customerNumber': customerNumber.text,
       'visitDate': _dateController.text,
       'visitTime': _timeController.text,
-      // 'addressLine1': _addressLine1.text,
-      // 'addressLine2': _addressLine2.text,
-      // 'addressLine3': _addressLine3.text,
-      // 'city': _city.text,
-      // 'landmark':_landMark.text,
-      // 'state':_state.text,
-      // 'district':_district.text,
-      // 'postOffice':selectedPostCode,
-      // 'pincode':_pincode.text,
       'customerName':_customerName.text,
       'CustomerMobile':_customerMobileNumber.text,
       'builderName':_builderName.text,
@@ -533,23 +505,15 @@ class _FormPageViewState extends State<FormPageView> {
 
   }
 
-  UnderlineInputBorder enb =  UnderlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide:   const BorderSide(color:  Colors.black38)
-  );
-  UnderlineInputBorder focus =  UnderlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide:  const BorderSide(color: Color(0xff298b28))
-  );
-
+//fetching the location infomation
   TextEditingController locationController = TextEditingController();
   String latitude = '';
   String longitude = '';
   void getLocation() async {
     print("Getting location");
     try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+      Position position = await   Geolocator.getCurrentPosition(forceAndroidLocationManager: true,
+          desiredAccuracy: LocationAccuracy.lowest);
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
           position.latitude, position.longitude);
@@ -578,83 +542,21 @@ class _FormPageViewState extends State<FormPageView> {
   }
 
   void requestLocationPermission() async {
+
+    try{
     var status = await Permission.location.request();
     if (status == PermissionStatus.granted) {
       getLocation();
     } else {
       print("Location permission denied");
     }
-  }
+  }catch(err){
+    print(err);
+  }}
   List<String> stateValues = [];
   List<String> districts  = [];
   List<String> postOffice  = [];
 
-  // void getCity() async {
-  //   try {
-  //     final String jsonContent = await rootBundle.loadString('assets/jsons/citylist.json');
-  //     print(jsonContent);
-  //
-  //     // Explicitly cast the decoded JSON to List<Map<String, dynamic>>
-  //     List<Map<String, dynamic>> jsonDataList = (jsonDecode(jsonContent) as List)
-  //         .map((item) => item as Map<String, dynamic>)
-  //         .toList();
-  //
-  //     stateValues = jsonDataList.map((item) => item["S"].toString()).toSet().toList();
-  //     print("StateList");
-  //     print(stateValues);
-  //     setState(() {
-  //       // Set initial value or perform other actions after loading data
-  //       _selectedState = stateValues.isNotEmpty ? stateValues[0] : '';
-  //       print(_selectedState);
-  //     });
-  //   } catch (e) {
-  //     // Handle errors, e.g., log the error or throw it again
-  //     print('Error fetching city data: $e');
-  //
-  //     // You can set a default value or show an error message to the user
-  //     setState(() {
-  //       _selectedState = 'Default State'; // Set a default value
-  //     });
-  //   }
-  // }
-  //
-  // String? _selectedDistrict;
-  // String? _selectedPostOffice;
-  // List<Map<String, dynamic>> jsonDataList = [];
-  // List<Map<String, dynamic>> filterDataByState(String selectedState) {
-  //   return jsonDataList.where((item) => item['S'] == selectedState).toList();
-  // }
-  //
-  //
-  // void updateDistrictsAndPlaces(String selectedState) {
-  //   try {
-  //     List<Map<String, dynamic>> filteredData = filterDataByState(selectedState);
-  //
-  //     print(filteredData); // Print filtered data for debugging
-  //
-  //     districts = filteredData.map((item) => item['D'].toString()).toSet().toList();
-  //     postOffice = filteredData.map((item) => item['PO'].toString()).toSet().toList();
-  //
-  //     print(districts);
-  //     print("Districts");
-  //
-  //     // Update your dropdowns or do anything else with the districts and places
-  //     // For example, you can update the districts and places dropdowns:
-  //     setState(() {
-  //       _selectedDistrict = districts.isNotEmpty ? districts[0] : '';
-  //       _selectedPostOffice = postOffice.isNotEmpty ? postOffice[0] : '';
-  //     });
-  //   } catch (e) {
-  //     // Handle errors, e.g., log the error or throw it again
-  //     print('Error updating districts and places: $e');
-  //
-  //     // You can set default values or show an error message to the user
-  //     setState(() {
-  //       _selectedDistrict = 'Default District'; // Set a default value for district
-  //       _selectedPostOffice = 'Default Post Office'; // Set a default value for post office
-  //     });
-  //   }
-  // }
 
 Future<void> getToken()
 async {
@@ -701,10 +603,10 @@ async {
   }
 
 
-
+@override
   void initState() {
     // TODO: implement initState
-    getToken();
+  getToken();
     fetchLeads();
     getDropDownSalutationData();
     getDropDownLeadData();
@@ -716,19 +618,8 @@ async {
    // getAccessToken();
   }
 
-
-  //FocusNode _customerNameFocus = FocusNode();
-
-
   @override
   Widget build(BuildContext context) {
-    // _customerNameFocus.addListener(() {
-    //   if (_customerNameFocus.hasFocus) {
-    //     setState(() {
-    //       isCustomerInfo = true;
-    //     });
-    //   }
-    // });
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
@@ -1892,389 +1783,6 @@ async {
                                       )),
                                 ),
                               ),
-                              // Card(
-                              //   elevation: 3,
-                              //   child: GestureDetector(
-                              //     onTap: () {
-                              //       if(areVisitFieldsFilled)
-                              //         {
-                              //       setState(() {
-                              //         isAddressInfo = !isAddressInfo;
-                              //         isVisitInfo = false;
-                              //         isCustomerInfo = false;
-                              //         isOtherInfo = false;
-                              //       });
-                              //     }},
-                              //     child: Container(
-                              //         color: Colors.white,
-                              //         child: Padding(
-                              //           padding: const EdgeInsets.all(8.0),
-                              //           child: Column(
-                              //             children: [
-                              //               SizedBox(
-                              //                 height: height * 0.05,
-                              //                 width: width * 1,
-                              //                 child: Row(
-                              //                   children: [
-                              //                     Image.asset(
-                              //                       'assets/images/address.png',
-                              //                       width: width * 0.08,
-                              //                       height: height * 0.04,
-                              //                       fit: BoxFit.cover,
-                              //                     ),
-                              //                     SizedBox(
-                              //                       width: width * 0.05,
-                              //                     ),
-                              //                     Text("Address Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
-                              //                    Spacer(),
-                              //                     areAddressFieldsFilled
-                              //                         ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
-                              //                         : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               // SizedBox(height: height * 0.015),
-                              //               Visibility(
-                              //                   visible:  isAddressInfo == true,
-                              //                   child: Column(
-                              //                     children: [
-                              //                       TextFormField(
-                              //                         controller: _addressLine1,
-                              //                         onChanged: (value) {
-                              //                           setState(() {
-                              //                             checkAddressFieldsFilled();
-                              //                           });
-                              //                         },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Address Line 1 *',
-                              //                           hintText: 'Enter Adress Line 1',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter Address Line 1';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _addressLine2,
-                              //                         onChanged: (value) {
-                              //                           setState(() {
-                              //                             checkAddressFieldsFilled();
-                              //                           });
-                              //                         },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Address Line 2 *',
-                              //                           hintText: 'Enter Address Line 2',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter address line 2';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _addressLine3,
-                              //                         onChanged: (value) {
-                              //                           setState(() {
-                              //                             checkAddressFieldsFilled();
-                              //                           });
-                              //                         },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Address Line 3 *',
-                              //                           hintText: 'Enter Address Line 3',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter address line 3';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _city,
-                              //                         onChanged: (value) {
-                              //                           setState(() {
-                              //                             checkAddressFieldsFilled();
-                              //                           });
-                              //                         },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'City/Town/Village *',
-                              //                           hintText: 'Enter City/Town/Village',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter your City/Town/Village';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _landMark,
-                              //                         onChanged: (value) {
-                              //                           // setState(() {
-                              //                           //   checkAddressFieldsFilled();
-                              //                           // });
-                              //                         },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Landmark',
-                              //                           hintText: 'Enter Landmark',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _pincode,
-                              //                         onChanged: (value) async {
-                              //                           setState(() {
-                              //                             checkAddressFieldsFilled();
-                              //                           });
-                              //                           if (value.length == 6) {
-                              //                             final String jsonContent = await rootBundle
-                              //                                 .loadString('assets/jsons/citylist.json');
-                              //
-                              //                             final List<dynamic> jsonData =
-                              //                             json.decode(jsonContent);
-                              //
-                              //                             var listSearchData = jsonData
-                              //                                 .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
-                              //                                 .toList();
-                              //
-                              //                             print("Helloooooooooo");
-                              //                             print(listSearchData);
-                              //                             if (listSearchData.isNotEmpty) {
-                              //                               selectedPostCode = null;
-                              //                               setState(() {
-                              //                                 _PostcodeList =
-                              //                                     listSearchData.map((e) => e).toList();
-                              //                               });
-                              //
-                              //                               print("List Drop Data");
-                              //                               var districtNames = listSearchData
-                              //                                   .map((e) => e["D"].toString())
-                              //                                   .toSet() // Convert to a set to remove duplicates
-                              //                                   .first;  // Take the first element
-                              //
-                              //                               print(districtNames);
-                              //
-                              //                               var stateName = listSearchData
-                              //                                   .map((e) => e["S"].toString())
-                              //                                   .toSet() // Convert to a set to remove duplicates
-                              //                                   .first;  // Take the first element
-                              //
-                              //                               print(stateName);
-                              //                               setState(() {
-                              //                                 _district.text = districtNames;
-                              //                                 _state.text = stateName;
-                              //                               });
-                              //
-                              //                             } else {
-                              //                               _PostcodeList.clear();
-                              //                               //  showToastMessage('Enter correct pincode');
-                              //                             }
-                              //                           }
-                              //                         },
-                              //                         keyboardType: TextInputType.phone,
-                              //                         inputFormatters: [
-                              //                           FilteringTextInputFormatter.singleLineFormatter,
-                              //                           LengthLimitingTextInputFormatter(6),
-                              //                         ],
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Pincode *',
-                              //                           hintText: 'Enter Pincode',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //  border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter pincode';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       DropdownButtonFormField2(
-                              //                         dropdownStyleData:DropdownStyleData(
-                              //                           decoration: BoxDecoration(
-                              //                             //     color: StyleData.buttonColor,
-                              //                               borderRadius: BorderRadius.circular(10)
-                              //
-                              //                           ),
-                              //                           maxHeight: 200,
-                              //                         ) ,
-                              //                         // isExpanded: true,
-                              //                         // isDense: true,
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'Post Office *',
-                              //                           hintText: 'Select an option',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (selectedPostCode == null) {
-                              //                             return "Select Post Office";
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                         value: selectedPostCode,
-                              //                         onChanged: (value) {
-                              //                          // checkAddressFieldsFilled();
-                              //                           setState(() {
-                              //                             selectedPostCode = value as String?;
-                              //                           });
-                              //                         },
-                              //
-                              //                         items: _PostcodeList.map((dynamic item) {
-                              //                           return DropdownMenuItem(
-                              //                             value: item["PO"],
-                              //                             child: Text(
-                              //                               item["PO"],
-                              //                                style: const TextStyle(
-                              //                                 color: Color(0xFF393939),
-                              //                             fontSize: 15,
-                              //                             fontFamily: 'Poppins',
-                              //                             fontWeight: FontWeight.w400,
-                              //                           ),
-                              //                             ),
-                              //                           );
-                              //                         }).toList(),
-                              //                         style: const TextStyle(
-                              //                           color: Color(0xFF393939),
-                              //                           fontSize: 15,
-                              //                           fontFamily: 'Poppins',
-                              //                           fontWeight: FontWeight.w400,
-                              //                         ),
-                              //
-                              //                         // items:
-                              //                         //     _PostcodeList.map((dynamic item) {
-                              //                         //   return DropdownMenuItem<dynamic>(
-                              //                         //     value: item,
-                              //                         //     child: Text(
-                              //                         //       item,
-                              //                         //       style: const TextStyle(color: Colors.white),
-                              //                         //     ),
-                              //                         //   );
-                              //                         // }).toList(),
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _district,
-                              //                         readOnly: true,
-                              //                         // onChanged: (value) {
-                              //                         //   setState(() {
-                              //                         //     checkAddressFieldsFilled();
-                              //                         //   });
-                              //                         // },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'District *',
-                              //                           hintText: 'Enter District',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter your district';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //                       TextFormField(
-                              //                         controller: _state,
-                              //                         readOnly: true,
-                              //                         // onChanged: (value) {
-                              //                         //   setState(() {
-                              //                         //     checkAddressFieldsFilled();
-                              //                         //   });
-                              //                         // },
-                              //                         decoration: InputDecoration(
-                              //                           labelText: 'State *',
-                              //                           hintText: '',
-                              //                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                              //                           //   border: InputBorder.none,
-                              //                           focusedBorder: focus,
-                              //                           enabledBorder: enb,
-                              //                           filled: true,
-                              //                           fillColor: StyleData.textFieldColor,
-                              //                         ),
-                              //                         validator: (value) {
-                              //                           if (value == null || value.isEmpty) {
-                              //                             return 'Please enter your State';
-                              //                           }
-                              //                           return null;
-                              //                         },
-                              //                       ),
-                              //
-                              //
-                              //
-                              //                       SizedBox(height: height * 0.02),
-                              //                       Visibility(
-                              //                         visible: areAddressFieldsFilled,
-                              //                         child: GestureDetector(
-                              //                           onTap: () {
-                              //                             if(areAddressFieldsFilled)
-                              //                             {
-                              //                               setState(() {
-                              //                                 isOtherInfo = !isOtherInfo;
-                              //                                 isVisitInfo = false;
-                              //                                 isCustomerInfo = false;
-                              //                                 isAddressInfo = false;
-                              //                               });
-                              //                             }},
-                              //                           child: Align(
-                              //                             alignment: Alignment.bottomRight,
-                              //                             child: Icon(
-                              //                               Icons.arrow_circle_down,
-                              //                               color: Colors.yellow.shade800, // Set your desired arrow color
-                              //                               size: 22,
-                              //                             ),
-                              //                           ),
-                              //                         ),
-                              //                       ),
-                              //                     ],
-                              //                   )),
-                              //             ],
-                              //           ),
-                              //         )),
-                              //   ),
-                              // ),
                               Card(
                                 elevation: 3,
                                 child: GestureDetector(
@@ -2483,37 +1991,6 @@ async {
     );
   }
 
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //     builder: (BuildContext context, Widget? child) {
-  //       return Theme(
-  //         data: ThemeData.light().copyWith(
-  //           primaryColor: Colors.yellow, // Your custom yellow color
-  //           hintColor: Colors.yellow,
-  //           colorScheme: ColorScheme.light(primary: Colors.yellow),
-  //           buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-  //           textButtonTheme: TextButtonThemeData(
-  //             style: TextButton.styleFrom(
-  //               primary: Colors.yellow,
-  //             ),
-  //           ),
-  //         ),
-  //         child: child!,
-  //       );
-  //     },
-  //   );
-  //
-  //   if (picked != null && picked != selectedDate) {
-  //     setState(() {
-  //       selectedDate = picked;
-  //     });
-  //   }
-  // }
   void _showAlertDialogSuccess(BuildContext context) {
     showDialog(
       context: context,

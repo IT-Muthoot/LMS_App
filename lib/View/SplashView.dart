@@ -6,8 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lead_management_system/View/HomePageView.dart';
-import 'package:lead_management_system/login1.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,6 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/NavigatorController.dart';
 import '../../Utils/StyleData.dart';
 import '../Utils/LocalStorage.dart';
+import 'HomePageView.dart';
+import 'LoginPageView.dart';
+
+
 
 
 class SplashView extends StatefulWidget {
@@ -227,14 +229,6 @@ class _SplashViewState extends State<SplashView> {
                   ],
                 ),
               ),
-              // Positioned(
-              //   bottom: 10,
-              //   right: width * 0.46,
-              //   child: Text(
-              //     'v$version',
-              //     style: const TextStyle(color: Colors.white70),
-              //   ),
-              // ),
               Positioned(
                 bottom: 10,
                 child: SizedBox(
