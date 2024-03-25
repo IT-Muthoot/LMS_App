@@ -394,13 +394,33 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
+                                   ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
+                                   Text(
+                                     searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
+                                     style: TextStyle(
+                                       color: Colors.green,
+                                       fontSize: 14.0,
+                                       fontFamily: 'Poppins',
+                                     ),
+                                   ) : Text(
+                                     searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
+                                     style: TextStyle(
+                                       color: Colors.red,
+                                       fontSize: 14.0,
+                                       fontFamily: 'Poppins',
+                                     ),
+                                   ),
                                    Row(
                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children: [
+                                       ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
                                        Icon(
                                          Icons.star,
                                          color: Colors.yellow.shade800
-                                       ),
+                                       ) :  Icon(
+                                           Icons.pending,
+                                           color: Colors.red
+                                       )  ,
                                        Text(
                                          "Lead ID",
                                          style: TextStyle(
