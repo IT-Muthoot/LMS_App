@@ -1,4 +1,4 @@
-package com.example.lead_management_system
+package com.muthoot.lead_management_system
 
 import io.flutter.embedding.android.FlutterActivity
 
