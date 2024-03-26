@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
-      title: 'Flutter Demo',
+      title: 'HomeFin Express',
       theme: ThemeData(
         useMaterial3: true,
       ),

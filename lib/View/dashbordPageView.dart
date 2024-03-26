@@ -440,15 +440,15 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                           ],
                                         ),
                                         SizedBox(height: 8),
-                                        Row(
-                                          children: [
-                                            Text("Visit ID : ",
-                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                                )),
-                                            Text( ListOfLeads[index]["VisitID"] ?? "",
-                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                          ],
-                                        ),
+                                        // Row(
+                                        //   children: [
+                                        //     Text("Visit ID : ",
+                                        //         style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                        //         )),
+                                        //     Text( ListOfLeads[index]["VisitID"] ?? "",
+                                        //         style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                        //   ],
+                                        // ),
                                       ],
                                     ),
                                  //   (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
