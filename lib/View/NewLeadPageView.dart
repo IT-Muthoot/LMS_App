@@ -71,6 +71,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? selectedPostCode;
   String? visitID;
 
+  String? selectedProductType;
+
   //textfields
   TextEditingController textEditingController = TextEditingController();
   TextEditingController firstName = TextEditingController();
@@ -563,6 +565,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'ConsentKYC' : consentKYC,
         'LeadID' : LeadID ?? "",
         'VisitID' : visitID ?? "",
+        'VerificationStatus' : "Pending",
         'userId': userId,
         'EmployeeName': pref.getString("employeeName"),
         'EmployeeCode':  pref.getString("employeeCode"),
@@ -754,6 +757,76 @@ print(params);
                                 ),
                               ],
                             ),
+                            // SizedBox(
+                            //   width: width * 1,
+                            //   child: DropdownButtonFormField2<String>(
+                            //     value: selectedProdut,
+                            //     onChanged: (String? newValue) {
+                            //       setState(() {
+                            //         selectedProdut = newValue;
+                            //         selectedProductType = _productsList.firstWhere((element) => element.title == newValue).type == 1 ? 'Home Loan' : 'Non-Home Loan';
+                            //         checkLeadsFieldsFilled();
+                            //       });
+                            //     },
+                            //     validator: (value) {
+                            //       if (value == null || value.isEmpty) {
+                            //         return 'Please select product';
+                            //       }
+                            //       return null;
+                            //     },
+                            //     items: _productsList
+                            //         .map((DropDownProductData item) {
+                            //       return DropdownMenuItem(
+                            //         value: item.title, // Ensure item.title is unique
+                            //         child: Text(
+                            //           item.title.length > 30
+                            //               ? item.title.substring(0, 31) +
+                            //               '...' // adjust the length as needed
+                            //               : item.title,
+                            //           style: const TextStyle(
+                            //             color: Color(0xFF393939),
+                            //             fontSize: 15,
+                            //             fontFamily: 'Poppins',
+                            //             fontWeight: FontWeight.w400,
+                            //           ),
+                            //         ),
+                            //       );
+                            //     }).toSet().toList(), // Ensure uniqueness by converting to Set and then back to List
+                            //     style: const TextStyle(
+                            //       color: Color(0xFF393939),
+                            //       fontSize: 15,
+                            //       fontFamily: 'Poppins',
+                            //       fontWeight: FontWeight.w400,
+                            //     ),
+                            //     //   hint: const Text('Select an option'),
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Product *',
+                            //       hintText: 'Select an option',
+                            //       //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                            //       //  border: InputBorder.none,
+                            //       focusedBorder: focus,
+                            //       enabledBorder: enb,
+                            //       filled: true,
+                            //       fillColor: StyleData.textFieldColor,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   padding: EdgeInsets.only(top: 8.0),
+                            //   child: selectedProductType != null
+                            //       ? Text(
+                            //     selectedProductType!,
+                            //     style: TextStyle(
+                            //       color: Colors.black,
+                            //       fontSize: 15,
+                            //       fontFamily: 'Poppins',
+                            //       fontWeight: FontWeight.w400,
+                            //     ),
+                            //   )
+                            //       : null,
+                            // ),
+
+
                             SizedBox(height: height * 0.03),
                             Visibility(
                               visible: consentCRIF == true && consentKYC == true,
@@ -1690,7 +1763,6 @@ print(params);
                                                           return null;
                                                         },
                                                       ),
-
                                                       Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
