@@ -384,63 +384,64 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                                 // commented for first phase
-                                 Navigator.push(
-                                     context,
-                                     MaterialPageRoute(
-                                         builder: (context) => DocumentPageView(
-                                           docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
-                                           visitID: ListOfLeads[index]["VisitID"]
-                                         )));
+                                //  Navigator.push(
+                                //      context,
+                                //      MaterialPageRoute(
+                                //          builder: (context) => DocumentPageView(
+                                //            docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
+                                //            visitID: ListOfLeads[index]["VisitID"]
+                                //          )));
                                },
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
-                                   Row(
-                                     children: [
-                                       Text(
-                                         "Status",
-                                         style: TextStyle(
-                                           color: Colors.black54,
-                                           fontSize: 14.0,
-                                         ),
-                                       ),
-                                       Text(
-                                         " - ",
-                                         style: TextStyle(
-                                           color: Colors.black26,
-                                           fontSize: 14.0,
-                                         ),
-                                       ),
-                                       ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
-                                       Text(
-                                         searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
-                                         style: TextStyle(
-                                           color: Colors.green,
-                                           fontSize: 14.0,
-                                           fontFamily: 'Poppins',
-                                         ),
-                                       ) : Text(
-                                         searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
-                                         style: TextStyle(
-                                           color: Colors.red,
-                                           fontSize: 14.0,
-                                           fontFamily: 'Poppins',
-                                         ),
-                                       ),
-                                     ],
-                                   ),
+                                   // Row(
+                                   //   children: [
+                                   //     Text(
+                                   //       "Status",
+                                   //       style: TextStyle(
+                                   //         color: Colors.black54,
+                                   //         fontSize: 14.0,
+                                   //       ),
+                                   //     ),
+                                   //     Text(
+                                   //       " - ",
+                                   //       style: TextStyle(
+                                   //         color: Colors.black26,
+                                   //         fontSize: 14.0,
+                                   //       ),
+                                   //     ),
+                                   //     ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
+                                   //     Text(
+                                   //       searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
+                                   //       style: TextStyle(
+                                   //         color: Colors.green,
+                                   //         fontSize: 14.0,
+                                   //         fontFamily: 'Poppins',
+                                   //       ),
+                                   //     ) : Text(
+                                   //       searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
+                                   //       style: TextStyle(
+                                   //         color: Colors.red,
+                                   //         fontSize: 14.0,
+                                   //         fontFamily: 'Poppins',
+                                   //       ),
+                                   //     ),
+                                   //   ],
+                                   // ),
 
                                    Row(
                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children: [
-                                       ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
+                                     //  ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
                                        Icon(
                                            Icons.star,
                                            color: Colors.yellow.shade800
-                                       ) :  Icon(
-                                           Icons.pending,
-                                           color: Colors.red
                                        ),
+                                       //     :  Icon(
+                                       //     Icons.pending,
+                                       //     color: Colors.red
+                                       // ),
                                        Text(
                                          "Lead ID",
                                          style: TextStyle(

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -350,9 +351,21 @@ _launchURL(String _url) async {
     // TODO: implement initState
     super.initState();
     // _checkInternet();
+    _fetchDeviceIdentifier();
     startApp();
   }
 
+  String? deviceIdentifier;
+  Future<void> _fetchDeviceIdentifier() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      setState(() {
+        deviceIdentifier = iosInfo.identifierForVendor;
+        print(deviceIdentifier);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

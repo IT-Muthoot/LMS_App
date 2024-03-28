@@ -77,6 +77,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           if( pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode'])
             {
               setState(() {
+                print("jhkjlkada");
                 employeeName = ListOfUsers[i]['EmployeeName'];
                 branchCode = ListOfUsers[i]['branchCode'];
                 pref.setString("branchcode", ListOfUsers[i]['branchCode']);

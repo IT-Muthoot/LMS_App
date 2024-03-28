@@ -382,6 +382,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       'Content-Type': 'application/json',
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
+    SharedPreferences pref =
+    await SharedPreferences.getInstance();
    // print(widget.accessToken);
     print(customerStatus);
     print(selectedProductValue);
@@ -425,7 +427,11 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "scheduleTime":DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
       "LeadSource": leadSource,
       "ConsentForCrif": consentCRIF,
-      "ConsentForKyc": consentKYC
+      "ConsentForKyc": consentKYC,
+      "AssignedSM":  pref.getString("managerName"),
+      "LeadOwner":  pref.getString("managerName"),
+      "IsDocumentCollected": true,
+      "isDirectLeads": true
     });
 
    print(data);
