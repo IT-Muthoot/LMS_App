@@ -1,6 +1,8 @@
-import 'package:device_info_plus/device_info_plus.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:unique_identifier/unique_identifier.dart';
 
 class UDIDScreen extends StatefulWidget {
   @override
@@ -8,42 +10,42 @@ class UDIDScreen extends StatefulWidget {
 }
 
 class _UDIDScreenState extends State<UDIDScreen> {
-  String _udid = 'Unknown';
+  String? _identifier = 'Unknown';
 
   @override
   void initState() {
     super.initState();
-    _fetchUDID();
+    initUniqueIdentifierState();
   }
 
-  Future<void> _fetchUDID() async {
+  Future<void> initUniqueIdentifierState() async {
+    String? identifier;
     try {
-      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
-        IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-        setState(() {
-          _udid = iosInfo.identifierForVendor!; // This may not be UDID but a suitable alternative
-        });
-      } else {
-        setState(() {
-          _udid = 'Not available on non-iOS devices';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _udid = 'Failed to get UDID';
-      });
+      identifier = await UniqueIdentifier.serial;
+    } on PlatformException {
+      identifier = 'Failed to get Unique Identifier';
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      _identifier = identifier;
+    });
+    print("jfkjbdf");
+    print(_identifier);
+    //0C073090-B1C6-4A33-A777-84E64F71FF90
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('UDID Fetcher'),
-      ),
-      body: Center(
-        child: Text('UDID: $_udid'),
+    return new MaterialApp(
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: new Center(
+          child: new Text('Running on device with id: $_identifier\n'),
+        ),
       ),
     );
   }
