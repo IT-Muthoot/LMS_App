@@ -351,21 +351,9 @@ _launchURL(String _url) async {
     // TODO: implement initState
     super.initState();
     // _checkInternet();
-    _fetchDeviceIdentifier();
     startApp();
   }
 
-  String? deviceIdentifier;
-  Future<void> _fetchDeviceIdentifier() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  if (Theme.of(context).platform == TargetPlatform.iOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      setState(() {
-        deviceIdentifier = iosInfo.identifierForVendor;
-        print(deviceIdentifier);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
