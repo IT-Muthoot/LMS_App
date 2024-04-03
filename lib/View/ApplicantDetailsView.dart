@@ -180,9 +180,8 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
             builder: (context) {
               String countText = searchKEY.text.isEmpty ? ListOfLeads.length.toString() : searchListOfLeads.length.toString();
               double textWidth = countText.length * 8.0; // Adjust 8.0 based on your font size and preference
-
               return Container(
-                width: textWidth + 20, // Adjust padding as needed
+                width: textWidth + 20,
                 height: height * 0.036,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -201,12 +200,9 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
               );
             },
           ),
-
-
         ],
       ),
         ),
-
       ],
         ),
          body:    SingleChildScrollView(

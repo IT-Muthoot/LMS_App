@@ -309,7 +309,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   }
 
 
-
+String? SalutaionID;
+  String? BranchCode1;
 
   getdata() {
     if (!widget.isNewActivity) {
@@ -336,6 +337,15 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
             : docData["connectorName"] ?? "";
         DSAConnectorCode1 = docData["DSAConnectorCode"] ?? "";
         visitID = docData["visitID"] ?? "";
+        BranchCode1 = docData["EmployeeBranchCode"] ?? "";
+
+        DropDownData? selectedSalutationData = _salutationList.firstWhere((salutation) => salutation.title == _selectedSalutation);
+       setState(() {
+         SalutaionID = selectedSalutationData.id.toString();
+       });
+
+        print(SalutaionID);
+
         print("Lead Source value");
       //  print(_leadSource.text);
         print(DSAConnectorName);
@@ -395,7 +405,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
       "Salutation": _selectedSalutation ?? "",
       "Email": _email.text,
       "Phone": customerNumber.text,
-      "HfinBranchcode": branchCode,
+      "HfinBranchcode": BranchCode1,
       "Product": selectedProductValue,
       "Purpose": selectedProdut ?? "",
       "DSAorConnectorName": DSAConnectorName,
@@ -537,7 +547,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     print("Hello");
     try{
       Map<String, dynamic> params = {
-        'salutation': _selectedSalutation ?? "",
+        'salutation':_selectedSalutation,
         'firstName': firstName.text,
         'lastName': lastName.text,
         'middleName': middleName.text,
@@ -557,7 +567,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'pincode':_pincode.text,
         'residentialType':_selectedResidentialType ?? "",
         'residentialStatus':_selectedResidentialStatus ?? "",
-        'homeFinBranchCode':branchCode,
+        'homeFinBranchCode':BranchCode1,
         'leadAmount':_leadAmount.text,
         'leadSource': _leadSource.text,
         'productCategory': selectedProductValue ?? "",
@@ -575,7 +585,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
         'userId': userId,
         'EmployeeName': pref.getString("employeeName"),
         'EmployeeCode':  pref.getString("employeeCode"),
-        'EmployeeBranchCode': pref.getString("branchcode"),
+        'EmployeeBranchCode': BranchCode1,
         'ManagerName': pref.getString("managerName"),
         'ManagerCode': pref.getString("ManagerCode"),
         'Region': pref.getString("Region"),
@@ -882,44 +892,47 @@ print(params);
                                                   visible:  isCustomerInfo == true,
                                                   child: Column(
                                                     children: [
-                                                      DropdownButtonFormField2<String>(
-                                                        value: _selectedSalutation,
-                                                        onChanged: (String? newValue) {
-                                                          setState(() {
-                                                            _selectedSalutation = newValue;
-                                                            checkCustomerFieldsFilled();
-                                                          });
-                                                        },
-                                                        items: _salutationList
-                                                            .map((DropDownData item){
-                                                          return DropdownMenuItem(
-                                                            value: item.title,
-                                                            child: Text(
-                                                              item.title,
-                                                              style: const TextStyle(
-                                                                color: Color(0xFF393939),
-                                                                fontSize: 15,
-                                                                fontFamily: 'Poppins',
-                                                                fontWeight: FontWeight.w400,
+                                                      IgnorePointer(
+                                                        ignoring : true,
+                                                        child: DropdownButtonFormField2<String>(
+                                                          value: _selectedSalutation,
+                                                          onChanged: (String? newValue) {
+                                                            setState(() {
+                                                              _selectedSalutation = newValue;
+                                                              checkCustomerFieldsFilled();
+                                                            });
+                                                          },
+                                                          items: _salutationList
+                                                              .map((DropDownData item){
+                                                            return DropdownMenuItem(
+                                                              value: item.title,
+                                                              child: Text(
+                                                                item.title,
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
                                                               ),
-                                                            ),
-                                                          );
-                                                        }).toList(),
-                                                        style: const TextStyle(
-                                                          color: Color(0xFF393939),
-                                                          fontSize: 15,
-                                                          fontFamily: 'Poppins',
-                                                          fontWeight: FontWeight.w400,
-                                                        ),
-                                                        //   hint: const Text('Select an option'),
-                                                        decoration: InputDecoration(
-                                                          labelText: 'Salutation *',
-                                                          hintText: 'Select an option',
-                                                          //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
-                                                          focusedBorder: focus,
-                                                          enabledBorder: enb,
-                                                          filled: true,
-                                                          fillColor: StyleData.textFieldColor,
+                                                            );
+                                                          }).toList(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF393939),
+                                                            fontSize: 15,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          //   hint: const Text('Select an option'),
+                                                          decoration: InputDecoration(
+                                                            labelText: 'Salutation *',
+                                                            hintText: 'Select an option',
+                                                            //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                            focusedBorder: focus,
+                                                            enabledBorder: enb,
+                                                            filled: true,
+                                                            fillColor: StyleData.textFieldColor,
+                                                          ),
                                                         ),
                                                       ),
                                                       TextFormField(
@@ -1731,7 +1744,7 @@ print(params);
                                                       ),
                                                       TextFormField(
                                                         //  controller: branchCode,
-                                                        initialValue: branchCode,
+                                                        initialValue: BranchCode1,
                                                         readOnly: true,
                                                         decoration: InputDecoration(
                                                           labelText: 'Home Fin Branch Code',
