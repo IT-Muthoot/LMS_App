@@ -1,7 +1,10 @@
 
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:lead_management_system/Utils/SaveData.dart';
 import 'View/SplashView.dart';
 import 'firebase_options.dart';
 
@@ -11,9 +14,14 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-     MyApp(),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(),
+    ),
   );
-
+  // runApp(
+  //    MyApp(),
+  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,6 +39,7 @@ class MyApp extends StatelessWidget {
       ),
       home:
   SplashView(),
+    //  SaveData(),
     );
   }
 }
