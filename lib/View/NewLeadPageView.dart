@@ -1014,9 +1014,15 @@ print(params);
                                                             // checkFieldsFilled();
                                                           });
                                                         },
+                                                        keyboardType: TextInputType.phone,
+                                                        inputFormatters: [
+                                                          FilteringTextInputFormatter.digitsOnly,
+                                                          LengthLimitingTextInputFormatter(10),
+                                                        ],
                                                         decoration: InputDecoration(
                                                           labelText: 'Additional Phone Number',
                                                           hintText: 'Enter Phone Number',
+                                                          prefixText: '+91 ',
                                                           //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                           focusedBorder: focus,
                                                           enabledBorder: enb,
@@ -1074,8 +1080,8 @@ print(params);
                                                             checkCustomerFieldsFilled();
                                                           });
                                                         },
-                                                        validator: (value) {
-                                                          if (value!.isEmpty) {
+                                                        validator: (String? value) { // Fix the type of value
+                                                          if (value == null || value.isEmpty) { // Handle null safety
                                                             return 'Select Gender';
                                                           }
                                                           return null;
@@ -2393,7 +2399,7 @@ print(params);
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('Lead Details Submitted successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  Text('Lead Submitted successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
                    SizedBox(height: 8),
                   Row(
                     children: [

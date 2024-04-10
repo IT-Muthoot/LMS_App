@@ -174,7 +174,7 @@ class _FormPageViewState extends State<FormPageView> {
   String? _selectedSalutation;
 
   final List<String> purposeVisit = [
-    'Document Pick up',
+    //'Document Pick up',
     'Lead Capture',
   ];
   String? selectedPurpose;
@@ -327,6 +327,22 @@ class _FormPageViewState extends State<FormPageView> {
         );
       },
     );
+
+    // if (pickedTime != null) {
+    //   setState(() {
+    //     _timeController.text = pickedTime.format(context);
+    //     if (_dateController.text.isNotEmpty &&
+    //         _timeController.text.isNotEmpty) {
+    //       setState(() {
+    //         areVisitFieldsFilled = true;
+    //       });
+    //     } else {
+    //       setState(() {
+    //         areVisitFieldsFilled = false;
+    //       });
+    //     }
+    //   });
+    // }
 
     if (pickedTime != null) {
       setState(() {
@@ -1542,6 +1558,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
                                                       return 'Please enter your first name';
@@ -1565,6 +1584,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   // validator: (value) {
                                                   //   if (value == null || value.isEmpty) {
                                                   //     return 'Please enter your first name';
@@ -1589,6 +1611,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
                                                       return 'Please enter your last name';
