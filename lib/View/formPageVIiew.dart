@@ -328,6 +328,22 @@ class _FormPageViewState extends State<FormPageView> {
       },
     );
 
+    // if (pickedTime != null) {
+    //   setState(() {
+    //     _timeController.text = pickedTime.format(context);
+    //     if (_dateController.text.isNotEmpty &&
+    //         _timeController.text.isNotEmpty) {
+    //       setState(() {
+    //         areVisitFieldsFilled = true;
+    //       });
+    //     } else {
+    //       setState(() {
+    //         areVisitFieldsFilled = false;
+    //       });
+    //     }
+    //   });
+    // }
+
     if (pickedTime != null) {
       setState(() {
         // Format time with AM/PM

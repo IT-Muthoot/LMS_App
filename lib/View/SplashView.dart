@@ -43,139 +43,6 @@ class _SplashViewState extends State<SplashView> {
     print(DateTime.now().day);
     print(DateTime.now().month);
     print(DateTime.now().year);
-    // if ((DateTime.now().day >= 21 && DateTime.now().day <= 23 )&&
-    //     DateTime.now().month == 2 &&
-    //     DateTime.now().year == 2024 )
-    // {
-    //   var docSnapshot = await FirebaseFirestore.instance
-    //       .collection('app_version')
-    //       .doc('app_version')
-    //       .get();
-    //   var appVersionFromFirestore = docSnapshot.data()?['app_version'];
-    //   print(appVersionFromFirestore);
-    //   print(version);
-    //   int firebaseVersion = getExtendedVersionNumber(appVersionFromFirestore); // return 102003
-    //   int appVersion = getExtendedVersionNumber(version!);
-    //   if (firebaseVersion > appVersion) {
-    //     print(docSnapshot.data());
-    //     Dialogs.materialDialog(
-    //         msg: 'New update available!',
-    //         title: "Update",
-    //         msgStyle:
-    //         TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
-    //         titleStyle: const TextStyle(color: Colors.white),
-    //         color: StyleData.backgroundDropdown,
-    //         context: context,
-    //         titleAlign: TextAlign.center,
-    //         msgAlign: TextAlign.center,
-    //         barrierDismissible: false,
-    //         dialogWidth: kIsWeb ? 0.3 : null,
-    //         onClose: (value) {},
-    //         actions: [
-    //           Padding(
-    //             padding: const EdgeInsets.symmetric(horizontal: 30),
-    //             child: InkWell(
-    //               onTap: () {
-    //                 SystemNavigator.pop();
-    //               },
-    //               child: Container(
-    //                 height: 40,
-    //                 width: 50,
-    //                 decoration: BoxDecoration(
-    //                     color: Colors.white,
-    //                     borderRadius: BorderRadius.circular(5)),
-    //                 child: Center(
-    //                     child: Text('ok',
-    //                         style: TextStyle(
-    //                             color: Colors.black,
-    //                             fontFamily: StyleData.boldFont,
-    //                             fontSize: 12))),
-    //               ),
-    //             ),
-    //           ),
-    //           // Padding(
-    //           //   padding: const EdgeInsets.symmetric(horizontal: 30),
-    //           //   child: InkWell(
-    //           //     onTap: () {
-    //           //       Navigator.pop(context);
-    //           //       // SystemNavigator.pop();
-    //           //       // LaunchReview.launch(
-    //           //       //     androidAppId: "com.muthoot.muthootloanassist",
-    //           //       //     iOSAppId: "com.muthoot.muthootloanassist");
-    //           //     },
-    //           //     child: Container(
-    //           //       height: 40,
-    //           //       width: 50,
-    //           //       decoration: BoxDecoration(
-    //           //           color: Colors.white,
-    //           //           borderRadius: BorderRadius.circular(5)),
-    //           //       child: Center(
-    //           //           child: Text('Update',
-    //           //               style: TextStyle(
-    //           //                   color: Colors.black,
-    //           //                   fontFamily: StyleData.boldFont,
-    //           //                   fontSize: 12))),
-    //           //     ),
-    //           //   ),
-    //           // )
-    //           // IconsButton(
-    //           //   onPressed: () {
-    //           //     Navigator.pop(context);
-    //           //     LaunchReview.launch(
-    //           //         androidAppId: "com.muthoot.muthootloanassist",
-    //           //         iOSAppId: "com.muthoot.muthootloanassist");
-    //           //   },
-    //           //   text: "Update",
-    //           //   iconData: Icons.update,
-    //           //   color: Color(0xFFC5322C),
-    //           //   textStyle: TextStyle(color: Colors.white),
-    //           //   iconColor: Colors.white,
-    //           // ),
-    //         ]);
-    //   } else {
-    //     print(docSnapshot.data());
-    //     LocalStore().get("employeeCode").then((value) {
-    //       Future.delayed(const Duration(seconds: 1), () async {
-    //         var headers = {
-    //           'X-PrettyPrint': '1',
-    //           'Content-Type': 'application/x-www-form-urlencoded',
-    //           'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
-    //         };
-    //         var data = {
-    //           'grant_type': 'password',
-    //           'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
-    //           'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
-    //           'username': 'itkrishnaprasad@muthootgroup.com',
-    //           'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
-    //         };
-    //         var dio = Dio();
-    //         var response = await dio.request(
-    //           'https://test.salesforce.com/services/oauth2/token',
-    //           options: Options(
-    //             method: 'POST',
-    //             headers: headers,
-    //           ),
-    //           data: data,
-    //         );
-    //
-    //         if (response.statusCode == 200) {
-    //
-    //           String jsonResponse = json.encode(response.data);
-    //           Map<String, dynamic> jsonMap = json.decode(jsonResponse);
-    //           accessToken = jsonMap['access_token'];
-    //
-    //           // Store the access token locally
-    //           saveAccessToken(accessToken!);
-    //           print("AccessToken");
-    //           print(accessToken);
-    //           NavigatorController.pagePush(
-    //               context, value == "" ?
-    //           LoginScreen()
-    //               : HomePageView());
-    //         }
-    //       });
-    //     });
-    //   }
     var docSnapshot = await FirebaseFirestore.instance
         .collection('app_version')
         .doc('app_version')
@@ -189,145 +56,250 @@ class _SplashViewState extends State<SplashView> {
       print("Verisono8u8394");
       print(firebaseVersion);
       if (firebaseVersion > appVersion) {
-        Dialogs.materialDialog(
-            msg: 'New update available! Please download new version and uninstall old version(${version}) then install downloaded app-${value ?? ""}.',
-            title: "Update Available",
-            msgStyle:
-            TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
-            titleStyle: const TextStyle(color: Colors.white),
-            color: StyleData.backgroundDropdown,
-            context: context,
-            titleAlign: TextAlign.center,
-            msgAlign: TextAlign.center,
-            barrierDismissible: false,
-            dialogWidth: kIsWeb ? 0.3 : null,
-            onClose: (value) {},
-            actions: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: InkWell(
-                  onTap: () {
-                    SystemNavigator.pop();
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: StyleData.boldFont,
-                                fontSize: 12))),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    SystemNavigator.pop();
-                    FirebaseFirestore.instance
-                        .collection('Latest App URL')
-                        .doc('Latest App URL')
-                        .get()
-                        .then((value) {
-                      _launchURL(value.data()!["app_url"].toString());
-                    });
-                    Fluttertoast.showToast(msg: "Downloading...");
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text('Download',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: StyleData.boldFont,
-                                fontSize: 12))),
-                  ),
-                ),
-              )
-              // IconsButton(
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //     LaunchReview.launch(
-              //         androidAppId: "com.muthoot.muthootloanassist",
-              //         iOSAppId: "com.muthoot.muthootloanassist");
-              //   },
-              //   text: "Update",
-              //   iconData: Icons.update,
-              //   color: Color(0xFFC5322C),
-              //   textStyle: TextStyle(color: Colors.white),
-              //   iconColor: Colors.white,
-              // ),
-            ]);
-      } else {
-        if (mounted) {
-          LocalStore().get("employeeCode").then((value) {
-                  Future.delayed(const Duration(seconds: 1), () async {
-                    var headers = {
-                      'X-PrettyPrint': '1',
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
-                    };
-                    var data = {
-                      'grant_type': 'password',
-                      'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
-                      'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
-                      'username': 'itkrishnaprasad@muthootgroup.com',
-                      'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
-                    };
-                    var dio = Dio();
-                    var response = await dio.request(
-                      'https://test.salesforce.com/services/oauth2/token',
-                      options: Options(
-                        method: 'POST',
-                        headers: headers,
+            print(docSnapshot.data());
+            Dialogs.materialDialog(
+                msg: 'New update available!',
+                title: "Update",
+                msgStyle:
+                TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
+                titleStyle: const TextStyle(color: Colors.white),
+                color: StyleData.backgroundDropdown,
+                context: context,
+                titleAlign: TextAlign.center,
+                msgAlign: TextAlign.center,
+                barrierDismissible: false,
+                dialogWidth: kIsWeb ? 0.3 : null,
+                onClose: (value) {},
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: InkWell(
+                      onTap: () {
+                        SystemNavigator.pop();
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                            child: Text('ok',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: StyleData.boldFont,
+                                    fontSize: 12))),
                       ),
-                      data: data,
-                    );
-
-                    if (response.statusCode == 200) {
-
-                      String jsonResponse = json.encode(response.data);
-                      Map<String, dynamic> jsonMap = json.decode(jsonResponse);
-                      accessToken = jsonMap['access_token'];
-
-                      // Store the access token locally
-                      saveAccessToken(accessToken!);
-                      print("AccessToken");
-                      print(accessToken);
-                      NavigatorController.pagePush(
-                          context, value == "" ?
-                      LoginScreen()
-                          : HomePageView());
-                    }
-                  });
-                });
-        }
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                  //   child: InkWell(
+                  //     onTap: () {
+                  //       Navigator.pop(context);
+                  //       // SystemNavigator.pop();
+                  //       // LaunchReview.launch(
+                  //       //     androidAppId: "com.muthoot.muthootloanassist",
+                  //       //     iOSAppId: "com.muthoot.muthootloanassist");
+                  //     },
+                  //     child: Container(
+                  //       height: 40,
+                  //       width: 50,
+                  //       decoration: BoxDecoration(
+                  //           color: Colors.white,
+                  //           borderRadius: BorderRadius.circular(5)),
+                  //       child: Center(
+                  //           child: Text('Update',
+                  //               style: TextStyle(
+                  //                   color: Colors.black,
+                  //                   fontFamily: StyleData.boldFont,
+                  //                   fontSize: 12))),
+                  //     ),
+                  //   ),
+                  // )
+                  // IconsButton(
+                  //   onPressed: () {
+                  //     Navigator.pop(context);
+                  //     LaunchReview.launch(
+                  //         androidAppId: "com.muthoot.muthootloanassist",
+                  //         iOSAppId: "com.muthoot.muthootloanassist");
+                  //   },
+                  //   text: "Update",
+                  //   iconData: Icons.update,
+                  //   color: Color(0xFFC5322C),
+                  //   textStyle: TextStyle(color: Colors.white),
+                  //   iconColor: Colors.white,
+                  // ),
+                ]);
+          }
+        // Dialogs.materialDialog(
+        //     msg: 'New update available! Please download new version and uninstall old version(${version}) then install downloaded app-${value ?? ""}.',
+        //     title: "Update Available",
+        //     msgStyle:
+        //     TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
+        //     titleStyle: const TextStyle(color: Colors.white),
+        //     color: StyleData.backgroundDropdown,
+        //     context: context,
+        //     titleAlign: TextAlign.center,
+        //     msgAlign: TextAlign.center,
+        //     barrierDismissible: false,
+        //     dialogWidth: kIsWeb ? 0.3 : null,
+        //     onClose: (value) {},
+        //     actions: [
+        //       Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 30),
+        //         child: InkWell(
+        //           onTap: () {
+        //             SystemNavigator.pop();
+        //           },
+        //           child: Container(
+        //             height: 40,
+        //             width: 50,
+        //             decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(5)),
+        //             child: Center(
+        //                 child: Text('Cancel',
+        //                     style: TextStyle(
+        //                         color: Colors.black,
+        //                         fontFamily: StyleData.boldFont,
+        //                         fontSize: 12))),
+        //           ),
+        //         ),
+        //       ),
+        //       Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 30),
+        //         child: InkWell(
+        //           onTap: () {
+        //             Navigator.pop(context);
+        //             SystemNavigator.pop();
+        //             FirebaseFirestore.instance
+        //                 .collection('Latest App URL')
+        //                 .doc('Latest App URL')
+        //                 .get()
+        //                 .then((value) {
+        //               _launchURL(value.data()!["app_url"].toString());
+        //             });
+        //             Fluttertoast.showToast(msg: "Downloading...");
+        //           },
+        //           child: Container(
+        //             height: 40,
+        //             width: 50,
+        //             decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(5)),
+        //             child: Center(
+        //                 child: Text('Download',
+        //                     style: TextStyle(
+        //                         color: Colors.black,
+        //                         fontFamily: StyleData.boldFont,
+        //                         fontSize: 12))),
+        //           ),
+        //         ),
+        //       )
+        //       // IconsButton(
+        //       //   onPressed: () {
+        //       //     Navigator.pop(context);
+        //       //     LaunchReview.launch(
+        //       //         androidAppId: "com.muthoot.muthootloanassist",
+        //       //         iOSAppId: "com.muthoot.muthootloanassist");
+        //       //   },
+        //       //   text: "Update",
+        //       //   iconData: Icons.update,
+        //       //   color: Color(0xFFC5322C),
+        //       //   textStyle: TextStyle(color: Colors.white),
+        //       //   iconColor: Colors.white,
+        //       // ),
+        //     ]);
       }
-  } else {
-  Dialogs.materialDialog(
-  msg: 'This app is not accessible now.',
-  title: "Access Unavailable",
-  msgStyle:
-  TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
-  titleStyle: const TextStyle(color: Colors.white),
-  color: StyleData.backgroundDropdown,
-  context: context,
-  titleAlign: TextAlign.center,
-  msgAlign: TextAlign.center,
-  barrierDismissible: false,
-  dialogWidth: kIsWeb ? 0.3 : null,
-  onClose: (value) {},
-  );
+  //   else {
+  //       if (mounted) {
+  //         LocalStore().get("employeeCode").then((value) {
+  //                 Future.delayed(const Duration(seconds: 1), () async {
+  //                   var headers = {
+  //                     'X-PrettyPrint': '1',
+  //                     'Content-Type': 'application/x-www-form-urlencoded',
+  //                     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
+  //                   };
+  //                   var data = {
+  //                     'grant_type': 'password',
+  //                     'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
+  //                     'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
+  //                     'username': 'itkrishnaprasad@muthootgroup.com',
+  //                     'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+  //                   };
+  //                   var dio = Dio();
+  //                   var response = await dio.request(
+  //                     'https://test.salesforce.com/services/oauth2/token',
+  //                     options: Options(
+  //                       method: 'POST',
+  //                       headers: headers,
+  //                     ),
+  //                     data: data,
+  //                   );
+  //
+  //                   if (response.statusCode == 200) {
+  //
+  //                     String jsonResponse = json.encode(response.data);
+  //                     Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+  //                     accessToken = jsonMap['access_token'];
+  //
+  //                     // Store the access token locally
+  //                     saveAccessToken(accessToken!);
+  //                     print("AccessToken");
+  //                     print(accessToken);
+  //                     NavigatorController.pagePush(
+  //                         context, value == "" ?
+  //                     LoginScreen()
+  //                         : HomePageView());
+  //                   }
+  //                 });
+  //               });
+  //       }
+  //     }
+  // }
+  else {
+      LocalStore().get("employeeCode").then((value) {
+        Future.delayed(const Duration(seconds: 1), () async {
+          var headers = {
+            'X-PrettyPrint': '1',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
+          };
+          var data = {
+            'grant_type': 'password',
+            'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
+            'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
+            'username': 'itkrishnaprasad@muthootgroup.com',
+            'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+          };
+          var dio = Dio();
+          var response = await dio.request(
+            'https://test.salesforce.com/services/oauth2/token',
+            options: Options(
+              method: 'POST',
+              headers: headers,
+            ),
+            data: data,
+          );
+
+          if (response.statusCode == 200) {
+
+            String jsonResponse = json.encode(response.data);
+            Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+            accessToken = jsonMap['access_token'];
+
+            // Store the access token locally
+            saveAccessToken(accessToken!);
+            print("AccessToken");
+            print(accessToken);
+            NavigatorController.pagePush(
+                context, value == "" ?
+            LoginScreen()
+                : HomePageView());
+          }
+        });
+      });
   }
   }
 
