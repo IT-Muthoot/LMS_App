@@ -174,7 +174,7 @@ class _FormPageViewState extends State<FormPageView> {
   String? _selectedSalutation;
 
   final List<String> purposeVisit = [
-    'Document Pick up',
+    //'Document Pick up',
     'Lead Capture',
   ];
   String? selectedPurpose;
@@ -1558,6 +1558,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
                                                       return 'Please enter your first name';
@@ -1581,6 +1584,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   // validator: (value) {
                                                   //   if (value == null || value.isEmpty) {
                                                   //     return 'Please enter your first name';
@@ -1605,6 +1611,9 @@ async {
                                                     filled: true,
                                                     fillColor: StyleData.textFieldColor,
                                                   ),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                                                  ],
                                                   validator: (value) {
                                                     if (value == null || value.isEmpty) {
                                                       return 'Please enter your last name';
