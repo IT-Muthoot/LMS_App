@@ -380,6 +380,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                                 // commented for first phase
+
                                 //  Navigator.push(
                                 //      context,
                                 //      MaterialPageRoute(
