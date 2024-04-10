@@ -379,14 +379,14 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              padding: EdgeInsets.all(8.0),
                              child: GestureDetector(
                                onTap: () {
-                                // commented for first phase
-                                //  Navigator.push(
-                                //      context,
-                                //      MaterialPageRoute(
-                                //          builder: (context) => DocumentPageView(
-                                //            docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
-                                //            visitID: ListOfLeads[index]["VisitID"]
-                                //          )));
+                              //  commented for first phase
+                              //    Navigator.push(
+                              //        context,
+                              //        MaterialPageRoute(
+                              //            builder: (context) => DocumentPageView(
+                              //              docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
+                              //              visitID: ListOfLeads[index]["VisitID"]
+                              //            )));
                                },
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,

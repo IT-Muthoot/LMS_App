@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +24,7 @@ class DashboardPageView extends StatefulWidget {
 class _DashboardPageViewState extends State<DashboardPageView> {
 
   List<DocumentSnapshot> ListOfLeads = [];
+  List<DocumentSnapshot> ListOfSavedLeads = [];
   List<DocumentSnapshot> ListOfUsers = [];
   var userType;
   String? employeeName;
@@ -71,13 +75,14 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfUsers = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
-          print("hgdhgjd");
-          print(ListOfUsers[i]['EmployeeName']);
+         // print(value.docs[i].data());
+           //   log(value.docs[i].data().toString());
+          // print("hgdhgjd");
+          // print(ListOfUsers[i]['EmployeeName']);
           if( pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode'])
             {
               setState(() {
-                print("jhkjlkada");
+            //    print("jhkjlkada");
                 employeeName = ListOfUsers[i]['EmployeeName'];
                 branchCode = ListOfUsers[i]['branchCode'];
                 pref.setString("branchcode", ListOfUsers[i]['branchCode']);
@@ -88,10 +93,10 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                 pref.setString("Region", ListOfUsers[i]['Region']);
                 pref.setString("Zone", ListOfUsers[i]['Zone']);
                 pref.setString("designation", ListOfUsers[i]['designation']);
-                print("EMployee Name");
-                print(employeeName);
-                print(branchCode);
-                print(pref.getString("ManagerCode"));
+                // print("EMployee Name");
+                // print(employeeName);
+                // print(branchCode);
+                // print(pref.getString("ManagerCode"));
               });
             }
         }
@@ -108,6 +113,35 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     }
   }
 
+  void fetchSaveddata() async {
+    CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    //  var userId = pref.getString("token");
+    var userId = pref.getString("userID");
+    setState(() {
+      userType = pref.getString("logintype");
+    });
+    print(userType);
+    if (userType == "user") {
+      users.where("userId", isEqualTo: userId).get().then((value) {
+        setState(() {
+          ListOfSavedLeads = value.docs;
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(value.docs[i].data());
+        }
+      });
+    } else {
+      users.get().then((value) {
+        setState(() {
+          ListOfSavedLeads = value.docs;
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(value.docs[i].data());
+        }
+      });
+    }
+  }
 
 
   @override
@@ -115,6 +149,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     // TODO: implement initState
     getUserData();
     fetchdata();
+    fetchSaveddata();
    // getdata();
     super.initState();
   }
@@ -396,7 +431,10 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                         isNewActivity: false,
                                         isUpdateActivity: true,
                                         docId: ListOfLeads[index].id,
-                                      )));
+                                        visitId: ListOfLeads[index]["visitID"],
+                                     //   saveddocId: ListOfSavedLeads[index].id,
+                                      )
+                                  ));
                             },
                             child: Card(
                             elevation: 0.5,
@@ -441,15 +479,15 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                           ],
                                         ),
                                         SizedBox(height: 8),
-                                        // Row(
-                                        //   children: [
-                                        //     Text("Visit ID : ",
-                                        //         style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
-                                        //         )),
-                                        //     Text( ListOfLeads[index]["VisitID"] ?? "",
-                                        //         style: TextStyle(fontSize: 16, color: Colors.black,)),
-                                        //   ],
-                                        // ),
+                                        Row(
+                                          children: [
+                                            Text("Visit ID : ",
+                                                style: TextStyle(fontSize: 15, color: Colors.blueGrey, // Optional: Set the underline color
+                                                )),
+                                            Text( ListOfLeads[index]["visitID"] ?? "",
+                                                style: TextStyle(fontSize: 16, color: Colors.black,)),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                  //   (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?

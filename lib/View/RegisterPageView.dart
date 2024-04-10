@@ -128,7 +128,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           UppercaseInputFormatter(),
                         ],
                         onChanged: (empCode) {
-                        getEmployee1Details(empCode);
+                          if (empCode.isEmpty) {
+                            empNameController.clear();
+                            branchcode.clear();
+                          } else {
+                            getEmployee1Details(empCode);
+                          }
                         },
                         validator: (isusernamevalid) {
                           if (isusernamevalid.toString().isNotEmpty)
@@ -147,7 +152,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                             labelText: "Employee Name *"
                         ),
-
+                        validator: (isusernamevalid) {
+                          if (isusernamevalid.toString().isNotEmpty)
+                            return null;
+                          else
+                            return 'Enter valid Employee Name';
+                        },
                       ),
                     ),
                     Container(
@@ -159,6 +169,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: InputDecoration(
                             labelText: "Branch Code *"
                         ),
+                        validator: (isusernamevalid) {
+                          if (isusernamevalid.toString().isNotEmpty)
+                            return null;
+                          else
+                            return 'Enter valid branch code';
+                        },
                       ),
                     ),
                     Container(
@@ -324,6 +340,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     {
                       customSuccessSnackBar("Password & Confirm password must be same");
                     }
+                  }
+                  else
+                  {
+                    customSuccessSnackBar("Please enter all the details");
                   }
                 },
                 child: Container(

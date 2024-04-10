@@ -330,20 +330,23 @@ class _FormPageViewState extends State<FormPageView> {
 
     if (pickedTime != null) {
       setState(() {
-        _timeController.text = pickedTime.format(context);
-        if (_dateController.text.isNotEmpty &&
-            _timeController.text.isNotEmpty) {
-          setState(() {
-            areVisitFieldsFilled = true;
-          });
+        // Format time with AM/PM
+        String formattedTime = pickedTime.hour > 12
+            ? '${pickedTime.hourOfPeriod}:${pickedTime.minute} PM'
+            : '${pickedTime.hourOfPeriod}:${pickedTime.minute} AM';
+
+        _timeController.text = formattedTime;
+
+        // Check if both date and time are filled
+        if (_dateController.text.isNotEmpty && _timeController.text.isNotEmpty) {
+          areVisitFieldsFilled = true;
         } else {
-          setState(() {
-            areVisitFieldsFilled = false;
-          });
+          areVisitFieldsFilled = false;
         }
       });
     }
   }
+
 
   //Function to check is all the fields are filled
   void checkCustomerFieldsFilled() {

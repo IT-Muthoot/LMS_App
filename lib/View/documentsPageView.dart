@@ -30,7 +30,7 @@ class DocumentPageView extends StatefulWidget {
   final String docId;
   final String visitID;
   const DocumentPageView({Key? key,
-    required this.docId,required this.visitID})
+    required this.docId,required this.visitID,})
       : super(key: key);
 
   @override
