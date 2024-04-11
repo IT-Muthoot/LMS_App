@@ -1027,110 +1027,113 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 
 
-                GestureDetector(
-                  onTap: () async {
-                    print("Helloo");
-                    if (registerformKey.currentState!.validate() ) {
-                      if(passwordController.text == confirmpasswordController.text)
-                        {
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return Center(
-                                child: SpinKitFadingCircle(
-                                  color: Colors.redAccent, // choose your preferred color
-                                  size: 50.0,
-                                ),
-                              );
-                            },
-                          );
-                          try {
-                            final credential = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text,
+                Visibility(
+                  visible: isTermsAndConditionsChecked == true,
+                  child: GestureDetector(
+                    onTap: () async {
+                      print("Helloo");
+                      if (registerformKey.currentState!.validate() ) {
+                        if(passwordController.text == confirmpasswordController.text)
+                          {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: SpinKitFadingCircle(
+                                    color: Colors.redAccent, // choose your preferred color
+                                    size: 50.0,
+                                  ),
+                                );
+                              },
                             );
-                            print("Helloo");
-                            if (credential.user!.uid != "") {
-                              CollectionReference users = FirebaseFirestore
-                                  .instance
-                                  .collection('users');
-
-                              Map<String, dynamic> params = {
-                                "EmployeeName": empNameController.text,
-                                "EmployeeCode": empCodeController.text,
-                             //   "MobileNumber": mobileNumber.text,
-                                "email": emailController.text,
-                                "password": passwordController.text,
-                                "branchCode": branchcode.text,
-                                "confirmPassword": confirmpasswordController.text,
-                                "designation": Designation,
-                                "Region": RegionName,
-                                "Zone": Zone,
-                                "ManagerName": ReportingManagerName,
-                                "ManagerCode": ReportingManagerCode,
-                                "userId": credential.user!.uid,
-                                "createdDate": Timestamp.now(),
-                                "userType": "user",
-                              };
-                              users.add(params);
-                              customSuccessSnackBar1("Registered Successfully");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginScreen(),
-                                ),
+                            try {
+                              final credential = await FirebaseAuth.instance
+                                  .createUserWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text,
                               );
+                              print("Helloo");
+                              if (credential.user!.uid != "") {
+                                CollectionReference users = FirebaseFirestore
+                                    .instance
+                                    .collection('users');
+
+                                Map<String, dynamic> params = {
+                                  "EmployeeName": empNameController.text,
+                                  "EmployeeCode": empCodeController.text,
+                               //   "MobileNumber": mobileNumber.text,
+                                  "email": emailController.text,
+                                  "password": passwordController.text,
+                                  "branchCode": branchcode.text,
+                                  "confirmPassword": confirmpasswordController.text,
+                                  "designation": Designation,
+                                  "Region": RegionName,
+                                  "Zone": Zone,
+                                  "ManagerName": ReportingManagerName,
+                                  "ManagerCode": ReportingManagerCode,
+                                  "userId": credential.user!.uid,
+                                  "createdDate": Timestamp.now(),
+                                  "userType": "user",
+                                };
+                                users.add(params);
+                                customSuccessSnackBar1("Registered Successfully");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              }
                               Navigator.pop(context);
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'weak-password') {
+                                customSuccessSnackBar("The password provided is too weak.");
+                              } else if (e.code == 'email-already-in-use') {
+                                customSuccessSnackBar("The account already exists for that email.");
+                              }
+                              Navigator.pop(context);
+                            } catch (e) {
+                              customSuccessSnackBar("Something went wrong, try again later");
+                              print(e);
                             }
                             Navigator.pop(context);
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'weak-password') {
-                              customSuccessSnackBar("The password provided is too weak.");
-                            } else if (e.code == 'email-already-in-use') {
-                              customSuccessSnackBar("The account already exists for that email.");
-                            }
-                            Navigator.pop(context);
-                          } catch (e) {
-                            customSuccessSnackBar("Something went wrong, try again later");
-                            print(e);
                           }
-                          Navigator.pop(context);
+                        else
+                        {
+                          customSuccessSnackBar("Password & Confirm password must be same");
                         }
+                      }
                       else
                       {
-                        customSuccessSnackBar("Password & Confirm password must be same");
+                        customSuccessSnackBar("Please enter all the details");
                       }
-                    }
-                    else
-                    {
-                      customSuccessSnackBar("Please enter all the details");
-                    }
-                  },
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                    },
                     child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      width: width * 0.5,
-                      decoration: new BoxDecoration(
-                          borderRadius: BorderRadius.circular(80.0),
-                          gradient: new LinearGradient(
-                              colors: [
-                                //       Color.fromARGB(255, 255, 136, 34),
-                                Color.fromARGB(255, 236, 139, 34),
-                                Color.fromARGB(255, 255, 177, 41)
-                              ]
-                          )
-                      ),
-                      padding: const EdgeInsets.all(0),
-                      child: Text(
-                        "SIGN UP",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold
+                      alignment: Alignment.centerRight,
+                      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        width: width * 0.5,
+                        decoration: new BoxDecoration(
+                            borderRadius: BorderRadius.circular(80.0),
+                            gradient: new LinearGradient(
+                                colors: [
+                                  //       Color.fromARGB(255, 255, 136, 34),
+                                  Color.fromARGB(255, 236, 139, 34),
+                                  Color.fromARGB(255, 255, 177, 41)
+                                ]
+                            )
+                        ),
+                        padding: const EdgeInsets.all(0),
+                        child: Text(
+                          "SIGN UP",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                     ),
