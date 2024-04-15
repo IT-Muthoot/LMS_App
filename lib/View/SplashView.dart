@@ -280,15 +280,15 @@ class _SplashViewState extends State<SplashView> {
                     };
                     var data = {
                       'grant_type': 'password',
-                      'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
-                      'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
-                      'username': 'itkrishnaprasad@muthootgroup.com',
+                      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+                      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+                      'username': 'salesappuser@muthoothomefin.com',
                       // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
-                      'password': 'Karthikrishna@19OuF0I0nQtoPEKx2P1hc32sJ'
+                      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
                     };
                     var dio = Dio();
                     var response = await dio.request(
-                      'https://test.salesforce.com/services/oauth2/token',
+                      'https://muthootltd.my.salesforce.com/services/oauth2/token',
                       options: Options(
                         method: 'POST',
                         headers: headers,
