@@ -271,6 +271,7 @@ class _SplashViewState extends State<SplashView> {
       } else {
         if (mounted) {
           LocalStore().get("employeeCode").then((value) {
+
                   Future.delayed(const Duration(seconds: 1), () async {
                     var headers = {
                       'X-PrettyPrint': '1',
@@ -282,7 +283,8 @@ class _SplashViewState extends State<SplashView> {
                       'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
                       'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD',
                       'username': 'itkrishnaprasad@muthootgroup.com',
-                      'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+                      // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+                      'password': 'Karthikrishna@19OuF0I0nQtoPEKx2P1hc32sJ'
                     };
                     var dio = Dio();
                     var response = await dio.request(
