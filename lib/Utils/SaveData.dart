@@ -370,21 +370,17 @@ class _SaveDataState extends State<SaveData> {
     }
   ];
 
-  List<Map<String, dynamic>> documentList = [
-    {"id": 1, "title": "Application Form"},
-    {"id": 2, "title": "Bank Passbook(Latest 6 months)"},
-    {"id": 3, "title": "Date of Birth Proof"},
-    {"id": 4, "title": "Login Fee Cheque"},
-    {"id": 5, "title": "Passport Size Color Photograph"},
-    {"id": 6, "title": "Photo ID Proof"},
-    {"id": 7, "title": "Residence Proof"},
-    {"id": 8, "title": "Salary Slip 3 Month"},
-    {"id": 9, "title": "Signature Proof"},
-    {"id": 10, "title": "Copy of Property"},
-    {"id": 11, "title": "Qualification proof"},
-    {"id": 12, "title": "Sector Employee From 16 for Pvt"},
-    {"id": 13, "title": "Total Work Experience Proof(Min 3 years)"},
-    {"id": 14, "title": "Work Experience Proof(1 years)"},
+  List<Map<String, dynamic>> dsaName = [
+    {"id": "1014", "title": "WEALTHVALLEY INSURANCE MARKETING PRIVATE LIMITED"},
+    {"id": "1015", "title": "AURA I SOLUTION"},
+    {"id": "1016", "title": "DK ASSOCIATES"},
+    {"id": "1017", "title": "Kashvi Sales and Distribution Pvt Ltd."},
+    {"id": "1020", "title": "NEERACHI TECHNOLOGIES Pvt. Ltd"},
+    {"id": "1021", "title": "Y S S DIRECT CREDIT  Pvt. Ltd"},
+    {"id": "1022", "title": "SIDDHI IMAGINE FINTECH CONSULTANCY PRIVATE LIMITED"},
+    {"id": "1023", "title": "S M ENTERPRISES"},
+    {"id": "1024", "title": "SHREE FINANCE"},
+    {"id": "1025", "title": "ACE EQUITY SOLUTIONS Pvt. Ltd."}
   ];
 
 
@@ -407,10 +403,10 @@ class _SaveDataState extends State<SaveData> {
   // }
   void pushData() async {
     FirebaseFirestore.instance
-        .collection("employeeMapping")
-        .doc("employeeMapping")
+        .collection("dsaName")
+        .doc("dsaName")
         .set({
-      "employeeMapping": FieldValue.arrayUnion(employeeMapping)
+      "dsaName": FieldValue.arrayUnion(dsaName)
     }, SetOptions(merge: true));
     print("hi");
   }

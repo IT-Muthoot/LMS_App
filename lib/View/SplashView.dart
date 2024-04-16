@@ -2,7 +2,9 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,6 +34,100 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   String? version = "";
   String? accessToken;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<User> handleSignInEmail(String username, String password) async {
+    UserCredential result = await _auth.signInWithEmailAndPassword(
+        email: username, password: password);
+    final User user = result.user!;
+    print(user);
+    return user;
+  }
+
+  _checkInternet() async {
+    // PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+    //   setState(() {
+    //     version = packageInfo.version;
+    //   });
+    // });
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<ConnectivityResult> result = await Connectivity().checkConnectivity();
+
+    print(result);
+    if (result[0] == ConnectivityResult.mobile) {
+
+      handleSignInEmail("itcoblr@muthootgroup.com", "Muthoot@123\$")
+          .then((value) {
+        startApp();
+      });
+    } else if (result[0] == ConnectivityResult.wifi) {
+
+      handleSignInEmail("itcoblr@muthootgroup.com", "Muthoot@123\$")
+          .then((value) {
+        startApp();
+      });
+    } else if (result[0] == ConnectivityResult.none) {
+      print("Dat 5");
+      Dialogs.materialDialog(
+          msg: 'Please check your internet and try again!',
+          title: "No Internet Connection",
+          msgStyle:
+          TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
+          titleStyle: const TextStyle(color: Colors.white),
+          color: StyleData.backgroundDropdown,
+          context: context,
+          titleAlign: TextAlign.center,
+          msgAlign: TextAlign.center,
+          barrierDismissible: false,
+          dialogWidth: kIsWeb ? 0.3 : null,
+          onClose: (value) {},
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: InkWell(
+                onTap: () {
+                  SystemNavigator.pop();
+                },
+                child: Container(
+                  height: 40,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Center(
+                      child: Text('Cancel',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: StyleData.boldFont,
+                              fontSize: 12))),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  _checkInternet();
+                },
+                child: Container(
+                  height: 40,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Center(
+                      child: Text('Retry',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: StyleData.boldFont,
+                              fontSize: 12))),
+                ),
+              ),
+            )
+          ]);
+    }
+  }
 
   startApp() async {
     PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
@@ -351,8 +447,8 @@ _launchURL(String _url) async {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _checkInternet();
-    startApp();
+  _checkInternet();
+   // startApp();
   }
 
 
