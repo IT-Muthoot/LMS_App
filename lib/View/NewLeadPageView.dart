@@ -10,9 +10,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 
+import '../Model/DatabaseHelper.dart';
 import '../Model/Response/DropDownModel.dart';
+import '../Model/leadDataModel.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 import 'ApplicantDetailsView.dart';
@@ -104,6 +107,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   TextEditingController _customerStatusController = TextEditingController();
 
+  bool isLeadsDataSaved = false;
+
   final List<String> _residentialType= [
     'Self owned',
     'Parent owned',
@@ -116,42 +121,42 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   ];
   String? _selectedResidentialStatus;
 
-  final List<DropDownData> _customerProfileList = [];
+  //final List<DropDownData> _customerProfileList = [];
 
   //dropdowns
-  getDropDownCustProfileData() {
-    FirebaseFirestore.instance
-        .collection("customerProfile")
-        .doc('customerProfile')
-        .get()
-        .then((value) {
-      for (var element in value.data()!['customerProfile']) {
-        setState(() {
-          _customerProfileList
-              .add(DropDownData(element['id'], element['title']));
-        });
-      }
-    });
-  }
-  String? _selectedCustomerProfile;
+  // getDropDownCustProfileData() {
+  //   FirebaseFirestore.instance
+  //       .collection("customerProfile")
+  //       .doc('customerProfile')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.data()!['customerProfile']) {
+  //       setState(() {
+  //         _customerProfileList
+  //             .add(DropDownData(element['id'], element['title']));
+  //       });
+  //     }
+  //   });
+  // }
+ // String? _selectedCustomerProfile;
 
-  final List<DropDownData> _employeeCategoryList = [];
+  // final List<DropDownData> _employeeCategoryList = [];
 
-  getDropDownEmpCategoryData() {
-    FirebaseFirestore.instance
-        .collection("employeeCategory")
-        .doc('employeeCategory')
-        .get()
-        .then((value) {
-      for (var element in value.data()!['employeeCategory']) {
-        setState(() {
-          _employeeCategoryList
-              .add(DropDownData(element['id'], element['title']));
-        });
-      }
-    });
-  }
-  String? _selectedEmployeeCategory;
+  // getDropDownEmpCategoryData() {
+  //   FirebaseFirestore.instance
+  //       .collection("employeeCategory")
+  //       .doc('employeeCategory')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.data()!['employeeCategory']) {
+  //       setState(() {
+  //         _employeeCategoryList
+  //             .add(DropDownData(element['id'], element['title']));
+  //       });
+  //     }
+  //   });
+  // }
+ // String? _selectedEmployeeCategory;
 
   final List<DropDownData> _salutationList = [];
 
@@ -236,9 +241,37 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     }
   }
 
+  String? _selectedCustomerProfile = 'Formal Salaried';
+  String? _selectedEmployeeCategory = 'Partnership';
+  List<String> _customerProfileList = [
+    'Formal Salaried',
+    'Informal Salaried',
+    'Formal SEP',
+    'Informal SEP',
+    'Formal SENP',
+    'Informal SENP',
+    'Not Working(NA)',
+  ];
 
-
-
+  Map<String, List<String>> _employeeCategoryList = {
+    'Formal Salaried': [
+      'Partnership',
+      'Proprietorship(formal)',
+      'Private Limited(Formal)',
+      'Central Govt./State Govt./PSU',
+      'Others',
+    ],
+    'Informal Salaried': [
+      'Partnership',
+      'Proprietorship(Informal)',
+      'Others',
+    ],
+    'Formal SEP': ['LLP'],
+    'Informal SEP': ['HUF'],
+    'Formal SENP': ['Others'],
+    'Informal SENP': ['Others'],
+    'Not Working(NA)': ['Not Working(NA)'],
+  };
 
   String? StateId;
   String? DistrictID;
@@ -311,9 +344,82 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     }
   }
 
-
 String? SalutaionID;
   String? BranchCode1;
+
+
+
+  getLeadDetails() {
+    if (!widget.isNewActivity) {
+      CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
+
+      if (widget.visitId != null) {
+        // If visitId exists, query with it
+        users.where('VisitID', isEqualTo: widget.visitId).get().then((querySnapshot) async {
+          if (querySnapshot.docs.isNotEmpty) {
+            var value = querySnapshot.docs.first.data();
+            setState(() {
+              docData = value;
+            });
+            // Update your UI with fetched data
+            updateUIWithFetchedData();
+          }
+        }).catchError((error) {
+          // Handle errors
+          print("Error fetching lead details: $error");
+        });
+      } else {
+        // If visitId is null, proceed with existing logic
+        users.doc(widget.docId).get().then((value) async {
+          setState(() {
+            docData = value.data();
+          });
+          // Update your UI with fetched data
+          updateUIWithFetchedData();
+        }).catchError((error) {
+          // Handle errors
+          print("Error fetching lead details: $error");
+        });
+      }
+    } else {
+      setState(() {
+        isFetching = false;
+      });
+    }
+  }
+
+  void updateUIWithFetchedData() async {
+    _dateOfBirth.text = docData["dateOfBirth"] ?? "";
+    _email.text = docData["email"] ?? "";
+    _selectedGender = docData["gender"] ?? "";
+    middleName.text = docData["middleName"] ?? "";
+    _additionalPhoneNumber.text = docData["additionalNumber"] ?? "";
+    _addressLine1.text = docData["addressLine1"] ?? "";
+    _addressLine2.text = docData["addressLine2"] ?? "";
+    _addressLine3.text = docData["addressLine3"] ?? "";
+    _landMark.text = docData["landmark"] ?? "";
+    _city.text = docData["city"] ?? "";
+    _district.text = docData["district"] ?? "";
+    _pincode.text = docData["pincode"] ?? "";
+    selectedPostCode = docData["postOffice"].toString() ?? "";
+    _state.text = docData["state"] ?? "";
+    selectedProductValue = docData["productCategory"] ?? "";
+    selectedProdut = docData["products"] ?? "";
+    monthlyIncomeOfApplicant.text = docData["monthlyIncome"] ?? "";
+    _leadAmount.text = docData["leadAmount"] ?? "";
+    panCardNumber.text = docData["panCardNumber"] ?? "";
+    aadharCardNumber.text = docData["aadharNumber"] ?? "";
+    _selectedResidentialStatus = docData["residentialStatus"] ?? "";
+    _selectedResidentialType = docData["residentialType"] ?? "";
+    _selectedEmployeeCategory = docData["EmployeeCategory"] ?? "";
+    _selectedCustomerProfile = docData["CustomerProfile"] ?? "";
+    consentKYC = docData["ConsentKYC"] ?? "";
+    consentCRIF = docData["ConsentCRIF"] ?? "";
+    isLeadsDataSaved = docData["isLeadSaved"] ?? "";
+    print("hgjhghgh");
+    print(isLeadsDataSaved);
+  }
+
 
   getdata() {
     if (!widget.isNewActivity) {
@@ -362,39 +468,7 @@ String? SalutaionID;
       });
     }
   }
-  void getLeadDetails() async {
-    print("bsdhfkjsd");
-    CollectionReference convertLeadsRef =
-    FirebaseFirestore.instance.collection('convertedLeads');
 
-    // Query the convertLeads collection to check if it contains a document with the visitID
-    QuerySnapshot convertLeadsSnapshot = await convertLeadsRef
-        .where('VisitID', isEqualTo: visitID)
-        .get();
-    if (convertLeadsSnapshot.docs.isNotEmpty) {
-      var convertLeadData = convertLeadsSnapshot.docs.first.data();
-      if (convertLeadData is Map<String, dynamic>) {
-      _dateOfBirth.text = convertLeadData["dateOfBirth"] ?? "";
-      _email.text = convertLeadData["email"] ?? "";
-     _selectedGender = convertLeadData["gender"] ?? "";
-      middleName.text = convertLeadData["middleName"] ?? "";
-      _additionalPhoneNumber.text = convertLeadData["additionalNumber"] ?? "";
-      consentCRIF = convertLeadData["ConsentCRIF"] ?? "";
-      consentKYC = convertLeadData["ConsentKYC"] ?? "";
-      _addressLine1.text = convertLeadData["ConsentKYC"] ?? "";
-      consentKYC = convertLeadData["ConsentKYC"] ?? "";
-      consentKYC = convertLeadData["ConsentKYC"] ?? "";
-      consentKYC = convertLeadData["ConsentKYC"] ?? "";
-      consentKYC = convertLeadData["ConsentKYC"] ?? "";
-
-      } else {
-        print('Error: convertLeadData is null');
-      }
-    } else {
-      // If no matching document is found in convertLeads collection
-      print('No lead details found for visitID: $visitID');
-    }
-  }
 
 
 
@@ -611,7 +685,7 @@ String? SalutaionID;
         'panCardNumber' : panCardNumber.text,
         'ConsentCRIF' :consentCRIF,
         'ConsentKYC' : consentKYC,
-        'LeadID' : LeadID ?? "",
+    //    'LeadID' : LeadID ?? "",
         'VisitID' : visitID ?? "",
         'VerificationStatus' : "Pending",
         'userId': userId,
@@ -624,13 +698,20 @@ String? SalutaionID;
         'Zone': pref.getString("Zone"),
         'Designation': pref.getString("designation"),
         'createdDateTime':Timestamp.fromDate(now),
+        'isLeadSaved': true,
+        'dsaConnectorName': DSAConnectorName,
+        'dsaConnectoreCode': DSAConnectorCode1,
+        'latitude': latitue,
+        'longitude': longitude,
+        'scheduledDate': scheduledDate,
+        'scheduledTime': DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
       };
 print(params);
 
           convertedLeads.add(params).then((value) {
             print("Data added successfully");
           //  Navigator.pop(context);
-         updateDataToVisitFirestore();
+       //  updateDataToVisitFirestore();
             _showAlertDialogSuccess(context);
           }).catchError((error) {
             print("Failed to add data: $error");
@@ -643,9 +724,10 @@ print(params);
     }catch(e){
       print(e);
     };
-
-
   }
+
+
+
 
 
   Future<void> getToken()
@@ -692,7 +774,10 @@ print(params);
     print(token);
   }
 
-   initState() {
+
+
+
+  initState() {
     // TODO: implement initState
     super.initState();
     getToken();
@@ -700,10 +785,11 @@ print(params);
     getDropDownProductsData();
     getDropDownSalutationData();
     getdata();
- //  getLeaddata();
+   getLeadDetails();
+   // fetchLeadData(widget.visitId);
     //getDropdownConnectorData();
-    getDropDownEmpCategoryData();
-    getDropDownCustProfileData();
+  //  getDropDownEmpCategoryData();
+   // getDropDownCustProfileData();
   }
 
   @override
@@ -1133,7 +1219,7 @@ print(params);
                                                       ),
                                                       SizedBox(height: height * 0.02),
                                                       Visibility(
-                                                        visible: areCustomerFieldsFilled,
+                                                        visible: areCustomerFieldsFilled || isLeadsDataSaved == true,
                                                         child: GestureDetector(
                                                           onTap: () {
                                                             if(areCustomerFieldsFilled)
@@ -1166,7 +1252,7 @@ print(params);
                                   elevation: 3,
                                   child: GestureDetector(
                                     onTap: () {
-                                      if(areCustomerFieldsFilled)
+                                      if(areCustomerFieldsFilled || isLeadsDataSaved == true)
                                       {
                                         setState(() {
                                           isAddressInfo = !isAddressInfo;
@@ -1230,9 +1316,17 @@ print(params);
                                                           if (value == null || value.isEmpty) {
                                                             return 'Please enter Address Line 1';
                                                           }
+                                                          if (value.length > 30) {
+                                                            return 'Address Line 1 must not exceed 30 characters';
+                                                          }
                                                           return null;
                                                         },
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(30), // Restrict input to 30 characters
+                                                        ],
+                                                     //   maxLength: 30, // Setting maximum character length
                                                       ),
+
                                                       TextFormField(
                                                         controller: _addressLine2,
                                                         onChanged: (value) {
@@ -1254,8 +1348,14 @@ print(params);
                                                           if (value == null || value.isEmpty) {
                                                             return 'Please enter address line 2';
                                                           }
+                                                          if (value.length > 30) {
+                                                            return 'Address Line 2 must not exceed 30 characters';
+                                                          }
                                                           return null;
                                                         },
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(30), // Restrict input to 30 characters
+                                                        ],
                                                       ),
                                                       TextFormField(
                                                         controller: _addressLine3,
@@ -1278,8 +1378,14 @@ print(params);
                                                           if (value == null || value.isEmpty) {
                                                             return 'Please enter address line 3';
                                                           }
+                                                          if (value.length > 30) {
+                                                            return 'Address Line 3 must not exceed 30 characters';
+                                                          }
                                                           return null;
                                                         },
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(30), // Restrict input to 30 characters
+                                                        ],
                                                       ),
                                                       TextFormField(
                                                         controller: _city,
@@ -1328,6 +1434,9 @@ print(params);
                                                           filled: true,
                                                           fillColor: StyleData.textFieldColor,
                                                         ),
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(20), // Restrict input to 30 characters
+                                                        ],
                                                       ),
                                                       TextFormField(
                                                         controller: _pincode,
@@ -1649,7 +1758,7 @@ print(params);
                                   elevation: 3,
                                   child: GestureDetector(
                                     onTap: () {
-                                      if(areAddressFieldsFilled)
+                                      if(areAddressFieldsFilled || isLeadsDataSaved == true)
                                         setState(() {
                                           isLeadInfo = !isLeadInfo;
                                           isCustomerInfo = false;
@@ -1906,7 +2015,7 @@ print(params);
                                                         visible: areLeadsFieldsFilled,
                                                         child: GestureDetector(
                                                           onTap: () {
-                                                            if(areLeadsFieldsFilled)
+                                                            if(areLeadsFieldsFilled || isLeadsDataSaved == true)
                                                             {
                                                               setState(() {
                                                                 isProfileInfo = !isProfileInfo;
@@ -1936,7 +2045,7 @@ print(params);
                                   elevation: 3,
                                   child: GestureDetector(
                                     onTap: () {
-                                      if(areLeadsFieldsFilled)
+                                      if(areLeadsFieldsFilled || isLeadsDataSaved == true)
                                       {
                                         setState(() {
                                           isProfileInfo = !isProfileInfo;
@@ -1990,28 +2099,16 @@ print(params);
                                                                 onChanged: (String? newValue) {
                                                                   setState(() {
                                                                     _selectedCustomerProfile = newValue;
+                                                                    // Reset employer category when customer profile changes
+                                                                    _selectedEmployeeCategory = _employeeCategoryList[newValue]![0];
                                                                     checkProfileFieldsFilled();
                                                                   });
                                                                 },
-                                                                validator: (value) {
-                                                                  if (value == null || value.isEmpty) {
-                                                                    return 'Please select customer profile';
-                                                                  }
-                                                                  return null;
-                                                                },
                                                                 items: _customerProfileList
-                                                                    .map((DropDownData item){
-                                                                  return DropdownMenuItem(
-                                                                    value: item.title,
-                                                                    child: Text(
-                                                                      item.title,
-                                                                      style: const TextStyle(
-                                                                        color: Color(0xFF393939),
-                                                                        fontSize: 15,
-                                                                        fontFamily: 'Poppins',
-                                                                        fontWeight: FontWeight.w400,
-                                                                      ),
-                                                                    ),
+                                                                    .map<DropdownMenuItem<String>>((String value) {
+                                                                  return DropdownMenuItem<String>(
+                                                                    value: value,
+                                                                    child: Text(value),
                                                                   );
                                                                 }).toList(),
                                                                 style: const TextStyle(
@@ -2040,25 +2137,11 @@ print(params);
                                                                     checkProfileFieldsFilled();
                                                                   });
                                                                 },
-                                                                validator: (value) {
-                                                                  if (value == null || value.isEmpty) {
-                                                                    return 'Please select Employee category';
-                                                                  }
-                                                                  return null;
-                                                                },
-                                                                items: _employeeCategoryList
-                                                                    .map((DropDownData item){
-                                                                  return DropdownMenuItem(
-                                                                    value: item.title,
-                                                                    child: Text(
-                                                                      item.title,
-                                                                      style: const TextStyle(
-                                                                        color: Color(0xFF393939),
-                                                                        fontSize: 15,
-                                                                        fontFamily: 'Poppins',
-                                                                        fontWeight: FontWeight.w400,
-                                                                      ),
-                                                                    ),
+                                                                items: _employeeCategoryList[_selectedCustomerProfile]!
+                                                                    .map<DropdownMenuItem<String>>((String value) {
+                                                                  return DropdownMenuItem<String>(
+                                                                    value: value,
+                                                                    child: Text(value),
                                                                   );
                                                                 }).toList(),
                                                                 style: const TextStyle(
@@ -2078,6 +2161,99 @@ print(params);
                                                                   fillColor: StyleData.textFieldColor,
                                                                 ),
                                                               ),
+                                                              // DropdownButtonFormField2<String>(
+                                                              //   value: _selectedCustomerProfile,
+                                                              //   onChanged: (String? newValue) {
+                                                              //     setState(() {
+                                                              //       _selectedCustomerProfile = newValue;
+                                                              //       checkProfileFieldsFilled();
+                                                              //     });
+                                                              //   },
+                                                              //   validator: (value) {
+                                                              //     if (value == null || value.isEmpty) {
+                                                              //       return 'Please select customer profile';
+                                                              //     }
+                                                              //     return null;
+                                                              //   },
+                                                              //   items: _customerProfileList
+                                                              //       .map((DropDownData item){
+                                                              //     return DropdownMenuItem(
+                                                              //       value: item.title,
+                                                              //       child: Text(
+                                                              //         item.title,
+                                                              //         style: const TextStyle(
+                                                              //           color: Color(0xFF393939),
+                                                              //           fontSize: 15,
+                                                              //           fontFamily: 'Poppins',
+                                                              //           fontWeight: FontWeight.w400,
+                                                              //         ),
+                                                              //       ),
+                                                              //     );
+                                                              //   }).toList(),
+                                                              //   style: const TextStyle(
+                                                              //     color: Color(0xFF393939),
+                                                              //     fontSize: 15,
+                                                              //     fontFamily: 'Poppins',
+                                                              //     fontWeight: FontWeight.w400,
+                                                              //   ),
+                                                              //   //   hint: const Text('Select an option'),
+                                                              //   decoration: InputDecoration(
+                                                              //     labelText: 'Customer Profile *',
+                                                              //     hintText: 'Select an option',
+                                                              //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                              //     focusedBorder: focus,
+                                                              //     enabledBorder: enb,
+                                                              //     filled: true,
+                                                              //     fillColor: StyleData.textFieldColor,
+                                                              //   ),
+                                                              // ),
+                                                              // SizedBox(height: height * 0.01,),
+                                                              // DropdownButtonFormField2<String>(
+                                                              //   value: _selectedEmployeeCategory,
+                                                              //   onChanged: (String? newValue) {
+                                                              //     setState(() {
+                                                              //       _selectedEmployeeCategory = newValue;
+                                                              //       checkProfileFieldsFilled();
+                                                              //     });
+                                                              //   },
+                                                              //   validator: (value) {
+                                                              //     if (value == null || value.isEmpty) {
+                                                              //       return 'Please select Employee category';
+                                                              //     }
+                                                              //     return null;
+                                                              //   },
+                                                              //   items: _employeeCategoryList
+                                                              //       .map((DropDownData item){
+                                                              //     return DropdownMenuItem(
+                                                              //       value: item.title,
+                                                              //       child: Text(
+                                                              //         item.title,
+                                                              //         style: const TextStyle(
+                                                              //           color: Color(0xFF393939),
+                                                              //           fontSize: 15,
+                                                              //           fontFamily: 'Poppins',
+                                                              //           fontWeight: FontWeight.w400,
+                                                              //         ),
+                                                              //       ),
+                                                              //     );
+                                                              //   }).toList(),
+                                                              //   style: const TextStyle(
+                                                              //     color: Color(0xFF393939),
+                                                              //     fontSize: 15,
+                                                              //     fontFamily: 'Poppins',
+                                                              //     fontWeight: FontWeight.w400,
+                                                              //   ),
+                                                              //   //   hint: const Text('Select an option'),
+                                                              //   decoration: InputDecoration(
+                                                              //     labelText: 'Employee Category *',
+                                                              //     hintText: 'Select an option',
+                                                              //     //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                              //     focusedBorder: focus,
+                                                              //     enabledBorder: enb,
+                                                              //     filled: true,
+                                                              //     fillColor: StyleData.textFieldColor,
+                                                              //   ),
+                                                              // ),
                                                               SizedBox(height: height * 0.01,),
                                                               TextFormField(
                                                                 controller: monthlyIncomeOfApplicant,
@@ -2201,11 +2377,18 @@ print(params);
                                     children:[
                                       ElevatedButton(
                                         onPressed: () {
+
+                                       //  saveDataToDatabase();
                                           if (_formKey.currentState!.validate() &&
                                               areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
                                               && areAddressFieldsFilled == true && areProfileFieldsFilled == true) {
-                                       leadCreation();
-                                     //  updateDataToFirestore();
+                                    //   leadCreation();
+                                            if(isLeadsDataSaved == false) {
+                                              updateDataToFirestore();
+                                            }else{
+                                              CustomSnackBar.errorSnackBarQ("Data already Saved", context);
+                                            }
+
                                           }
                                           else {
                                             CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
@@ -2221,7 +2404,7 @@ print(params);
                                             Icon(Icons.save_outlined, color: Colors.white,),
                                             SizedBox(width: width * 0.025,),
                                             Text(
-                                              'Submit',
+                                              'Save',
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 color: Colors.white,
@@ -2231,57 +2414,49 @@ print(params);
                                           ],
                                         ),
                                       ),
-                                      // SizedBox(
-                                      //   height: 55, // Adjust the height of the SizedBox to match the height of the Container
-                                      //   child: VerticalDivider(
-                                      //     thickness: 1.5,
-                                      //     color: Colors.black, // Set the color of the divider
-                                      //   ),
-                                      // ),
-                                      // ElevatedButton(
-                                      //   onPressed: () {
-                                      //     Navigator.push(
-                                      //         context,
-                                      //         MaterialPageRoute(
-                                      //             builder: (context) => DocumentPageView(
-                                      //                 docId:  widget.docId ,
-                                      //                 visitID: widget.visitId
-                                      //             )));
-                                      //     // if (_formKey.currentState!.validate() &&
-                                      //     //     areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
-                                      //     //     && areAddressFieldsFilled == true && areProfileFieldsFilled == true) {
-                                      //     //   Navigator.push(
-                                      //     //       context,
-                                      //     //       MaterialPageRoute(
-                                      //     //           builder: (context) => DocumentPageView(
-                                      //     //               docId:  widget.docId ,
-                                      //     //               visitID: widget.visitId
-                                      //     //           )));
-                                      //     // }
-                                      //     // else {
-                                      //     //   CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
-                                      //     // }
-                                      //   },
-                                      //   style: ElevatedButton.styleFrom(
-                                      //     backgroundColor: Colors.transparent,
-                                      //     elevation: 0,
-                                      //   ),
-                                      //   child: Row(
-                                      //     mainAxisAlignment: MainAxisAlignment.center,
-                                      //     children: [
-                                      //       Icon(Icons.arrow_forward, color: Colors.white,),
-                                      //       SizedBox(width: width * 0.025,),
-                                      //       Text(
-                                      //         'Next',
-                                      //         style: TextStyle(
-                                      //           fontSize: 18,
-                                      //           color: Colors.white,
-                                      //           fontWeight: FontWeight.bold,
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
+                                      SizedBox(
+                                        height: 55, // Adjust the height of the SizedBox to match the height of the Container
+                                        child: VerticalDivider(
+                                          thickness: 1.5,
+                                          color: Colors.black, // Set the color of the divider
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          if (isLeadsDataSaved == true) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => DocumentPageView(
+                                                        docId: widget.docId,
+                                                        visitID: widget.visitId,
+                                                        isNewActivity: false
+                                                    )));
+                                          }
+                                          else {
+                                            CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.arrow_forward, color: Colors.white,),
+                                            SizedBox(width: width * 0.025,),
+                                            Text(
+                                              'Next',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -2399,27 +2574,27 @@ print(params);
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('Lead Submitted successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  Text('Lead details saved successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
                    SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
-                      Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                  //     Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  //   ],
+                  // ),
                   SizedBox(height: 5),
                   SizedBox(
                     height: 25,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ApplicantDetailsView(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) =>
+                        //         ApplicantDetailsView(),
+                        //   ),
+                        // );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.red,

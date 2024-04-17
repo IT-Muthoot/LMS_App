@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -101,11 +104,39 @@ class _VisitPageViewState extends State<VisitPageView> {
       });
     }
   }
+//log data
+ // Import dart:developer to use log function
+
+//   void logDataFromFirestore() {
+//     log("Leads Data"); // Log a message indicating the start of the data
+//
+//     FirebaseFirestore.instance.collection('convertedLeads').get().then((querySnapshot) {
+//       querySnapshot.docs.forEach((doc) {
+//         Map<String, dynamic> data = doc.data();
+//         // Convert Timestamp to DateTime for the 'createdDateTime' field
+//         if (data.containsKey('createdDateTime') && data['createdDateTime'] is Timestamp) {
+//           Timestamp timestamp = data['createdDateTime'];
+//           DateTime dateTime = timestamp.toDate();
+//           String formattedDateTime = dateTime.toString(); // You can format it using DateFormat if needed
+//           data['createdDateTime'] = formattedDateTime;
+//         }
+//         String jsonData = jsonEncode(data); // Convert data map to JSON string
+//         log(jsonData); // Log JSON string
+//       });
+//     }).catchError((error) {
+//       log("Failed to get data: $error"); // Log error message if fetching data fails
+//     });
+//   }
+// // Function to convert Firestore Timestamp to DateTime
+//   DateTime _convertTimestampToDateTime(Timestamp timestamp) {
+//     return timestamp.toDate();
+//   }
+
 
   void fetchLeadsdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
     SharedPreferences pref = await SharedPreferences.getInstance();
-   // var userId = pref.getString("token");
+    // var userId = pref.getString("token");
     var userId = pref.getString("userID");
     setState(() {
       userType = pref.getString("logintype");
@@ -115,10 +146,11 @@ class _VisitPageViewState extends State<VisitPageView> {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {
           ListOfConvertedLeads = value.docs;
-
         });
+        print("Log for Leads");
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+          //   print(value.docs[i].data());
+          log(value.docs[i].data().toString());
         }
       });
     } else {
@@ -133,7 +165,6 @@ class _VisitPageViewState extends State<VisitPageView> {
       });
     }
   }
-
 
 
 
@@ -237,7 +268,11 @@ class _VisitPageViewState extends State<VisitPageView> {
     print(formatter.format(DateTime.now()));
     _startDateController.text = formatter.format(DateTime.now()) ;
     _endDateController.text = formatter.format(DateTime.now());
-    fetchdata();
+    DateTime startDate = DateTime(2024, 4, 4);
+    DateTime endDate = DateTime(2024, 4, 11);
+    // logDataFromFirestore(startDate, endDate);
+   // logDataFromFirestore();
+     fetchdata();
     fetchLeadsdata();
     print("Access token");
     print(widget.accessToken);

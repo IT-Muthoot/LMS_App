@@ -5,32 +5,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:material_dialogs/dialogs.dart';
-import 'package:open_file/open_file.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/Response/DropDownModel.dart';
 import '../Model/apiurls.dart';
-import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 import 'ApplicantDetailsView.dart';
-import 'VisitPageView.dart';
 
 class DocumentPageView extends StatefulWidget {
-  final String docId;
+  final bool isNewActivity;
   final String visitID;
+  final String docId;
   const DocumentPageView({Key? key,
-    required this.docId,required this.visitID,})
+    required this.visitID,required this.docId,required this.isNewActivity})
       : super(key: key);
 
   @override
@@ -44,9 +41,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
   String? LeadID;
-  String? ApplicantFirstName;
-  String? ApplicantLastName;
-  String? ApplicantFullName;
   String? CustomerNumber;
   String? DateOfBirth;
   String? Gender;
@@ -59,37 +53,278 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   String? products;
   String? mobileNumber;
   String? aadharNumber;
+  String? email;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? additionalMobileNumber;
+  String? addressLine1;
+  String? addressLine2;
+  String? addressLine3;
+  String? landMark;
+  String? city;
+  String? district;
+  String? pincode;
+  String? postOffice;
+  String? state;
+  String? monthlyIncome;
+  String? residentialStatus;
+  String? residentialType;
+  String? employeeCategory;
+  String? customerProfile;
+  String? salutaion;
+  String? employeeCode;
+  String? employeeName;
+  String? ManagerCode;
+  String? ManagerName;
+  bool? isKycCheck;
+  bool? isCrifCheck;
   var docData;
 
   String? ApplicationDocID;
   String? ApplicationDocID1;
 
-  void fetchdata() async {
-    CollectionReference users =
-    FirebaseFirestore.instance.collection('convertedLeads');
-    users.doc(widget.docId).get().then((value) async {
-      setState(() {
-        docData = value.data();
-      });
-      ApplicantFirstName = docData["firstName"] ?? "";
-      LeadID  = docData["LeadID"] ?? "";
-      ApplicantLastName = docData["lastName"] ?? "";
-      CustomerNumber = docData["customerNumber"] ?? "";
-      DateOfBirth = docData["dateOfBirth"] ?? "";
-      Gender = docData["gender"] ?? "";
-      HomeFinBranchCode = docData["homeFinBranchCode"] ?? "";
-      LeadAmount = docData["leadAmount"] ?? "";
-      LeadSource = docData["leadSource"] ?? "";
-      panCardNumber = docData["panCardNumber"] ?? "";
-      aadharNumber = docData["aadharNumber"] ?? "";
-      ApplicationDocID = docData["Application_Form"] ?? "";
-      //  print(_leadSource.text);
-      print(ApplicantFirstName);
-      print(ApplicationDocID);
-      print(LeadID);
+  getLeadDetails() {
+    if (!widget.isNewActivity) {
+      CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
 
-    });
+      if (widget.visitID != null) {
+        // If visitId exists, query with it
+        users.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) async {
+          if (querySnapshot.docs.isNotEmpty) {
+            var value = querySnapshot.docs.first.data();
+            setState(() {
+              docData = value;
+            });
+            // Update your UI with fetched data
+            updateUIWithFetchedData();
+          }
+        }).catchError((error) {
+          // Handle errors
+          print("Error fetching lead details: $error");
+        });
+      } else {
+        // If visitId is null, proceed with existing logic
+        users.doc(widget.docId).get().then((value) async {
+          setState(() {
+            docData = value.data();
+          });
+          // Update your UI with fetched data
+        updateUIWithFetchedData();
+        }).catchError((error) {
+          // Handle errors
+          print("Error fetching lead details: $error");
+        });
+      }
+    } else {
+      // setState(() {
+      //   isFetching = false;
+      // });
+    }
   }
+
+  void updateUIWithFetchedData() async {
+    DateOfBirth = docData["dateOfBirth"] ?? "";
+    email = docData["email"] ?? "";
+    Gender = docData["gender"] ?? "";
+    firstName = docData["firstName"] ?? "";
+    middleName = docData["middleName"] ?? "";
+    lastName = docData["lastName"] ?? "";
+    additionalMobileNumber = docData["additionalNumber"] ?? "";
+    addressLine1 = docData["addressLine1"] ?? "";
+    addressLine2 = docData["addressLine2"] ?? "";
+    addressLine3 = docData["addressLine3"] ?? "";
+    landMark = docData["landmark"] ?? "";
+    city = docData["city"] ?? "";
+    district = docData["district"] ?? "";
+    pincode = docData["pincode"] ?? "";
+    postOffice = docData["postOffice"] ?? "";
+    state= docData["state"] ?? "";
+    productCategory = docData["productCategory"] ?? "";
+    products = docData["products"] ?? "";
+    monthlyIncome= docData["monthlyIncome"] ?? "";
+    LeadAmount= docData["leadAmount"] ?? "";
+    panCardNumber = docData["panCardNumber"] ?? "";
+    aadharNumber= docData["aadharNumber"] ?? "";
+    residentialStatus= docData["residentialStatus"] ?? "";
+    residentialType = docData["residentialType"] ?? "";
+    employeeCategory = docData["EmployeeCategory"] ?? "";
+    customerProfile = docData["CustomerProfile"] ?? "";
+    CustomerNumber = docData["customerNumber"] ?? "";
+    HomeFinBranchCode = docData["homeFinBranchCode"] ?? "";
+    salutation = docData["salutation"] ?? "";
+    employeeName = docData["EmployeeName"] ?? "";
+    employeeCode = docData["EmployeeCode"] ?? "";
+    ManagerCode = docData["ManagerCode"] ?? "";
+    ManagerName = docData["ManagerName"] ?? "";
+    isKycCheck = docData["ConsentKYC"] ?? "";
+    isCrifCheck = docData["ConsentCRIF"] ?? "";
+  }
+
+
+  // Future<String?> leadCreation() async {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return Center(
+  //         child: SpinKitFadingCircle(
+  //           color: Colors.redAccent, // choose your preferred color
+  //           size: 50.0,
+  //         ),
+  //       );
+  //     },
+  //   );
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.getString('access_token');
+  //   var headers = {
+  //     'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
+  //     //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
+  //     'Content-Type': 'application/json',
+  //     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+  //   };
+  //   SharedPreferences pref =
+  //   await SharedPreferences.getInstance();
+  //   var data = json.encode({
+  //     "LastName": lastName.text,
+  //     "FirstName": firstName.text,
+  //     "MiddleName":middleName.text,
+  //     "Salutation": _selectedSalutation ?? "",
+  //     "Email": _email.text,
+  //     "Phone": customerNumber.text,
+  //     "HfinBranchcode": BranchCode1,
+  //     "Product": selectedProductValue,
+  //     "Purpose": selectedProdut ?? "",
+  //     "DSAorConnectorName": DSAConnectorName,
+  //     "DSAorConnectorCode": DSAConnectorCode1 ?? "",
+  //     "LeadSource":leadSource,
+  //     "Interest": customerStatus,
+  //     "Amount": _leadAmount.text,
+  //     "DateOfBirth": _dateOfBirth.text,
+  //     "Gender": _selectedGender ?? "",
+  //     "ResidentStatus":  _selectedResidentialStatus ?? "",
+  //     "ResidentType":_selectedResidentialType ?? "",
+  //     "Nationality": _nationality.text,
+  //     "CustomerProfile": _selectedCustomerProfile ?? "",
+  //     "MonthlyIncome": monthlyIncomeOfApplicant.text,
+  //     "EmployerCategory": _selectedEmployeeCategory ?? "",
+  //     "Pan": panCardNumber.text,
+  //     "Aadhaar": aadharCardNumber.text,
+  //     "Address1":_addressLine1.text,
+  //     "Address2": _addressLine2.text,
+  //     "Address3": _addressLine3.text,
+  //     "Landmark": _landMark.text,
+  //     "City": _city.text,
+  //     "State": StateId,
+  //     "District": DistrictID,
+  //     "PostalName": selectedPostCode ?? "",
+  //     "Pincode": _pincode.text,
+  //     "Country": "1",
+  //     "Latitude":latitue.toString(),
+  //     "Longitude": longitude.toString(),
+  //     "ScheduleDate": scheduledDate,
+  //     "scheduleTime": DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
+  //     "AssignedSM": pref.getString("managerName"),
+  //     "LeadOwner": pref.getString("managerName"),
+  //     "ConsentForCrif":consentCRIF,
+  //     "ConsentForKyc": consentKYC,
+  //     "IsDocumentCollected": true,
+  //     "isDirectLeads": true
+  //   });
+  //
+  //   print(data);
+  //   var dio = Dio();
+  //   var response = await dio.request(
+  //     'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+  //     options: Options(
+  //       method: 'POST',
+  //       headers: headers,
+  //     ),
+  //     data: data,
+  //   );
+  //   try {
+  //     if (response.statusCode == 200) {
+  //       //  Navigator.pop(context);
+  //       var responseMap = response.data;
+  //       String statusMessage = responseMap['statusMessage'];
+  //       int statusCode = responseMap['statusCode'];
+  //
+  //       if (statusMessage == "Lead created successfully" && statusCode == 200) {
+  //         print(json.encode(responseMap));
+  //
+  //         String sfLeadId = responseMap['SFleadId'];
+  //         setState(() {
+  //           LeadID = sfLeadId;
+  //         });
+  //
+  //         print("Lead ID");
+  //         print(LeadID);
+  //         updateDataToFirestore();
+  //         //  Navigator.pop(context);
+  //       } else {
+  //         _showAlertDialogSuccess1(context);
+  //         Navigator.pop(context);
+  //         print("hjdjnvfv");
+  //         _showToast('Error: Please try again');
+  //       }
+  //     } else {
+  //       Navigator.pop(context);
+  //       print("hjdjnvfv");
+  //       //_showAlertDialogSuccess1(context);
+  //       _showToast('Error: ${response.statusCode}');
+  //       // _showAlertDialogSuccess1(context);
+  //     }
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     print("hjdjnvfv");
+  //     _showToast('Error: $e');
+  //     print("Error: $e");
+  //   }
+  // }
+
+  // void _showToast(String message) {
+  //   Fluttertoast.showToast(
+  //     msg: message,
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.BOTTOM,
+  //     timeInSecForIosWeb: 1,
+  //     backgroundColor: Colors.red,
+  //     textColor: Colors.white,
+  //     fontSize: 16.0,
+  //   );
+  // }
+  //
+  // Future<void> updateDataToVisitFirestore() async {
+  //   CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
+  //   DateTime now = DateTime.now();
+  //   print("Hello");
+  //   try{
+  //     Map<String, dynamic> params = {
+  //       'LeadID' : LeadID,
+  //       'updatedTime':Timestamp.fromDate(now),
+  //     };
+  //     convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
+  //       if (querySnapshot.docs.isNotEmpty) {
+  //         print(querySnapshot.docs.isNotEmpty);
+  //         convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+  //           print("Data updated to Visits successfully");
+  //           //  Navigator.pop(context);
+  //         }).catchError((error) {
+  //           print("Failed to update data: $error");
+  //         });
+  //       } else {
+  //         // Navigator.pop(context);
+  //       }
+  //     }).catchError((error) {
+  //       print("Failed to check if customerNumber exists: $error");
+  //     });
+  //
+  //   }catch(e){
+  //     print(e);
+  //   };
+  //
+  //
+  // }
 
   String? selectedDoc;
   final List<DropDownData> _DocumentList = [];
@@ -144,7 +379,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchdata();
+  // fetchdata();
     updateDocumentStatus();
     getDropDownDocumentData();
   //  checkApplicationFormStatus();
@@ -152,11 +387,15 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   }
   Future<void> updateDocumentStatus() async {
     // Retrieve document IDs from Firestore
-    var data = await FirebaseFirestore.instance.collection("convertedLeads").doc(widget.docId).get();
-
+    var querySnapshot = await FirebaseFirestore.instance
+        .collection("convertedLeads")
+        .where("VisitID", isEqualTo: widget.visitID)
+        .get();
     setState(() {
       // Update the status variables based on retrieved document IDs
-      if (data.exists) {
+      if (querySnapshot.docs.isNotEmpty) {
+        var data = querySnapshot.docs[0].data();
+
         applicationForm = data["Application_Form"] == null ? "Not Uploaded" : "Uploaded";
         bankPassbook = data["Bank_PassBook"] == null ? "Not Uploaded" : "Uploaded";
         dateOfBirthProof = data["Date_Of_Birth"] == null ? "Not Uploaded" : "Uploaded";
@@ -170,9 +409,13 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         totalWorkExp = data["Total_Work_Experience"] == null ? "Not Uploaded" : "Uploaded";
         qualificationProof = data["Qualification_Proof"] == null ? "Not Uploaded" : "Uploaded";
         // Repeat this for other documents
+      } else {
+        // Handle case where no matching document is found
+        // You might want to set the status variables to some default value or handle it differently
       }
     });
   }
+
 
 
 
@@ -195,19 +438,20 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       child: SafeArea(child: Scaffold(
         appBar:  AppBar(
           backgroundColor: StyleData.appBarColor2,
-          title: Text("Applicant Detail",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
+          title: Text("Document Upload",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
           centerTitle: true,
           leading: Padding(
             padding: const EdgeInsets.all(19.0),
             child: GestureDetector(
               onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ApplicantDetailsView(),
-                  ),
-                );
+                Navigator.pop(context);
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) =>
+                //         ApplicantDetailsView(),
+                //   ),
+                // );
               },
               child:  Container(
                 child: Image.asset(
@@ -220,105 +464,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Card(
-                child: Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text("Lead ID - ",style: TextStyle(color: Colors.black87,fontSize: 16,fontFamily: StyleData.boldFont),),
-                              Text(LeadID ?? "",style: TextStyle(color: StyleData.appBarColor2,fontSize: 16,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                          SizedBox(
-                            height: height * 0.01,
-                          ),
-                          Row(
-                            children: [
-                              Text("Applicant Name",style: TextStyle(color: Colors.black38,fontSize: 13,),),
-                              Spacer(),
-                              Text((ApplicantFirstName ?? '') + ' ' + (ApplicantLastName ?? '') ?? "",style: TextStyle(color:Colors.black54,fontSize: 15,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Mobile Number",style: TextStyle(color: Colors.black38,fontSize: 13,),),
-                              Spacer(),
-                              Text(CustomerNumber ?? "",style: TextStyle(color:Colors.black54,fontSize: 15,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Date Of Birth",style: TextStyle(color: Colors.black38,fontSize: 13,),),
-                              Spacer(),
-                              Text(DateOfBirth ?? "",style: TextStyle(color:Colors.black54,fontSize: 15,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                          Divider(
-                            thickness: 0.4,
-                          ),
-                          Row(
-                            children: [
-                              Text("PAN Number",style: TextStyle(color: Colors.black38,fontSize: 13),),
-                              Spacer(),
-                              Text(panCardNumber ?? "",style: TextStyle(color:Colors.black54,fontSize: 15,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text("Aadhar Number",style: TextStyle(color: Colors.black38,fontSize: 13),),
-                              Spacer(),
-                              Text(aadharNumber ?? "",style: TextStyle(color:Colors.black54,fontSize: 15,fontFamily: StyleData.boldFont),),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // isVerification == false ?
-              // GestureDetector(
-              //   onTap: () {
-              //     setState(() {
-              //       isVerification = true;
-              //     });
-              //   },
-              //   child: Container(
-              //     alignment: Alignment.centerRight,
-              //     margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              //     child: Container(
-              //       alignment: Alignment.center,
-              //       height: 50.0,
-              //       width: width * 0.5,
-              //       decoration: new BoxDecoration(
-              //           borderRadius: BorderRadius.circular(80.0),
-              //           gradient: new LinearGradient(
-              //               colors: [
-              //                 // Color.fromARGB(255, 168, 2, 2),
-              //                 // Color.fromARGB(255, 206, 122, 122)
-              //                 Color.fromARGB(255, 61, 169, 83),
-              //                 Color.fromARGB(255, 131, 190, 143)
-              //               ]
-              //           )
-              //       ),
-              //       padding: const EdgeInsets.all(0),
-              //       child: Text(
-              //         "Verify",
-              //         textAlign: TextAlign.center,
-              //         style: TextStyle(
-              //             color: Colors.white,
-              //             fontWeight: FontWeight.bold,
-              //           fontSize: 16
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ) : SizedBox.shrink(),
               SizedBox(
                 height: height * 0.02,
               ),
@@ -1252,60 +1397,57 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                       ),
                                     ), // Change the splash color to red
                                   ),
-                                  SizedBox(
-                                    height: height * 0.03,
-                                  ),
-                                  Container(
-                                    height: 55,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: StyleData.appBarColor2,
-                                    ),
-
-                                    child: Center(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                              if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
-                                                  && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
-                                                  && signatureProof == "Uploaded"
-                                              )
-                                                {
-                                                  _showAlertDialogSuccess(context);
-                                                }
-                                              else
-                                                {
-                                                  CustomSnackBar.errorSnackBarQ("Please upload Manadtory Documents", context);
-                                                }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          elevation: 0,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.save_outlined, color: Colors.white,),
-                                            SizedBox(width: width * 0.025,),
-                                            Text(
-                                              'Save',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
                                 ],
                               ),
               ),
-              //
-              // SizedBox(
-              //   height:  height * 0.5,
-              // ),
+              SizedBox(
+                height: height * 0.03,
+              ),
+              Container(
+                height: 55,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: StyleData.appBarColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children:[
+                    ElevatedButton(
+                      onPressed: () {
+                        // if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
+                        //     && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
+                        //     && signatureProof == "Uploaded"
+                        // )
+                        //   {
+                        //     _showAlertDialogSuccess(context);
+                        //   }
+                        // else
+                        //   {
+                        //     CustomSnackBar.errorSnackBarQ("Please upload Manadtory Documents", context);
+                        //   }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Submit',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -1533,10 +1675,34 @@ print("bhjkjhlknl");
                   print(data);
                   FirebaseFirestore.instance
                       .collection("convertedLeads")
-                      .doc(widget.docId)
-                      .set({
-                    title: data["docId"].toString(),
-                  }, SetOptions(merge: true));
+                      .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
+                      .get()
+                      .then((QuerySnapshot snapshot) {
+                    if (snapshot.docs.isNotEmpty) {
+                      // If there's a matching document, set the value
+                      FirebaseFirestore.instance
+                          .collection("convertedLeads")
+                          .doc(snapshot.docs[0].id) // Use the ID of the first matching document
+                          .set({
+      title: data["docId"].toString(),
+    },
+        SetOptions(merge: true));
+                    } else {
+                      // Handle case where no matching document is found
+                      // Perhaps show an error message or take appropriate action
+                    }
+                  })
+                      .catchError((error) {
+                    // Handle errors
+                    print("Error: $error");
+                  });
+                  // FirebaseFirestore.instance
+                  //     .collection("convertedLeads")
+                  //     .doc(widget.docId)
+                  //     .set({
+                  //   title: data["docId"].toString(),
+                  // },
+                  //     SetOptions(merge: true));
                   SmartDialog.dismiss();
                   if (applicationFormClicked) {
                     print(ApplicationDocID);
