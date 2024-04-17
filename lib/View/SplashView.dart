@@ -139,6 +139,50 @@ class _SplashViewState extends State<SplashView> {
     print(DateTime.now().day);
     print(DateTime.now().month);
     print(DateTime.now().year);
+    LocalStore().get("employeeCode").then((value) {
+
+      Future.delayed(const Duration(seconds: 1), () async {
+        var headers = {
+          'X-PrettyPrint': '1',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
+        };
+        var data = {
+          'grant_type': 'password',
+          'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+          'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+          'username': 'salesappuser@muthoothomefin.com',
+          // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+          'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+        };
+        var dio = Dio();
+        var response = await dio.request(
+          'https://muthootltd.my.salesforce.com/services/oauth2/token',
+          options: Options(
+            method: 'POST',
+            headers: headers,
+          ),
+          data: data,
+        );
+
+        if (response.statusCode == 200) {
+
+          String jsonResponse = json.encode(response.data);
+          Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+          accessToken = jsonMap['access_token'];
+
+          // Store the access token locally
+          saveAccessToken(accessToken!);
+          print("AccessToken");
+          print(accessToken);
+          NavigatorController.pagePush(
+              context, value == "" ?
+          LoginScreen()
+              : HomePageView());
+        }
+      });
+    });
+
     // if ((DateTime.now().day >= 21 && DateTime.now().day <= 23 )&&
     //     DateTime.now().month == 2 &&
     //     DateTime.now().year == 2024 )
@@ -272,161 +316,161 @@ class _SplashViewState extends State<SplashView> {
     //       });
     //     });
     //   }
-    var docSnapshot = await FirebaseFirestore.instance
-        .collection('app_version')
-        .doc('app_version')
-        .get();
-    if (docSnapshot.exists) {
-      Map<String, dynamic>? data = docSnapshot.data();
-      var value = data?['app_version'];
-      int firebaseVersion = getExtendedVersionNumber(value); // return 102003
-      int appVersion = getExtendedVersionNumber(version!);
-      print(appVersion);
-      print("Verisono8u8394");
-      print(firebaseVersion);
-      if (firebaseVersion > appVersion) {
-        Dialogs.materialDialog(
-            msg: 'New update available! Please download new version and uninstall old version(${version}) then install downloaded app-${value ?? ""}.',
-            title: "Update Available",
-            msgStyle:
-            TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
-            titleStyle: const TextStyle(color: Colors.white),
-            color: StyleData.backgroundDropdown,
-            context: context,
-            titleAlign: TextAlign.center,
-            msgAlign: TextAlign.center,
-            barrierDismissible: false,
-            dialogWidth: kIsWeb ? 0.3 : null,
-            onClose: (value) {},
-            actions: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: InkWell(
-                  onTap: () {
-                    SystemNavigator.pop();
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: StyleData.boldFont,
-                                fontSize: 12))),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    SystemNavigator.pop();
-                    FirebaseFirestore.instance
-                        .collection('Latest App URL')
-                        .doc('Latest App URL')
-                        .get()
-                        .then((value) {
-                      _launchURL(value.data()!["app_url"].toString());
-                    });
-                    Fluttertoast.showToast(msg: "Downloading...");
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 50,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Center(
-                        child: Text('Download',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: StyleData.boldFont,
-                                fontSize: 12))),
-                  ),
-                ),
-              )
-              // IconsButton(
-              //   onPressed: () {
-              //     Navigator.pop(context);
-              //     LaunchReview.launch(
-              //         androidAppId: "com.muthoot.muthootloanassist",
-              //         iOSAppId: "com.muthoot.muthootloanassist");
-              //   },
-              //   text: "Update",
-              //   iconData: Icons.update,
-              //   color: Color(0xFFC5322C),
-              //   textStyle: TextStyle(color: Colors.white),
-              //   iconColor: Colors.white,
-              // ),
-            ]);
-      } else {
-        if (mounted) {
-          LocalStore().get("employeeCode").then((value) {
-
-                  Future.delayed(const Duration(seconds: 1), () async {
-                    var headers = {
-                      'X-PrettyPrint': '1',
-                      'Content-Type': 'application/x-www-form-urlencoded',
-                      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
-                    };
-                    var data = {
-                      'grant_type': 'password',
-                      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-                      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-                      'username': 'salesappuser@muthoothomefin.com',
-                      // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
-                      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
-                    };
-                    var dio = Dio();
-                    var response = await dio.request(
-                      'https://muthootltd.my.salesforce.com/services/oauth2/token',
-                      options: Options(
-                        method: 'POST',
-                        headers: headers,
-                      ),
-                      data: data,
-                    );
-
-                    if (response.statusCode == 200) {
-
-                      String jsonResponse = json.encode(response.data);
-                      Map<String, dynamic> jsonMap = json.decode(jsonResponse);
-                      accessToken = jsonMap['access_token'];
-
-                      // Store the access token locally
-                      saveAccessToken(accessToken!);
-                      print("AccessToken");
-                      print(accessToken);
-                      NavigatorController.pagePush(
-                          context, value == "" ?
-                      LoginScreen()
-                          : HomePageView());
-                    }
-                  });
-                });
-        }
-      }
-  } else {
-  Dialogs.materialDialog(
-  msg: 'This app is not accessible now.',
-  title: "Access Unavailable",
-  msgStyle:
-  TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
-  titleStyle: const TextStyle(color: Colors.white),
-  color: StyleData.backgroundDropdown,
-  context: context,
-  titleAlign: TextAlign.center,
-  msgAlign: TextAlign.center,
-  barrierDismissible: false,
-  dialogWidth: kIsWeb ? 0.3 : null,
-  onClose: (value) {},
-  );
-  }
+  //   var docSnapshot = await FirebaseFirestore.instance
+  //       .collection('app_version')
+  //       .doc('app_version')
+  //       .get();
+  //   if (docSnapshot.exists) {
+  //     Map<String, dynamic>? data = docSnapshot.data();
+  //     var value = data?['app_version'];
+  //     int firebaseVersion = getExtendedVersionNumber(value); // return 102003
+  //     int appVersion = getExtendedVersionNumber(version!);
+  //     print(appVersion);
+  //     print("Verisono8u8394");
+  //     print(firebaseVersion);
+  //     if (firebaseVersion > appVersion) {
+  //       Dialogs.materialDialog(
+  //           msg: 'New update available! Please download new version and uninstall old version(${version}) then install downloaded app-${value ?? ""}.',
+  //           title: "Update Available",
+  //           msgStyle:
+  //           TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
+  //           titleStyle: const TextStyle(color: Colors.white),
+  //           color: StyleData.backgroundDropdown,
+  //           context: context,
+  //           titleAlign: TextAlign.center,
+  //           msgAlign: TextAlign.center,
+  //           barrierDismissible: false,
+  //           dialogWidth: kIsWeb ? 0.3 : null,
+  //           onClose: (value) {},
+  //           actions: [
+  //             Padding(
+  //               padding: const EdgeInsets.symmetric(horizontal: 30),
+  //               child: InkWell(
+  //                 onTap: () {
+  //                   SystemNavigator.pop();
+  //                 },
+  //                 child: Container(
+  //                   height: 40,
+  //                   width: 50,
+  //                   decoration: BoxDecoration(
+  //                       color: Colors.white,
+  //                       borderRadius: BorderRadius.circular(5)),
+  //                   child: Center(
+  //                       child: Text('Cancel',
+  //                           style: TextStyle(
+  //                               color: Colors.black,
+  //                               fontFamily: StyleData.boldFont,
+  //                               fontSize: 12))),
+  //                 ),
+  //               ),
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.symmetric(horizontal: 30),
+  //               child: InkWell(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                   SystemNavigator.pop();
+  //                   FirebaseFirestore.instance
+  //                       .collection('Latest App URL')
+  //                       .doc('Latest App URL')
+  //                       .get()
+  //                       .then((value) {
+  //                     _launchURL(value.data()!["app_url"].toString());
+  //                   });
+  //                   Fluttertoast.showToast(msg: "Downloading...");
+  //                 },
+  //                 child: Container(
+  //                   height: 40,
+  //                   width: 50,
+  //                   decoration: BoxDecoration(
+  //                       color: Colors.white,
+  //                       borderRadius: BorderRadius.circular(5)),
+  //                   child: Center(
+  //                       child: Text('Download',
+  //                           style: TextStyle(
+  //                               color: Colors.black,
+  //                               fontFamily: StyleData.boldFont,
+  //                               fontSize: 12))),
+  //                 ),
+  //               ),
+  //             )
+  //             // IconsButton(
+  //             //   onPressed: () {
+  //             //     Navigator.pop(context);
+  //             //     LaunchReview.launch(
+  //             //         androidAppId: "com.muthoot.muthootloanassist",
+  //             //         iOSAppId: "com.muthoot.muthootloanassist");
+  //             //   },
+  //             //   text: "Update",
+  //             //   iconData: Icons.update,
+  //             //   color: Color(0xFFC5322C),
+  //             //   textStyle: TextStyle(color: Colors.white),
+  //             //   iconColor: Colors.white,
+  //             // ),
+  //           ]);
+  //     } else {
+  //       if (mounted) {
+  //         LocalStore().get("employeeCode").then((value) {
+  //
+  //                 Future.delayed(const Duration(seconds: 1), () async {
+  //                   var headers = {
+  //                     'X-PrettyPrint': '1',
+  //                     'Content-Type': 'application/x-www-form-urlencoded',
+  //                     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:0; LSKey-c\$CookieConsentPolicy=0:0'
+  //                   };
+  //                   var data = {
+  //                     'grant_type': 'password',
+  //                     'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+  //                     'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+  //                     'username': 'salesappuser@muthoothomefin.com',
+  //                     // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
+  //                     'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+  //                   };
+  //                   var dio = Dio();
+  //                   var response = await dio.request(
+  //                     'https://muthootltd.my.salesforce.com/services/oauth2/token',
+  //                     options: Options(
+  //                       method: 'POST',
+  //                       headers: headers,
+  //                     ),
+  //                     data: data,
+  //                   );
+  //
+  //                   if (response.statusCode == 200) {
+  //
+  //                     String jsonResponse = json.encode(response.data);
+  //                     Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+  //                     accessToken = jsonMap['access_token'];
+  //
+  //                     // Store the access token locally
+  //                     saveAccessToken(accessToken!);
+  //                     print("AccessToken");
+  //                     print(accessToken);
+  //                     NavigatorController.pagePush(
+  //                         context, value == "" ?
+  //                     LoginScreen()
+  //                         : HomePageView());
+  //                   }
+  //                 });
+  //               });
+  //       }
+  //     }
+  // } else {
+  // Dialogs.materialDialog(
+  // msg: 'This app is not accessible now.',
+  // title: "Access Unavailable",
+  // msgStyle:
+  // TextStyle(color: Colors.white, fontFamily: StyleData.boldFont),
+  // titleStyle: const TextStyle(color: Colors.white),
+  // color: StyleData.backgroundDropdown,
+  // context: context,
+  // titleAlign: TextAlign.center,
+  // msgAlign: TextAlign.center,
+  // barrierDismissible: false,
+  // dialogWidth: kIsWeb ? 0.3 : null,
+  // onClose: (value) {},
+  // );
+  // }
   }
 
 _launchURL(String _url) async {
