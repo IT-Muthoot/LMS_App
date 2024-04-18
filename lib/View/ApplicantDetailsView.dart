@@ -352,14 +352,6 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                            (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                        return InkWell(
                          onTap: () {
-                           // Navigator.push(
-                           //     context,
-                           //     MaterialPageRoute(
-                           //         builder: (context) => NewLeadPageView(
-                           //           isNewActivity: false,
-                           //           isUpdateActivity: true,
-                           //           docId: ListOfLeads[index].id,
-                           //         )));
                          },
                          child: Container(
                            margin: EdgeInsets.only(bottom: 8.0),
@@ -383,51 +375,18 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                               //    Navigator.push(
                               //        context,
                               //        MaterialPageRoute(
-                              //            builder: (context) => DocumentPageView(
+                              //            builder: (context) => NewLeadPageView(
                               //              docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
-                              //              visitID: ListOfLeads[index]["VisitID"]
+                              //                visitId: ListOfLeads[index]["VisitID"],
+                              //                isNewActivity: false,
+                              //                isUpdateActivity:true
                               //            )));
                                },
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
-                                   // Row(
-                                   //   children: [
-                                   //     Text(
-                                   //       "Status",
-                                   //       style: TextStyle(
-                                   //         color: Colors.black54,
-                                   //         fontSize: 14.0,
-                                   //       ),
-                                   //     ),
-                                   //     Text(
-                                   //       " - ",
-                                   //       style: TextStyle(
-                                   //         color: Colors.black26,
-                                   //         fontSize: 14.0,
-                                   //       ),
-                                   //     ),
-                                   //     ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
-                                   //     Text(
-                                   //       searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
-                                   //       style: TextStyle(
-                                   //         color: Colors.green,
-                                   //         fontSize: 14.0,
-                                   //         fontFamily: 'Poppins',
-                                   //       ),
-                                   //     ) : Text(
-                                   //       searchKEY.text.isEmpty ? ListOfLeads[index]["VerificationStatus"] : searchListOfLeads[index]["VerificationStatus"],
-                                   //       style: TextStyle(
-                                   //         color: Colors.red,
-                                   //         fontSize: 14.0,
-                                   //         fontFamily: 'Poppins',
-                                   //       ),
-                                   //     ),
-                                   //   ],
-                                   // ),
-
                                    Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   //  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                      children: [
                                      //  ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
                                        Icon(
@@ -438,6 +397,9 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                        //     Icons.pending,
                                        //     color: Colors.red
                                        // ),
+                                       SizedBox(
+                                         width: width * 0.34,
+                                       ),
                                        Text(
                                          "Lead ID",
                                          style: TextStyle(
@@ -446,18 +408,18 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                            fontWeight: FontWeight.bold,
                                          ),
                                        ),
-                                       Icon(
-                                           Icons.visibility,
-                                           color: Colors.red.shade300
-                                       ),
+                                       // Icon(
+                                       //     Icons.visibility,
+                                       //     color: Colors.red.shade300
+                                       // ),
                                      ],
                                    ),
                                    Center(
 
                                      child: Text(
                                        searchKEY.text.isEmpty
-                                           ? ListOfLeads[index]["LeadID"]
-                                           : searchListOfLeads[index]["LeadID"],
+                                           ? ListOfLeads[index]["LeadID"] ?? ""
+                                           : searchListOfLeads[index]["LeadID"] ?? "",
                                        style: TextStyle(
                                          color: Colors.black54,
                                          fontSize: 14.0,

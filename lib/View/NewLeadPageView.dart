@@ -3,14 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
+import 'package:material_dialogs/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
+
 
 
 import '../Model/DatabaseHelper.dart';
@@ -108,6 +111,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   TextEditingController _customerStatusController = TextEditingController();
 
   bool isLeadsDataSaved = false;
+  bool isLeadsUpdateData = false;
 
   final List<String> _residentialType= [
     'Self owned',
@@ -189,6 +193,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     'Lead Capture',
   ];
   String? selectedPurpose;
+  String? reasonDisInterest;
 
   String? selectedProductValue;
   final List<DropDownProductData> _productsList = [];
@@ -401,7 +406,6 @@ String? SalutaionID;
     _city.text = docData["city"] ?? "";
     _district.text = docData["district"] ?? "";
     _pincode.text = docData["pincode"] ?? "";
-    selectedPostCode = docData["postOffice"].toString() ?? "";
     _state.text = docData["state"] ?? "";
     selectedProductValue = docData["productCategory"] ?? "";
     selectedProdut = docData["products"] ?? "";
@@ -418,6 +422,10 @@ String? SalutaionID;
     isLeadsDataSaved = docData["isLeadSaved"] ?? "";
     print("hgjhghgh");
     print(isLeadsDataSaved);
+    setState(() {
+      selectedPostCode = docData["postOffice"] ?? "";
+    });
+    print(selectedPostCode);
   }
 
 
@@ -437,6 +445,7 @@ String? SalutaionID;
         _leadSource.text= docData["leadSource"] ?? "";
         customerStatus = docData["customerStatus"] ?? "";
         _customerStatusController.text= docData["customerStatus"] ?? "";
+        reasonDisInterest = docData["ReasonforDisinterest"] ?? "";
         latitue= docData["latitude"] ?? "";
         longitude= docData["longitude"] ?? "";
         scheduledDate= docData["visitDate"] ?? "";
@@ -476,128 +485,128 @@ String? SalutaionID;
 
   String? LeadID;
 
-  Future<String?> leadCreation() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: SpinKitFadingCircle(
-            color: Colors.redAccent, // choose your preferred color
-            size: 50.0,
-          ),
-        );
-      },
-    );
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.getString('access_token');
-    var headers = {
-   'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
-    //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
-      'Content-Type': 'application/json',
-      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
-    };
-    SharedPreferences pref =
-    await SharedPreferences.getInstance();
-   // print(widget.accessToken);
-    print(customerStatus);
-    print(selectedProductValue);
-    var data = json.encode({
-        "LastName": lastName.text,
-        "FirstName": firstName.text,
-        "MiddleName":middleName.text,
-        "Salutation": _selectedSalutation ?? "",
-        "Email": _email.text,
-        "Phone": customerNumber.text,
-        "HfinBranchcode": BranchCode1,
-        "Product": selectedProductValue,
-        "Purpose": selectedProdut ?? "",
-        "DSAorConnectorName": DSAConnectorName,
-        "DSAorConnectorCode": DSAConnectorCode1 ?? "",
-        "LeadSource":leadSource,
-        "Interest": customerStatus,
-        "Amount": _leadAmount.text,
-        "DateOfBirth": _dateOfBirth.text,
-        "Gender": _selectedGender ?? "",
-        "ResidentStatus":  _selectedResidentialStatus ?? "",
-        "ResidentType":_selectedResidentialType ?? "",
-        "Nationality": _nationality.text,
-        "CustomerProfile": _selectedCustomerProfile ?? "",
-        "MonthlyIncome": monthlyIncomeOfApplicant.text,
-        "EmployerCategory": _selectedEmployeeCategory ?? "",
-        "Pan": panCardNumber.text,
-        "Aadhaar": aadharCardNumber.text,
-        "Address1":_addressLine1.text,
-        "Address2": _addressLine2.text,
-        "Address3": _addressLine3.text,
-        "Landmark": _landMark.text,
-        "City": _city.text,
-        "State": StateId,
-        "District": DistrictID,
-        "PostalName": selectedPostCode ?? "",
-        "Pincode": _pincode.text,
-        "Country": "1",
-        "Latitude":latitue.toString(),
-        "Longitude": longitude.toString(),
-        "ScheduleDate": scheduledDate,
-        "scheduleTime": DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
-        "AssignedSM": pref.getString("managerName"),
-        "LeadOwner": pref.getString("managerName"),
-        "ConsentForCrif":consentCRIF,
-        "ConsentForKyc": consentKYC,
-        "IsDocumentCollected": true,
-        "isDirectLeads": true
-    });
-
-   print(data);
-    var dio = Dio();
-    var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
-      options: Options(
-        method: 'POST',
-        headers: headers,
-      ),
-      data: data,
-    );
-    try {
-      if (response.statusCode == 200) {
-      //  Navigator.pop(context);
-        var responseMap = response.data;
-        String statusMessage = responseMap['statusMessage'];
-        int statusCode = responseMap['statusCode'];
-
-        if (statusMessage == "Lead created successfully" && statusCode == 200) {
-          print(json.encode(responseMap));
-
-          String sfLeadId = responseMap['SFleadId'];
-          setState(() {
-            LeadID = sfLeadId;
-          });
-
-          print("Lead ID");
-          print(LeadID);
-          updateDataToFirestore();
-        //  Navigator.pop(context);
-        } else {
-           _showAlertDialogSuccess1(context);
-          Navigator.pop(context);
-          print("hjdjnvfv");
-          _showToast('Error: Please try again');
-        }
-      } else {
-        Navigator.pop(context);
-        print("hjdjnvfv");
-        //_showAlertDialogSuccess1(context);
-        _showToast('Error: ${response.statusCode}');
-        // _showAlertDialogSuccess1(context);
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      print("hjdjnvfv");
-      _showToast('Error: $e');
-      print("Error: $e");
-    }
-  }
+  // Future<String?> leadCreation() async {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext context) {
+  //       return Center(
+  //         child: SpinKitFadingCircle(
+  //           color: Colors.redAccent, // choose your preferred color
+  //           size: 50.0,
+  //         ),
+  //       );
+  //     },
+  //   );
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.getString('access_token');
+  //   var headers = {
+  //  'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
+  //   //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
+  //     'Content-Type': 'application/json',
+  //     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+  //   };
+  //   SharedPreferences pref =
+  //   await SharedPreferences.getInstance();
+  //  // print(widget.accessToken);
+  //   print(customerStatus);
+  //   print(selectedProductValue);
+  //   var data = json.encode({
+  //       "LastName": lastName.text,
+  //       "FirstName": firstName.text,
+  //       "MiddleName":middleName.text,
+  //       "Salutation": _selectedSalutation ?? "",
+  //       "Email": _email.text,
+  //       "Phone": customerNumber.text,
+  //       "HfinBranchcode": BranchCode1,
+  //       "Product": selectedProductValue,
+  //       "Purpose": selectedProdut ?? "",
+  //       "DSAorConnectorName": DSAConnectorName,
+  //       "DSAorConnectorCode": DSAConnectorCode1 ?? "",
+  //       "LeadSource":leadSource,
+  //       "Interest": customerStatus,
+  //       "Amount": _leadAmount.text,
+  //       "DateOfBirth": _dateOfBirth.text,
+  //       "Gender": _selectedGender ?? "",
+  //       "ResidentStatus":  _selectedResidentialStatus ?? "",
+  //       "ResidentType":_selectedResidentialType ?? "",
+  //       "Nationality": _nationality.text,
+  //       "CustomerProfile": _selectedCustomerProfile ?? "",
+  //       "MonthlyIncome": monthlyIncomeOfApplicant.text,
+  //       "EmployerCategory": _selectedEmployeeCategory ?? "",
+  //       "Pan": panCardNumber.text,
+  //       "Aadhaar": aadharCardNumber.text,
+  //       "Address1":_addressLine1.text,
+  //       "Address2": _addressLine2.text,
+  //       "Address3": _addressLine3.text,
+  //       "Landmark": _landMark.text,
+  //       "City": _city.text,
+  //       "State": StateId,
+  //       "District": DistrictID,
+  //       "PostalName": selectedPostCode ?? "",
+  //       "Pincode": _pincode.text,
+  //       "Country": "1",
+  //       "Latitude":latitue.toString(),
+  //       "Longitude": longitude.toString(),
+  //       "ScheduleDate": scheduledDate,
+  //       "scheduleTime": DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
+  //       "AssignedSM": pref.getString("managerName"),
+  //       "LeadOwner": pref.getString("managerName"),
+  //       "ConsentForCrif":consentCRIF,
+  //       "ConsentForKyc": consentKYC,
+  //       "IsDocumentCollected": true,
+  //       "isDirectLeads": true
+  //   });
+  //
+  //  print(data);
+  //   var dio = Dio();
+  //   var response = await dio.request(
+  //     'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+  //     options: Options(
+  //       method: 'POST',
+  //       headers: headers,
+  //     ),
+  //     data: data,
+  //   );
+  //   try {
+  //     if (response.statusCode == 200) {
+  //     //  Navigator.pop(context);
+  //       var responseMap = response.data;
+  //       String statusMessage = responseMap['statusMessage'];
+  //       int statusCode = responseMap['statusCode'];
+  //
+  //       if (statusMessage == "Lead created successfully" && statusCode == 200) {
+  //         print(json.encode(responseMap));
+  //
+  //         String sfLeadId = responseMap['SFleadId'];
+  //         setState(() {
+  //           LeadID = sfLeadId;
+  //         });
+  //
+  //         print("Lead ID");
+  //         print(LeadID);
+  //         updateDataToFirestore();
+  //       //  Navigator.pop(context);
+  //       } else {
+  //          _showAlertDialogSuccess1(context);
+  //         Navigator.pop(context);
+  //         print("hjdjnvfv");
+  //         _showToast('Error: Please try again');
+  //       }
+  //     } else {
+  //       Navigator.pop(context);
+  //       print("hjdjnvfv");
+  //       //_showAlertDialogSuccess1(context);
+  //       _showToast('Error: ${response.statusCode}');
+  //       // _showAlertDialogSuccess1(context);
+  //     }
+  //   } catch (e) {
+  //     Navigator.pop(context);
+  //     print("hjdjnvfv");
+  //     _showToast('Error: $e');
+  //     print("Error: $e");
+  //   }
+  // }
 
   void _showToast(String message) {
     Fluttertoast.showToast(
@@ -611,48 +620,51 @@ String? SalutaionID;
     );
   }
 
-  Future<void> updateDataToVisitFirestore() async {
-    CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
-    DateTime now = DateTime.now();
-    print("Hello");
-    try{
-      Map<String, dynamic> params = {
-        'LeadID' : LeadID,
-        'updatedTime':Timestamp.fromDate(now),
-      };
-      convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
-        if (querySnapshot.docs.isNotEmpty) {
-          print(querySnapshot.docs.isNotEmpty);
-          convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
-            print("Data updated to Visits successfully");
-          //  Navigator.pop(context);
-          }).catchError((error) {
-            print("Failed to update data: $error");
-          });
-        } else {
-           // Navigator.pop(context);
-        }
-      }).catchError((error) {
-        print("Failed to check if customerNumber exists: $error");
-      });
-
-    }catch(e){
-      print(e);
-    };
-
-
-  }
+  // Future<void> updateDataToVisitFirestore() async {
+  //   CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
+  //   DateTime now = DateTime.now();
+  //   print("Hello");
+  //   try{
+  //     Map<String, dynamic> params = {
+  //       'LeadID' : LeadID,
+  //       'updatedTime':Timestamp.fromDate(now),
+  //     };
+  //     convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
+  //       if (querySnapshot.docs.isNotEmpty) {
+  //         print(querySnapshot.docs.isNotEmpty);
+  //         convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+  //           print("Data updated to Visits successfully");
+  //         //  Navigator.pop(context);
+  //         }).catchError((error) {
+  //           print("Failed to update data: $error");
+  //         });
+  //       } else {
+  //          // Navigator.pop(context);
+  //       }
+  //     }).catchError((error) {
+  //       print("Failed to check if customerNumber exists: $error");
+  //     });
+  //
+  //   }catch(e){
+  //     print(e);
+  //   };
+  //
+  //
+  // }
 
   Future<void> updateDataToFirestore() async {
-    CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
-    SharedPreferences pref =
-    await SharedPreferences.getInstance();
+    CollectionReference convertedLeads =
+    FirebaseFirestore.instance.collection("convertedLeads");
+    SharedPreferences pref = await SharedPreferences.getInstance();
     var userId = pref.getString("userID");
     DateTime now = DateTime.now();
     print("Hello");
-    try{
+    try {
+      // Build the parameters for the update
       Map<String, dynamic> params = {
-        'salutation':_selectedSalutation,
+        'CustomerStatus': customerStatus,
+        'ReasonforDisinterest': reasonDisInterest,
+        'salutation': _selectedSalutation,
         'firstName': firstName.text,
         'lastName': lastName.text,
         'middleName': middleName.text,
@@ -665,127 +677,142 @@ String? SalutaionID;
         'addressLine2': _addressLine2.text,
         'addressLine3': _addressLine3.text,
         'city': _city.text,
-        'landmark':_landMark.text,
-        'state':_state.text,
-        'district':_district.text,
-      //  'postOffice':_postOffice.text,selectedPostCode
-         'postOffice': selectedPostCode ?? "",
-        'pincode':_pincode.text,
-        'residentialType':_selectedResidentialType ?? "",
-        'residentialStatus':_selectedResidentialStatus ?? "",
-        'homeFinBranchCode':BranchCode1,
-        'leadAmount':_leadAmount.text,
+        'landmark': _landMark.text,
+        'state': _state.text,
+        'district': _district.text,
+        'stateID': StateId,
+        'districtID': DistrictID,
+        'postOffice': selectedPostCode ?? "",
+        'pincode': _pincode.text,
+        'residentialType': _selectedResidentialType ?? "",
+        'residentialStatus': _selectedResidentialStatus ?? "",
+        'homeFinBranchCode': BranchCode1,
+        'leadAmount': _leadAmount.text,
         'leadSource': _leadSource.text,
         'productCategory': selectedProductValue ?? "",
         'products': selectedProdut ?? "",
         'CustomerProfile': _selectedCustomerProfile ?? "",
         'EmployeeCategory': _selectedEmployeeCategory ?? "",
-        'monthlyIncome' : monthlyIncomeOfApplicant.text,
-        'aadharNumber' : aadharCardNumber.text,
-        'panCardNumber' : panCardNumber.text,
-        'ConsentCRIF' :consentCRIF,
-        'ConsentKYC' : consentKYC,
-    //    'LeadID' : LeadID ?? "",
-        'VisitID' : visitID ?? "",
-        'VerificationStatus' : "Pending",
+        'monthlyIncome': monthlyIncomeOfApplicant.text,
+        'aadharNumber': aadharCardNumber.text,
+        'panCardNumber': panCardNumber.text,
+        'ConsentCRIF': consentCRIF,
+        'ConsentKYC': consentKYC,
+        'VisitID': visitID ?? "",
+        'VerificationStatus': "Pending",
         'userId': userId,
         'EmployeeName': pref.getString("employeeName"),
-        'EmployeeCode':  pref.getString("employeeCode"),
+        'EmployeeCode': pref.getString("employeeCode"),
         'EmployeeBranchCode': BranchCode1,
         'ManagerName': pref.getString("managerName"),
         'ManagerCode': pref.getString("ManagerCode"),
         'Region': pref.getString("Region"),
         'Zone': pref.getString("Zone"),
         'Designation': pref.getString("designation"),
-        'createdDateTime':Timestamp.fromDate(now),
+        'createdDateTime': Timestamp.fromDate(now),
         'isLeadSaved': true,
         'dsaConnectorName': DSAConnectorName,
         'dsaConnectoreCode': DSAConnectorCode1,
-        'latitude': latitue,
-        'longitude': longitude,
+        'latitude': latitue.toString(),
+        'longitude': longitude.toString(),
         'scheduledDate': scheduledDate,
-        'scheduledTime': DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
+        'scheduledTime': DateFormat("HH:mm:ss")
+            .format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
       };
-print(params);
+      print(params);
 
-          convertedLeads.add(params).then((value) {
-            print("Data added successfully");
-          //  Navigator.pop(context);
-       //  updateDataToVisitFirestore();
-            _showAlertDialogSuccess(context);
-          }).catchError((error) {
-            print("Failed to add data: $error");
-          });
-      //   }
-      // }).catchError((error) {
-      //   print("Failed to check if customerNumber exists: $error");
-      // });
+      // Query to find the document based on the visit ID
+      QuerySnapshot querySnapshot = await convertedLeads
+          .where('VisitID', isEqualTo: visitID)
+          .get();
 
-    }catch(e){
-      print(e);
-    };
-  }
-
-
-
-
-
-  Future<void> getToken()
-  async {
-    var headers = {
-      'X-PrettyPrint': '1',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
-    };
-    var data = {
-      'grant_type': 'password',
-      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      'username': 'salesappuser@muthoothomefin.com',
-      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
-    };
-    var dio = Dio();
-    var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/oauth2/token',
-      options: Options(
-        method: 'POST',
-        headers: headers,
-      ),
-      data: data,
-    );
-
-    String? accessToken;
-    if (response.statusCode == 200) {
-
-      String jsonResponse = json.encode(response.data);
-      Map<String, dynamic> jsonMap = json.decode(jsonResponse);
-      accessToken = jsonMap['access_token'];
-
-      // Store the access token locally
-      saveAccessToken(accessToken!);
-      print("AccessToken");
-      print(accessToken);
+      // Check if there's a document with the given visit ID
+      if (querySnapshot.docs.isNotEmpty) {
+        // Update the existing document with the new parameters
+        await convertedLeads.doc(querySnapshot.docs.first.id).update(params);
+        print("Data updated successfully");
+        _showAlertDialogSuccess(context);
+      } else {
+        // Add a new document since no existing document with the given visit ID was found
+        await convertedLeads.add(params);
+        print("Data added successfully");
+        _showAlertDialogSuccess(context);
+      }
+    } catch (e) {
+      print("Error: $e");
     }
   }
-  Future<void> saveAccessToken(String token) async {
+
+
+
+
+
+
+  // Future<void> getToken()
+  // async {
+  //   var headers = {
+  //     'X-PrettyPrint': '1',
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+  //   };
+  //   var data = {
+  //     'grant_type': 'password',
+  //     'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+  //     'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+  //     'username': 'salesappuser@muthoothomefin.com',
+  //     'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+  //   };
+  //   var dio = Dio();
+  //   var response = await dio.request(
+  //     'https://muthootltd.my.salesforce.com/services/oauth2/token',
+  //     options: Options(
+  //       method: 'POST',
+  //       headers: headers,
+  //     ),
+  //     data: data,
+  //   );
+  //
+  //   String? accessToken;
+  //   if (response.statusCode == 200) {
+  //
+  //     String jsonResponse = json.encode(response.data);
+  //     Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+  //     accessToken = jsonMap['access_token'];
+  //
+  //     // Store the access token locally
+  //     saveAccessToken(accessToken!);
+  //     print("AccessToken");
+  //     print(accessToken);
+  //   }
+  // }
+  // Future<void> saveAccessToken(String token) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('access_token', token);
+  //   print("Stored Access token");
+  //   print(token);
+  // }
+
+  _saveSelectedPostCode(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('access_token', token);
-    print("Stored Access token");
-    print(token);
+    await prefs.setString('selectedPostCode', value);
   }
-
-
-
+  _loadSelectedPostCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedPostCode = prefs.getString('selectedPostCode');
+    });
+  }
 
   initState() {
     // TODO: implement initState
     super.initState();
-    getToken();
+    //getToken();
   //  print(widget.accessToken);
     getDropDownProductsData();
     getDropDownSalutationData();
     getdata();
    getLeadDetails();
+    _loadSelectedPostCode();
    // fetchLeadData(widget.visitId);
     //getDropdownConnectorData();
   //  getDropDownEmpCategoryData();
@@ -918,7 +945,7 @@ print(params);
                                                     ),
                                                     Text("Customer Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
                                                     Spacer(),
-                                                    areCustomerFieldsFilled
+                                                    areCustomerFieldsFilled || isLeadsDataSaved == true
                                                         ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
                                                         : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
                                                   ],
@@ -1080,6 +1107,10 @@ print(params);
                                                         validator: (value) {
                                                           if (value!.isEmpty) {
                                                             return 'Enter email';
+                                                          }
+                                                          // Additional validation for Gmail format
+                                                          if (!value.endsWith('.com')) {
+                                                            return 'Enter a valid Gmail address';
                                                           }
                                                           return null;
                                                         },
@@ -1284,7 +1315,7 @@ print(params);
                                                     ),
                                                     Text("Address Information",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
                                                     Spacer(),
-                                                    areAddressFieldsFilled
+                                                    areAddressFieldsFilled || isLeadsDataSaved == true
                                                         ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
                                                         : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
                                                   ],
@@ -1555,6 +1586,7 @@ print(params);
                                                           // checkAddressFieldsFilled();
                                                           setState(() {
                                                             selectedPostCode = value as String?;
+                                                            _saveSelectedPostCode(selectedPostCode!);
                                                           });
                                                         },
 
@@ -1788,7 +1820,7 @@ print(params);
                                                     ),
                                                     Text("Lead Details",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
                                                     Spacer(),
-                                                    areLeadsFieldsFilled
+                                                    areLeadsFieldsFilled || isLeadsDataSaved == true
                                                         ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
                                                         : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
                                                   ],
@@ -2077,7 +2109,7 @@ print(params);
                                                     ),
                                                     Text("Profiling Stage",style: TextStyle(color: StyleData.appBarColor,fontWeight: FontWeight.bold,fontSize: 16),),
                                                     Spacer(),
-                                                    areProfileFieldsFilled
+                                                    areProfileFieldsFilled || isLeadsDataSaved == true
                                                         ? Icon(Icons.check_circle_sharp, color: Colors.green, size: 22,)
                                                         : Icon(Icons.arrow_drop_down_circle_rounded, color: StyleData.buttonColor, size: 22,)
                                                   ],
@@ -2341,7 +2373,7 @@ print(params);
                                                                 validator: (value) {
                                                                   if (value == null || value.isEmpty) {
                                                                     return 'Pan Card Number is required';
-                                                                  } else if (!isValidPanCard(value)) {
+                                                                  } else if (!isValidPanCard(value) && value.length < 10) {
                                                                     return 'Invalid Pan Card Number';
                                                                   }
                                                                   return null;
@@ -2377,22 +2409,20 @@ print(params);
                                     children:[
                                       ElevatedButton(
                                         onPressed: () {
-
-                                       //  saveDataToDatabase();
-                                          if (_formKey.currentState!.validate() &&
-                                              areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
-                                              && areAddressFieldsFilled == true && areProfileFieldsFilled == true) {
-                                    //   leadCreation();
-                                            if(isLeadsDataSaved == false) {
-                                              updateDataToFirestore();
-                                            }else{
-                                              CustomSnackBar.errorSnackBarQ("Data already Saved", context);
-                                            }
-
-                                          }
-                                          else {
-                                            CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
-                                          }
+                                              if(isLeadsDataSaved == true && isLeadsUpdateData == false)
+                                                {
+                                                  updateLeadData();
+                                                  //CustomSnackBar.errorSnackBarQ("Lead details already saved", context);
+                                                }else {
+                                                if (_formKey.currentState!.validate() &&
+                                                    areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
+                                                    && areAddressFieldsFilled == true && areProfileFieldsFilled == true || isLeadsUpdateData == true ) {
+                                                  updateDataToFirestore();
+                                                }
+                                                else {
+                                                  CustomSnackBar.errorSnackBarQ("Please enter all the mandatory fields", context);
+                                                }
+                                              }
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.transparent,
@@ -2434,7 +2464,7 @@ print(params);
                                                     )));
                                           }
                                           else {
-                                            CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
+                                            CustomSnackBar.errorSnackBarQ("Please fill the lead details", context);
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -2541,6 +2571,71 @@ print(params);
       },
     );
   }
+  void updateLeadData() async {
+    //New Implementation for saving application PDF
+    print("bhjkjhlknl");
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to edit the lead details?',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                setState(() {
+                  isLeadsUpdateData = true;
+                });
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]);
+  }
+
   void _showAlertDialogSuccess(BuildContext context) {
     showDialog(
       context: context,
@@ -2587,6 +2682,7 @@ print(params);
                     height: 25,
                     child: ElevatedButton(
                       onPressed: () {
+                        Navigator.pop(context);
                         Navigator.pop(context);
                         // Navigator.push(
                         //   context,

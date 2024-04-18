@@ -58,6 +58,7 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _addressLine3 = TextEditingController();
   TextEditingController _city = TextEditingController();
   TextEditingController _pincode = TextEditingController();
+  TextEditingController _reasonNotInterested = TextEditingController();
 
   //Additional details
   TextEditingController _customerName = TextEditingController();
@@ -228,7 +229,8 @@ class _FormPageViewState extends State<FormPageView> {
     print(data);
     var dio = Dio();
     var response = await dio.request(
-        'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
+        // 'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
+        'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/',
         options: Options(
           method: 'POST',
           headers: headers,
@@ -396,7 +398,7 @@ class _FormPageViewState extends State<FormPageView> {
 
   void checkOtherFieldsFilled() {
     if (selectedPurpose != null &&
-        selectedCustomerStatus != null) {
+        selectedCustomerStatus != null ) {
       setState(() {
         areOtherFieldsFilled = true;
       });
@@ -492,6 +494,7 @@ class _FormPageViewState extends State<FormPageView> {
       'compaignName': _selectedCampaign,
       'purposeVisit' : selectedPurpose,
       'customerStatus' : selectedCustomerStatus,
+      'ReasonforDisinterest' : _reasonNotInterested.text,
       'DSAConnectorCode' : _selectedLeadSource == 'DSA' ? selectedDSACode1 : ConnectorCode1,
       'latitude' : latitude,
       'longitude' : longitude,
@@ -585,15 +588,20 @@ async {
     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
   };
   var data = {
+    // 'grant_type': 'password',
+    // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+    // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+    // 'username': 'salesappuser@muthoothomefin.com',
+    // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
     'grant_type': 'password',
-    'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-    'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-    'username': 'salesappuser@muthoothomefin.com',
-    'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+    'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+    'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+    'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+    'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
   };
   var dio = Dio();
   var response = await dio.request(
-    'https://muthootltd.my.salesforce.com/services/oauth2/token',
+    'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
     options: Options(
       method: 'POST',
       headers: headers,
@@ -1888,7 +1896,7 @@ async {
                                                       ),
                                                       //   hint: const Text('Select an option'),
                                                       decoration: InputDecoration(
-                                                        labelText: 'Purpose Of Visit',
+                                                        labelText: 'Purpose Of Visit *',
                                                         hintText: 'Select an option',
                                                         //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                       //  border: InputBorder.none,
@@ -1897,6 +1905,12 @@ async {
                                                         filled: true,
                                                         fillColor:StyleData.textFieldColor,
                                                       ),
+                                                      validator: (value) {
+                                                        if (value == null || value.isEmpty) {
+                                                          return 'Please enter purpose of visit';
+                                                        }
+                                                        return null;
+                                                      },
                                                     ),
                                                     DropdownButtonFormField2<String>(
                                                       value: selectedCustomerStatus,
@@ -1929,7 +1943,7 @@ async {
                                                       ),
                                                       //   hint: const Text('Select an option'),
                                                       decoration: InputDecoration(
-                                                        labelText: 'Customer Status',
+                                                        labelText: 'Customer Status *',
                                                         hintText: 'Select an option',
                                                         //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                         //  border: InputBorder.none,
@@ -1937,6 +1951,37 @@ async {
                                                         enabledBorder: enb,
                                                         filled: true,
                                                         fillColor:StyleData.textFieldColor,
+                                                      ),
+                                                      validator: (value) {
+                                                        if (value == null || value.isEmpty) {
+                                                          return 'Please select Customer Status';
+                                                        }
+                                                        return null;
+                                                      },
+                                                    ),
+                                                    Visibility(
+                                                      visible: selectedCustomerStatus == "Not Interested",
+                                                      child: TextFormField(
+                                                        controller: _reasonNotInterested,
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            //   fetchAllCustomerMobile(value);
+                                                            checkOtherFieldsFilled();
+                                                          });
+                                                        },
+                                                                                                      decoration: InputDecoration(
+                                                          labelText: 'Reason *',
+                                                          focusedBorder: focus,
+                                                          enabledBorder: enb,
+                                                          filled: true,
+                                                          fillColor: StyleData.textFieldColor,
+                                                        ),
+                                                        validator: (value) {
+                                                          if (value == null || value.isEmpty) {
+                                                            return 'Please enter Reason';
+                                                          }
+                                                          return null;
+                                                        },
                                                       ),
                                                     ),
                                                   ],
@@ -1991,10 +2036,17 @@ async {
                           areCustomerFieldsFilled == true && areVisitFieldsFilled == true
                            && areOtherFieldsFilled == true) {
                          // visitCreation();
-                        fetchAllCustomerMobile(customerNumber.text);
+                        if(customerNumber.text.length < 10)
+                          {
+                            CustomSnackBar.errorSnackBarQ("Please enter valid Mobile Number", context);
+                          }
+                        else {
+                          fetchAllCustomerMobile(customerNumber.text);
+                        }
+
                       }
                       else {
-                        CustomSnackBar.errorSnackBarQ("Please enter mandatory fields", context);
+                        CustomSnackBar.errorSnackBarQ("Please enter all the mandatory fields", context);
                       }
                     },
                     style: ElevatedButton.styleFrom(

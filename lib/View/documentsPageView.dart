@@ -77,6 +77,17 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   String? employeeName;
   String? ManagerCode;
   String? ManagerName;
+  String? DSAConnectorCode;
+  String? DSAConnectorName;
+  String? CustomerStatus;
+  String? latitude;
+  String? longitude;
+  String? leadAmount;
+  String? ScheduledDate;
+  String? scheduledTime;
+  String? stateID;
+  String? districtID;
+  String? ReasonforDisinterest;
   bool? isKycCheck;
   bool? isCrifCheck;
   var docData;
@@ -125,6 +136,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
 
   void updateUIWithFetchedData() async {
     DateOfBirth = docData["dateOfBirth"] ?? "";
+    LeadSource = docData["leadSource"] ?? "";
     email = docData["email"] ?? "";
     Gender = docData["gender"] ?? "";
     firstName = docData["firstName"] ?? "";
@@ -151,7 +163,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     employeeCategory = docData["EmployeeCategory"] ?? "";
     customerProfile = docData["CustomerProfile"] ?? "";
     CustomerNumber = docData["customerNumber"] ?? "";
-    HomeFinBranchCode = docData["homeFinBranchCode"] ?? "";
+    HomeFinBranchCode = docData["EmployeeBranchCode"] ?? "";
     salutation = docData["salutation"] ?? "";
     employeeName = docData["EmployeeName"] ?? "";
     employeeCode = docData["EmployeeCode"] ?? "";
@@ -159,172 +171,291 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     ManagerName = docData["ManagerName"] ?? "";
     isKycCheck = docData["ConsentKYC"] ?? "";
     isCrifCheck = docData["ConsentCRIF"] ?? "";
+    DSAConnectorCode = docData["dsaConnectoreCode"] ?? "";
+    DSAConnectorName = docData["dsaConnectorName"] ?? "";
+    CustomerStatus = docData["CustomerStatus"] ?? "";
+    latitude = docData["latitude"] ?? "";
+    longitude = docData["longitude"] ?? "";
+    ScheduledDate = docData["scheduledDate"] ?? "";
+    scheduledTime = docData["scheduledTime"] ?? "";
+    stateID = docData["stateID"] ?? "";
+    districtID= docData["districtID"] ?? "";
+    ReasonforDisinterest= docData["ReasonforDisinterest"] ?? "";
+  }
+
+  var data;
+  Future<String?> leadCreation() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: SpinKitFadingCircle(
+            color: Colors.redAccent, // choose your preferred color
+            size: 50.0,
+          ),
+        );
+      },
+    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.getString('access_token');
+    var headers = {
+      'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
+      //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
+      'Content-Type': 'application/json',
+      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+    };
+    SharedPreferences pref =
+    await SharedPreferences.getInstance();
+    if( CustomerStatus == "Interested" ) {
+     data = json.encode({
+        "LastName": lastName ?? "",
+        "FirstName": firstName ?? "",
+        "MiddleName": middleName ?? "",
+        "Salutation": salutation ?? "",
+        "Email": email ?? "",
+        "Phone": CustomerNumber ?? "",
+        "HfinBranchcode": HomeFinBranchCode,
+        "Product": productCategory,
+        "Purpose": products ?? "",
+        "DSAorConnectorName": DSAConnectorName ?? "",
+        "DSAorConnectorCode": DSAConnectorCode ?? "",
+        "LeadSource": LeadSource,
+        "Interest": CustomerStatus ?? "",
+        "Amount": LeadAmount ?? "",
+        "DateOfBirth": DateOfBirth ?? "",
+        "Gender": Gender ?? "",
+        "AdditionalMobile": additionalMobileNumber ?? "",
+        "ResidentStatus": residentialStatus ?? "",
+        "ResidentType": residentialType ?? "",
+        "Nationality": "Indian",
+        "CustomerProfile": customerProfile ?? "",
+        "MonthlyIncome": monthlyIncome ?? "",
+        "EmployerCategory": employeeCategory ?? "",
+        "Pan": panCardNumber ?? "",
+        "Aadhaar": aadharNumber ?? "",
+        "Address1": addressLine1 ?? "",
+        "Address2": addressLine2 ?? "",
+        "Address3": addressLine3 ?? "",
+        "Landmark": landMark ?? "",
+        "City": city ?? "",
+        "State": stateID ?? "",
+        "District": districtID ?? "",
+        "PostalName": postOffice ?? "",
+        "Pincode": pincode ?? "",
+        "Country": "1",
+        "Latitude": latitude,
+        "Longitude": longitude,
+        "ScheduleDate": ScheduledDate,
+        "scheduleTime": scheduledTime,
+        "AssignedSM": ManagerName,
+        "LeadOwner": ManagerName,
+        "ConsentForCrif": isCrifCheck,
+        "ConsentForKyc": isKycCheck,
+        "IsDocumentCollected": true,
+        "isDirectLeads": true,
+        "Createdby": employeeName,
+        "CreatedbyCode": employeeCode
+      });
+    } else {
+      data = json.encode({
+        "LastName": lastName ?? "",
+        "FirstName": firstName ?? "",
+        "MiddleName": middleName ?? "",
+        "Salutation": salutation ?? "",
+        "Email": email ?? "",
+        "Phone": CustomerNumber ?? "",
+        "HfinBranchcode": HomeFinBranchCode,
+        "DSAorConnectorName": DSAConnectorName ?? "",
+        "DSAorConnectorCode": DSAConnectorCode ?? "",
+        "LeadSource": LeadSource,
+        "Interest": CustomerStatus ?? "",
+        "ReasonforDisinterest": ReasonforDisinterest ?? "",
+        "Latitude": latitude,
+        "Longitude": longitude,
+        "ScheduleDate": ScheduledDate,
+        "scheduleTime": scheduledTime,
+        "AssignedSM": ManagerName,
+        "LeadOwner": ManagerName,
+        "Createdby": employeeName,
+        "CreatedbyCode": employeeCode
+      });
+    }
+
+    print(data);
+    var dio = Dio();
+    var response = await dio.request(
+      // 'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
+      options: Options(
+        method: 'POST',
+        headers: headers,
+      ),
+      data: data,
+    );
+    try {
+      if (response.statusCode == 200) {
+        //  Navigator.pop(context);
+        var responseMap = response.data;
+        String statusMessage = responseMap['statusMessage'];
+        int statusCode = responseMap['statusCode'];
+
+        if (statusMessage == "Lead created successfully" && statusCode == 200) {
+          print(json.encode(responseMap));
+
+          String sfLeadId = responseMap['SFleadId'];
+          setState(() {
+            LeadID = sfLeadId;
+          });
+
+          print("Lead ID");
+          print(LeadID);
+          _showAlertDialogSuccess2(context);
+          updateDataToVisitFirestore();
+          //  Navigator.pop(context);
+        } else {
+          _showAlertDialogSuccess1(context);
+          Navigator.pop(context);
+          print("hjdjnvfv");
+          _showToast('Error: Please try again');
+        }
+      } else {
+        Navigator.pop(context);
+        print("hjdjnvfv1223");
+        //_showAlertDialogSuccess1(context);
+        _showToast('Error: ${response.statusCode}');
+        // _showAlertDialogSuccess1(context);
+      }
+    } catch (e) {
+      Navigator.pop(context);
+      print("hjdjnvfv");
+      _showToast('Error: $e');
+      print("Error: $e");
+    }
+  }
+
+  void _showToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  Future<void> getToken()
+  async {
+    var headers = {
+      'X-PrettyPrint': '1',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+    };
+    var data = {
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+      // 'username': 'salesappuser@muthoothomefin.com',
+      // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      'grant_type': 'password',
+      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
+    };
+    var dio = Dio();
+    var response = await dio.request(
+      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
+      options: Options(
+        method: 'POST',
+        headers: headers,
+      ),
+      data: data,
+    );
+
+    String? accessToken;
+    if (response.statusCode == 200) {
+
+      String jsonResponse = json.encode(response.data);
+      Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+      accessToken = jsonMap['access_token'];
+
+      // Store the access token locally
+      saveAccessToken(accessToken!);
+      print("AccessToken");
+      print(accessToken);
+    }
+  }
+  Future<void> saveAccessToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('access_token', token);
+    print("Stored Access token");
+    print(token);
   }
 
 
-  // Future<String?> leadCreation() async {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (BuildContext context) {
-  //       return Center(
-  //         child: SpinKitFadingCircle(
-  //           color: Colors.redAccent, // choose your preferred color
-  //           size: 50.0,
-  //         ),
-  //       );
-  //     },
-  //   );
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.getString('access_token');
-  //   var headers = {
-  //     'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
-  //     //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
-  //     'Content-Type': 'application/json',
-  //     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
-  //   };
-  //   SharedPreferences pref =
-  //   await SharedPreferences.getInstance();
-  //   var data = json.encode({
-  //     "LastName": lastName.text,
-  //     "FirstName": firstName.text,
-  //     "MiddleName":middleName.text,
-  //     "Salutation": _selectedSalutation ?? "",
-  //     "Email": _email.text,
-  //     "Phone": customerNumber.text,
-  //     "HfinBranchcode": BranchCode1,
-  //     "Product": selectedProductValue,
-  //     "Purpose": selectedProdut ?? "",
-  //     "DSAorConnectorName": DSAConnectorName,
-  //     "DSAorConnectorCode": DSAConnectorCode1 ?? "",
-  //     "LeadSource":leadSource,
-  //     "Interest": customerStatus,
-  //     "Amount": _leadAmount.text,
-  //     "DateOfBirth": _dateOfBirth.text,
-  //     "Gender": _selectedGender ?? "",
-  //     "ResidentStatus":  _selectedResidentialStatus ?? "",
-  //     "ResidentType":_selectedResidentialType ?? "",
-  //     "Nationality": _nationality.text,
-  //     "CustomerProfile": _selectedCustomerProfile ?? "",
-  //     "MonthlyIncome": monthlyIncomeOfApplicant.text,
-  //     "EmployerCategory": _selectedEmployeeCategory ?? "",
-  //     "Pan": panCardNumber.text,
-  //     "Aadhaar": aadharCardNumber.text,
-  //     "Address1":_addressLine1.text,
-  //     "Address2": _addressLine2.text,
-  //     "Address3": _addressLine3.text,
-  //     "Landmark": _landMark.text,
-  //     "City": _city.text,
-  //     "State": StateId,
-  //     "District": DistrictID,
-  //     "PostalName": selectedPostCode ?? "",
-  //     "Pincode": _pincode.text,
-  //     "Country": "1",
-  //     "Latitude":latitue.toString(),
-  //     "Longitude": longitude.toString(),
-  //     "ScheduleDate": scheduledDate,
-  //     "scheduleTime": DateFormat("HH:mm:ss").format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
-  //     "AssignedSM": pref.getString("managerName"),
-  //     "LeadOwner": pref.getString("managerName"),
-  //     "ConsentForCrif":consentCRIF,
-  //     "ConsentForKyc": consentKYC,
-  //     "IsDocumentCollected": true,
-  //     "isDirectLeads": true
-  //   });
-  //
-  //   print(data);
-  //   var dio = Dio();
-  //   var response = await dio.request(
-  //     'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
-  //     options: Options(
-  //       method: 'POST',
-  //       headers: headers,
-  //     ),
-  //     data: data,
-  //   );
-  //   try {
-  //     if (response.statusCode == 200) {
-  //       //  Navigator.pop(context);
-  //       var responseMap = response.data;
-  //       String statusMessage = responseMap['statusMessage'];
-  //       int statusCode = responseMap['statusCode'];
-  //
-  //       if (statusMessage == "Lead created successfully" && statusCode == 200) {
-  //         print(json.encode(responseMap));
-  //
-  //         String sfLeadId = responseMap['SFleadId'];
-  //         setState(() {
-  //           LeadID = sfLeadId;
-  //         });
-  //
-  //         print("Lead ID");
-  //         print(LeadID);
-  //         updateDataToFirestore();
-  //         //  Navigator.pop(context);
-  //       } else {
-  //         _showAlertDialogSuccess1(context);
-  //         Navigator.pop(context);
-  //         print("hjdjnvfv");
-  //         _showToast('Error: Please try again');
-  //       }
-  //     } else {
-  //       Navigator.pop(context);
-  //       print("hjdjnvfv");
-  //       //_showAlertDialogSuccess1(context);
-  //       _showToast('Error: ${response.statusCode}');
-  //       // _showAlertDialogSuccess1(context);
-  //     }
-  //   } catch (e) {
-  //     Navigator.pop(context);
-  //     print("hjdjnvfv");
-  //     _showToast('Error: $e');
-  //     print("Error: $e");
-  //   }
-  // }
+  Future<void> updateDataToLeadsFirestore() async {
+    CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
+    DateTime now = DateTime.now();
+    print("Hello");
+    try{
+      Map<String, dynamic> params = {
+        'LeadID' : LeadID,
+        'updatedTime':Timestamp.fromDate(now),
+      };
+      convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          print(querySnapshot.docs.isNotEmpty);
+          convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+            print("Data updated to Visits successfully");
+            //  Navigator.pop(context);
+          }).catchError((error) {
+            print("Failed to update data: $error");
+          });
+        } else {
+          // Navigator.pop(context);
+        }
+      }).catchError((error) {
+        print("Failed to check if customerNumber exists: $error");
+      });
 
-  // void _showToast(String message) {
-  //   Fluttertoast.showToast(
-  //     msg: message,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: 1,
-  //     backgroundColor: Colors.red,
-  //     textColor: Colors.white,
-  //     fontSize: 16.0,
-  //   );
-  // }
-  //
-  // Future<void> updateDataToVisitFirestore() async {
-  //   CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
-  //   DateTime now = DateTime.now();
-  //   print("Hello");
-  //   try{
-  //     Map<String, dynamic> params = {
-  //       'LeadID' : LeadID,
-  //       'updatedTime':Timestamp.fromDate(now),
-  //     };
-  //     convertedLeads.where('customerNumber', isEqualTo: customerNumber.text).get().then((querySnapshot) {
-  //       if (querySnapshot.docs.isNotEmpty) {
-  //         print(querySnapshot.docs.isNotEmpty);
-  //         convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
-  //           print("Data updated to Visits successfully");
-  //           //  Navigator.pop(context);
-  //         }).catchError((error) {
-  //           print("Failed to update data: $error");
-  //         });
-  //       } else {
-  //         // Navigator.pop(context);
-  //       }
-  //     }).catchError((error) {
-  //       print("Failed to check if customerNumber exists: $error");
-  //     });
-  //
-  //   }catch(e){
-  //     print(e);
-  //   };
-  //
-  //
-  // }
+    }catch(e){
+      print(e);
+    };
+  }
+
+  Future<void> updateDataToVisitFirestore() async {
+    CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
+    DateTime now = DateTime.now();
+    print("Hello");
+    try{
+      Map<String, dynamic> params = {
+        'LeadID' : LeadID,
+        'updatedTime':Timestamp.fromDate(now),
+      };
+      convertedLeads.where('visitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          print(querySnapshot.docs.isNotEmpty);
+          convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+            print("Data updated to Visits successfully");
+            updateDataToLeadsFirestore();
+            //  Navigator.pop(context);
+          }).catchError((error) {
+            print("Failed to update data: $error");
+          });
+        } else {
+          // Navigator.pop(context);
+        }
+      }).catchError((error) {
+        print("Failed to check if customerNumber exists: $error");
+      });
+
+    }catch(e){
+      print(e);
+    };
+  }
 
   String? selectedDoc;
   final List<DropDownData> _DocumentList = [];
@@ -380,6 +511,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     // TODO: implement initState
     super.initState();
   // fetchdata();
+    getToken();
+    getLeadDetails();
     updateDocumentStatus();
     getDropDownDocumentData();
   //  checkApplicationFormStatus();
@@ -1414,6 +1547,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                   children:[
                     ElevatedButton(
                       onPressed: () {
+                        leadCreation();
                         // if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
                         //     && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
                         //     && signatureProof == "Uploaded"
@@ -1864,6 +1998,131 @@ print("bhjkjhlknl");
                   ),
                 ],
               ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  void _showAlertDialogSuccess2(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0, // No shadow
+          content: Container(
+            height:190,
+            width: 200,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child:
+                  Container(
+                    height: 80,
+                    width: 60,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle
+                    ),
+                    child: Center(
+                      child: Icon(Icons.done,color: Colors.white,),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text('Lead details saved successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                    Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                SizedBox(
+                  height: 25,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text('OK', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  void _showAlertDialogSuccess1(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0, // No shadow
+          content: Container(
+            height:190,
+            width: 200,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child:
+                  Container(
+                    height: 80,
+                    width: 60,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle
+                    ),
+                    child: Center(
+                      child: Icon(Icons.done,color: Colors.white,),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text('Something went wrong', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                //  SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Please try again', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                    Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                SizedBox(height: 5),
+                SizedBox(
+                  height: 25,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text('OK', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
             ),
           ),
         );

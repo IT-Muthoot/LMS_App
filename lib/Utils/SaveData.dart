@@ -93,280 +93,88 @@ class _SaveDataState extends State<SaveData> {
   // }
   List<Map<String, dynamic>> employeeMapping = [
     {
-      "EMP_CODE": "FA03510",
-      "NAME": "BATADA SALONI RAFIKALI",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "SURE066",
-      "BRANCH": "SURENDRANAGAR",
-      "REGION CODE": "RO0005",
-      "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03846",
-      "NAME": "HARSHIT SARATHE",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "BHOP013",
-      "BRANCH": "BHOPAL",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "Reporting Manager Code": "MO1625",
-      "Reporting Manager Name": "Mohd Khan",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03060",
-      "NAME": "AMOL DILIP SANAP",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "PUNE003",
-      "BRANCH": "PUNE",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "Reporting Manager Code": "MO1435",
-      "Reporting Manager Name": "RAVINDRA INGAWALE",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03298",
-      "NAME": "NIRAV ASHOKKUMAR JANI",
+      "EMP_CODE": "MA03912",
+      "NAME": "LATHIGARA KETANKUMAR PRAVINBHAI",
       "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "SURE066",
-      "BRANCH": "SURENDRANAGAR",
+      "BRANCH CODE": "SURA004",
+      "BRANCH": "SURAT",
       "REGION CODE": "RO0005",
       "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1632",
+      "Reporting Manager Name": "ERANDE SUMIT",
+      "DSGN_NAME_2": "SALES MANAGER"
     },
     {
-      "EMP_CODE": "MA02904",
-      "NAME": "BAHADUR CHOUHAN",
+      "EMP_CODE": "MA03915",
+      "NAME": "ASWIN KUMAR K",
       "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "KOTA015",
-      "BRANCH": "KOTA",
-      "REGION CODE": "RO0006",
-      "REGION": "RAJASTHAN",
-      "Reporting Manager Code": "MO1557",
-      "Reporting Manager Name": "UMMED SINGH",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03791",
-      "NAME": "PARMAR SHYAM",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "JAMN067",
-      "BRANCH": "JAMNAGAR",
-      "REGION CODE": "RO0005",
-      "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03836",
-      "NAME": "KULDEEP SEN",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "SHIV026",
-      "BRANCH": "GWALIOR - SHIVPURI",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "Reporting Manager Code": "MO1197",
-      "Reporting Manager Name": "CHAYAN KUMAR",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03837",
-      "NAME": "JADAV SANJAYBHAI BATUKBHAI",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "SURE066",
-      "BRANCH": "SURENDRANAGAR",
-      "REGION CODE": "RO0005",
-      "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03009",
-      "NAME": "VAGHELA HITESH DHANSUKHBHAI",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "JUNA042",
-      "BRANCH": "JUNAGADH",
-      "REGION CODE": "RO0005",
-      "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03727",
-      "NAME": "AVINASH RAJARAM KAMBLE",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "SANG095",
-      "BRANCH": "SANGLI",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "Reporting Manager Code": "MO1600",
-      "Reporting Manager Name": "JITENDRA VARALE",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03620",
-      "NAME": "BRAJESH SEN",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "SHIV026",
-      "BRANCH": "GWALIOR - SHIVPURI",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "Reporting Manager Code": "MO1197",
-      "Reporting Manager Name": "CHAYAN KUMAR",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03628",
-      "NAME": "SATVIR SINGH",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "LUDH074",
-      "BRANCH": "LUDHIANA",
-      "REGION CODE": "RO0008",
-      "REGION": "PCH",
-      "Reporting Manager Code": "MO1320",
-      "Reporting Manager Name": "Pawan Kumar",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03797",
-      "NAME": "SHIVAM PANDAY",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "LUCK078",
-      "BRANCH": "LUCKNOW",
-      "REGION CODE": "RO0012",
-      "REGION": "UTTAR PRADESH",
-      "Reporting Manager Code": "MO1633",
-      "Reporting Manager Name": "RAMESH P",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA02497",
-      "NAME": "SAGAR NANAJI WAGH",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "PUNE003",
-      "BRANCH": "PUNE",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "Reporting Manager Code": "MO0922",
-      "Reporting Manager Name": "Chandrakant Mhase",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03734",
-      "NAME": "BRAHMA PRAKASH SRIVASTAVA",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "KANP018",
-      "BRANCH": "KANPUR",
-      "REGION CODE": "RO0012",
-      "REGION": "UTTAR PRADESH",
-      "Reporting Manager Code": "MO1633",
-      "Reporting Manager Name": "RAMESH P",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA02023",
-      "NAME": "BABASAHEB DATTATRAY BHALERAO",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "PUNE003",
-      "BRANCH": "PUNE",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "Reporting Manager Code": "MO0922",
-      "Reporting Manager Name": "Chandrakant Mhase",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03897",
-      "NAME": "PRASAD SURESH PALKAR",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "PANV038",
-      "BRANCH": "NAVI MUMBAI - PANVEL",
-      "REGION CODE": "RO0002",
-      "REGION": "MUMBAI",
-      "Reporting Manager Code": "MO1577",
-      "Reporting Manager Name": "RADHESHYAM DUBEY",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03903",
-      "NAME": "ANEESH K M",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "THRI034",
-      "BRANCH": "THRISSUR",
+      "BRANCH CODE": "KOCH001",
+      "BRANCH": "KOCHI",
       "REGION CODE": "RO0001",
       "REGION": "KERALA",
-      "Reporting Manager Code": "MO1548",
-      "Reporting Manager Name": "SIBI R",
-      "Reporting DESIGNATION": "SALES MANAGER"
+      "ZONE CODE": "ZO0001",
+      "ZONE": "SOUTH",
+      "Reporting Manager Code": "MO1551",
+      "Reporting Manager Name": "SAJEER U",
+      "DSGN_NAME_2": "SALES MANAGER"
     },
     {
-      "EMP_CODE": "MA03904",
-      "NAME": "DINKAR SHANKAR GADUGALE",
+      "EMP_CODE": "MA03914",
+      "NAME": "RAHUL K P",
       "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "PANV038",
-      "BRANCH": "NAVI MUMBAI - PANVEL",
+      "BRANCH CODE": "KOTT028",
+      "BRANCH": "KOTTAYAM",
+      "REGION CODE": "RO0001",
+      "REGION": "KERALA",
+      "ZONE CODE": "ZO0001",
+      "ZONE": "SOUTH",
+      "Reporting Manager Code": "MO0990",
+      "Reporting Manager Name": "ANANDHU SAJ",
+      "DSGN_NAME_2": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MA03923",
+      "NAME": "RAHUL NAGNATH KAMBLE",
+      "DSGN_NAME": "RELATIONSHIP MANAGER",
+      "BRANCH CODE": "THAN037",
+      "BRANCH": "MUMBAI - THANE",
       "REGION CODE": "RO0002",
       "REGION": "MUMBAI",
-      "Reporting Manager Code": "MO1577",
-      "Reporting Manager Name": "RADHESHYAM DUBEY",
-      "Reporting DESIGNATION": "SALES MANAGER"
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1449",
+      "Reporting Manager Name": "KANHAI JEE",
+      "DSGN_NAME_2": "SALES MANAGER"
     },
     {
-      "EMP_CODE": "MA03898",
-      "NAME": "AGRAVAT YAGNIK ASHWINBHAI",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "JUNA042",
-      "BRANCH": "JUNAGADH",
-      "REGION CODE": "RO0005",
-      "REGION": "GUJARAT",
-      "Reporting Manager Code": "MO1408",
-      "Reporting Manager Name": "SHAILESH VANARA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03901",
-      "NAME": "VIRENDRA PRATAP SINGH",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "VARA052",
-      "BRANCH": "VARANASI",
-      "REGION CODE": "RO0012",
-      "REGION": "UTTAR PRADESH",
-      "Reporting Manager Code": "MO1460",
-      "Reporting Manager Name": "TRISHANT MISHRA",
-      "Reporting DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03906",
-      "NAME": "VINOD SHRIVASTAV",
+      "EMP_CODE": "MA03920",
+      "NAME": "JAYESH SHARMA",
       "DSGN_NAME": "RELATIONSHIP MANAGER",
       "BRANCH CODE": "BHOP013",
       "BRANCH": "BHOPAL",
       "REGION CODE": "RO0004",
       "REGION": "MADHYA PRADESH",
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
       "Reporting Manager Code": "MO1625",
-      "Reporting Manager Name": "Mohd Khan",
-      "Reporting DESIGNATION": "SALES MANAGER"
+      "Reporting Manager Name": "MOHD KHAN",
+      "DSGN_NAME_2": "SALES MANAGER"
     },
     {
-      "EMP_CODE": "MA03900",
-      "NAME": "SHIVAKUMAR S",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "RAMN093",
-      "BRANCH": "RAMNAGARA",
-      "REGION CODE": "RO0010",
-      "REGION": "KARNATAKA",
-      "Reporting Manager Code": "MO1594",
-      "Reporting Manager Name": "DHARMA HG",
-      "Reporting DESIGNATION": "SALES MANAGER"
+      "EMP_CODE": "MA03922",
+      "NAME": "ARUN ELANGOVAN",
+      "DSGN_NAME": "RELATIONSHIP OFFICER",
+      "BRANCH CODE": "VELL086",
+      "BRANCH": "VELLORE",
+      "REGION CODE": "RO0011",
+      "REGION": "TAMILNADU",
+      "ZONE CODE": "ZO0001",
+      "ZONE": "SOUTH",
+      "Reporting Manager Code": "MO1633",
+      "Reporting Manager Name": "RAMESH P",
+      "DSGN_NAME_2": "SALES MANAGER"
     }
   ];
 
@@ -403,10 +211,10 @@ class _SaveDataState extends State<SaveData> {
   // }
   void pushData() async {
     FirebaseFirestore.instance
-        .collection("dsaName")
-        .doc("dsaName")
+        .collection("employeeMapping")
+        .doc("employeeMapping")
         .set({
-      "dsaName": FieldValue.arrayUnion(dsaName)
+      "employeeMapping": FieldValue.arrayUnion(employeeMapping)
     }, SetOptions(merge: true));
     print("hi");
   }

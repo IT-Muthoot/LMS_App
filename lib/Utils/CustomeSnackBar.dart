@@ -33,7 +33,7 @@ class CustomSnackBar{
               ),
             ],
           )),
-      backgroundColor:content == "Feedback Successfully Submitted" ? Colors.green: StyleData.appBarColor2,
+      backgroundColor:content == "Feedback Successfully Submitted" ? Colors.green: StyleData.appBarColor3,
       elevation: 10,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
