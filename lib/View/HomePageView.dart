@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/ApplicantDetailsView.dart';
 import 'package:lead_management_system/View/VisitPageView.dart';
@@ -32,8 +33,12 @@ class _HomePageViewState extends State<HomePageView> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return WillPopScope(  onWillPop: () => Future.value(false),
-
+    return WillPopScope(
+      onWillPop: () async {
+        // Close the app when back button is pressed
+        SystemNavigator.pop();
+        return false; // Prevent default back button behavior
+      },
       child: SafeArea(
         child: Scaffold(
           key: _scaffoldKey,

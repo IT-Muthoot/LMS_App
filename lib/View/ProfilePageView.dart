@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class ProfilePageView extends StatefulWidget {
   const ProfilePageView({super.key});
 
@@ -129,12 +130,51 @@ class _ProfilePageViewState extends State<ProfilePageView> {
     }
   }
 
+  List<DocumentSnapshot> visits = [];
+  DateTime fromDate = DateTime.now().subtract(Duration(days: 7));
+  DateTime toDate = DateTime.now();
+
+  // Function to fetch data from Firebase
+  Future<void> fetchVisitData() async {
+    // Implement Firebase query to fetch data from LeadCreation and convertedLeads collections
+    QuerySnapshot leadCreationSnapshot = await FirebaseFirestore.instance
+        .collection('LeadCreation')
+        .where('createdDateTime',
+        isGreaterThanOrEqualTo: fromDate,
+        isLessThanOrEqualTo: toDate)
+        .get();
+
+    QuerySnapshot convertedLeadsSnapshot = await FirebaseFirestore.instance
+        .collection('convertedLeads')
+        .where('createdDateTime',
+        isGreaterThanOrEqualTo: fromDate,
+        isLessThanOrEqualTo: toDate)
+        .get();
+
+    setState(() {
+      visits = leadCreationSnapshot.docs + convertedLeadsSnapshot.docs;
+    });
+  }
+
+  // Function to process data and calculate daily visit counts
+  Map<DateTime, int> calculateDailyVisits() {
+    Map<DateTime, int> dailyVisits = {};
+    for (var visit in visits) {
+      DateTime visitDate = visit['createdDateTime'].toDate();
+      DateTime normalizedDate =
+      DateTime(visitDate.year, visitDate.month, visitDate.day);
+      dailyVisits.update(normalizedDate, (value) => value + 1, ifAbsent: () => 1);
+    }
+    return dailyVisits;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     getUserData();
     fetchLeadsdata();
     fetchdata();
+    fetchVisitData();
     super.initState();
   }
 
@@ -151,7 +191,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
         child: Column(
           children: [
             Container(
-              color: Colors.orangeAccent,
+              color: StyleData.appBarColor2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -182,7 +222,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                     RichText(
                       text: TextSpan(
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 18.0,
                         ),
                         children: [
@@ -221,6 +261,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             SizedBox(
               height: height * 0.3,
             ),
+
             Center(
               child: Text(
                 "Coming Soon"

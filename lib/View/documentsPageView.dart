@@ -14,13 +14,17 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Model/Response/DropDownModel.dart';
 import '../Model/apiurls.dart';
+import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 import 'ApplicantDetailsView.dart';
+import 'dashbordPageView.dart';
 
 class DocumentPageView extends StatefulWidget {
   final bool isNewActivity;
@@ -94,6 +98,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
 
   String? ApplicationDocID;
   String? ApplicationDocID1;
+
+  String? selectedFilePathApplicationForm;
 
   getLeadDetails() {
     if (!widget.isNewActivity) {
@@ -285,8 +291,8 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     print(data);
     var dio = Dio();
     var response = await dio.request(
-      // 'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
-      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
+       'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+     // 'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -354,20 +360,20 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      // 'grant_type': 'password',
-      // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      // 'username': 'salesappuser@muthoothomefin.com',
-      // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
       'grant_type': 'password',
-      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
+      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+      'username': 'salesappuser@muthoothomefin.com',
+      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      // 'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
+      'https://muthootltd.my.salesforce.com/services/oauth2/token',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -513,7 +519,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   // fetchdata();
     getToken();
     getLeadDetails();
-    updateDocumentStatus();
+   updateDocumentStatus();
     getDropDownDocumentData();
   //  checkApplicationFormStatus();
 
@@ -559,12 +565,13 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     return WillPopScope(
       onWillPop: () async {
         // Navigate to ApplicantDetailsView when back button is pressed
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ApplicantDetailsView(),
-          ),
-        );
+        Navigator.pop(context);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => HomePageView(),
+        //   ),
+        // );
         // Prevent the default back navigation
         return false;
       },
@@ -689,7 +696,12 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                     ),
                   ), // Change the splash color to red
                 ),
-
+                                  // Column(
+                                  //   children: [
+                                  //     Image.file(File(selectedFilePathApplicationForm!)),
+                                  //     Text(selectedFilePathApplicationForm ?? "No file selected"),
+                                  //   ],
+                                  // ),
                 SizedBox(
                   height: height * 0.006,
                 ),
@@ -1547,13 +1559,15 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                   children:[
                     ElevatedButton(
                       onPressed: () {
-                        leadCreation();
+                        updateLeadData();
+                       // leadCreation();
                         // if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
                         //     && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
                         //     && signatureProof == "Uploaded"
                         // )
                         //   {
-                        //     _showAlertDialogSuccess(context);
+                        //     // _showAlertDialogSuccess(context);
+                        //     leadCreation();
                         //   }
                         // else
                         //   {
@@ -1626,6 +1640,12 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                             maxWidth: 820,
                             imageQuality: 60);
                         print(pickedFile);
+                        if(pickedFile != null)
+                          {
+                            setState(() {
+                              selectedFilePathApplicationForm = pickedFile.path;
+                            });
+                          }
                         if (applicationFormClicked) {
                           print("Yessss");
                           uploadOnDMS(pickedFile, "Application_Form");
@@ -1695,6 +1715,12 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         );
                       //  pickedFiles?.files.first
                         print(pickedFiles);
+                        if(pickedFiles != null && pickedFiles.files.isNotEmpty)
+                          {
+                            setState(() {
+                              selectedFilePathApplicationForm = pickedFiles.files.first.path;
+                            });
+                          }
                         if (applicationFormClicked) {
                           uploadOnDMS(pickedFiles?.files.first , "Application_Form");
                         } else if (bankPassbookClicked) {
@@ -1838,66 +1864,74 @@ print("bhjkjhlknl");
                   // },
                   //     SetOptions(merge: true));
                   SmartDialog.dismiss();
-                  if (applicationFormClicked) {
-                    print(ApplicationDocID);
-                    setState(() {
-                      applicationForm ="Uploaded";
-                    });
+                  if(data["docId"].toString().isNotEmpty)
+                    {
+                      if (applicationFormClicked) {
+                        print(ApplicationDocID);
+                        setState(() {
+                          applicationForm ="Uploaded";
+                        });
 
-                  } else if (bankPassbookClicked) {
-                    setState(() {
-                      bankPassbook = "Uploaded";
-                    });
+                      } else if (bankPassbookClicked) {
+                        setState(() {
+                          bankPassbook = "Uploaded";
+                        });
 
-                  }
-                  else if (dateOfBirthClicked) {
-                    setState(() {
-                      dateOfBirthProof = "Uploaded";
-                    });
-                    // SharedPreferences prefs = await SharedPreferences.getInstance();
-                    // await prefs.setString("dateOfBirthProof", "Uploaded");
-                  } else if (loginFeeChequeClicked) {
-                    setState(() {
-                      loginFeeCheque = "Uploaded";
-                    });
-                  } else if (passportSizePhotoClicked) {
-                    setState(() {
-                      passportSizePhoto = "Uploaded";
-                    });
-                  } else if (photoIdProofClicked) {
-                    setState(() {
-                      photoIdProof = "Uploaded";
-                    });
-                  } else if (residenceProofClicked) {
-                    setState(() {
-                      residenceProof = "Uploaded";
-                    });
-                  } else if (salarySlipClicked) {
-                    setState(() {
-                      salarySlip = "Uploaded";
-                    });
+                      }
+                      else if (dateOfBirthClicked) {
+                        setState(() {
+                          dateOfBirthProof = "Uploaded";
+                        });
+                        // SharedPreferences prefs = await SharedPreferences.getInstance();
+                        // await prefs.setString("dateOfBirthProof", "Uploaded");
+                      } else if (loginFeeChequeClicked) {
+                        setState(() {
+                          loginFeeCheque = "Uploaded";
+                        });
+                      } else if (passportSizePhotoClicked) {
+                        setState(() {
+                          passportSizePhoto = "Uploaded";
+                        });
+                      } else if (photoIdProofClicked) {
+                        setState(() {
+                          photoIdProof = "Uploaded";
+                        });
+                      } else if (residenceProofClicked) {
+                        setState(() {
+                          residenceProof = "Uploaded";
+                        });
+                      } else if (salarySlipClicked) {
+                        setState(() {
+                          salarySlip = "Uploaded";
+                        });
 
-                  } else if (signatureProofClicked) {
-                    setState(() {
-                      signatureProof = "Uploaded";
-                    });
+                      } else if (signatureProofClicked) {
+                        setState(() {
+                          signatureProof = "Uploaded";
+                        });
 
-                  } else if (copyOfPropertyClicked) {
-                    setState(() {
-                      copyOfProperty = "Uploaded";
-                    });
+                      } else if (copyOfPropertyClicked) {
+                        setState(() {
+                          copyOfProperty = "Uploaded";
+                        });
 
-                  }else if (totalWorkExpClicked) {
-                    setState(() {
-                      totalWorkExp = "Uploaded";
-                    });
-                  }else if (qualificationProofClicked) {
-                    setState(() {
-                      qualificationProof = "Uploaded";
-                    });
-                  }
+                      }else if (totalWorkExpClicked) {
+                        setState(() {
+                          totalWorkExp = "Uploaded";
+                        });
+                      }else if (qualificationProofClicked) {
+                        setState(() {
+                          qualificationProof = "Uploaded";
+                        });
+                      }
+                    }
+                  else
+                    {
+                      CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                    }
                 } catch (e) {
                   SmartDialog.dismiss();
+                  CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
                   debugPrint(e.toString());
                 }
               },
@@ -1940,7 +1974,71 @@ print("bhjkjhlknl");
         ]);
   }
 
-  void _showAlertDialogSuccess(BuildContext context) {
+  void updateLeadData() async {
+    //New Implementation for saving application PDF
+    print("bhjkjhlknl");
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to submit the lead details',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                // setState(() {
+                //   isLeadsUpdateData = true;
+                // });
+                leadCreation();
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]);
+  }
+  void _showAlertDialogSuccess2(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1973,8 +2071,14 @@ print("bhjkjhlknl");
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('Documents uploaded Succesfully', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87,fontSize: 18,),),
-                  //  SizedBox(height: 8),
+                  Text('Lead details saved successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                      Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                   SizedBox(height: 5),
                   SizedBox(
                     height: 25,
@@ -1983,7 +2087,7 @@ print("bhjkjhlknl");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ApplicantDetailsView(),
+                            builder: (context) => HomePageView(),
                           ),
                         );
                       },
@@ -1998,68 +2102,6 @@ print("bhjkjhlknl");
                   ),
                 ],
               ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-  void _showAlertDialogSuccess2(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0, // No shadow
-          content: Container(
-            height:190,
-            width: 200,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child:
-                  Container(
-                    height: 80,
-                    width: 60,
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle
-                    ),
-                    child: Center(
-                      child: Icon(Icons.done,color: Colors.white,),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text('Lead details saved successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
-                    Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(height: 5),
-                SizedBox(
-                  height: 25,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    child: Text('OK', style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
             ),
           ),
         );

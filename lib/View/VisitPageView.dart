@@ -611,8 +611,9 @@ class _VisitPageViewState extends State<VisitPageView> {
 
 
                         return
-                          isDateInRange ?  (ListOfLeads[index]["LeadID"] ?? "").length <= 1 &&  ListOfLeads[index]["customerStatus"] == "Interested"  ?
-                          InkWell(
+                          isDateInRange ?  (ListOfLeads[index]["LeadID"] ?? "").length <= 1  ?
+                        // &&  ListOfLeads[index]["customerStatus"] == "Interested"
+                        InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,

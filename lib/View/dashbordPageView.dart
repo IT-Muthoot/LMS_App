@@ -421,7 +421,8 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                       itemCount: ListOfLeads.length > 4 ? 4 : ListOfLeads.length,
                       itemBuilder: (context, index) {
                         ListOfLeads.sort((a, b) => DateTime.parse(b['visitDate']).compareTo(DateTime.parse(a['visitDate'])));
-                        return (ListOfLeads[index]["LeadID"] ?? "").length <= 1 && ListOfLeads[index]["customerStatus"] == "Interested" ?
+                        return (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
+                        // && ListOfLeads[index]["customerStatus"] == "Interested"
                           InkWell(
                             onTap: () {
                               Navigator.push(

@@ -81,6 +81,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? visitID;
 
   String? selectedProductType;
+  bool isDateOfBirth = false;
 
   //textfields
   TextEditingController textEditingController = TextEditingController();
@@ -112,6 +113,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   bool isLeadsDataSaved = false;
   bool isLeadsUpdateData = false;
+  bool isClickNext = false;
 
   final List<String> _residentialType= [
     'Self owned',
@@ -278,8 +280,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     'Not Working(NA)': ['Not Working(NA)'],
   };
 
-  String? StateId;
-  String? DistrictID;
+  var StateId;
+  var DistrictID;
 
   //Additional details
 
@@ -450,9 +452,22 @@ String? SalutaionID;
         longitude= docData["longitude"] ?? "";
         scheduledDate= docData["visitDate"] ?? "";
         scheduledTime= docData["visitTime"] ?? "";
+        // DSAConnectorName = docData["leadSource"] == "DSA"
+        //     ? docData["dsaName"] ?? ""
+        //     : docData["connectorName"] ?? "";
         DSAConnectorName = docData["leadSource"] == "DSA"
             ? docData["dsaName"] ?? ""
-            : docData["connectorName"] ?? "";
+            : docData["leadSource"] == "Marketing Campaign"
+            ? docData["compaignName"] ?? ""
+            : docData["leadSource"] == "Builder"
+            ? docData["builderName"] ?? ""
+            : docData["leadSource"] == "Customer Referral"
+            ? docData["customerName"] ?? ""
+            : docData["leadSource"] == "Employee Referral"
+            ? docData["referralEmpName"] ?? ""
+            : docData["leadSource"] == "Connector"
+            ? docData["connectorName"] ?? ""
+            : "";
         DSAConnectorCode1 = docData["DSAConnectorCode"] ?? "";
         visitID = docData["visitID"] ?? "";
         BranchCode1 = docData["EmployeeBranchCode"] ?? "";
@@ -461,6 +476,10 @@ String? SalutaionID;
       // // Call function to get lead details
       //    getLeadDetails();
       //   }
+
+        print("123DSACONMARNAME");
+        print(DSAConnectorName);
+        print(DSAConnectorCode1);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.getString('branchcode');
         print( prefs.getString('branchcode'));
@@ -477,9 +496,6 @@ String? SalutaionID;
       });
     }
   }
-
-
-
 
   List<DocumentSnapshot> ListOfSavedLeads = [];
 
@@ -653,6 +669,20 @@ String? SalutaionID;
   // }
 
   Future<void> updateDataToFirestore() async {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: SpinKitFadingCircle(
+              color: Colors.redAccent,
+              size: 50.0,
+            ),
+          );
+        },
+      );
+    print(StateId);
+    print("StateId34556");
     CollectionReference convertedLeads =
     FirebaseFirestore.instance.collection("convertedLeads");
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -680,8 +710,8 @@ String? SalutaionID;
         'landmark': _landMark.text,
         'state': _state.text,
         'district': _district.text,
-        'stateID': StateId,
-        'districtID': DistrictID,
+        'stateID':   pref.getString("stateID") ?? "",
+        'districtID':  pref.getString("districtID") ?? "",
         'postOffice': selectedPostCode ?? "",
         'pincode': _pincode.text,
         'residentialType': _selectedResidentialType ?? "",
@@ -699,6 +729,7 @@ String? SalutaionID;
         'ConsentCRIF': consentCRIF,
         'ConsentKYC': consentKYC,
         'VisitID': visitID ?? "",
+        'LeadID': "-",
         'VerificationStatus': "Pending",
         'userId': userId,
         'EmployeeName': pref.getString("employeeName"),
@@ -731,19 +762,109 @@ String? SalutaionID;
         // Update the existing document with the new parameters
         await convertedLeads.doc(querySnapshot.docs.first.id).update(params);
         print("Data updated successfully");
+        Navigator.pop(context);
         _showAlertDialogSuccess(context);
+
       } else {
         // Add a new document since no existing document with the given visit ID was found
         await convertedLeads.add(params);
         print("Data added successfully");
+        Navigator.pop(context);
         _showAlertDialogSuccess(context);
+
       }
     } catch (e) {
       print("Error: $e");
     }
   }
 
+  Future<void> updateLeadsDataToFirestore() async {
+    print(StateId);
+    print("StateId34556");
+    CollectionReference convertedLeads =
+    FirebaseFirestore.instance.collection("convertedLeads");
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var userId = pref.getString("userID");
+    DateTime now = DateTime.now();
+    print("Hello");
+    try {
+      // Build the parameters for the update
+      Map<String, dynamic> params = {
+        'CustomerStatus': customerStatus,
+        'ReasonforDisinterest': reasonDisInterest,
+        'salutation': _selectedSalutation,
+        'firstName': firstName.text,
+        'lastName': lastName.text,
+        'middleName': middleName.text,
+        'customerNumber': customerNumber.text,
+        'email': _email.text,
+        'additionalNumber': _additionalPhoneNumber.text,
+        'dateOfBirth': _dateOfBirth.text,
+        'gender': _selectedGender,
+        'addressLine1': _addressLine1.text,
+        'addressLine2': _addressLine2.text,
+        'addressLine3': _addressLine3.text,
+        'city': _city.text,
+        'landmark': _landMark.text,
+        'state': _state.text,
+        'district': _district.text,
+        'stateID':   pref.getString("stateID") ?? "",
+        'districtID':  pref.getString("districtID") ?? "",
+        'postOffice': selectedPostCode ?? "",
+        'pincode': _pincode.text,
+        'residentialType': _selectedResidentialType ?? "",
+        'residentialStatus': _selectedResidentialStatus ?? "",
+        'homeFinBranchCode': BranchCode1,
+        'leadAmount': _leadAmount.text,
+        'leadSource': _leadSource.text,
+        'productCategory': selectedProductValue ?? "",
+        'products': selectedProdut ?? "",
+        'CustomerProfile': _selectedCustomerProfile ?? "",
+        'EmployeeCategory': _selectedEmployeeCategory ?? "",
+        'monthlyIncome': monthlyIncomeOfApplicant.text,
+        'aadharNumber': aadharCardNumber.text,
+        'panCardNumber': panCardNumber.text,
+        'ConsentCRIF': consentCRIF,
+        'ConsentKYC': consentKYC,
+        'VisitID': visitID ?? "",
+        'LeadID': "-",
+        'VerificationStatus': "Pending",
+        'userId': userId,
+        'EmployeeName': pref.getString("employeeName"),
+        'EmployeeCode': pref.getString("employeeCode"),
+        'EmployeeBranchCode': BranchCode1,
+        'ManagerName': pref.getString("managerName"),
+        'ManagerCode': pref.getString("ManagerCode"),
+        'Region': pref.getString("Region"),
+        'Zone': pref.getString("Zone"),
+        'Designation': pref.getString("designation"),
+        'createdDateTime': Timestamp.fromDate(now),
+        'isLeadSaved': true,
+        'dsaConnectorName': DSAConnectorName,
+        'dsaConnectoreCode': DSAConnectorCode1,
+        'latitude': latitue.toString(),
+        'longitude': longitude.toString(),
+        'scheduledDate': scheduledDate,
+        'scheduledTime': DateFormat("HH:mm:ss")
+            .format(DateFormat("h:mm a").parse(scheduledTime ?? "")),
+      };
+      print(params);
 
+      // Query to find the document based on the visit ID
+      QuerySnapshot querySnapshot = await convertedLeads
+          .where('VisitID', isEqualTo: visitID)
+          .get();
+
+      // Check if there's a document with the given visit ID
+      if (querySnapshot.docs.isNotEmpty) {
+        // Update the existing document with the new parameters
+        await convertedLeads.doc(querySnapshot.docs.first.id).update(params);
+        print("Data updated successfully");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 
 
 
@@ -791,6 +912,8 @@ String? SalutaionID;
   //   print("Stored Access token");
   //   print(token);
   // }
+
+
 
   _saveSelectedPostCode(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1108,6 +1231,14 @@ String? SalutaionID;
                                                           if (value!.isEmpty) {
                                                             return 'Enter email';
                                                           }
+                                                          // Check if email contains '@'
+                                                          if (!value.contains('@')) {
+                                                            return 'Enter a valid email address (missing "@")';
+                                                          }
+                                                          // Check if email contains space
+                                                          if (value.contains(' ')) {
+                                                            return 'Email cannot contain spaces';
+                                                          }
                                                           // Additional validation for Gmail format
                                                           if (!value.endsWith('.com')) {
                                                             return 'Enter a valid Gmail address';
@@ -1173,10 +1304,13 @@ String? SalutaionID;
                                                           DateTime selectedDate = DateTime.parse(value);
 
                                                           // Calculating age
-                                                          int age = DateTime.now().year - selectedDate.year;
+                                                         int age = DateTime.now().year - selectedDate.year;
 
                                                           // Checking if age falls within the specified range
                                                           if (age < 18 || age > 70) {
+                                                            setState(() {
+                                                              isDateOfBirth = true;
+                                                            });
                                                             return 'Age should fall between 18 and 70 years old.';
                                                           }
 
@@ -1441,6 +1575,9 @@ String? SalutaionID;
                                                           }
                                                           return null;
                                                         },
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(20), // Restrict input to 30 characters
+                                                        ],
                                                       ),
                                                       TextFormField(
                                                         controller: _landMark,
@@ -1526,7 +1663,9 @@ String? SalutaionID;
                                                                 StateId = stateID;
                                                                 DistrictID = districtID;
                                                               });
-
+                                                              SharedPreferences pref = await SharedPreferences.getInstance();
+                                                              pref.setString("stateID", StateId);
+                                                              pref.setString("districtID", DistrictID);
                                                             } else {
                                                               _PostcodeList.clear();
                                                               //  showToastMessage('Enter correct pincode');
@@ -1978,7 +2117,7 @@ String? SalutaionID;
                                                           ),
                                                           //   hint: const Text('Select an option'),
                                                           decoration: InputDecoration(
-                                                            labelText: 'Product *',
+                                                            labelText: 'Purpose Of Loan *',
                                                             hintText: 'Select an option',
                                                             //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                             //  border: InputBorder.none,
@@ -2031,7 +2170,7 @@ String? SalutaionID;
                                                           ),
                                                           //   hint: const Text('Select an option'),
                                                           decoration: InputDecoration(
-                                                            labelText: 'Product *',
+                                                            labelText: 'Purpose Of Loan *',
                                                             hintText: 'Select an option',
                                                             //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                             //  border: InputBorder.none,
@@ -2411,13 +2550,47 @@ String? SalutaionID;
                                         onPressed: () {
                                               if(isLeadsDataSaved == true && isLeadsUpdateData == false)
                                                 {
-                                                  updateLeadData();
+                                                  if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 ) {
+                                                    if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                                                    {
+                                                    if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
+                                                      {
+                                                        CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
+
+                                                      }
+                                                    else {
+                                                      updateLeadData();
+                                                    }
+                                                    }else{
+                                                      CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
+                                                    }
+                                                  }else{
+                                                    CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
+                                                  }
                                                   //CustomSnackBar.errorSnackBarQ("Lead details already saved", context);
                                                 }else {
                                                 if (_formKey.currentState!.validate() &&
                                                     areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
                                                     && areAddressFieldsFilled == true && areProfileFieldsFilled == true || isLeadsUpdateData == true ) {
-                                                  updateDataToFirestore();
+                                                  if(aadharCardNumber.text.length == 12 || panCardNumber.text.length == 10) {
+                                                    if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                                                      {
+                                                        if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70)
+                                                        {
+                                                          CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
+                                                        }
+                                                        else {
+                                                          setState(() {
+                                                            isClickNext = true;
+                                                          });
+                                                          updateDataToFirestore();
+                                                        }
+                                                      }else{
+                                                      CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
+                                                    }
+                                                  }else{
+                                                    CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
+                                                  }
                                                 }
                                                 else {
                                                   CustomSnackBar.errorSnackBarQ("Please enter all the mandatory fields", context);
@@ -2453,19 +2626,51 @@ String? SalutaionID;
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          if (isLeadsDataSaved == true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => DocumentPageView(
-                                                        docId: widget.docId,
-                                                        visitID: widget.visitId,
-                                                        isNewActivity: false
-                                                    )));
+                                          if(isLeadsDataSaved == true || isClickNext == true )
+                                          {
+                                            if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 ) {
+                                              if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                                              {
+                                                if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
+                                                {
+                                                  CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
+
+                                                }
+                                                else {
+                                                  updateLeadsDataToFirestore();
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => DocumentPageView(
+                                                              docId: widget.docId,
+                                                              visitID: widget.visitId,
+                                                              isNewActivity: false
+                                                          )));
+                                                }
+                                              }else{
+                                                CustomSnackBar.errorSnackBarQ("Please enter and save valid email", context);
+                                              }
+                                            }else{
+                                              CustomSnackBar.errorSnackBarQ("Please enter and save valid Profiling details", context);
+                                            }
+                                          }else{
+                                            CustomSnackBar.errorSnackBarQ("Please save the lead details", context);
                                           }
-                                          else {
-                                            CustomSnackBar.errorSnackBarQ("Please fill the lead details", context);
-                                          }
+                                          // if(isClickNext == true || )
+                                          //   {
+                                          //     Navigator.push(
+                                          //         context,
+                                          //         MaterialPageRoute(
+                                          //             builder: (context) => DocumentPageView(
+                                          //                 docId: widget.docId,
+                                          //                 visitID: widget.visitId,
+                                          //                 isNewActivity: false
+                                          //             )));
+                                          //   }
+                                          // else {
+                                          //   CustomSnackBar.errorSnackBarQ("Please Save the lead Details", context);
+                                          // }
+
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.transparent,
@@ -2575,7 +2780,7 @@ String? SalutaionID;
     //New Implementation for saving application PDF
     print("bhjkjhlknl");
     Dialogs.materialDialog(
-        msg: 'Are you sure you want to edit the lead details?',
+        msg: 'Are you sure you want to make the changes in the lead details?',
         title: "Alert",
         msgStyle:
         TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
@@ -2593,9 +2798,10 @@ String? SalutaionID;
             child: InkWell(
               onTap: () async {
                 setState(() {
-                  isLeadsUpdateData = true;
+                  isClickNext = true;
                 });
                 Navigator.pop(context);
+                updateDataToFirestore();
               },
               child: Container(
                 height: 40,
@@ -2683,7 +2889,7 @@ String? SalutaionID;
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        Navigator.pop(context);
+                      //  Navigator.pop(context);
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(
