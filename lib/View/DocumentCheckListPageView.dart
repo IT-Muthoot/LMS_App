@@ -21,6 +21,7 @@ class DocumentChecklistPageView extends StatefulWidget {
 
 class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
 
+  List<dynamic> mandatoryDocuments = [];
   var userType;
 
   List<DocumentSnapshot> leadDetails = [];
@@ -40,9 +41,9 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
     if (leadSnapshot.docs.isNotEmpty) {
       setState(() {
         leadDetails = leadSnapshot.docs;
-        productCategory = leadDetails[0]['productCategory'];
-        purposeOfLoan = leadDetails[0]['products'];
-        region = leadDetails[0]['Region'];
+        productCategory = leadDetails[0]['productCategory']; // important
+        purposeOfLoan = leadDetails[0]['products']; // important
+        region = leadDetails[0]['Region']; // important
       });
     } else {
 
@@ -62,14 +63,29 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
 
       // Iterate through the documents and log the data
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        log(documentSnapshot.data().toString());
+        // log(documentSnapshot.data().toString());  // fetching the data
+        // print(documentSnapshot['documentChecklist'].runtimeType);
 
+        for(int i = 0; i < documentSnapshot['documentChecklist'].length; i++){
+          String? uppercaseRegion = region?.toUpperCase();
+          // print('Value at index $i: ${documentSnapshot['documentChecklist'][0]} \n');
+          documentSnapshot['documentChecklist'][i].forEach((key, value) {
+            // print('Key: $key');
+            if(key == uppercaseRegion) {
+              // log(value[productCategory].toString());
+              // print("\n\n");
+              // log(value[productCategory][purposeOfLoan].toString());
+              // log(value[productCategory][purposeOfLoan]['Mandatory'].toString());
+              mandatoryDocuments = value[productCategory][purposeOfLoan]['Mandatory'];
+              print(mandatoryDocuments);
+            }
+          });
+        }
       }
     } catch (e) {
       log('Error fetching data: $e');
     }
   }
-
 
 
 
