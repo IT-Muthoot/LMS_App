@@ -7,6 +7,7 @@ import 'package:lead_management_system/View/dashbordPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utils/StyleData.dart';
+import 'DocumentCheckListPageView.dart';
 import 'NewLeadPageView.dart';
 import 'documentsPageView.dart';
 
@@ -372,15 +373,15 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                               //  commented for first phase
-                              //    Navigator.push(
-                              //        context,
-                              //        MaterialPageRoute(
-                              //            builder: (context) => NewLeadPageView(
-                              //              docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
-                              //                visitId: ListOfLeads[index]["VisitID"],
-                              //                isNewActivity: false,
-                              //                isUpdateActivity:true
-                              //            )));
+                                 Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                         builder: (context) => DocumentChecklistPageView(
+                                           docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
+                                             leadId: ListOfLeads[index]["LeadID"],
+                                             isNewActivity: false,
+                                             isUpdateActivity:true
+                                         )));
                                },
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,

@@ -207,17 +207,707 @@ class _SaveDataState extends State<SaveData> {
   ];
 
 
-  List<Map<String, dynamic>> dsaName = [
-    {"id": "1014", "title": "WEALTHVALLEY INSURANCE MARKETING PRIVATE LIMITED"},
-    {"id": "1015", "title": "AURA I SOLUTION"},
-    {"id": "1016", "title": "DK ASSOCIATES"},
-    {"id": "1017", "title": "Kashvi Sales and Distribution Pvt Ltd."},
-    {"id": "1020", "title": "NEERACHI TECHNOLOGIES Pvt. Ltd"},
-    {"id": "1021", "title": "Y S S DIRECT CREDIT  Pvt. Ltd"},
-    {"id": "1022", "title": "SIDDHI IMAGINE FINTECH CONSULTANCY PRIVATE LIMITED"},
-    {"id": "1023", "title": "S M ENTERPRISES"},
-    {"id": "1024", "title": "SHREE FINANCE"},
-    {"id": "1025", "title": "ACE EQUITY SOLUTIONS Pvt. Ltd."}
+  List<Map<String, dynamic>> documentChecklist = [
+    {
+      "TAMILNADU": {
+        "Home Loan": {
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Plan approval/Actual plan"},
+              {"ID": 3, "Title": "Estimate"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed in favour of seller"},
+              {"ID": 2, "Title": "Sale agreement"},
+              {"ID": 3, "Title": "Plan approval"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed in favour of seller"},
+              {"ID": 2, "Title": "Sale agreement"},
+              {"ID": 3, "Title": "Property tax receipt"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale agreement"},
+              {"ID": 2, "Title": "Layout approval"},
+              {"ID": 3, "Title": "Plan approval/Actual plan"},
+              {"ID": 4, "Title": "Estimate"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Plan approval/Actual plan"},
+              {"ID": 3, "Title": "Estimate"}
+            ]
+          },
+          "HOME EXTENSION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Plan approval/Actual plan"},
+              {"ID": 3, "Title": "Estimate"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax receipt"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax receipt"}
+            ]
+          },
+          "BALANCE TRANSFER-LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax receipt"}
+            ]
+          },
+          "REFINANCE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Plan approval/Actual plan"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "KARNATAKA": {
+        "Home Loan": {
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Khatha"},
+              {"ID": 3, "Title": "Approved / Working plan"},
+              {"ID": 4, "Title": "Estimation"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale agreement"},
+              {"ID": 2, "Title": "Title deed"},
+              {"ID": 3, "Title": "Khatha"},
+              {"ID": 4, "Title": "Approved plan"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale agreement"},
+              {"ID": 2, "Title": "Title deed"},
+              {"ID": 3, "Title": "Khatha"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale agreement"},
+              {"ID": 2, "Title": "Title deed"},
+              {"ID": 3, "Title": "Khatha"},
+              {"ID": 4, "Title": "Layout plan"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Khatha"}
+            ]
+          },
+          "HOME EXTENSION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Khatha"},
+              {"ID": 3, "Title": "Approved / Working plan"},
+              {"ID": 4, "Title": "Estimation"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Khatha"},
+              {"ID": 3, "Title": "Approved / Working plan"},
+              {"ID": 4, "Title": "Estimation"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "REFINANCE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Khatha"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "TAP": {
+        "Home Loan": {
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Plan approval / Architect plan"},
+              {"ID": 3, "Title": "Estimation"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement of Sale"},
+              {"ID": 2, "Title": "Link document"},
+              {"ID": 3, "Title": "Plan approval / Architect plan"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement of Sale"},
+              {"ID": 2, "Title": "Link document"},
+              {"ID": 3, "Title": "Property tax"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement of Sale"},
+              {"ID": 2, "Title": "Link document"},
+              {"ID": 3, "Title": "Estimation"},
+              {"ID": 4, "Title": "Plan approval / Architect plan"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Link document"},
+              {"ID": 3, "Title": "Estimation"},
+              {"ID": 4, "Title": "Property tax"}
+            ]
+          },
+          "HOME EXTENSION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Link document"},
+              {"ID": 3, "Title": "Estimation for Extension"},
+              {"ID": 4, "Title": "Plan approval / Architect plan"},
+              {"ID": 5, "Title": "Property tax"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax"}
+            ]
+          },
+          "BALANCE TRANSFER-LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax"}
+            ]
+          },
+          "REFINANCE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Property tax"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "GUJARAT": {
+        "Home Loan": {
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement for sale/Allotment letter"},
+              {"ID": 2, "Title": "Construction Permission"},
+              {"ID": 3, "Title": "Approved lay out/Building plan"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement for sale"},
+              {"ID": 2, "Title": "Tax bill"},
+              {"ID": 3, "Title": "Electricity bill"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Approved lay out/Building plan/Draft plan"},
+              {"ID": 3, "Title": "Estimate"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Tax bill"},
+              {"ID": 3, "Title": "Electricity bill"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Construction Permission"},
+              {"ID": 3, "Title": "Approved lay out/Building plan"},
+              {"ID": 4, "Title": "Estimate"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "REFINANCE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Construction Permission"},
+              {"ID": 3, "Title": "Approved lay out/Building plan"},
+              {"ID": 4, "Title": "Estimate"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "MADHYA PRADESH": {
+        "Home Loan": {
+          "HOME IMPROVEMENT / RENOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission by Municipal / DA"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "Diversion Order"},
+              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 6, "Title": "Detailed Estimate/ Architect Plan"},
+              {"ID": 7, "Title": "Latest Property Tax paid receipt"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
+              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
+              {"ID": 4, "Title": "Diversion Order"},
+              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 6, "Title": "RERA Registration copy if applicable"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
+              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
+              {"ID": 4, "Title": "Diversion Order"},
+              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 6, "Title": "Latest Property Tax paid receipt"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "Diversion order"},
+              {"ID": 5, "Title": "Latest Property Tax paid receipt"},
+              {"ID": 6, "Title": "T&CP Layout/ Builder Layout if applicable"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "REFINANCE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "Diversion Order"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "Detailed Estimate"},
+              {"ID": 7, "Title": "Latest Property Tax paid receipt"}
+            ]
+          },
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal/ Arcitect Plan"},
+              {"ID": 2, "Title": "Construction permission"},
+              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Sale Deed"},
+              {"ID": 4, "Title": "Diversion Order"},
+              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 6, "Title": "Latest Property Tax Paid Receipt/ E-bill"}
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "RAJASTHAN": {
+        "Home Loan": {
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Estimate for construction with proposed construction plan"},
+              {"ID": 3, "Title": "Layout plan"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENNOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Estimate for extension with proposed construction plan"},
+              {"ID": 3, "Title": "Layout plan"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Sale agreement"},
+              {"ID": 3, "Title": "Layout plan"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Sale agreement"},
+              {"ID": 3, "Title": "Layout plan"},
+              {"ID": 4, "Title": "Floor Plan"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Sale agreement"},
+              {"ID": 3, "Title": "Proposed estimate for construction"},
+              {"ID": 4, "Title": "Layout plan of scheme"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title deed"},
+              {"ID": 2, "Title": "Layout plan"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "UTTAR PRADESH": {
+        "Home Loan": {
+          "Self construction/ Improvement/Extension": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Applicant’s sale deed"},
+              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 3, "Title": "Detailed Estimate/ Architect Plan"},
+              {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan/floor plan by approved architect"},
+              {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
+              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 4, "Title": "RERA Registration copy if applicable"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by approved architect"},
+              {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
+              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Applicant’s sale deed"},
+              {"ID": 2, "Title": "E-bill/Latest Property Tax paid receipt"},
+              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 4, "Title": "Layout plan if applicable"},
+              {"ID": 5, "Title": "Detailed Estimate &map"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Agreement to Sale"},
+              {"ID": 3, "Title": "Society layout plan (In case where numbering of plots is seen in sale deed)"},
+              {"ID": 4, "Title": "Architect drawn Map & Estimate"},
+              {"ID": 5, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
+              {"ID": 6, "Title": "Mauka patwari/pointer plan required case to case basis"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement to sale / Draft Agreement/ Sale Deed"},
+              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 3, "Title": "Latest Property Tax Paid Receipt/ E-bill"}
+            ]
+          },
+          "Refinance": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Applicant’s sale deed"},
+              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
+              {"ID": 3, "Title": "Latest Property Tax paid receipt"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "ROM": {
+        "Home Loan": {
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
+              {"ID": 3, "Title": "Agreement to sale / Draft Agreement"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "RERA Registration copy if applicable"}
+            ]
+          },
+          "Resale Purchase": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Copy of seller sale deed"},
+              {"ID": 4, "Title": "Agreement to sale / Draft Agreement"},
+              {"ID": 5, "Title": "N.A. Order / Property Card /Zone Certificate"},
+              {"ID": 6, "Title": "Layout plan if applicable"},
+              {"ID": 7, "Title": "Latest Tax paid receipt"}
+            ]
+          },
+          "Self Construction": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan"},
+              {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "Detailed Estimate"}
+            ]
+          },
+          "Balance Transfer": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENNOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan for proposed area"},
+              {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "Detailed Estimate for proposed area"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "Refinance": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "Detailed Estimate"}
+            ]
+          },
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
+              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
+              {"ID": 3, "Title": "Applicant’s sale deed"},
+              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
+              {"ID": 5, "Title": "Layout plan if applicable"},
+              {"ID": 6, "Title": "Latest Tax paid receipt"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "DNCR": {
+        "Home Loan": {
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Agreement to Sale"},
+              {"ID": 3, "Title": "Colony layout plan (In case where numbering of plots is seen in sale deed, )"},
+              {"ID": 4, "Title": "Architect building plan & construction Estimate)"},
+              {"ID": 5, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
+              {"ID": 6, "Title": "Mauka patwari/pointer plan required case to case basis"}
+            ]
+          },
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Architect building plan & construction Estimate"},
+              {"ID": 3, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
+              {"ID": 4, "Title": "Mauka patwari/pointer plan required case to case basis."}
+            ]
+          },
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
+              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
+              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
+              {"ID": 2, "Title": "Approved Plan and commencement certificate"},
+              {"ID": 3, "Title": "NA order"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "TOP-UP": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
+              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PCH": {
+        "Home Loan": {
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title Document"},
+              {"ID": 2, "Title": "ATS"},
+              {"ID": 3, "Title": "Estimate and Map Req. during initiation"}
+            ]
+          },
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title Document"},
+              {"ID": 2, "Title": "ATS"},
+              {"ID": 3, "Title": "HTA if Applicable"}
+            ]
+          },
+          "SELF CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Title Document"},
+              {"ID": 2, "Title": "Estimate and Map Req. during initiation"}
+            ]
+          },
+          "HOME IMPROVEMENT / RENNOVATION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Construction Map and Renovation Estimate"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Electricity Bill"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale Deed"},
+              {"ID": 2, "Title": "Electricity Bill"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "MUMBAI": {
+        "Home Loan": {
+          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
+              {"ID": 2, "Title": "Approved Plan and commencement certificate"},
+              {"ID": 3, "Title": "NA order"},
+              {"ID": 4, "Title": "Namuna 8A"},
+              {"ID": 5, "Title": "Fore Boundary Certificate"},
+              {"ID": 6, "Title": "Gaothan Certificate"}
+            ]
+          },
+          "RESALE PURCHASE": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement to sale/Draft Agreement/Allotment Letter"},
+              {"ID": 2, "Title": "Approved Plan and Commencement certificate"},
+              {"ID": 3, "Title": "NA order"},
+              {"ID": 4, "Title": "Namuna 8A"},
+              {"ID": 5, "Title": "Fore Boundary Certificate"},
+              {"ID": 6, "Title": "Gaothan Certificate"}
+            ]
+          },
+          "PLOT PURCHASE + CONSTRUCTION": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Sale deed"},
+              {"ID": 2, "Title": "Registered Architect Plan Copy"},
+              {"ID": 3, "Title": "NA order and Layout plan"},
+              {"ID": 4, "Title": "Registered Architect Estimate"},
+              {"ID": 5, "Title": "Namuna 8A"},
+              {"ID": 6, "Title": "Fore Boundary Certificate"},
+              {"ID": 7, "Title": "Gaothan Certificate"}
+            ]
+          },
+          "BALANCE TRANSFER": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
+              {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
+              {"ID": 3, "Title": "NA order"},
+              {"ID": 4, "Title": "Namuna 8A"},
+              {"ID": 5, "Title": "Fore Boundary Certificate"},
+              {"ID": 6, "Title": "Gaothan Certificate"}
+            ]
+          }
+        },
+        "Non-Home Loan": {
+          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
+              {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
+              {"ID": 3, "Title": "NA order"},
+              {"ID": 4, "Title": "Namuna 8A"},
+              {"ID": 5, "Title": "Fore Boundary Certificate"},
+              {"ID": 6, "Title": "Gaothan Certificate"}
+            ]
+          },
+          "Top -Up": {
+            "Mandatory": [
+              {"ID": 1, "Title": "Agreement to Sale/Allotment Letter"},
+              {"ID": 2, "Title": "Ebill"}
+            ]
+          }
+        }
+      }
+    }
   ];
 
 
@@ -231,22 +921,22 @@ class _SaveDataState extends State<SaveData> {
 
 
 
-  // void pushData() async {
-  //   FirebaseFirestore.instance
-  //       .collection("customerProfile")
-  //       .doc("customerProfile")
-  //       .update({"customerProfile": FieldValue.arrayUnion(customerProfile)});
-  //   print("hi");
-  // }
   void pushData() async {
     FirebaseFirestore.instance
-        .collection("employeeMapping")
-        .doc("employeeMapping")
-        .set({
-      "employeeMapping": FieldValue.arrayUnion(employeeMapping)
-    }, SetOptions(merge: true));
+        .collection("documentChecklist")
+        .doc("documentChecklist")
+        .update({"documentChecklist": FieldValue.arrayUnion(documentChecklist)});
     print("hi");
   }
+  // void pushData() async {
+  //   FirebaseFirestore.instance
+  //       .collection("documentChecklist")
+  //       .doc("documentChecklist")
+  //       .set({
+  //     "documentChecklist": FieldValue.arrayUnion(documentChecklist)
+  //   }, SetOptions(merge: true));
+  //   print("hi");
+  // }
 
   @override
   Widget build(BuildContext context) {
