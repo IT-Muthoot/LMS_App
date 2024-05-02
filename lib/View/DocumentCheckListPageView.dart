@@ -29,6 +29,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
   String? SelectedMandatoryDoc;
   var userType;
   bool documentCheck = false;
+  Map<String, bool> documentCheckboxStates = {};
 
   List<DocumentSnapshot> leadDetails = [];
   String? productCategory;
@@ -81,7 +82,11 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
             // print('Key: $key');
             if(key == uppercaseRegion) {
               mandatoryDocuments = value[productCategory][purposeOfLoan]['Mandatory'];
-              print(mandatoryDocuments.map((document) => document['Title']));
+              log(mandatoryDocuments.toString());
+              // print(mandatoryDocuments.map((document) => document['Title']));
+              // for(int i = 0; i < mandatoryDocuments.length; i++) {
+              //   print(mandatoryDocuments[i]['Title']);
+              // }
             }
           });
         }
@@ -185,108 +190,185 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                     ),
                   ],
                 ),
+
                 Visibility(
                   visible: documentCheck,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: width * 1,
-                        child: DropdownButtonFormField2<String>(
-                          value: SelectedMandatoryDoc,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              SelectedMandatoryDoc = newValue;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select Document';
-                            }
-                            return null;
-                          },
-                          items: mandatoryDocuments.map((document){
-                            return DropdownMenuItem<String>(
-                              value: document['Title'],
-                              child: Text(
-                                document['Title'],
-                                  overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Color(0xFF393939),
-                                  fontSize: 15,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          style: const TextStyle(
-                            color: Color(0xFF393939),
-                            fontSize: 15,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          //   hint: const Text('Select an option'),
-                          decoration: InputDecoration(
-                            labelText: 'Select the document*',
-                            hintText: 'Select an option',
-                            focusedBorder: focus,
-                            enabledBorder: enb,
-                            filled: true,
-                            fillColor:StyleData.textFieldColor,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: height * 0.02,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          selectSource(height, width);
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: mandatoryDocuments.length,
+                    itemBuilder: (context, index) {
+                      final document = mandatoryDocuments[index];
+                      final documentId = document['ID'].toString();
+
+                      documentCheckboxStates.putIfAbsent(documentId, () => false);
+
+                      return CheckboxListTile(
+                        title: Text(mandatoryDocuments[index]['Title']),
+                        value: documentCheckboxStates[documentId], // Set initial value of checkbox, you can change it if the document is mandatory.
+                        activeColor: StyleData.appBarColor,
+                        onChanged: (bool? newValue) {
+                          print(newValue);
+                          setState(() {
+                            documentCheckboxStates[documentId] = newValue ?? false;
+                          });
                         },
-                        child: DottedBorder(
-                          color: Colors.black87,
-                          borderType: BorderType.RRect,
-                          radius: const Radius.circular(12),
-                          padding: const EdgeInsets.all(6),
-                          child: ClipRRect(
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                            child: Container(
-                              height: height * 0.07,
-                              width: width * 0.9,
-                              color: Colors.grey[200],
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.camera_alt,
-                                        color: Colors.black54,
-                                        size: 26,
-                                      ),
-                                      Text(
-                                        "/",
-                                        style: TextStyle(  color: Colors.black54,),
-                                      ),
-                                      Icon(Icons.arrow_circle_up_rounded,
-                                          color: Colors.black54, size: 26),
-                                    ],
-                                  ),
-                                  SizedBox(height: height * 0.01),
-                                  Text(
-                                      SelectedMandatoryDoc ?? ""
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        // secondary: InkWell(
+                        //   onTap: () {
+                        //     selectSource(height, width);
+                        //   },
+                        //   child: DottedBorder(
+                        //     color: Colors.black87,
+                        //     borderType: BorderType.RRect,
+                        //     radius: const Radius.circular(12),
+                        //     padding: const EdgeInsets.all(6),
+                        //     child: ClipRRect(
+                        //       borderRadius:
+                        //       const BorderRadius.all(Radius.circular(12)),
+                        //       child: Container(
+                        //         height: height * 0.07,
+                        //         width: width * 0.9,
+                        //         color: Colors.grey[200],
+                        //         child: Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: [
+                        //             const Row(
+                        //               mainAxisAlignment: MainAxisAlignment.center,
+                        //               children: [
+                        //                 Icon(
+                        //                   Icons.camera_alt,
+                        //                   color: Colors.black54,
+                        //                   size: 26,
+                        //                 ),
+                        //                 Text(
+                        //                   "/",
+                        //                   style: TextStyle(  color: Colors.black54,),
+                        //                 ),
+                        //                 Icon(Icons.arrow_circle_up_rounded,
+                        //                     color: Colors.black54, size: 26),
+                        //               ],
+                        //             ),
+                        //             SizedBox(height: height * 0.01),
+                        //             Text(
+                        //                 SelectedMandatoryDoc ?? ""
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                      );
+                    }
+                  )
                 )
+
+
+
+
+                // Visibility(
+                //   visible: documentCheck,
+                //   child: Column(
+                //     children: [
+                //       SizedBox(
+                //         width: width * 1,
+                //         child: DropdownButtonFormField2<String>(
+                //           value: SelectedMandatoryDoc,
+                //           onChanged: (String? newValue) {
+                //             setState(() {
+                //               SelectedMandatoryDoc = newValue;
+                //             });
+                //           },
+                //           validator: (value) {
+                //             if (value == null || value.isEmpty) {
+                //               return 'Please select Document';
+                //             }
+                //             return null;
+                //           },
+                //           items: mandatoryDocuments.map((document){
+                //             return DropdownMenuItem<String>(
+                //               value: document['Title'],
+                //               child: Text(
+                //                 document['Title'],
+                //                   overflow: TextOverflow.ellipsis,
+                //                 style: const TextStyle(
+                //                   color: Color(0xFF393939),
+                //                   fontSize: 15,
+                //                   fontFamily: 'Poppins',
+                //                   fontWeight: FontWeight.w400,
+                //                 ),
+                //               ),
+                //             );
+                //           }).toList(),
+                //           style: const TextStyle(
+                //             color: Color(0xFF393939),
+                //             fontSize: 15,
+                //             fontFamily: 'Poppins',
+                //             fontWeight: FontWeight.w400,
+                //           ),
+                //           //   hint: const Text('Select an option'),
+                //           decoration: InputDecoration(
+                //             labelText: 'Select the document*',
+                //             hintText: 'Select an option',
+                //             focusedBorder: focus,
+                //             enabledBorder: enb,
+                //             filled: true,
+                //             fillColor:StyleData.textFieldColor,
+                //           ),
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         height: height * 0.02,
+                //       ),
+                //       InkWell(
+                //         onTap: () {
+                //           selectSource(height, width);
+                //         },
+                //         child: DottedBorder(
+                //           color: Colors.black87,
+                //           borderType: BorderType.RRect,
+                //           radius: const Radius.circular(12),
+                //           padding: const EdgeInsets.all(6),
+                //           child: ClipRRect(
+                //             borderRadius:
+                //             const BorderRadius.all(Radius.circular(12)),
+                //             child: Container(
+                //               height: height * 0.07,
+                //               width: width * 0.9,
+                //               color: Colors.grey[200],
+                //               child: Column(
+                //                 mainAxisAlignment: MainAxisAlignment.center,
+                //                 children: [
+                //                   const Row(
+                //                     mainAxisAlignment: MainAxisAlignment.center,
+                //                     children: [
+                //                       Icon(
+                //                         Icons.camera_alt,
+                //                         color: Colors.black54,
+                //                         size: 26,
+                //                       ),
+                //                       Text(
+                //                         "/",
+                //                         style: TextStyle(  color: Colors.black54,),
+                //                       ),
+                //                       Icon(Icons.arrow_circle_up_rounded,
+                //                           color: Colors.black54, size: 26),
+                //                     ],
+                //                   ),
+                //                   SizedBox(height: height * 0.01),
+                //                   Text(
+                //                       SelectedMandatoryDoc ?? ""
+                //                     ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // )
+
+
               ],
             ),
           ),
