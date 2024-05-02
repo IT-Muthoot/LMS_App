@@ -211,28 +211,28 @@ class _SaveDataState extends State<SaveData> {
     {
       "TAMILNADU": {
         "Home Loan": {
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Plan approval/Actual plan"},
               {"ID": 3, "Title": "Estimate"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed in favour of seller"},
               {"ID": 2, "Title": "Sale agreement"},
               {"ID": 3, "Title": "Plan approval"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed in favour of seller"},
               {"ID": 2, "Title": "Sale agreement"},
               {"ID": 3, "Title": "Property tax receipt"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale agreement"},
               {"ID": 2, "Title": "Layout approval"},
@@ -240,21 +240,21 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Estimate"}
             ]
           },
-          "HOME IMPROVEMENT / RENOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Plan approval/Actual plan"},
               {"ID": 3, "Title": "Estimate"}
             ]
           },
-          "HOME EXTENSION": {
+          "Home Extension": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Plan approval/Actual plan"},
               {"ID": 3, "Title": "Estimate"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax receipt"}
@@ -262,19 +262,19 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax receipt"}
             ]
           },
-          "BALANCE TRANSFER-LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Balance Transfer - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax receipt"}
             ]
           },
-          "REFINANCE": {
+          "Refinance": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Plan approval/Actual plan"}
@@ -286,7 +286,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "KARNATAKA": {
         "Home Loan": {
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Khatha"},
@@ -294,7 +294,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Estimation"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale agreement"},
               {"ID": 2, "Title": "Title deed"},
@@ -302,14 +302,14 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Approved plan"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale agreement"},
               {"ID": 2, "Title": "Title deed"},
               {"ID": 3, "Title": "Khatha"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale agreement"},
               {"ID": 2, "Title": "Title deed"},
@@ -317,13 +317,13 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Layout plan"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Khatha"}
             ]
           },
-          "HOME EXTENSION": {
+          "Home Extension": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Khatha"},
@@ -331,7 +331,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Estimation"}
             ]
           },
-          "HOME IMPROVEMENT / RENOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Khatha"},
@@ -341,7 +341,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "REFINANCE": {
+          "Refinance": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Khatha"}
@@ -353,28 +353,28 @@ class _SaveDataState extends State<SaveData> {
     {
       "TAP": {
         "Home Loan": {
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Plan approval / Architect plan"},
               {"ID": 3, "Title": "Estimation"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement of Sale"},
               {"ID": 2, "Title": "Link document"},
               {"ID": 3, "Title": "Plan approval / Architect plan"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement of Sale"},
               {"ID": 2, "Title": "Link document"},
               {"ID": 3, "Title": "Property tax"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement of Sale"},
               {"ID": 2, "Title": "Link document"},
@@ -382,7 +382,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Plan approval / Architect plan"}
             ]
           },
-          "HOME IMPROVEMENT / RENOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Link document"},
@@ -390,7 +390,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Property tax"}
             ]
           },
-          "HOME EXTENSION": {
+          "Home Extension": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Link document"},
@@ -399,7 +399,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 5, "Title": "Property tax"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax"}
@@ -407,19 +407,19 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax"}
             ]
           },
-          "BALANCE TRANSFER-LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Balance Transfer - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax"}
             ]
           },
-          "REFINANCE": {
+          "Refinance": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Property tax"}
@@ -431,35 +431,35 @@ class _SaveDataState extends State<SaveData> {
     {
       "GUJARAT": {
         "Home Loan": {
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement for sale/Allotment letter"},
               {"ID": 2, "Title": "Construction Permission"},
               {"ID": 3, "Title": "Approved lay out/Building plan"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement for sale"},
               {"ID": 2, "Title": "Tax bill"},
               {"ID": 3, "Title": "Electricity bill"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Approved lay out/Building plan/Draft plan"},
               {"ID": 3, "Title": "Estimate"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Tax bill"},
               {"ID": 3, "Title": "Electricity bill"}
             ]
           },
-          "HOME IMPROVEMENT / RENOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Construction Permission"},
@@ -469,7 +469,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "REFINANCE": {
+          "Refinance": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Construction Permission"},
@@ -483,7 +483,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "MADHYA PRADESH": {
         "Home Loan": {
-          "HOME IMPROVEMENT / RENOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission by Municipal / DA"},
@@ -494,7 +494,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 7, "Title": "Latest Property Tax paid receipt"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
@@ -504,7 +504,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "RERA Registration copy if applicable"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
@@ -514,7 +514,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Latest Property Tax paid receipt"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission"},
@@ -526,7 +526,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "REFINANCE": {
+          "Refinance": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission"},
@@ -537,7 +537,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 7, "Title": "Latest Property Tax paid receipt"}
             ]
           },
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal/ Arcitect Plan"},
               {"ID": 2, "Title": "Construction permission"},
@@ -550,32 +550,31 @@ class _SaveDataState extends State<SaveData> {
         }
       }
     },
-
     {
       "RAJASTHAN": {
         "Home Loan": {
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Estimate for construction with proposed construction plan"},
               {"ID": 3, "Title": "Layout plan"}
             ]
           },
-          "HOME IMPROVEMENT / RENNOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Estimate for extension with proposed construction plan"},
               {"ID": 3, "Title": "Layout plan"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Sale agreement"},
               {"ID": 3, "Title": "Layout plan"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Sale agreement"},
@@ -583,7 +582,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Floor Plan"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Sale agreement"},
@@ -591,7 +590,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Layout plan of scheme"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Title deed"},
               {"ID": 2, "Title": "Layout plan"}
@@ -603,7 +602,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "UTTAR PRADESH": {
         "Home Loan": {
-          "Self construction/ Improvement/Extension": {
+          "Self-Construction/ Improvement/Extension": {
             "Mandatory": [
               {"ID": 1, "Title": "Applicant’s sale deed"},
               {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
@@ -611,7 +610,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan/floor plan by approved architect"},
               {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
@@ -619,7 +618,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "RERA Registration copy if applicable"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by approved architect"},
               {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
@@ -627,7 +626,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Applicant’s sale deed"},
               {"ID": 2, "Title": "E-bill/Latest Property Tax paid receipt"},
@@ -636,7 +635,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 5, "Title": "Detailed Estimate &map"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Agreement to Sale"},
@@ -648,7 +647,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement to sale / Draft Agreement/ Sale Deed"},
               {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
@@ -668,7 +667,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "ROM": {
         "Home Loan": {
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
               {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
@@ -689,7 +688,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 7, "Title": "Latest Tax paid receipt"}
             ]
           },
-          "Self Construction": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan"},
               {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
@@ -708,7 +707,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 5, "Title": "Layout plan if applicable"}
             ]
           },
-          "HOME IMPROVEMENT / RENNOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan for proposed area"},
               {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
@@ -730,7 +729,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Detailed Estimate"}
             ]
           },
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
               {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
@@ -746,7 +745,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "DNCR": {
         "Home Loan": {
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Agreement to Sale"},
@@ -756,7 +755,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Mauka patwari/pointer plan required case to case basis"}
             ]
           },
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Architect building plan & construction Estimate"},
@@ -764,21 +763,21 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 4, "Title": "Mauka patwari/pointer plan required case to case basis."}
             ]
           },
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
               {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
               {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
               {"ID": 2, "Title": "Approved Plan and commencement certificate"},
@@ -800,33 +799,33 @@ class _SaveDataState extends State<SaveData> {
     {
       "PCH": {
         "Home Loan": {
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Title Document"},
               {"ID": 2, "Title": "ATS"},
               {"ID": 3, "Title": "Estimate and Map Req. during initiation"}
             ]
           },
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Title Document"},
               {"ID": 2, "Title": "ATS"},
               {"ID": 3, "Title": "HTA if Applicable"}
             ]
           },
-          "SELF CONSTRUCTION": {
+          "Self-Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Title Document"},
               {"ID": 2, "Title": "Estimate and Map Req. during initiation"}
             ]
           },
-          "HOME IMPROVEMENT / RENNOVATION": {
+          "Home Improvement/Rennovation": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Construction Map and Renovation Estimate"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Electricity Bill"}
@@ -834,7 +833,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale Deed"},
               {"ID": 2, "Title": "Electricity Bill"}
@@ -846,7 +845,7 @@ class _SaveDataState extends State<SaveData> {
     {
       "MUMBAI": {
         "Home Loan": {
-          "PURCHASE DIRECTLY FROM BUILDER/AUTHORITY": {
+          "Purchase Directly From Builder/Authority": {
             "Mandatory": [
               {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
               {"ID": 2, "Title": "Approved Plan and commencement certificate"},
@@ -856,7 +855,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Gaothan Certificate"}
             ]
           },
-          "RESALE PURCHASE": {
+          "Resale Purchase": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement to sale/Draft Agreement/Allotment Letter"},
               {"ID": 2, "Title": "Approved Plan and Commencement certificate"},
@@ -866,7 +865,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Gaothan Certificate"}
             ]
           },
-          "PLOT PURCHASE + CONSTRUCTION": {
+          "Plot Purchase+Construction": {
             "Mandatory": [
               {"ID": 1, "Title": "Sale deed"},
               {"ID": 2, "Title": "Registered Architect Plan Copy"},
@@ -877,7 +876,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 7, "Title": "Gaothan Certificate"}
             ]
           },
-          "BALANCE TRANSFER": {
+          "Balance Transfer": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
               {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
@@ -889,7 +888,7 @@ class _SaveDataState extends State<SaveData> {
           }
         },
         "Non-Home Loan": {
-          "NORMAL - LOAN AGAINST RESIDENTIAL PROPERTY": {
+          "Normal - Loan Against Residential Property": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
               {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
@@ -899,7 +898,7 @@ class _SaveDataState extends State<SaveData> {
               {"ID": 6, "Title": "Gaothan Certificate"}
             ]
           },
-          "Top -Up": {
+          "Top-Up": {
             "Mandatory": [
               {"ID": 1, "Title": "Agreement to Sale/Allotment Letter"},
               {"ID": 2, "Title": "Ebill"}
@@ -909,17 +908,6 @@ class _SaveDataState extends State<SaveData> {
       }
     }
   ];
-
-
-
-
-
-
-
-
-
-
-
 
   void pushData() async {
     FirebaseFirestore.instance
