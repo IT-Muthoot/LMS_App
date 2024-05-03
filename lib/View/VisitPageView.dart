@@ -104,6 +104,8 @@ class _VisitPageViewState extends State<VisitPageView> {
       });
     }
   }
+
+
 //log data
  // Import dart:developer to use log function
 

@@ -93,115 +93,31 @@ class _SaveDataState extends State<SaveData> {
   // }
   List<Map<String, dynamic>> employeeMapping = [
     {
-      "EMP_CODE": "MA03937",
-      "NAME": "ASHISH",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "ROHT094",
-      "BRANCH": "ROHTAK",
-      "REGION CODE": "RO0008",
-      "REGION": "PCH",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1471",
-      "Reporting Manager Name": "MAHESH .",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03932",
-      "NAME": "VIKAS KUMAR SHARMA",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "ALWA012",
-      "BRANCH": "ALWAR",
+      "EMP_CODE": "MA03943",
+      "NAME": "SAGAR PRAJAPATI",
+      "DSGN_NAME": "RELATIONSHIP MANAGER",
+      "BRANCH CODE": "AJME022",
+      "BRANCH": "AJMER",
       "REGION CODE": "RO0006",
       "REGION": "RAJASTHAN",
       "ZONE CODE": "ZO0003",
       "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1128",
-      "Reporting Manager Name": "Bhanu Pareek",
+      "Reporting Manager Code": "MO1617",
+      "Reporting Manager Name": "KAMAL CHOUHAN",
       "DSGN_NAME_2": "SALES MANAGER"
     },
     {
-      "EMP_CODE": "MA03924",
-      "NAME": "AGRAVAT DHAVAL RASHMIKANT",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "AHME007",
-      "BRANCH": "AHMEDABAD",
+      "EMP_CODE": "MA03945",
+      "NAME": "VADGAMA HARDIK HARIKISHANBHAI",
+      "DSGN_NAME": "RELATIONSHIP MANAGER",
+      "BRANCH CODE": "RAJK005",
+      "BRANCH": "RAJKOT",
       "REGION CODE": "RO0005",
       "REGION": "GUJARAT",
       "ZONE CODE": "ZO0002",
       "ZONE": "WEST",
-      "Reporting Manager Code": "MO1194",
-      "Reporting Manager Name": "SHAIKH MUKHTYAR",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03934",
-      "NAME": "VIJAYPAL SINGH RAJPUT",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "BHOP013",
-      "BRANCH": "BHOPAL",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1625",
-      "Reporting Manager Name": "Mohd Khan",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "FA03929",
-      "NAME": "SHIVANI KUSHWAHA",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "BHOP013",
-      "BRANCH": "BHOPAL",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1625",
-      "Reporting Manager Name": "Mohd Khan",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "FA03930",
-      "NAME": "CHANDA RAMASHARY YADAV",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "THAN037",
-      "BRANCH": "MUMBAI - THANE",
-      "REGION CODE": "RO0002",
-      "REGION": "MUMBAI",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1444",
-      "Reporting Manager Name": "SANDEEP SAR",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03936",
-      "NAME": "IRFAAN ANISH SHEIKH",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "NAGP010",
-      "BRANCH": "NAGPUR",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1610",
-      "Reporting Manager Name": "SHAIKH ISMAIL",
-      "DSGN_NAME_2": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MA03935",
-      "NAME": "KIRAN LAXMAN SHINGARE",
-      "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "KOLH009",
-      "BRANCH": "KOLHAPUR",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1464",
-      "Reporting Manager Name": "AMIT PITAKE",
+      "Reporting Manager Code": "MO1658",
+      "Reporting Manager Name": "PRATIKKUMAR SOLANKI",
       "DSGN_NAME_2": "SALES MANAGER"
     }
   ];
@@ -909,22 +825,22 @@ class _SaveDataState extends State<SaveData> {
     }
   ];
 
-  void pushData() async {
-    FirebaseFirestore.instance
-        .collection("documentChecklist")
-        .doc("documentChecklist")
-        .update({"documentChecklist": FieldValue.arrayUnion(documentChecklist)});
-    print("hi");
-  }
   // void pushData() async {
   //   FirebaseFirestore.instance
   //       .collection("documentChecklist")
   //       .doc("documentChecklist")
-  //       .set({
-  //     "documentChecklist": FieldValue.arrayUnion(documentChecklist)
-  //   }, SetOptions(merge: true));
+  //       .update({"documentChecklist": FieldValue.arrayUnion(documentChecklist)});
   //   print("hi");
   // }
+  void pushData() async {
+    FirebaseFirestore.instance
+        .collection("employeeMapping")
+        .doc("employeeMapping")
+        .set({
+      "employeeMapping": FieldValue.arrayUnion(employeeMapping)
+    }, SetOptions(merge: true));
+    print("hi");
+  }
 
   @override
   Widget build(BuildContext context) {
