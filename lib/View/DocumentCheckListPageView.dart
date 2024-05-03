@@ -1,15 +1,25 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:http_parser/http_parser.dart';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_dialogs/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Model/apiurls.dart';
+import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 
 class DocumentChecklistPageView extends StatefulWidget {
@@ -202,62 +212,81 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
 
                       documentCheckboxStates.putIfAbsent(documentId, () => false);
 
-                      return CheckboxListTile(
-                        title: Text(mandatoryDocuments[index]['Title']),
-                        value: documentCheckboxStates[documentId], // Set initial value of checkbox, you can change it if the document is mandatory.
-                        activeColor: StyleData.appBarColor,
-                        onChanged: (bool? newValue) {
-                          print(newValue);
-                          setState(() {
-                            documentCheckboxStates[documentId] = newValue ?? false;
-                          });
-                        },
-                        // secondary: InkWell(
-                        //   onTap: () {
-                        //     selectSource(height, width);
-                        //   },
-                        //   child: DottedBorder(
-                        //     color: Colors.black87,
-                        //     borderType: BorderType.RRect,
-                        //     radius: const Radius.circular(12),
-                        //     padding: const EdgeInsets.all(6),
-                        //     child: ClipRRect(
-                        //       borderRadius:
-                        //       const BorderRadius.all(Radius.circular(12)),
-                        //       child: Container(
-                        //         height: height * 0.07,
-                        //         width: width * 0.9,
-                        //         color: Colors.grey[200],
-                        //         child: Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: [
-                        //             const Row(
-                        //               mainAxisAlignment: MainAxisAlignment.center,
-                        //               children: [
-                        //                 Icon(
-                        //                   Icons.camera_alt,
-                        //                   color: Colors.black54,
-                        //                   size: 26,
-                        //                 ),
-                        //                 Text(
-                        //                   "/",
-                        //                   style: TextStyle(  color: Colors.black54,),
-                        //                 ),
-                        //                 Icon(Icons.arrow_circle_up_rounded,
-                        //                     color: Colors.black54, size: 26),
-                        //               ],
-                        //             ),
-                        //             SizedBox(height: height * 0.01),
-                        //             Text(
-                        //                 SelectedMandatoryDoc ?? ""
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+                      return ListTile(
+                        // title: Text(mandatoryDocuments[index]['Title']),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(mandatoryDocuments[index]['Title']),
+                            // SizedBox(height: 2), // Add spacing between title and document name
+                            Text(
+                              mandatoryDocuments[index]['Title'],
+                              style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                            ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.attach_file),
+                          onPressed: () => selectSource(height, width), //mandatoryDocuments[index]
+                        ),
                       );
+
+                      // return CheckboxListTile(
+                      //   title: Text(mandatoryDocuments[index]['Title']),
+                      //   value: documentCheckboxStates[documentId], // Set initial value of checkbox, you can change it if the document is mandatory.
+                      //   activeColor: StyleData.appBarColor,
+                      //   onChanged: (bool? newValue) {
+                      //     print(newValue);
+                      //     setState(() {
+                      //       documentCheckboxStates[documentId] = newValue ?? false;
+                      //     });
+                      //   },
+                      //   // secondary: InkWell(
+                      //   //   onTap: () {
+                      //   //     selectSource(height, width);
+                      //   //   },
+                      //   //     child: DottedBorder(
+                      //   //     color: Colors.black87,
+                      //   //     borderType: BorderType.RRect,
+                      //   //     radius: const Radius.circular(12),
+                      //   //     padding: const EdgeInsets.all(6),
+                      //   //     child: ClipRRect(
+                      //   //       borderRadius:
+                      //   //       const BorderRadius.all(Radius.circular(12)),
+                      //   //       child: Container(
+                      //   //         height: height * 0.07,
+                      //   //         width: width * 0.9,
+                      //   //         color: Colors.grey[200],
+                      //   //         child: Column(
+                      //   //           mainAxisAlignment: MainAxisAlignment.center,
+                      //   //           children: [
+                      //   //             const Row(
+                      //   //               mainAxisAlignment: MainAxisAlignment.center,
+                      //   //               children: [
+                      //   //                 Icon(
+                      //   //                   Icons.camera_alt,
+                      //   //                   color: Colors.black54,
+                      //   //                   size: 26,
+                      //   //                 ),
+                      //   //                 Text(
+                      //   //                   "/",
+                      //   //                   style: TextStyle(  color: Colors.black54,),
+                      //   //                 ),
+                      //   //                 Icon(Icons.arrow_circle_up_rounded,
+                      //   //                     color: Colors.black54, size: 26),
+                      //   //               ],
+                      //   //             ),
+                      //   //             SizedBox(height: height * 0.01),
+                      //   //             Text(
+                      //   //                 SelectedMandatoryDoc ?? ""
+                      //   //             ),
+                      //   //           ],
+                      //   //         ),
+                      //   //       ),
+                      //   //     ),
+                      //   //   ),
+                      //   // ),
+                      // );
                     }
                   )
                 )
@@ -454,7 +483,8 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                         );
                         //  pickedFiles?.files.first
                         print(pickedFiles!.files.first.name);
-                      //  uploadOnDMS(pickedFiles,pickedFiles!.names);
+                        String fileName = pickedFiles!.names[0].toString();
+                        uploadOnDMS(pickedFiles, fileName);
                       },
                       trailing: Icon(
                         Icons.arrow_circle_right_rounded,
@@ -469,215 +499,228 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
         });
   }
 
-  // void uploadOnDMS(var pickedFile, String title) async {
-  //   //New Implementation for saving application PDF
-  //   print("bhjkjhlknl");
-  //   Dialogs.materialDialog(
-  //       msg: 'Are you sure you want to upload this document?',
-  //       title: "Alert",
-  //       msgStyle:
-  //       TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
-  //       titleStyle: const TextStyle(color: Colors.white),
-  //       color: StyleData.appBarColor2,
-  //       context: context,
-  //       titleAlign: TextAlign.center,
-  //       msgAlign: TextAlign.center,
-  //       barrierDismissible: false,
-  //       dialogWidth: kIsWeb ? 0.3 : null,
-  //       onClose: (value) {},
-  //       actions: [
-  //         Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 30),
-  //           child: InkWell(
-  //             onTap: () async {
-  //               Navigator.pop(context);
-  //               SmartDialog.showLoading(msg: "Uploading Document");
-  //               var dio = Dio();
-  //               try {
-  //                 FormData formData = FormData.fromMap({
-  //                   "File": await MultipartFile.fromFile(
-  //                     pickedFile!.path,
-  //                     filename: pickedFile.name,
-  //                     //    contentType: MediaType("pdf", "jpg"), //add this
-  //                     contentType:  _getContentType(pickedFile.name), //add this
-  //                   ),
-  //                   "Title": widget.visitID,
-  //                   "Description": "Document Verification",
-  //                   "Tags": "HomeFin",
-  //                   "IsPasswordProtected": "0",
-  //                   "Password": "0",
-  //                   "LUSR": "HomeFin",
-  //                 });
-  //                 print(formData);
-  //                 formData.files.addAll([
-  //                   MapEntry(
-  //                       "File",
-  //                       await MultipartFile.fromFile(pickedFile!.path,
-  //                           filename: pickedFile.name,
-  //                           contentType: MediaType('application', 'pdf')))
-  //                 ]);
-  //                 (dio.httpClientAdapter as DefaultHttpClientAdapter)
-  //                     .onHttpClientCreate = (client) {
-  //                   client.badCertificateCallback =
-  //                       (X509Certificate cert, String host, int port) => true;
-  //                 };
-  //                 dio.options.headers['Content-Type'] = 'multipart/form-data';
-  //                 // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
-  //
-  //                 var response = await dio.post(
-  //                   ApiUrls().uploadDoc,
-  //                   data: formData,
-  //                   onSendProgress: (int sent, int total) {
-  //                     debugPrint("sent${sent.toString()}" +
-  //                         " total${total.toString()}");
-  //                   },
-  //                 ).whenComplete(() {
-  //                   debugPrint("complete:");
-  //                 }).catchError((onError) {
-  //                   debugPrint("complete1");
-  //                   SmartDialog.dismiss();
-  //                 });
-  //                 print(response);
-  //                 var data = json.decode(response.toString());
-  //                 print(data);
-  //                 FirebaseFirestore.instance
-  //                     .collection("convertedLeads")
-  //                     .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
-  //                     .get()
-  //                     .then((QuerySnapshot snapshot) {
-  //                   if (snapshot.docs.isNotEmpty) {
-  //                     // If there's a matching document, set the value
-  //                     FirebaseFirestore.instance
-  //                         .collection("convertedLeads")
-  //                         .doc(snapshot.docs[0].id) // Use the ID of the first matching document
-  //                         .set({
-  //                       title: data["docId"].toString(),
-  //                     },
-  //                         SetOptions(merge: true));
-  //                   } else {
-  //                     // Handle case where no matching document is found
-  //                     // Perhaps show an error message or take appropriate action
-  //                   }
-  //                 })
-  //                     .catchError((error) {
-  //                   // Handle errors
-  //                   print("Error: $error");
-  //                 });
-  //                 // FirebaseFirestore.instance
-  //                 //     .collection("convertedLeads")
-  //                 //     .doc(widget.docId)
-  //                 //     .set({
-  //                 //   title: data["docId"].toString(),
-  //                 // },
-  //                 //     SetOptions(merge: true));
-  //                 SmartDialog.dismiss();
-  //                 if(data["docId"].toString().isNotEmpty)
-  //                 {
-  //                   if (applicationFormClicked) {
-  //                     print(ApplicationDocID);
-  //                     setState(() {
-  //                       applicationForm ="Uploaded";
-  //                     });
-  //
-  //                   } else if (bankPassbookClicked) {
-  //                     setState(() {
-  //                       bankPassbook = "Uploaded";
-  //                     });
-  //
-  //                   }
-  //                   else if (dateOfBirthClicked) {
-  //                     setState(() {
-  //                       dateOfBirthProof = "Uploaded";
-  //                     });
-  //                     // SharedPreferences prefs = await SharedPreferences.getInstance();
-  //                     // await prefs.setString("dateOfBirthProof", "Uploaded");
-  //                   } else if (loginFeeChequeClicked) {
-  //                     setState(() {
-  //                       loginFeeCheque = "Uploaded";
-  //                     });
-  //                   } else if (passportSizePhotoClicked) {
-  //                     setState(() {
-  //                       passportSizePhoto = "Uploaded";
-  //                     });
-  //                   } else if (photoIdProofClicked) {
-  //                     setState(() {
-  //                       photoIdProof = "Uploaded";
-  //                     });
-  //                   } else if (residenceProofClicked) {
-  //                     setState(() {
-  //                       residenceProof = "Uploaded";
-  //                     });
-  //                   } else if (salarySlipClicked) {
-  //                     setState(() {
-  //                       salarySlip = "Uploaded";
-  //                     });
-  //
-  //                   } else if (signatureProofClicked) {
-  //                     setState(() {
-  //                       signatureProof = "Uploaded";
-  //                     });
-  //
-  //                   } else if (copyOfPropertyClicked) {
-  //                     setState(() {
-  //                       copyOfProperty = "Uploaded";
-  //                     });
-  //
-  //                   }else if (totalWorkExpClicked) {
-  //                     setState(() {
-  //                       totalWorkExp = "Uploaded";
-  //                     });
-  //                   }else if (qualificationProofClicked) {
-  //                     setState(() {
-  //                       qualificationProof = "Uploaded";
-  //                     });
-  //                   }
-  //                 }
-  //                 else
-  //                 {
-  //                   CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
-  //                 }
-  //               } catch (e) {
-  //                 SmartDialog.dismiss();
-  //                 CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
-  //                 debugPrint(e.toString());
-  //               }
-  //             },
-  //             child: Container(
-  //               height: 40,
-  //               width: 50,
-  //               decoration: BoxDecoration(
-  //                   color: Colors.white,
-  //                   borderRadius: BorderRadius.circular(5)),
-  //               child: Center(
-  //                   child: Text('Yes',
-  //                       style: TextStyle(
-  //                           color: Colors.black,
-  //                           fontFamily: StyleData.boldFont,
-  //                           fontSize: 12))),
-  //             ),
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 30),
-  //           child: InkWell(
-  //             onTap: () {
-  //               Navigator.pop(context);
-  //             },
-  //             child: Container(
-  //               height: 40,
-  //               width: 50,
-  //               decoration: BoxDecoration(
-  //                   color: Colors.white,
-  //                   borderRadius: BorderRadius.circular(5)),
-  //               child: Center(
-  //                   child: Text('Cancel',
-  //                       style: TextStyle(
-  //                           color: Colors.black,
-  //                           fontFamily: StyleData.boldFont,
-  //                           fontSize: 12))),
-  //             ),
-  //           ),
-  //         )
-  //       ]);
-  // }
+  void uploadOnDMS(var pickedFile, String title) async {
+    //New Implementation for saving application PDF
+    print("bhjkjhlknl");
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to upload this document?',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                Navigator.pop(context);
+                SmartDialog.showLoading(msg: "Uploading Document");
+                var dio = Dio();
+                try {
+                  FormData formData = FormData.fromMap({
+                    "File": await MultipartFile.fromFile(
+                      pickedFile!.path,
+                      filename: pickedFile.name,
+                      //    contentType: MediaType("pdf", "jpg"), //add this
+                      contentType:  _getContentType(pickedFile.name), //add this
+                    ),
+                    "Title": widget.leadId,
+                    "Description": "Document Verification",
+                    "Tags": "HomeFin",
+                    "IsPasswordProtected": "0",
+                    "Password": "0",
+                    "LUSR": "HomeFin",
+                  });
+                  print(formData);
+                  formData.files.addAll([
+                    MapEntry(
+                        "File",
+                        await MultipartFile.fromFile(pickedFile!.path,
+                            filename: pickedFile.name,
+                            contentType: MediaType('application', 'pdf')))
+                  ]);
+                  (dio.httpClientAdapter as DefaultHttpClientAdapter)
+                      .onHttpClientCreate = (client) {
+                    client.badCertificateCallback =
+                        (X509Certificate cert, String host, int port) => true;
+                  };
+                  dio.options.headers['Content-Type'] = 'multipart/form-data';
+                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
+
+                  var response = await dio.post(
+                    ApiUrls().uploadDoc,
+                    data: formData,
+                    onSendProgress: (int sent, int total) {
+                      debugPrint("sent${sent.toString()}" +
+                          " total${total.toString()}");
+                    },
+                  ).whenComplete(() {
+                    debugPrint("complete:");
+                  }).catchError((onError) {
+                    debugPrint("complete1");
+                    SmartDialog.dismiss();
+                  });
+                  print(response);
+                  var data = json.decode(response.toString());
+                  print(data);
+                  FirebaseFirestore.instance
+                      .collection("convertedLeads")
+                      .where("LeadID", isEqualTo: widget.leadId) // Check if visitID matches
+                      .get()
+                      .then((QuerySnapshot snapshot) {
+                    if (snapshot.docs.isNotEmpty) {
+                      // If there's a matching document, set the value
+                      FirebaseFirestore.instance
+                          .collection("convertedLeads")
+                          .doc(snapshot.docs[0].id) // Use the ID of the first matching document
+                          .set({
+                        title: data["docId"].toString(),
+                      },
+                          SetOptions(merge: true));
+                    } else {
+                      // Handle case where no matching document is found
+                      // Perhaps show an error message or take appropriate action
+                    }
+                  })
+                      .catchError((error) {
+                    // Handle errors
+                    print("Error: $error");
+                  });
+                  // FirebaseFirestore.instance
+                  //     .collection("convertedLeads")
+                  //     .doc(widget.docId)
+                  //     .set({
+                  //   title: data["docId"].toString(),
+                  // },
+                  //     SetOptions(merge: true));
+                  SmartDialog.dismiss();
+                  if(data["docId"].toString().isNotEmpty)
+                  {
+                    // if (applicationFormClicked) {
+                    //   print(ApplicationDocID);
+                    //   setState(() {
+                    //     applicationForm ="Uploaded";
+                    //   });
+                    //
+                    // } else if (bankPassbookClicked) {
+                    //   setState(() {
+                    //     bankPassbook = "Uploaded";
+                    //   });
+                    //
+                    // }
+                    // else if (dateOfBirthClicked) {
+                    //   setState(() {
+                    //     dateOfBirthProof = "Uploaded";
+                    //   });
+                    //   // SharedPreferences prefs = await SharedPreferences.getInstance();
+                    //   // await prefs.setString("dateOfBirthProof", "Uploaded");
+                    // } else if (loginFeeChequeClicked) {
+                    //   setState(() {
+                    //     loginFeeCheque = "Uploaded";
+                    //   });
+                    // } else if (passportSizePhotoClicked) {
+                    //   setState(() {
+                    //     passportSizePhoto = "Uploaded";
+                    //   });
+                    // } else if (photoIdProofClicked) {
+                    //   setState(() {
+                    //     photoIdProof = "Uploaded";
+                    //   });
+                    // } else if (residenceProofClicked) {
+                    //   setState(() {
+                    //     residenceProof = "Uploaded";
+                    //   });
+                    // } else if (salarySlipClicked) {
+                    //   setState(() {
+                    //     salarySlip = "Uploaded";
+                    //   });
+                    //
+                    // } else if (signatureProofClicked) {
+                    //   setState(() {
+                    //     signatureProof = "Uploaded";
+                    //   });
+                    //
+                    // } else if (copyOfPropertyClicked) {
+                    //   setState(() {
+                    //     copyOfProperty = "Uploaded";
+                    //   });
+                    //
+                    // }else if (totalWorkExpClicked) {
+                    //   setState(() {
+                    //     totalWorkExp = "Uploaded";
+                    //   });
+                    // }else if (qualificationProofClicked) {
+                    //   setState(() {
+                    //     qualificationProof = "Uploaded";
+                    //   });
+                    // }
+                  }
+                  else
+                  {
+                    CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                  }
+                } catch (e) {
+                  SmartDialog.dismiss();
+                  CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                  debugPrint(e.toString());
+                }
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]);
+  }
+}
+MediaType _getContentType(String fileName) {
+  String extension = fileName.split('.').last.toLowerCase();
+  if (extension == 'pdf') {
+    return MediaType('application', 'pdf');
+  } else if (extension == 'jpg' || extension == 'jpeg') {
+    return MediaType('image', 'jpeg');
+  } else if (extension == 'png') {
+    return MediaType('image', 'png');
+  } else {
+    // Handle other file types here if needed
+    return MediaType('application', 'octet-stream'); // Default content type
+  }
 }
