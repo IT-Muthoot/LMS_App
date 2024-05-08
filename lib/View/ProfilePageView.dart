@@ -1,10 +1,16 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
+import 'package:lead_management_system/View/PendingLeadsPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'QueriesPageView.dart';
+import 'SentForVerification.dart';
+import 'VerifiedLeadsPageView.dart';
 
 
 class ProfilePageView extends StatefulWidget {
@@ -17,12 +23,20 @@ class ProfilePageView extends StatefulWidget {
 class _ProfilePageViewState extends State<ProfilePageView> {
   File? _image;
   List<DocumentSnapshot> ListOfLeads = [];
+  List<DocumentSnapshot> ListOfLeads1 = [];
   List<DocumentSnapshot> ListOfUsers = [];
   List<DocumentSnapshot> ListOfConvertedLeads = [];
   var userType;
   String? employeeName;
   String? branchCode;
   String? employeeCode;
+  int totalLeads = 0;
+  int verifiedLeads = 0;
+  int queryLeads = 0;
+  int pendingLeads = 0;
+  int sentForVerificationLeads = 0;
+  DateTime? startDate;
+  DateTime? endDate;
 
   void getUserData() async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -66,117 +80,198 @@ class _ProfilePageViewState extends State<ProfilePageView> {
       });
     }
   }
-
-  void fetchdata() async {
-    CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    // var userId = pref.getString("token");
-    var userId = pref.getString("userID");
-    print("userIDlkkk");
-    print("userId");
-    setState(() {
-      userType = pref.getString("logintype");
-    });
-    print(userType);
-    if (userType == "user") {
-      users.where("userId", isEqualTo: userId).get().then((value) {
-        setState(() {
-          ListOfLeads = value.docs;
-        });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
-        }
-      });
-    } else {
-      users.get().then((value) {
-        setState(() {
-          ListOfLeads = value.docs;
-        });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
-        }
-      });
-    }
-  }
-
-  void fetchLeadsdata() async {
+  void fetchLeadsdata(DateTime? startDate, DateTime? endDate) async {
     CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
     SharedPreferences pref = await SharedPreferences.getInstance();
     var userId = pref.getString("userID");
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
-    if (userType == "user") {
-      users.where("userId", isEqualTo: userId).get().then((value) {
-        setState(() {
-          ListOfConvertedLeads = value.docs;
 
-        });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
-        }
-      });
-    } else {
-      users.get().then((value) {
-        setState(() {
-          ListOfConvertedLeads = value.docs;
-        });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
-        }
+    Query leadsQuery = users.where("userId", isEqualTo: userId);
 
-      });
+    if (userType != "user") {
+      leadsQuery = users;
     }
-  }
 
-  List<DocumentSnapshot> visits = [];
-  DateTime fromDate = DateTime.now().subtract(Duration(days: 7));
-  DateTime toDate = DateTime.now();
+    // Apply date range filter
+    if (startDate != null && endDate != null) {
+      leadsQuery = leadsQuery.where('updatedTime', isGreaterThanOrEqualTo: startDate)
+          .where('updatedTime', isLessThanOrEqualTo: endDate);
+    }
 
-  // Function to fetch data from Firebase
-  Future<void> fetchVisitData() async {
-    // Implement Firebase query to fetch data from LeadCreation and convertedLeads collections
-    QuerySnapshot leadCreationSnapshot = await FirebaseFirestore.instance
-        .collection('LeadCreation')
-        .where('createdDateTime',
-        isGreaterThanOrEqualTo: fromDate,
-        isLessThanOrEqualTo: toDate)
-        .get();
+    QuerySnapshot querySnapshot = await leadsQuery.get();
+    ListOfLeads = querySnapshot.docs;
+    ListOfLeads1 = querySnapshot.docs;
 
-    QuerySnapshot convertedLeadsSnapshot = await FirebaseFirestore.instance
-        .collection('convertedLeads')
-        .where('createdDateTime',
-        isGreaterThanOrEqualTo: fromDate,
-        isLessThanOrEqualTo: toDate)
-        .get();
+    // Reset counts
+    verifiedLeads = 0;
+    pendingLeads = 0;
+    sentForVerificationLeads = 0;
+
+    // Update counts based on filtered leads
+    ListOfLeads.forEach((lead) {
+      if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
+        verifiedLeads++;
+      } else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
+        pendingLeads++;
+      } else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
+        sentForVerificationLeads++;
+      }
+    });
 
     setState(() {
-      visits = leadCreationSnapshot.docs + convertedLeadsSnapshot.docs;
+      totalLeads = verifiedLeads + pendingLeads + sentForVerificationLeads;
+      ListOfConvertedLeads = ListOfLeads;
     });
   }
 
-  // Function to process data and calculate daily visit counts
-  Map<DateTime, int> calculateDailyVisits() {
-    Map<DateTime, int> dailyVisits = {};
-    for (var visit in visits) {
-      DateTime visitDate = visit['createdDateTime'].toDate();
-      DateTime normalizedDate =
-      DateTime(visitDate.year, visitDate.month, visitDate.day);
-      dailyVisits.update(normalizedDate, (value) => value + 1, ifAbsent: () => 1);
+
+  // void fetchLeadsdata() async {
+  //   CollectionReference users =
+  //   FirebaseFirestore.instance.collection('convertedLeads');
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   var userId = pref.getString("userID");
+  //   setState(() {
+  //     userType = pref.getString("logintype");
+  //   });
+  //
+  //   if (userType == "user") {
+  //     QuerySnapshot querySnapshot =
+  //     await users.where("userId", isEqualTo: userId).get();
+  //     ListOfLeads = querySnapshot.docs;
+  //     ListOfLeads1 = querySnapshot.docs;
+  //   } else {
+  //     QuerySnapshot querySnapshot = await users.get();
+  //     ListOfLeads = querySnapshot.docs;
+  //     ListOfLeads1 = querySnapshot.docs;
+  //   }
+  //
+  //   ListOfLeads.forEach((lead) {
+  //     if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
+  //       verifiedLeads++;
+  //     } else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
+  //       pendingLeads++;
+  //     }
+  //     else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
+  //       sentForVerificationLeads++;
+  //
+  //     }
+  //   });
+  //
+  //   ListOfLeads.forEach((lead) {
+  //     if ( lead["LeadID"].length > 1 &&
+  //         lead["VerificationStatus"] == "Sent for Verification" &&
+  //         lead.data() is Map<String, dynamic> && // Check if data is a Map
+  //         (lead.data() as Map<String, dynamic>).containsKey("Query") && // Cast and check for 'Query' key
+  //         lead["Query"] != null) {
+  //       queryLeads++;
+  //     }
+  //   });
+  //
+  //
+  //   setState(() {
+  //     totalLeads = verifiedLeads + pendingLeads + sentForVerificationLeads;
+  //     ListOfConvertedLeads = ListOfLeads;
+  //   });
+  // }
+
+  TextEditingController _startDateController = TextEditingController();
+  TextEditingController _endDateController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context, int type) async {
+    final DateTime now = DateTime.now();
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now, // Set the initialDate to today
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blue, // Your custom yellow color
+            hintColor: Color(0xff973232),
+            colorScheme: ColorScheme.light(primary: Color(0xff973232)),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: Color(0xff973232),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        if (type == 1) {
+          _startDateController.text = formatDate(pickedDate.toLocal().toString());
+          startDate = pickedDate;
+        } else {
+          _endDateController.text = formatDate(pickedDate.toLocal().toString());
+          endDate = pickedDate;
+        }
+      });
+      fetchLeadsdata(startDate!, endDate!);
     }
-    return dailyVisits;
+  }
+
+  String formatDate(String dateString) {
+    try {
+      // Assuming dateString is in the format 'yyyy-MM-dd HH:mm:ss.SSS'
+      DateTime date = DateTime.parse(dateString);
+
+      final formatter = DateFormat('yyyy-MM-dd');
+      return formatter.format(date);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return " --";
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     getUserData();
-    fetchLeadsdata();
-    fetchdata();
-    fetchVisitData();
+    final formatter = DateFormat('yyyy-MM-dd');
+    _startDateController.text = formatter.format(DateTime.now()) ;
+    _endDateController.text = formatter.format(DateTime.now());
+    fetchLeadsdata(null, null);
     super.initState();
   }
+
+  Widget buildPieChart() {
+    return PieChart(
+      PieChartData(
+        sections: [
+          PieChartSectionData(
+            value: verifiedLeads.toDouble(),
+            title: '${verifiedLeads.toString()} Verified',
+            color: Colors.green,
+            radius: 70,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          ),
+          PieChartSectionData(
+            value: pendingLeads.toDouble(),
+            title: '${pendingLeads.toString()} Pending',
+            color: Colors.orange,
+            radius: 70,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          ),
+          PieChartSectionData(
+            value: sentForVerificationLeads.toDouble(),
+            title: '${sentForVerificationLeads.toString()} Sent for Verification',
+            color: Colors.amber,
+            radius: 70,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+
 
 
 
@@ -184,8 +279,6 @@ class _ProfilePageViewState extends State<ProfilePageView> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    int numberOfVisits = ListOfLeads.length;
-    int numberOfLeadsConverted = ListOfConvertedLeads.length;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -235,22 +328,6 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                         ],
                       ),
                     ),
-                    // RichText(
-                    //   text: TextSpan(
-                    //     style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: 18.0,
-                    //     ),
-                    //     children: [
-                    //       TextSpan(
-                    //         text: employeeCode,
-                    //         style: TextStyle(
-                    //           fontWeight: FontWeight.w200,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
 
@@ -258,57 +335,310 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                 ),
               ),
             ),
-            SizedBox(
-              height: height * 0.3,
-            ),
-
-            Center(
-              child: Text(
-                "Coming Soon"
-              ),
-            )
-            // Center(
-            //   child: Card(
-            //     elevation: 4, // Adjust elevation as needed
-            //     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Adjust margin as needed
-            //     child: Container(
-            //       color: Colors.white,
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(16.0),
-            //         child: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: [
-            //             Text(
-            //               "Total Number of Visits: ",
-            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-            //               // Adjust style as needed
-            //             ),
-            //             Text(
-            //               "$numberOfVisits",
-            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: StyleData.appBarColor2),
-            //               // Adjust style as needed
-            //             ),
-            //             SizedBox(height: 10),
-            //             Text(
-            //               "Leads Converted: ",
-            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-            //               // Adjust style as needed
-            //             ),
-            //             Text(
-            //               "$numberOfLeadsConverted",
-            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: StyleData.appBarColor2),
-            //               // Adjust style as needed
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // )
-
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.end,
+                     children: [
+                       Padding(
+                         padding: EdgeInsets.only(right: 8.0),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.end,
+                           children: [
+                             Container(
+                               height: height * 0.04,
+                               width: width * 0.4,
+                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(30.0),
+                                 gradient: LinearGradient(
+                                   colors: [
+                                     Color.fromARGB(255, 236, 225, 215),
+                                     Color.fromARGB(255, 227, 222, 215)
+                                   ],
+                                 ),
+                               ),
+                               child: Padding(
+                                 padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                 child: TextFormField(
+                                   controller: _startDateController,
+                                   readOnly: true,
+                                   onTap: () => _selectDate(context, 1),
+                                   decoration: InputDecoration(
+                                     labelText: '',
+                                     suffixIcon: Icon(Icons.calendar_today, size: 20,),
+                                     focusedBorder: InputBorder.none,
+                                     border: InputBorder.none,
+                                   ),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                       Padding(
+                         padding: EdgeInsets.only(right: 8.0),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.end,
+                           children: [
+                             Container(
+                               height: height * 0.04,
+                               width: width * 0.4,
+                               decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(30.0),
+                                 gradient: LinearGradient(
+                                   colors: [
+                                     Color.fromARGB(255, 236, 225, 215),
+                                     Color.fromARGB(255, 227, 222, 215)
+                                   ],
+                                 ),
+                               ),
+                               child: Padding(
+                                 padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                 child: TextFormField(
+                                   controller: _endDateController,
+                                   readOnly: true,
+                                   onTap: () => _selectDate(context,2),
+                                   decoration: InputDecoration(
+                                       labelText: '',
+                                       suffixIcon: Icon(Icons.calendar_today,size: 20,),
+                                       border: InputBorder.none
+                                   ),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                     ],
+                   ),
+                   SizedBox(
+                     height: height * 0.03,
+                   ),
+                   GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => VerifiedLeadsPageView(),
+                         ),
+                       );
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width: width * 0.8,
+                             child: Row(
+                               children: [
+                                 Text("Verified",style: TextStyle(
+                                   fontSize: 18,
+                                   fontWeight: FontWeight.w400,
+                                   color: Colors.green
+                                 ),),
+                                 Card(
+                                   child: Container(
+                                     color: Colors.white,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(2.0),
+                                       child: Text('${verifiedLeads.toString()}',style: TextStyle(
+                                           fontSize: 18,
+                                           fontWeight: FontWeight.w400,
+                                           color: Colors.green
+                                       ),),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           Icon(Icons.navigate_next)
+                         ],
+                       ),
+                     ),
+                   ),
+                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => SentForVerification(),
+                         ),
+                       );
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width:width * 0.8,
+                             child: Row(
+                               children: [
+                                 Text("Sent for Verification",style: TextStyle(
+                                     fontSize: 18,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.amber
+                                 ),),
+                                 Card(
+                                   child: Container(
+                                     color: Colors.white,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(2.0),
+                                       child: Text('${sentForVerificationLeads.toString()}',style: TextStyle(
+                                           fontSize: 18,
+                                           fontWeight: FontWeight.w400,
+                                           color: Colors.green
+                                       ),),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           Icon(Icons.navigate_next)
+                         ],
+                       ),
+                     ),
+                   ),
+                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => PendingLeadsPageView(),
+                         ),
+                       );
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width:width * 0.8,
+                             child: Row(
+                               children: [
+                                 Text("Pending",style: TextStyle(
+                                     fontSize: 18,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.orangeAccent
+                                 ),),
+                                 Card(
+                                   child: Container(
+                                     color: Colors.white,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(2.0),
+                                       child: Text('${pendingLeads.toString()}',style: TextStyle(
+                                           fontSize: 18,
+                                           fontWeight: FontWeight.w400,
+                                           color: Colors.green
+                                       ),),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           Icon(Icons.navigate_next)
+                         ],
+                       ),
+                     ),
+                   ),
+                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => QueryPageView(),
+                         ),
+                       );
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width:width * 0.8,
+                             child: Row(
+                               children: [
+                                 Text("Queries",style: TextStyle(
+                                     fontSize: 18,
+                                     fontWeight: FontWeight.w400,
+                                     color: StyleData.appBarColor2
+                                 ),),
+                                 Card(
+                                   child: Container(
+                                     color: Colors.white,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(2.0),
+                                       child: Text('${queryLeads.toString()}',style: TextStyle(
+                                           fontSize: 18,
+                                           fontWeight: FontWeight.w400,
+                                           color: Colors.green
+                                       ),),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           Icon(Icons.navigate_next)
+                         ],
+                       ),
+                     ),
+                   ),
+                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   Text(
+                     'Total Leads: $totalLeads',
+                     style: TextStyle(
+                       fontSize: 18.0,
+                       fontWeight: FontWeight.w400,
+                       color: Colors.black,
+                       // Add more styling properties as needed
+                     ),
+                   ),
+                   SizedBox(
+                     height: height * 0.03,
+                   ),
+                   Center(
+                     child: Text('Verification Status',
+                       style: TextStyle(
+                       fontSize: 16.0,
+                       fontWeight: FontWeight.w400,
+                       color: StyleData.appBarColor2,
+                       // Add more styling properties as needed
+                     ),),
+                   ),
+                   SizedBox(
+                     height: height * 0.03,
+                   ),
+                   Center(
+                     child: Container(
+                       height: 200,
+                       width: 200,
+                       child: buildPieChart(),
+                     ),
+                   ),
+                 ],
+               ),
+             ),
           ],
         ),
       ),
     );
   }
+
+
+
+}
+class LeadStatus {
+  final String status;
+  final int count;
+
+  LeadStatus(this.status, this.count);
 }

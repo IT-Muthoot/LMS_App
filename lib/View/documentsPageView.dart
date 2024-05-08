@@ -17,22 +17,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:material_dialogs/dialogs.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Model/Response/DropDownModel.dart';
 import '../Model/apiurls.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
-import 'ApplicantDetailsView.dart';
-import 'dashbordPageView.dart';
+import 'DocumentCheckListPageView.dart';
 
 class DocumentPageView extends StatefulWidget {
   final bool isNewActivity;
+  final bool isTechChecklist;
   final String visitID;
   final String docId;
+  final String leadID;
   const DocumentPageView({Key? key,
-    required this.visitID,required this.docId,required this.isNewActivity})
+    required this.visitID,required this.docId,required this.isNewActivity,required this.isTechChecklist,required this.leadID})
       : super(key: key);
 
   @override
@@ -605,14 +604,36 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: height * 0.02,
-              ),
+              // SizedBox(
+              //   height: height * 0.01,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Lead ID : ",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.leadID,
+                                        style: TextStyle(
+                                          color: StyleData.appBarColor2,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+
                 Text(
                   "Required Documents",
                   style: TextStyle(
@@ -1549,6 +1570,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
               SizedBox(
                 height: height * 0.03,
               ),
+              widget.leadID != null && widget.isTechChecklist ?
               Container(
                 height: 55,
                 width: double.infinity,
@@ -1560,20 +1582,49 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                   children:[
                     ElevatedButton(
                       onPressed: () {
+                        Navigator.push(
+                            context,
+                        MaterialPageRoute(
+                            builder: (context) => DocumentChecklistPageView(
+                                docId:widget.docId,
+                                leadId: widget.leadID,
+                                isNewActivity: false,
+                                isUpdateActivity:true
+                            )));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ) :
+            Container(
+                height: 55,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: StyleData.appBarColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children:[
+                    ElevatedButton(
+                      onPressed: () {
                         updateLeadData();
-                       // leadCreation();
-                        // if(applicationForm == "Uploaded" && bankPassbook == "Uploaded" && dateOfBirthProof == "Uploaded" && loginFeeCheque == "Uploaded"
-                        //     && passportSizePhoto == "Uploaded" && photoIdProof == "Uploaded" && residenceProof == "Uploaded" && salarySlip == "Uploaded"
-                        //     && signatureProof == "Uploaded"
-                        // )
-                        //   {
-                        //     // _showAlertDialogSuccess(context);
-                        //     leadCreation();
-                        //   }
-                        // else
-                        //   {
-                        //     CustomSnackBar.errorSnackBarQ("Please upload Manadtory Documents", context);
-                        //   }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -1593,7 +1644,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),

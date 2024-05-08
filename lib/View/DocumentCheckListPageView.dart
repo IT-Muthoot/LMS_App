@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/apiurls.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
+import 'HomePageView.dart';
 
 class DocumentChecklistPageView extends StatefulWidget {
   final bool isNewActivity;
@@ -41,13 +42,50 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
   bool documentCheck = false;
  String? isChecklist;
   Map<String, bool> documentCheckboxStates = {};
+  Map<String, String> uploadedFileNames = {};
+  var checklistData;
+
 
 
   List<DocumentSnapshot> leadDetails = [];
   String? productCategory;
   String? purposeOfLoan;
   String? region;
+  String? VerificationStatus = "Pending";
+  String VerificationStatusBy = "Pending";
 
+
+  void updateLeadDetails() async {
+    CollectionReference leadsCollection =
+    FirebaseFirestore.instance.collection('convertedLeads');
+    DateTime now = DateTime.now();
+    print("Hello");
+    try{
+      Map<String, dynamic> params = {
+        'VerificationStatus' : 'Sent for Verification',
+        'updatedTime':Timestamp.fromDate(now),
+      };
+      leadsCollection.where('LeadID', isEqualTo: widget.leadId).get().then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          print(querySnapshot.docs.isNotEmpty);
+          leadsCollection.doc(querySnapshot.docs.first.id).update(params).then((value) {
+            print("Data updated to Visits successfully");
+            _showAlertDialogSuccess2(context);
+            //  Navigator.pop(context);
+          }).catchError((error) {
+            print("Failed to update data: $error");
+          });
+        } else {
+          // Navigator.pop(context);
+        }
+      }).catchError((error) {
+        print("Failed to check if customerNumber exists: $error");
+      });
+
+    }catch(e){
+      print(e);
+    };
+  }
 
   void fetchLeadDetails() async {
     CollectionReference leadsCollection =
@@ -61,15 +99,49 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
     if (leadSnapshot.docs.isNotEmpty) {
       setState(() {
         leadDetails = leadSnapshot.docs;
-        productCategory = leadDetails[0]['productCategory']; // important
-        purposeOfLoan = leadDetails[0]['products']; // important
-        region = leadDetails[0]['Region']; // important
+        productCategory = leadDetails[0]['productCategory'] ?? "";
+        purposeOfLoan = leadDetails[0]['products'] ?? "";
+        region = leadDetails[0]['Region'] ?? "";
+        VerificationStatus = leadDetails[0]['VerificationStatus'] ?? "";
+        // VerificationStatusBy = leadDetails[0]['VerifiedBy' ?? ""] ?? ""; // important
+     // important
       });
       _fetchDataFromFirestore();
     } else {
 
     }
   }
+
+  void fetchLeadChecklistDetails() async {
+    CollectionReference leadsCollection = FirebaseFirestore.instance.collection('convertedLeads');
+
+    QuerySnapshot leadSnapshot = await leadsCollection
+        .where('LeadID', isEqualTo: widget.leadId)
+        .limit(1)
+        .get();
+
+    if (leadSnapshot.docs.isNotEmpty) {
+      // If lead details found, extract the checklist data
+     checklistData = leadSnapshot.docs.first.data();
+      // Iterate through mandatory documents to update uploadedFileNames
+      for (int index = 0; index < mandatoryDocuments.length; index++) {
+        final document = mandatoryDocuments[index];
+        final documentId = document['ID'].toString();
+        final documentTitle = mandatoryDocuments[index]['Title'];
+        final checklistTitle = '$documentTitle-checklist';
+
+        // Check if checklistTitle exists in the checklist data
+        if (checklistData.containsKey(checklistTitle)) {
+          // If checklist exists, update uploadedFileNames accordingly
+          setState(() {
+            uploadedFileNames[documentId] = 'Uploaded'; // You can set any string you want
+          });
+        }
+      }
+    }
+  }
+
+
   UnderlineInputBorder enb =  UnderlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide:   const BorderSide(color:  Colors.black38)
@@ -94,26 +166,40 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
           documentSnapshot['documentChecklist'][i].forEach((key, value) {
             // print('Key: $key');
             if(key == uppercaseRegion) {
-              mandatoryDocuments = value[productCategory][purposeOfLoan]['Mandatory'];
-              log(mandatoryDocuments.toString());
-              // print(mandatoryDocuments.map((document) => document['Title']));
-              // for(int i = 0; i < mandatoryDocuments.length; i++) {
-              //   print(mandatoryDocuments[i]['Title']);
-              // }
+              setState(() {
+                mandatoryDocuments = value[productCategory][purposeOfLoan]['Mandatory'];
+                log(mandatoryDocuments.toString());
+              });
             }
           });
         }
       }
     } catch (e) {
+      CustomSnackBar.errorSnackBarQ("Technical Checklist Not Available", context);
       log('Error fetching data: $e');
     }
   }
+
+  Future<void> saveUploadedFileName(String fileName, String documentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(documentId, fileName);
+  }
+
+
+  Future<String?> getUploadedFileName(String documentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(documentId);
+  }
+
 
 
   XFile? pickedFile;
   FilePickerResult? pickedFiles;
   bool documentUploaded = false;
   String uploadedFileName = '';
+  String checklistName = '';
+  int? mandatoryDocumentCount;
+  int uploadedDocumentCount = 0;
 
   @override
   void initState() {
@@ -154,107 +240,279 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
           ),
 
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Lead ID: ${widget.leadId}',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Text(
-                  'Product: $productCategory',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Text(
-                  'Purpose Of Loan: $purposeOfLoan',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Text(
-                  'Region: $region',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: documentCheck,
-                      activeColor: StyleData.appBarColor,
-                      onChanged: (value) {
-                        setState(() {
-                          documentCheck = value!;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Document Checklist',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-
-                Visibility(
-                  visible: documentCheck,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: mandatoryDocuments.length,
-                    itemBuilder: (context, index) {
-                      final document = mandatoryDocuments[index];
-                      final documentId = document['ID'].toString();
-
-                      documentCheckboxStates.putIfAbsent(documentId, () => false);
-
-                      return ListTile(
-                        // title: Text(mandatoryDocuments[index]['Title']),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Text(mandatoryDocuments[index]['Title']),
-                            if (documentUploaded)
-                              Text(
-                                uploadedFileName,
-                                style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                            Text(
+                              'Status ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
                               ),
-                            //   Text(
-                            //   mandatoryDocuments[index]['Title'],
-                            //   style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                            // )
+                            ),
+                            Text(
+                              '-',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              ' $VerificationStatus',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: VerificationStatus == 'Verified' ? Colors.green : StyleData.appBarColor2 ,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.attach_file),
-                          onPressed: () {
-                            selectSource(height, width,mandatoryDocuments[index]['Title']);
-                          }
-                              //mandatoryDocuments[index]
+                        Divider(),
+                        // Row(
+                        //   children: [
+                        //     Text(
+                        //       'RM/CM Status ',
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         color: Colors.black,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //     Text(
+                        //       '-',
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         color: Colors.black,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //     Text(
+                        //       ' $VerificationStatusBy',
+                        //       style: TextStyle(
+                        //         fontSize: 18,
+                        //         color: VerificationStatusBy == "Pending" ? StyleData.appBarColor2 : Colors.orangeAccent,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        // Divider(),
+                        Text(
+                          'Lead ID: ${widget.leadId}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
-                      );
+                        Text(
+                          'Product: $productCategory',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Text(
+                          'Purpose Of Loan: $purposeOfLoan',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Text(
+                          'Region: $region',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: documentCheck,
+                              activeColor: StyleData.appBarColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  documentCheck = value!;
+                                });
+                                fetchLeadChecklistDetails();
+                              },
+                            ),
+                            Text(
+                              'Technical Checklist',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                
+                        Visibility(
+                          visible: documentCheck,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: mandatoryDocuments.length,
+                            itemBuilder: (context, index) {
+                              final document = mandatoryDocuments[index];
+                              final documentId = document['ID'].toString();
+                              mandatoryDocumentCount = mandatoryDocuments.length;
 
-                    }
-                  )
-                )
-              ],
+                              documentCheckboxStates.putIfAbsent(documentId, () => false);
+
+                              return ListTile(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(mandatoryDocuments[index]['Title']),
+                                    if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
+                                      Text(
+                                        uploadedFileNames[documentId] ?? '', // Display uploaded filename
+                                        style: TextStyle(color: Colors.red, fontSize: 12.0),
+                                      ),
+                                    Divider()
+                                  ],
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.attach_file),
+                                  onPressed: () {
+                                    selectSource(height, width,mandatoryDocuments[index]['Title'],documentId);
+                                  }
+                                      //mandatoryDocuments[index]
+                                ),
+                              );
+                
+                            }
+                          )
+                        ),
+                
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+            Container(
+              height: 55,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: StyleData.appBarColor2,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:[
+                  ElevatedButton(
+                    onPressed: () {
+                      updateDocument();
+                      // if (uploadedDocumentCount == mandatoryDocumentCount) {
+                      //
+                      // } else {
+                      //   CustomSnackBar.errorSnackBarQ("Please ", context);
+                      // }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  selectSource(height, width,title) {
+  void updateDocument() async {
+    //New Implementation for saving application PDF
+    print("bhjkjhlknl");
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to submit the Documents',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                // setState(() {
+                //   isLeadsUpdateData = true;
+                // });
+                updateLeadDetails();
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]);
+  }
+
+
+
+  selectSource(height, width,title, String documentId) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -291,7 +549,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                             imageQuality: 60);
                         print(pickedFile);
                         if (pickedFile != null) {
-                          uploadOnDMS(pickedFile,title);
+                          uploadOnDMS(pickedFile,title,documentId);
                         } else {
                           // Handle case where user canceled image picking
                         }
@@ -337,7 +595,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                         );
                         //  pickedFiles?.files.first
                         print(pickedFiles!.files.first.name);
-                        uploadOnDMS(pickedFiles!.files.first, title);
+                        uploadOnDMS(pickedFiles!.files.first, title,documentId);
                       },
                       trailing: Icon(
                         Icons.arrow_circle_right_rounded,
@@ -352,7 +610,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
         });
   }
 
-  void uploadOnDMS(var pickedFile, String title) async {
+  void uploadOnDMS(var pickedFile, String title,String documentId) async {
     print("bhjkjhlknl");
     print(pickedFile);
     Dialogs.materialDialog(
@@ -431,56 +689,29 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                       // If there's a matching document, set the value
                       FirebaseFirestore.instance
                           .collection("convertedLeads")
-                          .doc(snapshot.docs[0].id) // Use the ID of the first matching document
+                          .doc(snapshot.docs[0].id)
                           .set({
-                        title: data["docId"].toString(),
+                        '$title-checklist': data["docId"].toString(),
                       },
                           SetOptions(merge: true));
+
+                      setState(()  {
+                        documentUploaded = true;
+                        uploadedFileNames[documentId] = pickedFile.name;
+                        checklistName = title;
+                        uploadedDocumentCount++;
+                      });
+                      saveUploadedFileName(pickedFile.name,documentId);
                     } else {
-                      // Handle case where no matching document is found
-                      // Perhaps show an error message or take appropriate action
+                      CustomSnackBar.errorSnackBarQ("No such document found", context);
                     }
                   })
                       .catchError((error) {
-                    // Handle errors
+                    CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
                     print("Error: $error");
                   });
 
                   SmartDialog.dismiss();
-                  FirebaseFirestore.instance
-                      .collection("convertedLeads")
-                      .where("LeadID", isEqualTo: widget.leadId) // Check if visitID matches
-                      .get()
-                      .then((QuerySnapshot snapshot) {
-                    if (snapshot.docs.isNotEmpty) {
-                      // If there's a matching document, set the value
-                      FirebaseFirestore.instance
-                          .collection("convertedLeads")
-                          .doc(snapshot.docs[0].id) // Use the ID of the first matching document
-                          .set({
-                        title: data["docId"].toString(),
-                      },
-                          SetOptions(merge: true));
-                    } else {
-
-                    }
-                  })
-                      .catchError((error) {
-                    print("Error: $error");
-                  });
-
-                  if(data["docId"].toString().isNotEmpty)
-                  {
-                    setState(() {
-                      documentUploaded = true;
-                      uploadedFileName = pickedFile.name;
-                    });
-
-                  }
-                  else
-                  {
-                    CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
-                  }
                 } catch (e) {
                   SmartDialog.dismiss();
                   CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
@@ -523,7 +754,72 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
               ),
             ),
           )
-        ]);
+        ]
+    );
+  }
+
+  void _showAlertDialogSuccess2(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0, // No shadow
+            content: Container(
+              height:190,
+              width: 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child:
+                    Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle
+                      ),
+                      child: Center(
+                        child: Icon(Icons.done,color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('Documents Submitted for verification', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  SizedBox(height: 5),
+                  SizedBox(
+                    height: 25,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageView(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text('OK', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 MediaType _getContentType(String fileName) {

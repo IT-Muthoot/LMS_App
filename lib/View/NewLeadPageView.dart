@@ -2644,7 +2644,9 @@ String? SalutaionID;
                                                           builder: (context) => DocumentPageView(
                                                               docId: widget.docId,
                                                               visitID: widget.visitId,
-                                                              isNewActivity: false
+                                                              isNewActivity: false,
+                                                              leadID: '',
+                                                              isTechChecklist : false
                                                           )));
                                                 }
                                               }else{

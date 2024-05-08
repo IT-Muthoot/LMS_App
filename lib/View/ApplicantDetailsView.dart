@@ -27,6 +27,8 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
   TextEditingController searchKEY = TextEditingController();
+  String? VisitID;
+  bool istechnicalChecklist = true;
 
   void fetchdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
@@ -39,20 +41,22 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
+        List<DocumentSnapshot> filteredList = value.docs.where((doc) => (doc["LeadID"] as String).length > 1).toList();
         setState(() {
-          ListOfLeads = value.docs;
+          ListOfLeads = filteredList;
         });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+        for (var i = 0; filteredList.length > i; i++) {
+          print(filteredList[i].data());
         }
       });
     } else {
       users.get().then((value) {
+        List<DocumentSnapshot> filteredList = value.docs.where((doc) => (doc["LeadID"] as String).length > 1).toList();
         setState(() {
-          ListOfLeads = value.docs;
+          ListOfLeads = filteredList;
         });
-        for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+        for (var i = 0; filteredList.length > i; i++) {
+          print(filteredList[i].data());
         }
       });
     }
@@ -230,20 +234,6 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                            borderSide: BorderSide(color:Colors.black54)),
                        contentPadding: const EdgeInsets.only(left: 1,),
                        hintStyle: const TextStyle(fontSize: 14,color: Colors.black54),
-                       // suffixIcon: IconButton(
-                       //   icon:    SizedBox(
-                       //     //  height: 60,
-                       //     child: Image.asset(
-                       //         'assets/images/filter.png',
-                       //         width: width * 0.06,
-                       //         height: height * 0.02,
-                       //         color: Colors.black87
-                       //     ),
-                       //   ),
-                       //   onPressed: () {
-                       //  //   _scaffoldKey.currentState!.openDrawer();
-                       //   },
-                       // ),
                        prefixIcon: IconButton(
                          icon: Icon(Icons.search),
                          onPressed: () {},
@@ -261,81 +251,8 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                SizedBox(
                  height: height * 0.01,
                ),
-               // Row(
-               //   mainAxisAlignment: MainAxisAlignment.end,
-               //   children: [
-               //     Padding(
-               //       padding: EdgeInsets.only(right: 8.0), // Adjust the right padding as needed
-               //       child: Container(
-               //         height: height * 0.04,
-               //         width: width * 0.4,
-               //         decoration: BoxDecoration(
-               //           borderRadius: BorderRadius.circular(30.0),
-               //           gradient: LinearGradient(
-               //             colors: [
-               //               Color.fromARGB(255, 236, 225, 215),
-               //               Color.fromARGB(255, 227, 222, 215)
-               //             ],
-               //           ),
-               //         ),
-               //         child: Padding(
-               //           padding: EdgeInsets.symmetric(horizontal: 8.0),
-               //           child: TextFormField(
-               //             controller: _startDateController,
-               //             readOnly: true,
-               //             onTap: () => _selectDate(context, 1),
-               //             decoration: InputDecoration(
-               //               labelText: '',
-               //               suffixIcon: Icon(Icons.calendar_today, size: 20,),
-               //               focusedBorder: InputBorder.none,
-               //               border: InputBorder.none,
-               //             ),
-               //           ),
-               //         ),
-               //       ),
-               //     ),
-               //
-               //     Padding(
-               //       padding: EdgeInsets.only(right: 8.0),
-               //       child: Container(
-               //         height: height * 0.04,
-               //         width: width * 0.4,
-               //         decoration: new BoxDecoration(
-               //             borderRadius: BorderRadius.circular(30.0),
-               //             gradient: new LinearGradient(
-               //                 colors: [
-               //                   // Color.fromARGB(255, 168, 2, 2),
-               //                   // Color.fromARGB(255, 206, 122, 122)
-               //                   Color.fromARGB(255, 236, 225, 215),
-               //                   Color.fromARGB(255, 227, 222, 215)
-               //                 ]
-               //             )
-               //         ),
-               //         child: Padding(
-               //           padding: EdgeInsets.symmetric(horizontal: 8.0),
-               //           child: TextFormField(
-               //             controller: _endDateController,
-               //             readOnly: true,
-               //
-               //             onTap: () => _selectDate(context,2),
-               //             decoration: InputDecoration(
-               //                 labelText: '',
-               //                 suffixIcon: Icon(Icons.calendar_today,size: 20,),
-               //                 border: InputBorder.none
-               //               //  filled: true,
-               //               //  fillColor: Colors.grey[200],
-               //             ),
-               //           ),
-               //         ),
-               //       ),
-               //     ),
-               //   ],
-               // ),
-               // SizedBox(
-               //   height: height * 0.01,
-               // ),
                SizedBox(
-                 height: height * 0.65,
+                 height:  MediaQuery.of(context).size.height,
                  width: MediaQuery.of(context).size.width,
                  child:ListOfLeads.isNotEmpty ?
                  Scrollbar(
@@ -373,60 +290,89 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                               //  commented for first phase
+                                 if(ListOfLeads[index]["VerificationStatus"] == "Pending")
                                  Navigator.push(
                                      context,
-                                     MaterialPageRoute(
-                                         builder: (context) => DocumentChecklistPageView(
-                                           docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
-                                             leadId: ListOfLeads[index]["LeadID"],
-                                             isNewActivity: false,
-                                             isUpdateActivity:true
-                                         )));
+                                   MaterialPageRoute(
+                                       builder: (context) =>  DocumentPageView(
+                                         docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
+                                         leadID: ListOfLeads[index]["LeadID"],
+                                           isNewActivity: false,
+                                         visitID: ListOfLeads[index]["VisitID"],
+                                         isTechChecklist : istechnicalChecklist
+                                       ))
+                                     // MaterialPageRoute(
+                                     //     builder: (context) => DocumentChecklistPageView(
+                                     //       docId: searchKEY.text.isEmpty ? ListOfLeads[index].id : searchListOfLeads[index].id,
+                                     //         leadId: ListOfLeads[index]["LeadID"],
+                                     //         isNewActivity: false,
+                                     //         isUpdateActivity:true
+                                     //     ))
+                                 );
                                },
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
                                    Row(
-                                   //  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                      children: [
-                                     //  ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
-                                       Icon(
-                                           Icons.star,
-                                           color: Colors.yellow.shade800
-                                       ),
-                                       //     :  Icon(
-                                       //     Icons.pending,
-                                       //     color: Colors.red
-                                       // ),
-                                       SizedBox(
-                                         width: width * 0.34,
-                                       ),
                                        Text(
-                                         "Lead ID",
+                                         "Status : ",
                                          style: TextStyle(
                                            color: StyleData.appBarColor2,
-                                           fontSize: 18.0,
+                                           fontSize: 15.0,
                                            fontWeight: FontWeight.bold,
                                          ),
                                        ),
-                                       // Icon(
-                                       //     Icons.visibility,
-                                       //     color: Colors.red.shade300
-                                       // ),
+                                       Text(
+                                         searchKEY.text.isEmpty
+                                             ? ListOfLeads[index]["VerificationStatus"] ?? ""
+                                             : searchListOfLeads[index]["VerificationStatus"] ?? "",
+                                         style: TextStyle(
+                                           color: ListOfLeads[index]["VerificationStatus"] == 'Verified' ? Colors.green : ListOfLeads[index]["VerificationStatus"] == 'Pending' ?  Colors.red :  Colors.amber ,
+                                           fontSize: 14.0,
+                                           fontFamily: 'Poppins',
+                                         ),
+                                       ),
                                      ],
                                    ),
-                                   Center(
-
-                                     child: Text(
-                                       searchKEY.text.isEmpty
-                                           ? ListOfLeads[index]["LeadID"] ?? ""
-                                           : searchListOfLeads[index]["LeadID"] ?? "",
-                                       style: TextStyle(
-                                         color: Colors.black54,
-                                         fontSize: 14.0,
-                                         fontFamily: 'Poppins',
+                                   Row(
+                                   //  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                     children: [
+                                   ListOfLeads[index]["VerificationStatus"] == 'Verified' ?
+                                       Icon(
+                                           Icons.star,
+                                           color: Colors.yellow.shade800
+                                       )
+                                           :  Icon(
+                                           Icons.incomplete_circle_sharp,
+                                           color: Colors.grey
                                        ),
-                                     ),
+                                       SizedBox(
+                                         width: width * 0.08,
+                                       ),
+                                       Row(
+                                         children: [
+                                           Text(
+                                             "Lead ID - ",
+                                             style: TextStyle(
+                                               color: StyleData.appBarColor2,
+                                               fontSize: 18.0,
+                                               fontWeight: FontWeight.bold,
+                                             ),
+                                           ),
+                                           Text(
+                                             searchKEY.text.isEmpty
+                                                 ? ListOfLeads[index]["LeadID"] ?? ""
+                                                 : searchListOfLeads[index]["LeadID"] ?? "",
+                                             style: TextStyle(
+                                               color: Colors.black54,
+                                               fontSize: 14.0,
+                                               fontFamily: 'Poppins',
+                                             ),
+                                           ),
+                                         ],
+                                       ),
+                                     ],
                                    ),
                                    Divider(
                                      color: StyleData.appBarColor2,
