@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/formPageVIiew.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'LoginPageView.dart';
 import 'ApplicantDetailsView.dart';
@@ -143,7 +144,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     }
   }
 
-
+  bool _isLoading = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -152,8 +153,15 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     fetchSaveddata();
    // getdata();
     super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
   }
-
+  void loadData() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
 
   @override
@@ -406,7 +414,47 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                     ],
                   ),
                 ),
-                SizedBox(
+                _isLoading ?
+                Column(
+                  children: List.generate(2, (index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.black12,
+                      highlightColor: Colors.white70,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 100,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ) :  SizedBox(
                   height: height * 0.42,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty ?

@@ -50,7 +50,7 @@ class _HomePageViewState extends State<HomePageView> {
             items: <Widget>[
               Icon(Icons.home, size: 30),
               Icon(Icons.search, size: 30),
-              Icon(Icons.settings, size: 30),
+              Icon(Icons.view_list_sharp, size: 30),
             ],
             buttonBackgroundColor:  Color.fromARGB(255, 255, 136, 34),
             animationCurve: Curves.easeInOut,

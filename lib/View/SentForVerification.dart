@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/ProfilePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../Utils/StyleData.dart';
 
@@ -15,7 +16,7 @@ class SentForVerification extends StatefulWidget {
 
 class _SentForVerificationState extends State<SentForVerification> {
 
-
+  bool _isLoading = true;
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
   TextEditingController searchKEY = TextEditingController();
@@ -69,9 +70,17 @@ class _SentForVerificationState extends State<SentForVerification> {
   void initState() {
     // TODO: implement initState
     fetchLeadsdata();
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
     super.initState();
-  }
 
+  }
+  void loadData() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +111,7 @@ class _SentForVerificationState extends State<SentForVerification> {
               ),
             ),
             title: Text(
-              "Pending Leads",
+              "Sent for Verification",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -191,6 +200,47 @@ class _SentForVerificationState extends State<SentForVerification> {
                 SizedBox(
                   height: height * 0.02,
                 ),
+                _isLoading ?
+                Column(
+                  children: List.generate(5, (index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.black12,
+                      highlightColor: Colors.white70,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 100,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ) :
                 SizedBox(
                   height:  MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -221,7 +271,9 @@ class _SentForVerificationState extends State<SentForVerification> {
                                           child:
                                           Text( searchKEY.text.isEmpty
                                               ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
-                                              : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",),
+                                              : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
+                                            style: TextStyle(color: StyleData.appBarColor2),
+                                          ),
                                         ),
                                         Card(
                                           child: Container(

@@ -80,101 +80,55 @@ class _ProfilePageViewState extends State<ProfilePageView> {
       });
     }
   }
-  void fetchLeadsdata(DateTime? startDate, DateTime? endDate) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
+
+  void fetchLeadsdata() async {
+    CollectionReference users =
+    FirebaseFirestore.instance.collection('convertedLeads');
     SharedPreferences pref = await SharedPreferences.getInstance();
     var userId = pref.getString("userID");
     setState(() {
       userType = pref.getString("logintype");
     });
 
-    Query leadsQuery = users.where("userId", isEqualTo: userId);
-
-    if (userType != "user") {
-      leadsQuery = users;
+    if (userType == "user") {
+      QuerySnapshot querySnapshot =
+      await users.where("userId", isEqualTo: userId).get();
+      ListOfLeads = querySnapshot.docs;
+      ListOfLeads1 = querySnapshot.docs;
+    } else {
+      QuerySnapshot querySnapshot = await users.get();
+      ListOfLeads = querySnapshot.docs;
+      ListOfLeads1 = querySnapshot.docs;
     }
 
-    // Apply date range filter
-    if (startDate != null && endDate != null) {
-      leadsQuery = leadsQuery.where('updatedTime', isGreaterThanOrEqualTo: startDate)
-          .where('updatedTime', isLessThanOrEqualTo: endDate);
-    }
-
-    QuerySnapshot querySnapshot = await leadsQuery.get();
-    ListOfLeads = querySnapshot.docs;
-    ListOfLeads1 = querySnapshot.docs;
-
-    // Reset counts
-    verifiedLeads = 0;
-    pendingLeads = 0;
-    sentForVerificationLeads = 0;
-
-    // Update counts based on filtered leads
     ListOfLeads.forEach((lead) {
       if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
         verifiedLeads++;
       } else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
         pendingLeads++;
-      } else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
+      }
+      else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
         sentForVerificationLeads++;
+
       }
     });
+
+    ListOfLeads.forEach((lead) {
+      if ( lead["LeadID"].length > 1 &&
+          lead["VerificationStatus"] == "Pending" &&
+          lead.data() is Map<String, dynamic> &&
+          (lead.data() as Map<String, dynamic>).containsKey("Query") &&
+          lead["Query"] != null) {
+        queryLeads++;
+      }
+    });
+
 
     setState(() {
       totalLeads = verifiedLeads + pendingLeads + sentForVerificationLeads;
       ListOfConvertedLeads = ListOfLeads;
     });
   }
-
-
-  // void fetchLeadsdata() async {
-  //   CollectionReference users =
-  //   FirebaseFirestore.instance.collection('convertedLeads');
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   var userId = pref.getString("userID");
-  //   setState(() {
-  //     userType = pref.getString("logintype");
-  //   });
-  //
-  //   if (userType == "user") {
-  //     QuerySnapshot querySnapshot =
-  //     await users.where("userId", isEqualTo: userId).get();
-  //     ListOfLeads = querySnapshot.docs;
-  //     ListOfLeads1 = querySnapshot.docs;
-  //   } else {
-  //     QuerySnapshot querySnapshot = await users.get();
-  //     ListOfLeads = querySnapshot.docs;
-  //     ListOfLeads1 = querySnapshot.docs;
-  //   }
-  //
-  //   ListOfLeads.forEach((lead) {
-  //     if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
-  //       verifiedLeads++;
-  //     } else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
-  //       pendingLeads++;
-  //     }
-  //     else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
-  //       sentForVerificationLeads++;
-  //
-  //     }
-  //   });
-  //
-  //   ListOfLeads.forEach((lead) {
-  //     if ( lead["LeadID"].length > 1 &&
-  //         lead["VerificationStatus"] == "Sent for Verification" &&
-  //         lead.data() is Map<String, dynamic> && // Check if data is a Map
-  //         (lead.data() as Map<String, dynamic>).containsKey("Query") && // Cast and check for 'Query' key
-  //         lead["Query"] != null) {
-  //       queryLeads++;
-  //     }
-  //   });
-  //
-  //
-  //   setState(() {
-  //     totalLeads = verifiedLeads + pendingLeads + sentForVerificationLeads;
-  //     ListOfConvertedLeads = ListOfLeads;
-  //   });
-  // }
 
   TextEditingController _startDateController = TextEditingController();
   TextEditingController _endDateController = TextEditingController();
@@ -214,7 +168,6 @@ class _ProfilePageViewState extends State<ProfilePageView> {
           endDate = pickedDate;
         }
       });
-      fetchLeadsdata(startDate!, endDate!);
     }
   }
 
@@ -238,7 +191,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
     final formatter = DateFormat('yyyy-MM-dd');
     _startDateController.text = formatter.format(DateTime.now()) ;
     _endDateController.text = formatter.format(DateTime.now());
-    fetchLeadsdata(null, null);
+    fetchLeadsdata();
     super.initState();
   }
 

@@ -69,7 +69,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
         if (querySnapshot.docs.isNotEmpty) {
           print(querySnapshot.docs.isNotEmpty);
           leadsCollection.doc(querySnapshot.docs.first.id).update(params).then((value) {
-            print("Data updated to Visits successfully");
+            print("Data updated to Leads successfully");
             _showAlertDialogSuccess2(context);
             //  Navigator.pop(context);
           }).catchError((error) {

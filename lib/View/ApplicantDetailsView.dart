@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:lead_management_system/View/dashbordPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../Utils/StyleData.dart';
 import 'DocumentCheckListPageView.dart';
@@ -29,6 +30,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
   TextEditingController searchKEY = TextEditingController();
   String? VisitID;
   bool istechnicalChecklist = true;
+  bool _isLoading = true;
 
   void fetchdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
@@ -134,12 +136,136 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     // TODO: implement initState
     fetchdata();
     super.initState();
-    // _startDateController.text = formatDate(DateTime.now().toLocal().toString());
-    // _endDateController.text = formatDate(DateTime.now().toLocal().toString());
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
+  }
+  void loadData() {
+    setState(() {
+      _isLoading = false;
+      // // Replace this with your actual data
+      // ListOfLeads = yourData;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: _isLoading ? _buildShimmerList() : _buildListView(context),
+    );
+  }
+  Widget _buildShimmerList() {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      appBar:  AppBar(
+        backgroundColor: StyleData.appBarColor2,
+        leading: Padding(
+          padding: const EdgeInsets.all(19.0),
+          child: InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      HomePageView(),
+                ),
+              );
+            },
+            child:  Icon(Icons.home, size: 30,color: Colors.white,),),
+        ),
+        title: Text("Lead Details",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: width * 0.05,
+                ),
+                Builder(
+                  builder: (context) {
+                    String countText = searchKEY.text.isEmpty ? ListOfLeads.length.toString() : searchListOfLeads.length.toString();
+                    double textWidth = countText.length * 8.0; // Adjust 8.0 based on your font size and preference
+                    return Container(
+                      width: textWidth + 20,
+                      height: height * 0.036,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white24,
+                      ),
+                      child: Center(
+                        child: Text(
+                          countText,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: List.generate(10, (index) {
+            return Shimmer.fromColors(
+              baseColor: Colors.black12,
+              highlightColor: Colors.white70,
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.grey[300],
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 20,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: double.infinity,
+                            height: 20,
+                            color: Colors.grey[300],
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: 100,
+                            height: 20,
+                            color: Colors.grey[300],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+
+  @override
+  Widget _buildListView(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(

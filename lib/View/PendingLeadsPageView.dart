@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/ProfilePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../Utils/StyleData.dart';
+import 'documentsPageView.dart';
 
 class PendingLeadsPageView extends StatefulWidget {
   const PendingLeadsPageView({super.key});
@@ -63,15 +65,23 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
     }
   }
 
-
+  bool _isLoading = true;
 
   @override
   void initState() {
     // TODO: implement initState
     fetchLeadsdata();
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
     super.initState();
-  }
 
+  }
+  void loadData() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +134,7 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                             ? ListOfLeads.length.toString()
                             : searchListOfLeads.length.toString();
                         double textWidth =
-                            countText.length * 8.0; // Adjust 8.0 based on your font size and preference
+                            countText.length * 8.0;
                         return Container(
                           width: textWidth + 20,
                           height: height * 0.036,
@@ -191,6 +201,47 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                 SizedBox(
                   height: height * 0.02,
                 ),
+                _isLoading ?
+                Column(
+                  children: List.generate(5, (index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.black12,
+                      highlightColor: Colors.white70,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 100,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ) :
                 SizedBox(
                   height:  MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -238,10 +289,57 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                                         ),
                                       ],
                                     ),
-                                    subtitle: Text(
-                                      searchKEY.text.isEmpty
-                                          ? ListOfLeads[index]['LeadID'] ?? ""
-                                          : searchListOfLeads[index]["LeadID"] ?? "",
+                                    subtitle: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: width * 0.67,
+                                          child: Text(
+                                            searchKEY.text.isEmpty
+                                                ? ListOfLeads[index]['LeadID'] ?? ""
+                                                : searchListOfLeads[index]["LeadID"] ?? "",
+                                            style: TextStyle(
+                                              color: StyleData.appBarColor2
+                                            ),
+                                          ),
+                                        ),
+                                        Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            side: BorderSide(color: Colors.grey, width: 2.0),
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => DocumentPageView(
+                                                    visitID: searchKEY.text.isEmpty
+                                                        ? ListOfLeads[index]['VisitID'] ?? ""
+                                                        : searchListOfLeads[index]["VisitID"] ?? "",
+                                                    docId: ListOfLeads[index].id,
+                                                    isNewActivity: false,
+                                                    isTechChecklist: true,
+                                                    leadID: searchKEY.text.isEmpty
+                                                        ? ListOfLeads[index]['LeadID'] ?? ""
+                                                        : searchListOfLeads[index]["LeadID"] ?? "",
+
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              color: Colors.white,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  'Update',
+                                                  style: TextStyle(color: StyleData.appBarColor2),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
 

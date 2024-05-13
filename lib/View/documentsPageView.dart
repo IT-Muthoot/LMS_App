@@ -536,7 +536,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         var data = querySnapshot.docs[0].data();
 
         applicationForm = data["Application_Form"] == null ? "Not Uploaded" : "Uploaded";
-        bankPassbook = data["Bank_PassBook"] == null ? "Not Uploaded" : "Uploaded";
+        bankPassbook = data["Bank_Passbook"] == null ? "Not Uploaded" : "Uploaded";
         dateOfBirthProof = data["Date_Of_Birth"] == null ? "Not Uploaded" : "Uploaded";
         loginFeeCheque = data["Login_Fee_Check"] == null ? "Not Uploaded" : "Uploaded";
         passportSizePhoto = data["Passport_Size_Photo"] == null ? "Not Uploaded" : "Uploaded";
@@ -1775,7 +1775,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         if (applicationFormClicked) {
                           uploadOnDMS(pickedFiles?.files.first , "Application_Form");
                         } else if (bankPassbookClicked) {
-                          uploadOnDMS(pickedFiles?.files.first, "Bank_PassBook");
+                          uploadOnDMS(pickedFiles?.files.first, "Bank_Passbook");
                         }
                         else if (dateOfBirthClicked) {
                           uploadOnDMS(pickedFiles?.files.first , "Date_Of_Birth");

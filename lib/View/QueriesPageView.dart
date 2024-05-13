@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/ProfilePageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import '../Utils/StyleData.dart';
 import 'documentsPageView.dart';
 
@@ -25,6 +26,7 @@ class _QueryPageViewState extends State<QueryPageView> {
   String? LeadID;
   String? VisitID;
   String? DocIS;
+  bool _isLoading = true;
 
 
   List<DocumentSnapshot> searchListOfLeads = [];
@@ -58,14 +60,14 @@ class _QueryPageViewState extends State<QueryPageView> {
       setState(() {
         ListOfLeads = userLeads.where((lead) =>
         lead["LeadID"].length > 1 &&
-            lead["VerificationStatus"] == "Sent for Verification" &&
+            lead["VerificationStatus"] == "Pending" &&
             lead.data() is Map<String, dynamic> && // Check if data is a Map
             (lead.data() as Map<String, dynamic>).containsKey("Query") && // Cast and check for 'Query' key
             lead["Query"] != null
         ).toList();
       });
     } else {
-      QuerySnapshot querySnapshot = await users.where("VerificationStatus", isEqualTo: "Sent for Verification").get();
+      QuerySnapshot querySnapshot = await users.where("VerificationStatus", isEqualTo: "Pending").get();
       setState(() {
         ListOfLeads = querySnapshot.docs.where((lead) =>
         lead["LeadID"].length > 1 &&
@@ -89,9 +91,16 @@ class _QueryPageViewState extends State<QueryPageView> {
   void initState() {
     // TODO: implement initState
     fetchLeadsdata();
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
     super.initState();
   }
-
+  void loadData() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +131,7 @@ class _QueryPageViewState extends State<QueryPageView> {
               ),
             ),
             title: Text(
-              "Pending Leads",
+              "Queries",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -211,6 +220,47 @@ class _QueryPageViewState extends State<QueryPageView> {
                 SizedBox(
                   height: height * 0.02,
                 ),
+                _isLoading ?
+                Column(
+                  children: List.generate(5, (index) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.black12,
+                      highlightColor: Colors.white70,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Container(
+                                    width: 100,
+                                    height: 20,
+                                    color: Colors.white70,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
+                ) :
                 SizedBox(
                   height:  MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -239,7 +289,7 @@ class _QueryPageViewState extends State<QueryPageView> {
                                       Row(
                                         children: [
                                           SizedBox(
-                                            width: width * 0.47,
+                                            width: width * 0.6,
                                             child:
                                             Text( searchKEY.text.isEmpty
                                                 ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
@@ -267,17 +317,18 @@ class _QueryPageViewState extends State<QueryPageView> {
                                       Row(
                                         children: [
                                           SizedBox(
-                                            width: width * 0.47,
+                                            width: width * 0.6,
                                             child: Text(
                                               searchKEY.text.isEmpty
                                                   ? ListOfLeads[index]['LeadID'] ?? ""
                                                   : searchListOfLeads[index]["LeadID"] ?? "",
+                                              style: TextStyle(color: StyleData.appBarColor2),
                                             ),
                                           ),
                                           Card(
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(8.0),
-                                              side: BorderSide(color: Colors.grey, width: 1.0),
+                                              side: BorderSide(color: Colors.grey, width: 2.0),
                                             ),
                                             child: GestureDetector(
                                               onTap: () {
@@ -311,7 +362,6 @@ class _QueryPageViewState extends State<QueryPageView> {
                                               ),
                                             ),
                                           ),
-
                                         ],
                                       ),
                                       Row(
