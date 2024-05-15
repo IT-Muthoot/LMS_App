@@ -292,7 +292,7 @@ class _VisitPageViewState extends State<VisitPageView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePageView(),
+            builder: (context) => HomePageView(Token: '',),
           ),
         );
         // Prevent the default back navigation

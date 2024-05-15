@@ -1,16 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/ApplicantDetailsView.dart';
 import 'package:lead_management_system/View/VisitPageView.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ProfilePageView.dart';
 import 'dashbordPageView.dart';
 import 'formPageVIiew.dart';
 
 class HomePageView extends StatefulWidget {
-  const HomePageView({super.key});
+  final String Token;
+  const HomePageView({super.key,required this.Token,});
 
   @override
   State<HomePageView> createState() => _HomePageViewState();
@@ -27,6 +31,55 @@ class _HomePageViewState extends State<HomePageView> {
     VisitPageView(),
     ProfilePageView(),
   ];
+
+  FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  String? FCMToken;
+
+  Future<void> initialize() async {
+
+    await _fcm.requestPermission();
+    FCMToken = await _fcm.getToken();
+    print('Token : $FCMToken');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString("fcmToken", FCMToken.toString());
+
+    updateUserData(pref.getString("employeeCode") ?? "", pref.getString("fcmToken") ?? "");
+
+  }
+
+  Future<void> updateUserData(String employeeCode, String fcmToken) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    print("Employee Code: $employeeCode");
+
+    try {
+      var querySnapshot = await users
+          .where("EmployeeCode", isEqualTo: employeeCode.toUpperCase())
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var userId = querySnapshot.docs.first.id;
+        print("User ID: $userId");
+
+        // Update the user document with the FCM token
+        await users.doc(userId).update({"FCMToken": fcmToken});
+        print("User data updated successfully");
+      } else {
+        print("User with EmployeeCode $employeeCode not found");
+      }
+    } catch (error) {
+      print("Error updating user data: $error");
+    }
+  }
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initialize();
+    super.initState();
+  }
 
 
   @override

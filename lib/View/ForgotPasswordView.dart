@@ -106,7 +106,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                LoginScreen(),
+                                LoginScreen(Token: '',),
                           ),
                         );
 
@@ -277,7 +277,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginScreen(),
+                                  builder: (context) => LoginScreen(Token: '',),
                                 ),
                               );
                             }).catchError((error) {

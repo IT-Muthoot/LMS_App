@@ -229,8 +229,8 @@ class _FormPageViewState extends State<FormPageView> {
     print(data);
     var dio = Dio();
     var response = await dio.request(
-        'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
-       // 'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/',
+     //   'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
+        'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/',
         options: Options(
           method: 'POST',
           headers: headers,
@@ -644,6 +644,7 @@ async {
     getDropDownDSAData();
     getDropDownCampaignData();
     super.initState();
+  getLocation();
     requestLocationPermission();
    // getAccessToken();
   }
@@ -658,7 +659,7 @@ async {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePageView(),
+            builder: (context) => HomePageView(Token: '',),
           ),
         );
         // Prevent the default back navigation
@@ -677,7 +678,7 @@ async {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                         HomePageView(),
+                         HomePageView(Token: '',),
                       ),
                     );
         
@@ -2125,7 +2126,7 @@ async {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePageView(),
+                            builder: (context) => HomePageView(Token: '',),
                           ),
                         );
                       },

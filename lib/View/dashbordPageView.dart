@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
+import 'package:lead_management_system/View/NotificationPageView.dart';
 import 'package:lead_management_system/View/formPageVIiew.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../Model/NotificationData.dart';
 import 'LoginPageView.dart';
 import 'ApplicantDetailsView.dart';
 import 'NewLeadPageView.dart';
@@ -23,10 +27,13 @@ class DashboardPageView extends StatefulWidget {
 }
 
 class _DashboardPageViewState extends State<DashboardPageView> {
+  String NotificationMsg = "Waiting for notification";
+
 
   List<DocumentSnapshot> ListOfLeads = [];
   List<DocumentSnapshot> ListOfSavedLeads = [];
   List<DocumentSnapshot> ListOfUsers = [];
+  List<Map<dynamic,String>> ListOfNotification = [];
   var userType;
   String? employeeName;
   String? branchCode;
@@ -144,6 +151,37 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     }
   }
 
+
+  void fetchNotifiedDataFromList() async {
+    CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    //  var userId = pref.getString("token");
+    var userId = pref.getString("userID");
+    setState(() {
+      userType = pref.getString("logintype");
+    });
+    print(userType);
+    if (userType == "user") {
+      users.where("userId", isEqualTo: userId).get().then((value) {
+        setState(() {
+          ListOfNotification = value.docs.cast<Map<dynamic, String>>();
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(value.docs[i].data());
+        }
+      });
+    } else {
+      users.get().then((value) {
+        setState(() {
+          ListOfNotification = value.docs.cast<Map<dynamic, String>>();
+        });
+        for (var i = 0; value.docs.length > i; i++) {
+          print(value.docs[i].data());
+        }
+      });
+    }
+  }
+
   bool _isLoading = true;
   @override
   void initState() {
@@ -156,6 +194,29 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     Future.delayed(Duration(seconds: 2), () {
       loadData();
     });
+    FirebaseMessaging.instance.getInitialMessage().then((event) => {
+      if(event != null)
+        {
+          setState(() {
+            NotificationMsg = "${event!.notification!.title}${event!.notification!.body}";
+            print(NotificationMsg);
+          })
+        }
+    }
+    );
+    FirebaseMessaging.onMessage.listen((event) {
+      setState(() {
+        NotificationMsg = "${event.notification!.title}${event.notification!.body}";
+        print(NotificationMsg);
+      });
+    });
+FirebaseMessaging.onMessageOpenedApp.listen((event) {
+  setState(() {
+    NotificationMsg = "${event.notification!.title}${event.notification!.body}";
+    print(NotificationMsg);
+  });
+});
+
   }
   void loadData() {
     setState(() {
@@ -197,23 +258,68 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                               color: Colors.white,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginScreen(),
+                          Row(
+                            children: [
+                              Stack(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.notifications_none,color: Colors.white,size: 25,),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => NotificationPageView()),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                              child: Icon(
-                                Icons.logout_sharp,
-                                color: Colors.white,
-                                size: 25.0,
+                                  Positioned(
+                                    right: 0,
+                                    child: Consumer<NotificationProvider>(
+                                      builder: (context, notificationProvider, child) {
+                                        int unreadCount = notificationProvider.unreadCount;
+                                        return unreadCount > 0
+                                            ? CircleAvatar(
+                                          radius: 10,
+                                          backgroundColor: Colors.red,
+                                          child: Text(
+                                            unreadCount.toString(),
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                        )
+                                            : Container();
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                              // InkWell(
+                              //     onTap: () {
+                              //       Navigator.push(
+                              //         context,
+                              //         MaterialPageRoute(
+                              //           builder: (context) => NotificationPageView(),
+                              //         ),
+                              //       );
+                              //     },
+                              //     child: Icon(Icons.notifications_none,size: 25,color: Colors.white,)),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginScreen(Token: '',),
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.logout_sharp,
+                                    color: Colors.white,
+                                    size: 25.0,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

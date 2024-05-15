@@ -800,7 +800,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePageView(),
+                            builder: (context) => HomePageView(Token: '',),
                           ),
                         );
                       },

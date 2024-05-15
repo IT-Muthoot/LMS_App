@@ -55,7 +55,8 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCkEwNU-DwN8Lol-snkPibjSwT6vUGRjWA',
-    appId: '1:818116081964:android:b6e26a12616b39d1be9489',
+    // appId: '1:818116081964:android:b6e26a12616b39d1be9489',
+    appId: '1:818116081964:android:d7fa92c46d6d938abe9489',
     messagingSenderId: '818116081964',
     projectId: 'lms-application-be1ea',
     storageBucket: 'lms-application-be1ea.appspot.com',

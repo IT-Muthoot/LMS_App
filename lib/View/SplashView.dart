@@ -1,14 +1,11 @@
 
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -21,11 +18,9 @@ import '../Utils/LocalStorage.dart';
 import 'HomePageView.dart';
 import 'LoginPageView.dart';
 
-
-
-
 class SplashView extends StatefulWidget {
-  const SplashView({super.key});
+  final String Token;
+  SplashView( {super.key,required this.Token,});
 
   @override
   State<SplashView> createState() => _SplashViewState();
@@ -177,8 +172,8 @@ class _SplashViewState extends State<SplashView> {
           print(accessToken);
           NavigatorController.pagePush(
               context, value == "" ?
-          LoginScreen()
-              : HomePageView());
+          LoginScreen(Token : widget.Token)
+              : HomePageView(Token : widget.Token));
         }
       });
     });

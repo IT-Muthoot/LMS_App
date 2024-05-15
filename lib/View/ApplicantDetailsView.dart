@@ -168,7 +168,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      HomePageView(),
+                      HomePageView(Token: '',),
                 ),
               );
             },
@@ -274,7 +274,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HomePageView(),
+            builder: (context) => HomePageView(Token: '',),
           ),
         );
         // Prevent the default back navigation
@@ -291,7 +291,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          HomePageView(),
+                          HomePageView(Token: '',),
                     ),
                   );
                 },

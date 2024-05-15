@@ -17,7 +17,8 @@ import '../Utils/background.dart';
 
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String Token;
+  const LoginScreen({super.key,required this.Token,});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePageView(),
+          builder: (context) => HomePageView(Token: '',),
         ),
       );
     }

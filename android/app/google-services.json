@@ -8,25 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:818116081964:android:b6e26a12616b39d1be9489",
-        "android_client_info": {
-          "package_name": "com.example.lead_management_system"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCkEwNU-DwN8Lol-snkPibjSwT6vUGRjWA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:818116081964:android:d7fa92c46d6d938abe9489",
         "android_client_info": {
           "package_name": "com.muthoot.lead_management_system"
