@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 
@@ -101,6 +102,24 @@ class _DocumentPageViewState extends State<DocumentPageView> {
 
   String? selectedFilePathApplicationForm;
 
+  String? VerificationStatus = "Pending";
+  String VerificationStatusBy = "Pending";
+  List<dynamic> mandatoryDocuments = [];
+  String? SelectedMandatoryDoc;
+  bool documentCheck = false;
+  String? isChecklist;
+  Map<String, bool> documentCheckboxStates = {};
+  Map<String, String> uploadedFileNames = {};
+  var checklistData;
+  String? region;
+  bool documentUploaded = false;
+  String uploadedFileName = '';
+  String checklistName = '';
+  int? mandatoryDocumentCount;
+  int uploadedDocumentCount = 0;
+  XFile? pickedFileChecklist;
+  FilePickerResult? pickedFiles;
+
   getLeadDetails() {
     if (!widget.isNewActivity) {
       CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
@@ -139,6 +158,18 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       // });
     }
   }
+
+  Future<void> saveUploadedFileName(String fileName, String documentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(documentId, fileName);
+  }
+
+
+  Future<String?> getUploadedFileName(String documentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(documentId);
+  }
+
 
   void updateUIWithFetchedData() async {
     DateOfBirth = docData["dateOfBirth"] ?? "";
@@ -187,6 +218,47 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     stateID = docData["stateID"] ?? "";
     districtID= docData["districtID"] ?? "";
     ReasonforDisinterest= docData["ReasonforDisinterest"] ?? "";
+    VerificationStatus = docData['VerificationStatus'] ?? "";
+    region = docData['Region'] ?? "";
+
+    if(region != null)
+      {
+        _fetchDataFromFirestore();
+      }
+    else
+      {
+
+      }
+  }
+
+
+  Future<void> _fetchDataFromFirestore() async {
+    try {
+      // Access the Firestore instance
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      // Access the "documentChecklist" collection
+      CollectionReference checklistCollection = firestore.collection('documentChecklist');
+      QuerySnapshot querySnapshot = await checklistCollection.get();
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        for(int i = 0; i < documentSnapshot['documentChecklist'].length; i++){
+          String? uppercaseRegion = region?.toUpperCase();
+          // print('Value at index $i: ${documentSnapshot['documentChecklist'][0]} \n');
+          documentSnapshot['documentChecklist'][i].forEach((key, value) {
+            // print('Key: $key');
+            if(key == uppercaseRegion) {
+              setState(() {
+                mandatoryDocuments = value[productCategory][products]['Mandatory'];
+                log(mandatoryDocuments.toString());
+              });
+            }
+          });
+        }
+      }
+    } catch (e) {
+      CustomSnackBar.errorSnackBarQ("Technical Checklist Not Available", context);
+      log('Error fetching data: $e');
+    }
   }
 
   var data;
@@ -291,7 +363,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     print(data);
     var dio = Dio();
     var response = await dio.request(
-    //   'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+   // 'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
       'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
       options: Options(
         method: 'POST',
@@ -360,20 +432,21 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      'grant_type': 'password',
-      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      'username': 'salesappuser@muthoothomefin.com',
-      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
       // 'grant_type': 'password',
-      // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      // 'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
+      // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+      // 'username': 'salesappuser@muthoothomefin.com',
+      // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      'grant_type': 'password',
+      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/oauth2/token',
+   //   'https://muthootltd.my.salesforce.com/services/oauth2/token',
+      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -402,6 +475,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   }
 
 
+
   Future<void> updateDataToLeadsFirestore() async {
     CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
     DateTime now = DateTime.now();
@@ -409,6 +483,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     try{
       Map<String, dynamic> params = {
         'LeadID' : LeadID,
+        'VerificationStatus' : 'Sent for Verification',
         'updatedTime':Timestamp.fromDate(now),
       };
       convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
@@ -416,6 +491,38 @@ class _DocumentPageViewState extends State<DocumentPageView> {
           print(querySnapshot.docs.isNotEmpty);
           convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
             print("Data updated to Visits successfully");
+            _showAlertDialogSuccess2(context);
+            //  Navigator.pop(context);
+          }).catchError((error) {
+            print("Failed to update data: $error");
+          });
+        } else {
+          // Navigator.pop(context);
+        }
+      }).catchError((error) {
+        print("Failed to check if customerNumber exists: $error");
+      });
+
+    }catch(e){
+      print(e);
+    };
+  }
+
+  Future<void> updateDataToLeadsFirestore1() async {
+    CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
+    DateTime now = DateTime.now();
+    print("Hello");
+    try{
+      Map<String, dynamic> params = {
+        'VerificationStatus' : 'Sent for Verification',
+        'updatedTime':Timestamp.fromDate(now),
+      };
+      convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          print(querySnapshot.docs.isNotEmpty);
+          convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+            print("Data updated to Leads successfully");
+            _showAlertDialogSuccess3(context);
             //  Navigator.pop(context);
           }).catchError((error) {
             print("Failed to update data: $error");
@@ -461,6 +568,35 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     }catch(e){
       print(e);
     };
+  }
+
+  void fetchLeadChecklistDetails() async {
+    CollectionReference leadsCollection = FirebaseFirestore.instance.collection('convertedLeads');
+
+    QuerySnapshot leadSnapshot = await leadsCollection
+        .where('VisitID', isEqualTo: widget.visitID)
+        .limit(1)
+        .get();
+
+    if (leadSnapshot.docs.isNotEmpty) {
+      // If lead details found, extract the checklist data
+      checklistData = leadSnapshot.docs.first.data();
+      // Iterate through mandatory documents to update uploadedFileNames
+      for (int index = 0; index < mandatoryDocuments.length; index++) {
+        final document = mandatoryDocuments[index];
+        final documentId = document['ID'].toString();
+        final documentTitle = mandatoryDocuments[index]['Title'];
+        final checklistTitle = '$documentTitle-checklist';
+
+        // Check if checklistTitle exists in the checklist data
+        if (checklistData.containsKey(checklistTitle)) {
+          // If checklist exists, update uploadedFileNames accordingly
+          setState(() {
+            uploadedFileNames[documentId] = 'Uploaded'; // You can set any string you want
+          });
+        }
+      }
+    }
   }
 
   String? selectedDoc;
@@ -633,7 +769,31 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                   SizedBox(
                                     height: height * 0.01,
                                   ),
-
+                                  Text(
+                                    'Product: $productCategory',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Purpose Of Loan: $products',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Region: $region',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                Divider(),
                 Text(
                   "Required Documents",
                   style: TextStyle(
@@ -1557,12 +1717,67 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                                                   fontSize: 12,
                                                 ),
                                               ),
-
                                             ],
                                           ),
                                         ),
                                       ),
                                     ), // Change the splash color to red
+                                  ),
+                                  SizedBox(height: height * 0.01),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: documentCheck,
+                                        activeColor: StyleData.appBarColor,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            documentCheck = value!;
+                                          });
+                                          fetchLeadChecklistDetails();
+                                        },
+                                      ),
+                                      Text(
+                                        'Technical Checklist',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Visibility(
+                                      visible: documentCheck,
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: mandatoryDocuments.length,
+                                          itemBuilder: (context, index) {
+                                            final document = mandatoryDocuments[index];
+                                            final documentId = document['ID'].toString();
+                                            mandatoryDocumentCount = mandatoryDocuments.length;
+
+                                            documentCheckboxStates.putIfAbsent(documentId, () => false);
+
+                                            return ListTile(
+                                              title: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(mandatoryDocuments[index]['Title']),
+                                                  if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
+                                                    Text(
+                                                      uploadedFileNames[documentId] ?? '', // Display uploaded filename
+                                                      style: TextStyle(color: Colors.red, fontSize: 12.0),
+                                                    ),
+                                                  Divider()
+                                                ],
+                                              ),
+                                              trailing: IconButton(
+                                                  icon: Icon(Icons.attach_file),
+                                                  onPressed: () {
+                                                    selectSourceChecklist(height, width,mandatoryDocuments[index]['Title'],documentId);
+                                                  }
+                                                //mandatoryDocuments[index]
+                                              ),
+                                            );
+
+                                          }
+                                      )
                                   ),
                                 ],
                               ),
@@ -1582,15 +1797,16 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                   children:[
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                        MaterialPageRoute(
-                            builder: (context) => DocumentChecklistPageView(
-                                docId:widget.docId,
-                                leadId: widget.leadID,
-                                isNewActivity: false,
-                                isUpdateActivity:true
-                            )));
+                        updateLeadData1();
+                        // Navigator.push(
+                        //     context,
+                        // MaterialPageRoute(
+                        //     builder: (context) => DocumentChecklistPageView(
+                        //         docId:widget.docId,
+                        //         leadId: widget.leadID,
+                        //         isNewActivity: false,
+                        //         isUpdateActivity:true
+                        //     )));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
@@ -1600,7 +1816,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Next',
+                            'Update',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.white,
@@ -1813,6 +2029,255 @@ class _DocumentPageViewState extends State<DocumentPageView> {
           );
         });
   }
+
+  selectSourceChecklist(height, width,title, String documentId) {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          // <-- SEE HERE
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        barrierColor: Colors.blueGrey.withOpacity(0.7),
+        backgroundColor: Colors.black,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: height * 0.2,
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: height * 0.015),
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: StyleData.background,
+                        child: const Center(
+                          child: Icon(Icons.camera, color: Colors.black),
+                        ),
+                      ),
+                      title: const Text("Take Camera",
+                          style: TextStyle(color: Colors.white60)),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        var pickedFile = await ImagePicker().pickImage(
+                            source: ImageSource.camera,
+                            maxHeight: 640,
+                            maxWidth: 820,
+                            imageQuality: 60);
+                        print(pickedFile);
+                        if (pickedFile != null) {
+                          uploadOnDMSChecklist(pickedFile,title,documentId);
+                        } else {
+                          // Handle case where user canceled image picking
+                        }
+
+
+                      },
+                      trailing: Icon(
+                        Icons.arrow_circle_right_rounded,
+                        color: StyleData.background,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: SizedBox(
+                          width: width * 0.7,
+                          child: const Divider(
+                            color: Colors.black26,
+                            thickness: 0.4,
+                          )),
+                    ),
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: StyleData.background,
+                        child: const Center(
+                          child: Icon(
+                            Icons.image,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      title: const Text(
+                        "Select From Gallery",
+                        style: TextStyle(color: Colors.white60),
+                      ),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        pickedFiles =
+                        await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
+                          allowCompression: true,
+                          allowMultiple: false,
+                        );
+                        //  pickedFiles?.files.first
+                        print(pickedFiles!.files.first.name);
+                        uploadOnDMSChecklist(pickedFiles!.files.first, title,documentId);
+                      },
+                      trailing: Icon(
+                        Icons.arrow_circle_right_rounded,
+                        color: StyleData.background,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void uploadOnDMSChecklist(var pickedFile, String title,String documentId) async {
+    print("bhjkjhlknl");
+    print(pickedFile);
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to upload this document?',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                Navigator.pop(context);
+                SmartDialog.showLoading(msg: "Uploading Document");
+                var dio = Dio();
+                try {
+                  FormData formData = FormData.fromMap({
+                    "File": await MultipartFile.fromFile(
+                      pickedFile!.path,
+                      filename: pickedFile.name,
+                      //    contentType: MediaType("pdf", "jpg"), //add this
+                      contentType:  _getContentType(pickedFile.name), //add this
+                    ),
+                    "Title": widget.visitID,
+                    "Description": "Document Verification",
+                    "Tags": "HomeFin",
+                    "IsPasswordProtected": "0",
+                    "Password": "0",
+                    "LUSR": "HomeFin",
+                  });
+                  print(formData);
+                  formData.files.addAll([
+                    MapEntry(
+                        "File",
+                        await MultipartFile.fromFile(pickedFile!.path,
+                            filename: pickedFile.name,
+                            contentType: MediaType('application', 'pdf')))
+                  ]);
+                  (dio.httpClientAdapter as DefaultHttpClientAdapter)
+                      .onHttpClientCreate = (client) {
+                    client.badCertificateCallback =
+                        (X509Certificate cert, String host, int port) => true;
+                  };
+                  dio.options.headers['Content-Type'] = 'multipart/form-data';
+                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
+
+                  var response = await dio.post(
+                    ApiUrls().uploadDoc,
+                    data: formData,
+                    onSendProgress: (int sent, int total) {
+                      debugPrint("sent${sent.toString()}" +
+                          " total${total.toString()}");
+                    },
+                  ).whenComplete(() {
+                  }).catchError((onError) {
+                    debugPrint("complete1");
+                    SmartDialog.dismiss();
+                  });
+                  print(response);
+                  var data = json.decode(response.toString());
+                  print(data);
+                  FirebaseFirestore.instance
+                      .collection("convertedLeads")
+                      .where("LeadID", isEqualTo: widget.visitID) // Check if visitID matches
+                      .get()
+                      .then((QuerySnapshot snapshot) {
+                    if (snapshot.docs.isNotEmpty) {
+                      // If there's a matching document, set the value
+                      FirebaseFirestore.instance
+                          .collection("convertedLeads")
+                          .doc(snapshot.docs[0].id)
+                          .set({
+                        '$title-checklist': data["docId"].toString(),
+                      },
+                          SetOptions(merge: true));
+
+                      setState(()  {
+                        documentUploaded = true;
+                        uploadedFileNames[documentId] = pickedFile.name;
+                        checklistName = title;
+                        uploadedDocumentCount++;
+                      });
+                      saveUploadedFileName(pickedFile.name,documentId);
+                    } else {
+                      CustomSnackBar.errorSnackBarQ("No such document found", context);
+                    }
+                  })
+                      .catchError((error) {
+                    CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                    print("Error: $error");
+                  });
+
+                  SmartDialog.dismiss();
+                } catch (e) {
+                  SmartDialog.dismiss();
+                  CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                  debugPrint(e.toString());
+                }
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]
+    );
+  }
+
+
+
   void uploadOnDMS(var pickedFile, String title) async {
     //New Implementation for saving application PDF
 print("bhjkjhlknl");
@@ -2024,6 +2489,71 @@ print("bhjkjhlknl");
           )
         ]);
   }
+  void updateLeadData1() async {
+    //New Implementation for saving application PDF
+    print("bhjkjhlknl");
+    Dialogs.materialDialog(
+        msg: 'Are you sure you want to submit the lead details',
+        title: "Alert",
+        msgStyle:
+        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        titleStyle: const TextStyle(color: Colors.white),
+        color: StyleData.appBarColor2,
+        context: context,
+        titleAlign: TextAlign.center,
+        msgAlign: TextAlign.center,
+        barrierDismissible: false,
+        dialogWidth: kIsWeb ? 0.3 : null,
+        onClose: (value) {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () async {
+                // setState(() {
+                //   isLeadsUpdateData = true;
+                // });
+                updateDataToLeadsFirestore1();
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Yes',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 40,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: StyleData.boldFont,
+                            fontSize: 12))),
+              ),
+            ),
+          )
+        ]);
+  }
 
   void updateLeadData() async {
     //New Implementation for saving application PDF
@@ -2088,6 +2618,76 @@ print("bhjkjhlknl");
             ),
           )
         ]);
+  }
+  void _showAlertDialogSuccess3(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0, // No shadow
+            content: Container(
+              height:190,
+              width: 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Center(
+                    child:
+                    Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle
+                      ),
+                      child: Center(
+                        child: Icon(Icons.done,color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('Sent for Verification', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  SizedBox(height: 8),
+                  // Row(
+                  //   children: [
+                  //     Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
+                  //     Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                  //   ],
+                  // ),
+                  SizedBox(height: 5),
+                  SizedBox(
+                    height: 25,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePageView(Token: '',),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Text('OK', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
   void _showAlertDialogSuccess2(BuildContext context) {
     showDialog(

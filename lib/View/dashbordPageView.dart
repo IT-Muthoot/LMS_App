@@ -54,7 +54,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+         // print(value.docs[i].data());
         }
       });
     } else {
@@ -63,7 +63,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+        //  print(value.docs[i].data());
         }
       });
     }

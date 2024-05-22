@@ -48,7 +48,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
           ListOfLeads = filteredList;
         });
         for (var i = 0; filteredList.length > i; i++) {
-          print(filteredList[i].data());
+        //  print(filteredList[i].data());
         }
       });
     } else {
@@ -58,7 +58,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
           ListOfLeads = filteredList;
         });
         for (var i = 0; filteredList.length > i; i++) {
-          print(filteredList[i].data());
+       //   print(filteredList[i].data());
         }
       });
     }

@@ -48,16 +48,24 @@ class _NotificationPageViewState extends State<NotificationPageView> {
       ),
       body:Consumer<NotificationProvider>(
         builder: (context, notificationProvider, child) {
+          // Print the number of notifications
+          print("Number of notifications: ${notificationProvider.notifications.length}");
+
           // Mark all notifications as read when the page is opened
           WidgetsBinding.instance.addPostFrameCallback((_) {
             notificationProvider.markAllAsRead();
           });
 
-          return ListView.builder(
+          return notificationProvider.notifications.isEmpty
+              ? Center(child: Text("No notifications available")) // Show a message if there are no notifications
+              : ListView.builder(
             itemCount: notificationProvider.notifications.length,
             itemBuilder: (context, index) {
               final reversedIndex = notificationProvider.notifications.length - 1 - index;
               final notification = notificationProvider.notifications[reversedIndex];
+
+              print("Notification at index $index: ${notification.title}, ${notification.body}, isRead: ${notification.isRead}");
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -78,6 +86,7 @@ class _NotificationPageViewState extends State<NotificationPageView> {
           );
         },
       ),
+
     );
   }
 }

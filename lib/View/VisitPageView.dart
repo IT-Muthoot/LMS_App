@@ -90,7 +90,7 @@ class _VisitPageViewState extends State<VisitPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+        //  print(value.docs[i].data());
         }
       });
     } else {
@@ -99,7 +99,7 @@ class _VisitPageViewState extends State<VisitPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+         // print(value.docs[i].data());
         }
       });
     }
@@ -161,7 +161,7 @@ class _VisitPageViewState extends State<VisitPageView> {
           ListOfConvertedLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+         // print(value.docs[i].data());
         }
 
       });

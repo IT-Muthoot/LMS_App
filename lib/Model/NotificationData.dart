@@ -28,6 +28,42 @@ class NotificationModel {
   }
 }
 
+// class NotificationProvider with ChangeNotifier {
+//   List<NotificationModel> _notifications = [];
+//   int _latestUnreadCount = 0;
+//
+//   List<NotificationModel> get notifications => _notifications;
+//   int get unreadCount => _latestUnreadCount;
+//
+//   void addNotification(NotificationModel notification) {
+//     _notifications.add(notification);
+//     if (!notification.isRead) {
+//       _latestUnreadCount++;
+//     }
+//     notifyListeners();
+//   }
+//
+//   void setNotifications(List<NotificationModel> notifications) {
+//     _notifications = notifications;
+//     _latestUnreadCount = _notifications.where((notification) => !notification.isRead).length;
+//     notifyListeners();
+//   }
+//
+//   void markAllAsRead() {
+//     for (var notification in _notifications) {
+//       notification.isRead = true;
+//     }
+//     _latestUnreadCount = 0;
+//     notifyListeners();
+//   }
+//
+//   void resetUnreadCount() {
+//     _latestUnreadCount = 0;
+//     notifyListeners();
+//   }
+// }
+
+
 class NotificationProvider with ChangeNotifier {
   List<NotificationModel> _notifications = [];
 

@@ -93,73 +93,48 @@ class _SaveDataState extends State<SaveData> {
   // }
   List<Map<String, dynamic>> employeeMapping = [
     {
-      "EMP_CODE": "MA03970",
-      "NAME": "SHAKTI SETH",
+      "EMP_CODE": "MA03988",
+      "NAME": "SURENDRA PRAJAPAT",
       "DSGN_NAME": "RELATIONSHIP MANAGER",
-      "BRANCH CODE": "VARA052",
-      "BRANCH": "VARANASI",
-      "REGION CODE": "RO0012",
-      "REGION": "UTTAR PRADESH",
+      "BRANCH CODE": "JODH014",
+      "BRANCH": "JODHPUR",
+      "REGION CODE": "RO0006",
+      "REGION": "RAJASTHAN",
       "ZONE CODE": "ZO0003",
       "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1619",
-      "Reporting Manager Name": "VIKAS SINGH"
+      "Reporting Manager Code": "MO1649",
+      "Reporting Manager Name": "MUKESH SUTHAR",
+      "DSGN_NAME": "SALES MANAGER",
     },
     {
-      "EMP_CODE": "MA03963",
-      "NAME": "NITHIN M S",
+      "EMP_CODE": "MA03991",
+      "NAME": "BALVEER VAISHNAV",
       "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "KOCH001",
-      "BRANCH": "KOCHI",
-      "REGION CODE": "RO0001",
-      "REGION": "KERALA",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1551",
-      "Reporting Manager Name": "SAJEER U"
-    },
-    {
-      "EMP_CODE": "MA03969",
-      "NAME": "LAKKENABOYINA NARESH",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "ONGO072",
-      "BRANCH": "ONGOLE",
-      "REGION CODE": "RO0007",
-      "REGION": "TAP",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1022",
-      "Reporting Manager Name": "Dara Jayarao"
-    },
-    {
-      "EMP_CODE": "MA03966",
-      "NAME": "INDRAJEET SINGH CHAUHAN",
-      "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "BHOP013",
-      "BRANCH": "BHOPAL",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
+      "BRANCH CODE": "BIKA023",
+      "BRANCH": "BIKANER",
+      "REGION CODE": "RO0006",
+      "REGION": "RAJASTHAN",
       "ZONE CODE": "ZO0003",
       "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1625",
-      "Reporting Manager Name": "Mohd Khan"
+      "Reporting Manager Code": "MO1676",
+      "Reporting Manager Name": "MUKESH PANWAR",
+      "DSGN_NAME": "SALES MANAGER",
     },
     {
-      "EMP_CODE": "MA03964",
-      "NAME": "ABHIJEET DHANAJI SURYWANSHI",
+      "EMP_CODE": "MA03989",
+      "NAME": "ARJUN",
       "DSGN_NAME": "RELATIONSHIP OFFICER",
-      "BRANCH CODE": "PIMP092",
-      "BRANCH": "PIMPRI",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1362",
-      "Reporting Manager Name": "KISHOR MHASKE"
+      "BRANCH CODE": "BIKA023",
+      "BRANCH": "BIKANER",
+      "REGION CODE": "RO0006",
+      "REGION": "RAJASTHAN",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1676",
+      "Reporting Manager Name": "MUKESH PANWAR",
+      "DSGN_NAME": "SALES MANAGER",
     }
   ];
-
-
 
 
   List<Map<String, dynamic>> documentChecklist = [
