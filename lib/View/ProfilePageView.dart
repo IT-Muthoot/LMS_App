@@ -115,10 +115,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
 
     ListOfLeads.forEach((lead) {
       if ( lead["LeadID"].length > 1 &&
-          lead["VerificationStatus"] == "Pending" &&
-          lead.data() is Map<String, dynamic> &&
-          (lead.data() as Map<String, dynamic>).containsKey("Query") &&
-          lead["Query"] != null) {
+          lead["VerificationStatus"] == "Push Back") {
         queryLeads++;
       }
     });

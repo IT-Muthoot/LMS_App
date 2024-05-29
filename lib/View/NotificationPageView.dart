@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Model/NotificationData.dart';
 import '../Utils/StyleData.dart';
-import '../main.dart';
 
 class NotificationPageView extends StatefulWidget {
   const NotificationPageView({super.key});
@@ -17,6 +14,15 @@ class NotificationPageView extends StatefulWidget {
 }
 
 class _NotificationPageViewState extends State<NotificationPageView> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotificationProvider>(context, listen: false).markAllAsRead();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +56,6 @@ class _NotificationPageViewState extends State<NotificationPageView> {
         builder: (context, notificationProvider, child) {
           // Print the number of notifications
           print("Number of notifications: ${notificationProvider.notifications.length}");
-
-          // Mark all notifications as read when the page is opened
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            notificationProvider.markAllAsRead();
-          });
 
           return notificationProvider.notifications.isEmpty
               ? Center(child: Text("No notifications available")) // Show a message if there are no notifications

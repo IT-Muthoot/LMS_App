@@ -223,8 +223,10 @@ class _FormPageViewState extends State<FormPageView> {
       "PurposeOfvisit": selectedPurpose ?? "",
       "CustomerStatus": selectedCustomerStatus ?? "",
       "ScheduledVisit": _dateController.text,
-      "Latitude": latitude.toString(),
-      "Longitude": longitude.toString(),
+      // "Latitude": latitude.toString(),
+      // "Longitude": longitude.toString(),
+      "Latitude": (latitude?.toString()?.isNotEmpty == true ? latitude.toString() : "19.024651"),
+      "Longitude": (longitude?.toString()?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
     });
     print(data);
     var dio = Dio();

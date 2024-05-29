@@ -263,7 +263,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                               Stack(
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.notifications_none,color: Colors.white,size: 25,),
+                                    icon: Icon(Icons.notifications_none, color: Colors.white, size: 25),
                                     onPressed: () {
                                       Navigator.push(
                                         context,

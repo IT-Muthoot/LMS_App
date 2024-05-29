@@ -53,39 +53,54 @@ class _QueryPageViewState extends State<QueryPageView> {
       userType = pref.getString("logintype");
     });
 
-    if (userType == "user") {
-      QuerySnapshot querySnapshot = await users.where("userId", isEqualTo: userId).get();
+    try {
+      QuerySnapshot querySnapshot;
+
+      // Fetching leads only with VerificationStatus "Push Back"
+      querySnapshot = await users.where("VerificationStatus", isEqualTo: "Push Back").get();
+
       userLeads = querySnapshot.docs;
-      print(userLeads);
-      setState(() {
-        ListOfLeads = userLeads.where((lead) =>
-        lead["LeadID"].length > 1 &&
-            lead["VerificationStatus"] == "Pending" &&
-            lead.data() is Map<String, dynamic> && // Check if data is a Map
-            (lead.data() as Map<String, dynamic>).containsKey("Query") && // Cast and check for 'Query' key
-            lead["Query"] != null
-        ).toList();
-      });
-    } else {
-      QuerySnapshot querySnapshot = await users.where("VerificationStatus", isEqualTo: "Pending").get();
-      setState(() {
-        ListOfLeads = querySnapshot.docs.where((lead) =>
-        lead["LeadID"].length > 1 &&
-            lead.data() is Map<String, dynamic> && // Check if data is a Map
-            (lead.data() as Map<String, dynamic>).containsKey("Query") && // Cast and check for 'Query' key
-            lead["Query"] != null
-        ).toList();
 
+      List<DocumentSnapshot> filteredLeads = userLeads.where((lead) {
+        Map<String, dynamic> data = lead.data() as Map<String, dynamic>;
+        List<dynamic> documents = data["VerifiedBy"] == "Verified By SM" ? data["Documents1"] : data["Documents"];
+        return data["LeadID"].length > 1 &&
+            documents.any((doc) => doc["query"] != null && doc["query"].toString().isNotEmpty);
+      }).toList();
 
+      for (var lead in filteredLeads) {
+        Map<String, dynamic> data = lead.data() as Map<String, dynamic>;
+        List<dynamic> documents = data["VerifiedBy"] == "Verified By SM" ? data["Documents1"] : data["Documents"];
+        for (var doc in documents) {
+          print('Document Key: ${doc['key']}');
+          print('Is Checked: ${doc['isChecked']}');
+          print('Query: ${doc['query']}');
+        }
+      }
+
+      setState(() {
+        ListOfLeads = filteredLeads;
       });
+
+    } catch (e) {
+      print('Error fetching leads data: $e');
     }
   }
 
 
 
-
-
-
+  List<String> _getAllKeyNameAndQueriesFromLead(DocumentSnapshot lead) {
+    List<dynamic> documents = lead["VerifiedBy"] == "Verified By SM" ? lead["Documents1"] :  lead["Documents"];
+    List<String> keyNameAndQueries = [];
+    for (var doc in documents) {
+      if (doc.containsKey("query") && doc["query"] != null && doc["query"].toString().isNotEmpty) {
+        String keyName = doc["key"];
+        String query = doc["query"].toString();
+        keyNameAndQueries.add("$keyName: $query");
+      }
+    }
+    return keyNameAndQueries;
+  }
 
   @override
   void initState() {
@@ -375,9 +390,15 @@ class _QueryPageViewState extends State<QueryPageView> {
                                           ),
                                         ],
                                       ),
-                                          Text( searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]['Query'] ?? ""
-                                              : searchListOfLeads[index]["Query"] ?? "",style: TextStyle(color:Colors.black,fontSize: 15)),
+                                      Text(
+                                        searchKEY.text.isEmpty
+                                            ? _getAllKeyNameAndQueriesFromLead(ListOfLeads[index]).join('\n') ?? ""
+                                            : _getAllKeyNameAndQueriesFromLead(searchListOfLeads[index]).join('\n') ?? "",
+                                        style: TextStyle(color:Colors.black, fontSize: 15),
+                                      ),
+
+
+
                                     ],
                                   ),
                                 ),

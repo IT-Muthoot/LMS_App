@@ -107,6 +107,9 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   List<dynamic> mandatoryDocuments = [];
   String? SelectedMandatoryDoc;
   bool documentCheck = false;
+  bool isLoanApplicationDocument = false;
+  bool isMandatoryDocument = false;
+  bool isOptionalDocument = false;
   String? isChecklist;
   Map<String, bool> documentCheckboxStates = {};
   Map<String, String> uploadedFileNames = {};
@@ -119,6 +122,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   int uploadedDocumentCount = 0;
   XFile? pickedFileChecklist;
   FilePickerResult? pickedFiles;
+  bool isTechChecklist = false;
 
   getLeadDetails() {
     if (!widget.isNewActivity) {
@@ -220,6 +224,10 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     ReasonforDisinterest= docData["ReasonforDisinterest"] ?? "";
     VerificationStatus = docData['VerificationStatus'] ?? "";
     region = docData['Region'] ?? "";
+   isLoanApplicationDocument =  docData['isLoanApplicationDocument'] ;
+    isMandatoryDocument =  docData['isMandatoryDocument'] ;
+    isOptionalDocument =  docData['isOptionalDocument'] ;
+    isTechChecklist =  docData['isTechnicalChecklist'] ;
 
     if(region != null)
       {
@@ -257,6 +265,9 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       }
     } catch (e) {
       CustomSnackBar.errorSnackBarQ("Technical Checklist Not Available", context);
+      setState(() {
+        isTechChecklist = true;
+      });
       log('Error fetching data: $e');
     }
   }
@@ -507,7 +518,6 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       print(e);
     };
   }
-
   Future<void> updateDataToLeadsFirestore1() async {
     CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
     DateTime now = DateTime.now();
@@ -515,14 +525,18 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     try{
       Map<String, dynamic> params = {
         'VerificationStatus' : 'Sent for Verification',
+        'isLoanApplicationDocument' : isLoanApplicationDocument,
+        'isMandatoryDocument' : isMandatoryDocument,
+        'isOptionalDocument' : isOptionalDocument,
+        'isTechnicalChecklist':isTechChecklist,
         'updatedTime':Timestamp.fromDate(now),
       };
       convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           print(querySnapshot.docs.isNotEmpty);
           convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
-            print("Data updated to Leads successfully");
-            _showAlertDialogSuccess3(context);
+            print("Data updated to Visits successfully");
+            _showAlertDialogSuccess2(context);
             //  Navigator.pop(context);
           }).catchError((error) {
             print("Failed to update data: $error");
@@ -539,6 +553,37 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     };
   }
 
+  // Future<void> updateDataToLeadsFirestore1() async {
+  //   CollectionReference convertedLeads = FirebaseFirestore.instance.collection("convertedLeads");
+  //   DateTime now = DateTime.now();
+  //   print("Hello");
+  //   try{
+  //     Map<String, dynamic> params = {
+  //       'VerificationStatus' : 'Sent for Verification',
+  //       'updatedTime':Timestamp.fromDate(now),
+  //     };
+  //     convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
+  //       if (querySnapshot.docs.isNotEmpty) {
+  //         print(querySnapshot.docs.isNotEmpty);
+  //         convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
+  //           print("Data updated to Leads successfully");
+  //           _showAlertDialogSuccess3(context);
+  //           //  Navigator.pop(context);
+  //         }).catchError((error) {
+  //           print("Failed to update data: $error");
+  //         });
+  //       } else {
+  //         // Navigator.pop(context);
+  //       }
+  //     }).catchError((error) {
+  //       print("Failed to check if customerNumber exists: $error");
+  //     });
+  //
+  //   }catch(e){
+  //     print(e);
+  //   };
+  // }
+
   Future<void> updateDataToVisitFirestore() async {
     CollectionReference convertedLeads = FirebaseFirestore.instance.collection("LeadCreation");
     DateTime now = DateTime.now();
@@ -546,6 +591,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     try{
       Map<String, dynamic> params = {
         'LeadID' : LeadID,
+        'VerificationStatus' : 'Sent for Verification',
         'updatedTime':Timestamp.fromDate(now),
       };
       convertedLeads.where('visitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
@@ -589,12 +635,13 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         final checklistTitle = '$documentTitle-checklist';
 
         // Check if checklistTitle exists in the checklist data
-        if (checklistData.containsKey(checklistTitle)) {
-          // If checklist exists, update uploadedFileNames accordingly
+        if (checklistData.containsKey(checklistTitle) && checklistData[checklistTitle].isNotEmpty) {
+          // If checklist exists and is not empty, update uploadedFileNames accordingly
           setState(() {
             uploadedFileNames[documentId] = 'Uploaded'; // You can set any string you want
           });
         }
+
       }
     }
   }
@@ -671,18 +718,18 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       if (querySnapshot.docs.isNotEmpty) {
         var data = querySnapshot.docs[0].data();
 
-        applicationForm = data["Application_Form"] == null ? "Not Uploaded" : "Uploaded";
-        bankPassbook = data["Bank_Passbook"] == null ? "Not Uploaded" : "Uploaded";
-        dateOfBirthProof = data["Date_Of_Birth"] == null ? "Not Uploaded" : "Uploaded";
-        loginFeeCheque = data["Login_Fee_Check"] == null ? "Not Uploaded" : "Uploaded";
-        passportSizePhoto = data["Passport_Size_Photo"] == null ? "Not Uploaded" : "Uploaded";
-        photoIdProof = data["Photo_Id_Proof"] == null ? "Not Uploaded" : "Uploaded";
-        residenceProof = data["Residence_Proof"] == null ? "Not Uploaded" : "Uploaded";
-        salarySlip = data["Salary_Slip"] == null ? "Not Uploaded" : "Uploaded";
-        signatureProof = data["Signature_Proof"] == null ? "Not Uploaded" : "Uploaded";
-        copyOfProperty = data["Copy_Of_Property"] == null ? "Not Uploaded" : "Uploaded";
-        totalWorkExp = data["Total_Work_Experience"] == null ? "Not Uploaded" : "Uploaded";
-        qualificationProof = data["Qualification_Proof"] == null ? "Not Uploaded" : "Uploaded";
+        applicationForm = (data["Application_Form"] != null && data["Application_Form"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        bankPassbook = (data["Bank_Passbook"] != null && data["Bank_Passbook"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        dateOfBirthProof = (data["Date_Of_Birth"] != null && data["Date_Of_Birth"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        loginFeeCheque = (data["Login_Fee_Check"] != null && data["Login_Fee_Check"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        passportSizePhoto = (data["Passport_Size_Photo"] != null && data["Passport_Size_Photo"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        photoIdProof = (data["Photo_Id_Proof"] != null && data["Photo_Id_Proof"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        residenceProof = (data["Residence_Proof"] != null && data["Residence_Proof"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        salarySlip = (data["Salary_Slip"] != null && data["Salary_Slip"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        signatureProof = (data["Signature_Proof"] != null && data["Signature_Proof"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        copyOfProperty = (data["Copy_Of_Property"] != null && data["Copy_Of_Property"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        totalWorkExp = (data["Total_Work_Experience"] != null && data["Total_Work_Experience"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
+        qualificationProof = (data["Qualification_Proof"] != null && data["Qualification_Proof"].isNotEmpty) ? "Uploaded" : "Not Uploaded";
         // Repeat this for other documents
       } else {
         // Handle case where no matching document is found
@@ -737,1134 +784,1204 @@ class _DocumentPageViewState extends State<DocumentPageView> {
           ),
 
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // SizedBox(
-              //   height: height * 0.01,
-              // ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Lead ID : ",
-                                        style: TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.leadID,
-                                        style: TextStyle(
-                                          color: StyleData.appBarColor2,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.01,
-                                  ),
-                                  Text(
-                                    'Product: $productCategory',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Purpose Of Loan: $products',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Region: $region',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.01,
-                                  ),
-                Divider(),
-                Text(
-                  "Required Documents",
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontFamily: StyleData.boldFont,
-                    fontSize: 17,
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                const Text(
-                  "Application Form *",
-                  style: TextStyle(color: Colors.black38, fontSize: 13),
-                ),
-                SizedBox(
-                  height: height * 0.001,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      applicationFormClicked= true;
-                      bankPassbookClicked = false;
-                      dateOfBirthClicked = false;
-                      loginFeeChequeClicked = false;
-                      passportSizePhotoClicked = false;
-                      photoIdProofClicked = false;
-                      residenceProofClicked = false;
-                      salarySlipClicked = false;
-                      signatureProofClicked = false;
-                      copyOfPropertyClicked = false;
-                      qualificationProofClicked = false;
-                      sectorEmployeePvtClicked = false;
-                      totalWorkExpClicked = false;
-                      WorkExpClicked = false;
-                    });
-                    selectSource(height, width);
-                  },
-                  child: DottedBorder(
-                    color: Colors.black87,
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    padding: const EdgeInsets.all(6),
-                    child: ClipRRect(
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(12)),
-                      child: Container(
-                        height: height * 0.07,
-                        width: width * 0.9,
-                        color: Colors.grey[200],
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // SizedBox(
+                    //   height: height * 0.01,
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible:   widget.leadID != null,
+                            child: Row(
                               children: [
-                                Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.black54,
-                                  size: 26,
+                                Text(
+                                  "Lead ID : ",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Text(
-                                  "/",
-                                  style: TextStyle(  color: Colors.black54,),
+                                  widget.leadID,
+                                  style: TextStyle(
+                                    color: StyleData.appBarColor2,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                                Icon(Icons.arrow_circle_up_rounded,
-                                    color: Colors.black54, size: 26),
                               ],
                             ),
-                            SizedBox(height: height * 0.01),
-                            Text(
-                              applicationForm ?? "Application form",
-                              style: TextStyle(
-                                color: applicationForm != null ? Colors.red : Colors.grey,
-                                fontSize: 12,
-                              ),
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          Text(
+                            'Product: $productCategory',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
                             ),
-
-                          ],
-                        ),
-                      ),
-                    ),
-                  ), // Change the splash color to red
-                ),
-                                  // Column(
-                                  //   children: [
-                                  //     Image.file(File(selectedFilePathApplicationForm!)),
-                                  //     Text(selectedFilePathApplicationForm ?? "No file selected"),
-                                  //   ],
-                                  // ),
-                SizedBox(
-                  height: height * 0.006,
-                ),
-                const Text(
-                  "Bank Passbook *",
-                  style: TextStyle(color: Colors.black38, fontSize: 13),
-                ),
-                SizedBox(
-                  height: height * 0.001,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      bankPassbookClicked = true;
-                      applicationFormClicked = false;
-                      dateOfBirthClicked = false;
-                      loginFeeChequeClicked = false;
-                      passportSizePhotoClicked = false;
-                      photoIdProofClicked = false;
-                      residenceProofClicked = false;
-                      salarySlipClicked = false;
-                      signatureProofClicked = false;
-                      copyOfPropertyClicked = false;
-                      qualificationProofClicked = false;
-                      sectorEmployeePvtClicked = false;
-                      totalWorkExpClicked = false;
-                      WorkExpClicked = false;
-                    });
-                    selectSource(height, width);
-                  },
-                  child: DottedBorder(
-                    color: Colors.black87,
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    padding: const EdgeInsets.all(6),
-                    child: ClipRRect(
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(12)),
-                      child: Container(
-                          height: height * 0.07,
-                          width: width * 0.9,
-                          color: Colors.grey[200],
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          Text(
+                            'Purpose Of Loan: $products',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          Text(
+                            'Region: $region',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.01,
+                          ),
+                          Divider(),
+                          Row(
                             children: [
-                              const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.black54,
-                                    size: 26,
-                                  ),
-                                  Text(
-                                    "/",
-                                    style: TextStyle(  color: Colors.black54,),
-                                  ),
-                                  Icon(Icons.arrow_circle_up_rounded,
-                                      color: Colors.black54, size: 26),
-                                ],
+                              Checkbox(
+                                value: isLoanApplicationDocument,
+                                activeColor: StyleData.appBarColor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isLoanApplicationDocument = value!;
+                                  });
+                                },
                               ),
-                              SizedBox(height: height * 0.01),
                               Text(
-                                bankPassbook ??
-                                    "Bank Passbook",
-                                style: TextStyle(
-                                  color: bankPassbook != null ? Colors.red : Colors.grey,
-                                  fontSize: 12,
-                                ),
+                                'Loan Application Document',
+                                style: TextStyle(fontSize: 18),
                               ),
                             ],
-                          )),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: height * 0.006,
-                ),
-                const Text(
-                  "Date Of Birth Proof *",
-                  style: TextStyle(color: Colors.black38, fontSize: 13),
-                ),
-                SizedBox(
-                  height: height * 0.001,
-                ),
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      dateOfBirthClicked = true;
-                      bankPassbookClicked = false;
-                      applicationFormClicked = false;
-                      loginFeeChequeClicked = false;
-                      passportSizePhotoClicked = false;
-                      photoIdProofClicked = false;
-                      residenceProofClicked = false;
-                      salarySlipClicked = false;
-                      signatureProofClicked = false;
-                      copyOfPropertyClicked = false;
-                      qualificationProofClicked = false;
-                      sectorEmployeePvtClicked = false;
-                      totalWorkExpClicked = false;
-                      WorkExpClicked = false;
-                    });
-                    selectSource(height, width);
-                  },
-                  child: DottedBorder(
-                    color: Colors.black87,
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(12),
-                    padding: const EdgeInsets.all(6),
-                    child: ClipRRect(
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(12)),
-                      child: Container(
-                          height: height * 0.07,
-                          width: width * 0.9,
-                          color: Colors.grey[200],
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Visibility(
+                              visible: isLoanApplicationDocument,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.black54,
-                                    size: 26,
-                                  ),
-                                  Text(
-                                    "/",
-                                    style: TextStyle(  color: Colors.black54,),
-                                  ),
-                                  Icon(Icons.arrow_circle_up_rounded,
-                                      color: Colors.black54, size: 26),
-                                ],
-                              ),
-                              SizedBox(height: height * 0.01),
-                              Text(
-                                dateOfBirthProof ??
-                                    "Date of Birth proof",
-                                style: TextStyle(
-                                  color: dateOfBirthProof != null ? Colors.red : Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              )
-                            ],
-                          )),
-                    ),
-                  ),
-                ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Login Fee Cheque *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        loginFeeChequeClicked = true;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        photoIdProofClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                            height: height * 0.07,
-                                            width: width * 0.9,
-                                            color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  loginFeeCheque ??
-                                                      "Login Fee Cheque",
-                                                  style: TextStyle(
-                                                    color: loginFeeCheque != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Passport Size Photo *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        passportSizePhotoClicked = true;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        photoIdProofClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                            height: height * 0.07,
-                                            width: width * 0.9,
-                                            color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  passportSizePhoto ??
-                                                      "Passport Size Photo",
-                                                  style: TextStyle(
-                                                    color: passportSizePhoto != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Photo ID Proof *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        photoIdProofClicked = true;
-                                        passportSizePhotoClicked = false;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                            height: height * 0.07,
-                                            width: width * 0.9,
-                                            color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  photoIdProof ??
-                                                      "Photo ID Proof",
-                                                  style: TextStyle(
-                                                    color: photoIdProof != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Residence Proof *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        residenceProofClicked = true;
-                                        photoIdProofClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                            height: height * 0.07,
-                                            width: width * 0.9,
-                                            color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  residenceProof ??
-                                                      "Residence Proof",
-                                                  style: TextStyle(
-                                                    color: residenceProof != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Salary Slip *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        salarySlipClicked = true;
-                                        signatureProofClicked = false;
-                                        residenceProofClicked = false;
-                                        photoIdProofClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                            height: height * 0.07,
-                                            width: width * 0.9,
-                                            color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  salarySlip ??
-                                                      "Salary Slip",
-                                                  style: TextStyle(
-                                                    color: salarySlip != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Signature Proof *",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        signatureProofClicked = true;
-                                        residenceProofClicked = false;
-                                        photoIdProofClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        dateOfBirthClicked = false;
-                                        bankPassbookClicked = false;
-                                        applicationFormClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        salarySlipClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                              const BorderRadius.all(Radius.circular(12)),
-                                              child: Container(
-                                                height: height * 0.07,
-                                                width: width * 0.9,
-                                                color: Colors.grey[200],
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.camera_alt,
-                                                      color: Colors.black54,
-                                                      size: 26,
-                                                    ),
-                                                    Text(
-                                                      "/",
-                                                      style: TextStyle(  color: Colors.black54,),
-                                                    ),
-                                                    Icon(Icons.arrow_circle_up_rounded,
-                                                        color: Colors.black54, size: 26),
-                                                  ],
-                                                ),
-                                                SizedBox(height: height * 0.01),
-                                                Text(
-                                                  signatureProof ??
-                                                      "Signature Proof",
-                                                  style: TextStyle(
-                                                    color: signatureProof != null ? Colors.red : Colors.grey,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.05,
-                                  ),
-                                  Text(
-                                    "Optional Documents",
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontFamily: StyleData.boldFont,
-                                      fontSize: 17,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.02,
-                                  ),
-                                  const Text(
-                                    "Copy Of Property",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        copyOfPropertyClicked = true;
-                                        applicationFormClicked= false;
-                                        bankPassbookClicked = false;
-                                        dateOfBirthClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        photoIdProofClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        totalWorkExpClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                          height: height * 0.07,
-                                          width: width * 0.9,
-                                          color: Colors.grey[200],
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.camera_alt,
-                                                    color: Colors.black54,
-                                                    size: 26,
-                                                  ),
-                                                  Text(
-                                                    "/",
-                                                    style: TextStyle(  color: Colors.black54,),
-                                                  ),
-                                                  Icon(Icons.arrow_circle_up_rounded,
-                                                      color: Colors.black54, size: 26),
-                                                ],
-                                              ),
-                                              SizedBox(height: height * 0.01),
-                                              Text(
-                                                copyOfProperty ?? "Copy Of Property",
-                                                style: TextStyle(
-                                                  color: copyOfProperty != null ? Colors.red : Colors.grey,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ), // Change the splash color to red
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Total work experience",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        totalWorkExpClicked = true;
-                                        copyOfPropertyClicked = false;
-                                        applicationFormClicked= false;
-                                        bankPassbookClicked = false;
-                                        dateOfBirthClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        photoIdProofClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        qualificationProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                          height: height * 0.07,
-                                          width: width * 0.9,
-                                          color: Colors.grey[200],
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.camera_alt,
-                                                    color: Colors.black54,
-                                                    size: 26,
-                                                  ),
-                                                  Text(
-                                                    "/",
-                                                    style: TextStyle(  color: Colors.black54,),
-                                                  ),
-                                                  Icon(Icons.arrow_circle_up_rounded,
-                                                      color: Colors.black54, size: 26),
-                                                ],
-                                              ),
-                                              SizedBox(height: height * 0.01),
-                                              Text(
-                                                totalWorkExp ?? "Total Work Experience",
-                                                style: TextStyle(
-                                                  color: totalWorkExp != null ? Colors.red : Colors.grey,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ), // Change the splash color to red
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.006,
-                                  ),
-                                  const Text(
-                                    "Qualification Proof",
-                                    style: TextStyle(color: Colors.black38, fontSize: 13),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.001,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        qualificationProofClicked = true;
-                                        totalWorkExpClicked = false;
-                                        copyOfPropertyClicked = false;
-                                        applicationFormClicked= false;
-                                        bankPassbookClicked = false;
-                                        dateOfBirthClicked = false;
-                                        loginFeeChequeClicked = false;
-                                        passportSizePhotoClicked = false;
-                                        photoIdProofClicked = false;
-                                        residenceProofClicked = false;
-                                        salarySlipClicked = false;
-                                        signatureProofClicked = false;
-                                        sectorEmployeePvtClicked = false;
-                                        WorkExpClicked = false;
-                                      });
-                                      selectSource(height, width);
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.black87,
-                                      borderType: BorderType.RRect,
-                                      radius: const Radius.circular(12),
-                                      padding: const EdgeInsets.all(6),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        const BorderRadius.all(Radius.circular(12)),
-                                        child: Container(
-                                          height: height * 0.07,
-                                          width: width * 0.9,
-                                          color: Colors.grey[200],
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.camera_alt,
-                                                    color: Colors.black54,
-                                                    size: 26,
-                                                  ),
-                                                  Text(
-                                                    "/",
-                                                    style: TextStyle(  color: Colors.black54,),
-                                                  ),
-                                                  Icon(Icons.arrow_circle_up_rounded,
-                                                      color: Colors.black54, size: 26),
-                                                ],
-                                              ),
-                                              SizedBox(height: height * 0.01),
-                                              Text(
-                                                qualificationProof ?? "Qualification Proof",
-                                                style: TextStyle(
-                                                  color: qualificationProof != null ? Colors.red : Colors.grey,
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ), // Change the splash color to red
-                                  ),
-                                  SizedBox(height: height * 0.01),
                                   Row(
                                     children: [
                                       Checkbox(
-                                        value: documentCheck,
+                                        value: isMandatoryDocument,
                                         activeColor: StyleData.appBarColor,
                                         onChanged: (value) {
                                           setState(() {
-                                            documentCheck = value!;
+                                            isMandatoryDocument = value!;
                                           });
-                                          fetchLeadChecklistDetails();
                                         },
                                       ),
                                       Text(
-                                        'Technical Checklist',
+                                        'Mandatory Documents',
                                         style: TextStyle(fontSize: 18),
                                       ),
                                     ],
                                   ),
                                   Visibility(
-                                      visible: documentCheck,
-                                      child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: mandatoryDocuments.length,
-                                          itemBuilder: (context, index) {
-                                            final document = mandatoryDocuments[index];
-                                            final documentId = document['ID'].toString();
-                                            mandatoryDocumentCount = mandatoryDocuments.length;
-
-                                            documentCheckboxStates.putIfAbsent(documentId, () => false);
-
-                                            return ListTile(
-                                              title: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(mandatoryDocuments[index]['Title']),
-                                                  if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
-                                                    Text(
-                                                      uploadedFileNames[documentId] ?? '', // Display uploaded filename
-                                                      style: TextStyle(color: Colors.red, fontSize: 12.0),
+                                    visible: isMandatoryDocument,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: height * 0.02,
+                                        ),
+                                        const Text(
+                                          "Application Form *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              applicationFormClicked= true;
+                                              bankPassbookClicked = false;
+                                              dateOfBirthClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              photoIdProofClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            applicationForm == "Uploaded" && widget.leadID != null ? "" : applicationForm == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                height: height * 0.07,
+                                                width: width * 0.9,
+                                                color: Colors.grey[200],
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    const Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.camera_alt,
+                                                          color: Colors.black54,
+                                                          size: 26,
+                                                        ),
+                                                        Text(
+                                                          "/",
+                                                          style: TextStyle(  color: Colors.black54,),
+                                                        ),
+                                                        Icon(Icons.arrow_circle_up_rounded,
+                                                            color: Colors.black54, size: 26),
+                                                      ],
                                                     ),
-                                                  Divider()
-                                                ],
-                                              ),
-                                              trailing: IconButton(
-                                                  icon: Icon(Icons.attach_file),
-                                                  onPressed: () {
-                                                    selectSourceChecklist(height, width,mandatoryDocuments[index]['Title'],documentId);
-                                                  }
-                                                //mandatoryDocuments[index]
-                                              ),
-                                            );
+                                                    SizedBox(height: height * 0.01),
+                                                    Text(
+                                                      applicationForm ?? "Application form",
+                                                      style: TextStyle(
+                                                        color: applicationForm == "Uploaded" ? Colors.green : Colors.red,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
 
-                                          }
-                                      )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ), // Change the splash color to red
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Bank Passbook *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              bankPassbookClicked = true;
+                                              applicationFormClicked = false;
+                                              dateOfBirthClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              photoIdProofClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            bankPassbook == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        bankPassbook ??
+                                                            "Bank Passbook",
+                                                        style: TextStyle(
+                                                          color: bankPassbook == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Date Of Birth Proof *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              dateOfBirthClicked = true;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              photoIdProofClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            dateOfBirthProof == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        dateOfBirthProof ??
+                                                            "Date of Birth proof",
+                                                        style: TextStyle(
+                                                          color: dateOfBirthProof == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Login Fee Cheque *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              loginFeeChequeClicked = true;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              photoIdProofClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            loginFeeCheque == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        loginFeeCheque ??
+                                                            "Login Fee Cheque",
+                                                        style: TextStyle(
+                                                          color: loginFeeCheque == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Passport Size Photo *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              passportSizePhotoClicked = true;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              photoIdProofClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            passportSizePhoto == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        passportSizePhoto ??
+                                                            "Passport Size Photo",
+                                                        style: TextStyle(
+                                                          color: passportSizePhoto == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Photo ID Proof *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              photoIdProofClicked = true;
+                                              passportSizePhotoClicked = false;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              residenceProofClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            photoIdProof == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        photoIdProof ??
+                                                            "Photo ID Proof",
+                                                        style: TextStyle(
+                                                          color: photoIdProof == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Residence Proof *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              residenceProofClicked = true;
+                                              photoIdProofClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              salarySlipClicked = false;
+                                              signatureProofClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            residenceProof == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        residenceProof ??
+                                                            "Residence Proof",
+                                                        style: TextStyle(
+                                                          color: residenceProof == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Salary Slip *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              salarySlipClicked = true;
+                                              signatureProofClicked = false;
+                                              residenceProofClicked = false;
+                                              photoIdProofClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            salarySlip == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        salarySlip ??
+                                                            "Salary Slip",
+                                                        style: TextStyle(
+                                                          color: salarySlip == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.006,
+                                        ),
+                                        const Text(
+                                          "Signature Proof *",
+                                          style: TextStyle(color: Colors.black38, fontSize: 13),
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.001,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              signatureProofClicked = true;
+                                              residenceProofClicked = false;
+                                              photoIdProofClicked = false;
+                                              passportSizePhotoClicked = false;
+                                              dateOfBirthClicked = false;
+                                              bankPassbookClicked = false;
+                                              applicationFormClicked = false;
+                                              loginFeeChequeClicked = false;
+                                              salarySlipClicked = false;
+                                              copyOfPropertyClicked = false;
+                                              qualificationProofClicked = false;
+                                              sectorEmployeePvtClicked = false;
+                                              totalWorkExpClicked = false;
+                                              WorkExpClicked = false;
+                                            });
+                                            signatureProof == "Uploaded" ? "" : selectSource(height, width);
+                                          },
+                                          child: DottedBorder(
+                                            color: Colors.black87,
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(12),
+                                            padding: const EdgeInsets.all(6),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                              const BorderRadius.all(Radius.circular(12)),
+                                              child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        signatureProof ??
+                                                            "Signature Proof",
+                                                        style: TextStyle(
+                                                          color: signatureProof == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  SizedBox(
+                                    height: height * 0.001,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: isOptionalDocument,
+                                        activeColor: StyleData.appBarColor,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isOptionalDocument = value!;
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        'Optional Documents',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  Visibility(
+                                      visible: isOptionalDocument ,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: height * 0.02,
+                                          ),
+                                          const Text(
+                                            "Copy Of Property",
+                                            style: TextStyle(color: Colors.black38, fontSize: 13),
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.001,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                copyOfPropertyClicked = true;
+                                                applicationFormClicked= false;
+                                                bankPassbookClicked = false;
+                                                dateOfBirthClicked = false;
+                                                loginFeeChequeClicked = false;
+                                                passportSizePhotoClicked = false;
+                                                photoIdProofClicked = false;
+                                                residenceProofClicked = false;
+                                                salarySlipClicked = false;
+                                                signatureProofClicked = false;
+                                                qualificationProofClicked = false;
+                                                sectorEmployeePvtClicked = false;
+                                                totalWorkExpClicked = false;
+                                                WorkExpClicked = false;
+                                              });
+                                              copyOfProperty == "Uploaded" ? "" : selectSource(height, width);
+                                            },
+                                            child: DottedBorder(
+                                              color: Colors.black87,
+                                              borderType: BorderType.RRect,
+                                              radius: const Radius.circular(12),
+                                              padding: const EdgeInsets.all(6),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                const BorderRadius.all(Radius.circular(12)),
+                                                child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        copyOfProperty ?? "Copy Of Property",
+                                                        style: TextStyle(
+                                                          color: copyOfProperty == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ), // Change the splash color to red
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.006,
+                                          ),
+                                          const Text(
+                                            "Total work experience",
+                                            style: TextStyle(color: Colors.black38, fontSize: 13),
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.001,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                totalWorkExpClicked = true;
+                                                copyOfPropertyClicked = false;
+                                                applicationFormClicked= false;
+                                                bankPassbookClicked = false;
+                                                dateOfBirthClicked = false;
+                                                loginFeeChequeClicked = false;
+                                                passportSizePhotoClicked = false;
+                                                photoIdProofClicked = false;
+                                                residenceProofClicked = false;
+                                                salarySlipClicked = false;
+                                                signatureProofClicked = false;
+                                                qualificationProofClicked = false;
+                                                sectorEmployeePvtClicked = false;
+                                                WorkExpClicked = false;
+                                              });
+                                              totalWorkExp == "Uploaded" ? "" : selectSource(height, width);
+                                            },
+                                            child: DottedBorder(
+                                              color: Colors.black87,
+                                              borderType: BorderType.RRect,
+                                              radius: const Radius.circular(12),
+                                              padding: const EdgeInsets.all(6),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                const BorderRadius.all(Radius.circular(12)),
+                                                child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        totalWorkExp ?? "Total Work Experience",
+                                                        style: TextStyle(
+                                                          color: totalWorkExp == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ), // Change the splash color to red
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.006,
+                                          ),
+                                          const Text(
+                                            "Qualification Proof",
+                                            style: TextStyle(color: Colors.black38, fontSize: 13),
+                                          ),
+                                          SizedBox(
+                                            height: height * 0.001,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                qualificationProofClicked = true;
+                                                totalWorkExpClicked = false;
+                                                copyOfPropertyClicked = false;
+                                                applicationFormClicked= false;
+                                                bankPassbookClicked = false;
+                                                dateOfBirthClicked = false;
+                                                loginFeeChequeClicked = false;
+                                                passportSizePhotoClicked = false;
+                                                photoIdProofClicked = false;
+                                                residenceProofClicked = false;
+                                                salarySlipClicked = false;
+                                                signatureProofClicked = false;
+                                                sectorEmployeePvtClicked = false;
+                                                WorkExpClicked = false;
+                                              });
+                                              qualificationProof == "Uploaded" ? "" : selectSource(height, width);
+                                            },
+                                            child: DottedBorder(
+                                              color: Colors.black87,
+                                              borderType: BorderType.RRect,
+                                              radius: const Radius.circular(12),
+                                              padding: const EdgeInsets.all(6),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                const BorderRadius.all(Radius.circular(12)),
+                                                child: Container(
+                                                  height: height * 0.07,
+                                                  width: width * 0.9,
+                                                  color: Colors.grey[200],
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      const Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.camera_alt,
+                                                            color: Colors.black54,
+                                                            size: 26,
+                                                          ),
+                                                          Text(
+                                                            "/",
+                                                            style: TextStyle(  color: Colors.black54,),
+                                                          ),
+                                                          Icon(Icons.arrow_circle_up_rounded,
+                                                              color: Colors.black54, size: 26),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: height * 0.01),
+                                                      Text(
+                                                        qualificationProof ?? "Qualification Proof",
+                                                        style: TextStyle(
+                                                          color: qualificationProof == "Uploaded" ? Colors.green : Colors.red,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ), // Change the splash color to red
+                                          ),
+                                        ],
+                                      ))
                                 ],
                               ),
-              ),
-              SizedBox(
-                height: height * 0.03,
-              ),
-              widget.leadID != null && widget.isTechChecklist ?
-              Container(
-                height: 55,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: StyleData.appBarColor2,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:[
-                    ElevatedButton(
-                      onPressed: () {
-                        updateLeadData1();
-                        // Navigator.push(
-                        //     context,
-                        // MaterialPageRoute(
-                        //     builder: (context) => DocumentChecklistPageView(
-                        //         docId:widget.docId,
-                        //         leadId: widget.leadID,
-                        //         isNewActivity: false,
-                        //         isUpdateActivity:true
-                        //     )));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Update',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          //
+                          // SizedBox(height: height * 0.005),
+                          Visibility(
+                            visible: isTechChecklist == false,
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  value: documentCheck,
+                                  activeColor: StyleData.appBarColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      documentCheck = value!;
+                                    });
+                                    fetchLeadChecklistDetails();
+                                  },
+                                ),
+                                Text(
+                                  'Technical Checklist',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Visibility(
+                              visible: documentCheck,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: mandatoryDocuments.length,
+                                  itemBuilder: (context, index) {
+                                    final document = mandatoryDocuments[index];
+                                    final documentId = document['ID'].toString();
+                                    mandatoryDocumentCount = mandatoryDocuments.length;
+              
+                                    documentCheckboxStates.putIfAbsent(documentId, () => false);
+              
+                                    return ListTile(
+                                      title: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(mandatoryDocuments[index]['Title']),
+                                          if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
+                                            Text(
+                                              uploadedFileNames[documentId] ?? '', // Display uploaded filename
+                                              style:TextStyle(color:  uploadedFileNames[documentId] == "Uploaded" ? Colors.green : Colors.red, fontSize: 12.0),
+                                            ),
+                                          Divider()
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                          icon: Icon(Icons.attach_file),
+                                          onPressed: () {
+                                            uploadedFileNames[documentId] == "Uploaded" ? "" :  selectSourceChecklist(height, width,mandatoryDocuments[index]['Title'],documentId);
+                                          }
+                                        //mandatoryDocuments[index]
+                                      ),
+                                    );
+              
+                                  }
+                              )
                           ),
                         ],
                       ),
                     ),
+              
                   ],
                 ),
-              ) :
+              ),
+            ),
+            SizedBox(
+              height: height * 0.03,
+            ),
+            
+            widget.leadID != null && widget.isTechChecklist ?
             Container(
-                height: 55,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: StyleData.appBarColor2,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children:[
-                    ElevatedButton(
-                      onPressed: () {
-                        updateLeadData();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Submit',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              height: 55,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: StyleData.appBarColor2,
               ),
-            ],
-          ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:[
+                  ElevatedButton(
+                    onPressed: () {
+                      updateLeadData1();
+                      // Navigator.push(
+                      //     context,
+                      // MaterialPageRoute(
+                      //     builder: (context) => DocumentChecklistPageView(
+                      //         docId:widget.docId,
+                      //         leadId: widget.leadID,
+                      //         isNewActivity: false,
+                      //         isUpdateActivity:true
+                      //     )));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Update',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ) :
+            Container(
+              height: 55,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: StyleData.appBarColor2,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:[
+                  ElevatedButton(
+                    onPressed: () {
+                      updateLeadData();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]
         ),
       )
       ),
@@ -2200,7 +2317,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                   print(data);
                   FirebaseFirestore.instance
                       .collection("convertedLeads")
-                      .where("LeadID", isEqualTo: widget.visitID) // Check if visitID matches
+                      .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
                       .get()
                       .then((QuerySnapshot snapshot) {
                     if (snapshot.docs.isNotEmpty) {
@@ -2722,14 +2839,7 @@ print("bhjkjhlknl");
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('Lead details saved successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text('Lead ID - ', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87),),
-                      Text('$LeadID', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+                  Text('Submitted successfully', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
                   SizedBox(
                     height: 25,

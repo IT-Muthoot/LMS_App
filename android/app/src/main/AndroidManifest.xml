@@ -29,6 +29,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
             </intent-filter>
 
         </activity>

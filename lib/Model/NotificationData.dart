@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationModel {
   final String title;
@@ -63,20 +66,25 @@ class NotificationModel {
 //   }
 // }
 
-
 class NotificationProvider with ChangeNotifier {
   List<NotificationModel> _notifications = [];
 
   List<NotificationModel> get notifications => _notifications;
   int get unreadCount => _notifications.where((notification) => !notification.isRead).length;
 
+  NotificationProvider() {
+    _loadNotificationsFromPrefs();
+  }
+
   void addNotification(NotificationModel notification) {
     _notifications.add(notification);
+    _saveNotificationsToPrefs();
     notifyListeners();
   }
 
   void setNotifications(List<NotificationModel> notifications) {
     _notifications = notifications;
+    _saveNotificationsToPrefs();
     notifyListeners();
   }
 
@@ -84,7 +92,25 @@ class NotificationProvider with ChangeNotifier {
     for (var notification in _notifications) {
       notification.isRead = true;
     }
+    _saveNotificationsToPrefs();
     notifyListeners();
   }
+
+  Future<void> _saveNotificationsToPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> notificationsJson = _notifications.map((n) => jsonEncode(n.toJson())).toList();
+    prefs.setStringList('notifications', notificationsJson);
+  }
+
+  Future<void> _loadNotificationsFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String>? notificationsJson = prefs.getStringList('notifications');
+    if (notificationsJson != null) {
+      _notifications = notificationsJson.map((json) => NotificationModel.fromJson(jsonDecode(json))).toList();
+      notifyListeners();
+    }
+  }
 }
+
+
 
