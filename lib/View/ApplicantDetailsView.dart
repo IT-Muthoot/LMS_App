@@ -416,7 +416,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                               //  commented for first phase
-                                 if(ListOfLeads[index]["VerificationStatus"] == "Pending")
+                                 if(ListOfLeads[index]["VerificationStatus"] == "Pending" || ListOfLeads[index]["VerificationStatus"] == "Push Back")
                                  Navigator.push(
                                      context,
                                    MaterialPageRoute(

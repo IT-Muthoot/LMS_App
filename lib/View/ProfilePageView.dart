@@ -290,82 +290,82 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                child: Column(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.end,
-                     children: [
-                       Padding(
-                         padding: EdgeInsets.only(right: 8.0),
-                         child: Column(
-                           crossAxisAlignment: CrossAxisAlignment.end,
-                           children: [
-                             Container(
-                               height: height * 0.04,
-                               width: width * 0.4,
-                               decoration: BoxDecoration(
-                                 borderRadius: BorderRadius.circular(30.0),
-                                 gradient: LinearGradient(
-                                   colors: [
-                                     Color.fromARGB(255, 236, 225, 215),
-                                     Color.fromARGB(255, 227, 222, 215)
-                                   ],
-                                 ),
-                               ),
-                               child: Padding(
-                                 padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                 child: TextFormField(
-                                   controller: _startDateController,
-                                   readOnly: true,
-                                   onTap: () => _selectDate(context, 1),
-                                   decoration: InputDecoration(
-                                     labelText: '',
-                                     suffixIcon: Icon(Icons.calendar_today, size: 20,),
-                                     focusedBorder: InputBorder.none,
-                                     border: InputBorder.none,
-                                   ),
-                                 ),
-                               ),
-                             ),
-                           ],
-                         ),
-                       ),
-                       Padding(
-                         padding: EdgeInsets.only(right: 8.0),
-                         child: Column(
-                           crossAxisAlignment: CrossAxisAlignment.end,
-                           children: [
-                             Container(
-                               height: height * 0.04,
-                               width: width * 0.4,
-                               decoration: BoxDecoration(
-                                 borderRadius: BorderRadius.circular(30.0),
-                                 gradient: LinearGradient(
-                                   colors: [
-                                     Color.fromARGB(255, 236, 225, 215),
-                                     Color.fromARGB(255, 227, 222, 215)
-                                   ],
-                                 ),
-                               ),
-                               child: Padding(
-                                 padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                 child: TextFormField(
-                                   controller: _endDateController,
-                                   readOnly: true,
-                                   onTap: () => _selectDate(context,2),
-                                   decoration: InputDecoration(
-                                       labelText: '',
-                                       suffixIcon: Icon(Icons.calendar_today,size: 20,),
-                                       border: InputBorder.none
-                                   ),
-                                 ),
-                               ),
-                             ),
-                           ],
-                         ),
-                       ),
-                     ],
-                   ),
+                   // Row(
+                   //   mainAxisAlignment: MainAxisAlignment.end,
+                   //   children: [
+                   //     Padding(
+                   //       padding: EdgeInsets.only(right: 8.0),
+                   //       child: Column(
+                   //         crossAxisAlignment: CrossAxisAlignment.end,
+                   //         children: [
+                   //           Container(
+                   //             height: height * 0.04,
+                   //             width: width * 0.4,
+                   //             decoration: BoxDecoration(
+                   //               borderRadius: BorderRadius.circular(30.0),
+                   //               gradient: LinearGradient(
+                   //                 colors: [
+                   //                   Color.fromARGB(255, 236, 225, 215),
+                   //                   Color.fromARGB(255, 227, 222, 215)
+                   //                 ],
+                   //               ),
+                   //             ),
+                   //             child: Padding(
+                   //               padding: EdgeInsets.symmetric(horizontal: 8.0),
+                   //               child: TextFormField(
+                   //                 controller: _startDateController,
+                   //                 readOnly: true,
+                   //                 onTap: () => _selectDate(context, 1),
+                   //                 decoration: InputDecoration(
+                   //                   labelText: '',
+                   //                   suffixIcon: Icon(Icons.calendar_today, size: 20,),
+                   //                   focusedBorder: InputBorder.none,
+                   //                   border: InputBorder.none,
+                   //                 ),
+                   //               ),
+                   //             ),
+                   //           ),
+                   //         ],
+                   //       ),
+                   //     ),
+                   //     Padding(
+                   //       padding: EdgeInsets.only(right: 8.0),
+                   //       child: Column(
+                   //         crossAxisAlignment: CrossAxisAlignment.end,
+                   //         children: [
+                   //           Container(
+                   //             height: height * 0.04,
+                   //             width: width * 0.4,
+                   //             decoration: BoxDecoration(
+                   //               borderRadius: BorderRadius.circular(30.0),
+                   //               gradient: LinearGradient(
+                   //                 colors: [
+                   //                   Color.fromARGB(255, 236, 225, 215),
+                   //                   Color.fromARGB(255, 227, 222, 215)
+                   //                 ],
+                   //               ),
+                   //             ),
+                   //             child: Padding(
+                   //               padding: EdgeInsets.symmetric(horizontal: 8.0),
+                   //               child: TextFormField(
+                   //                 controller: _endDateController,
+                   //                 readOnly: true,
+                   //                 onTap: () => _selectDate(context,2),
+                   //                 decoration: InputDecoration(
+                   //                     labelText: '',
+                   //                     suffixIcon: Icon(Icons.calendar_today,size: 20,),
+                   //                     border: InputBorder.none
+                   //                 ),
+                   //               ),
+                   //             ),
+                   //           ),
+                   //         ],
+                   //       ),
+                   //     ),
+                   //   ],
+                   // ),
                    SizedBox(
-                     height: height * 0.03,
+                     height: height * 0.02,
                    ),
                    GestureDetector(
                      onTap: () {
@@ -455,50 +455,50 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                      ),
                    ),
                    Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
-                   GestureDetector(
-                     onTap: () {
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(
-                           builder: (context) => PendingLeadsPageView(),
-                         ),
-                       );
-                     },
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Row(
-                         children: [
-                           SizedBox(
-                             width:width * 0.8,
-                             child: Row(
-                               children: [
-                                 Text("Pending",style: TextStyle(
-                                     fontSize: 18,
-                                     fontWeight: FontWeight.w400,
-                                     color: Colors.orangeAccent
-                                 ),),
-                                 Card(
-                                   child: Container(
-                                     color: Colors.white,
-                                     child: Padding(
-                                       padding: const EdgeInsets.all(2.0),
-                                       child: Text('${pendingLeads.toString()}',style: TextStyle(
-                                           fontSize: 18,
-                                           fontWeight: FontWeight.w400,
-                                           color: Colors.green
-                                       ),),
-                                     ),
-                                   ),
-                                 ),
-                               ],
-                             ),
-                           ),
-                           Icon(Icons.navigate_next)
-                         ],
-                       ),
-                     ),
-                   ),
-                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   // GestureDetector(
+                   //   onTap: () {
+                   //     Navigator.push(
+                   //       context,
+                   //       MaterialPageRoute(
+                   //         builder: (context) => PendingLeadsPageView(),
+                   //       ),
+                   //     );
+                   //   },
+                   //   child: Padding(
+                   //     padding: const EdgeInsets.all(8.0),
+                   //     child: Row(
+                   //       children: [
+                   //         SizedBox(
+                   //           width:width * 0.8,
+                   //           child: Row(
+                   //             children: [
+                   //               Text("Pending",style: TextStyle(
+                   //                   fontSize: 18,
+                   //                   fontWeight: FontWeight.w400,
+                   //                   color: Colors.orangeAccent
+                   //               ),),
+                   //               Card(
+                   //                 child: Container(
+                   //                   color: Colors.white,
+                   //                   child: Padding(
+                   //                     padding: const EdgeInsets.all(2.0),
+                   //                     child: Text('${pendingLeads.toString()}',style: TextStyle(
+                   //                         fontSize: 18,
+                   //                         fontWeight: FontWeight.w400,
+                   //                         color: Colors.green
+                   //                     ),),
+                   //                   ),
+                   //                 ),
+                   //               ),
+                   //             ],
+                   //           ),
+                   //         ),
+                   //         Icon(Icons.navigate_next)
+                   //       ],
+                   //     ),
+                   //   ),
+                   // ),
+                   // Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
                    GestureDetector(
                      onTap: () {
                        Navigator.push(

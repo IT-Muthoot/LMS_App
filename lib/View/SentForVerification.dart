@@ -197,118 +197,122 @@ class _SentForVerificationState extends State<SentForVerification> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                _isLoading ?
                 Column(
-                  children: List.generate(5, (index) {
-                    return Shimmer.fromColors(
-                      baseColor: Colors.black12,
-                      highlightColor: Colors.white70,
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    height: 20,
-                                    color: Colors.white70,
+                  children: [
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    _isLoading ?
+                    Column(
+                      children: List.generate(5, (index) {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.black12,
+                          highlightColor: Colors.white70,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 20,
+                                        color: Colors.white70,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 20,
+                                        color: Colors.white70,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        width: 100,
+                                        height: 20,
+                                        color: Colors.white70,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 20,
-                                    color: Colors.white70,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    width: 100,
-                                    height: 20,
-                                    color: Colors.white70,
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
-                ) :
-                SizedBox(
-                  height:  MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child:ListOfLeads.isNotEmpty
-                      ?
-                  Scrollbar(
-                    thickness: 8.5,
-                    thumbVisibility: true,
-                    radius: const Radius.circular(8),
-                    controller: _scrollController,
-                    child: ListView.builder(
-                      itemCount: searchKEY.text.isEmpty
-                          ? ListOfLeads.length
-                          : searchListOfLeads.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        ListOfLeads.sort((a, b) =>
-                            (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
-                        return Column(
-                            children:[
-                              Card(
-                                child: Container(
-                                  color: Colors.white,
-                                  child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: width * 0.48,
-                                          child:
-                                          Text( searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
-                                              : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
-                                            style: TextStyle(color: StyleData.appBarColor2),
-                                          ),
-                                        ),
-                                        Card(
-                                          child: Container(
-                                            color: Colors.white,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                ListOfLeads[index]['VerificationStatus'],
-                                                style: TextStyle(color: Colors.orange),
+                          ),
+                        );
+                      }),
+                    ) :
+                    SizedBox(
+                      height: height * 0.73,
+                      width: MediaQuery.of(context).size.width,
+                      child:ListOfLeads.isNotEmpty
+                          ?
+                      Scrollbar(
+                        thickness: 8.5,
+                        thumbVisibility: true,
+                        radius: const Radius.circular(8),
+                        controller: _scrollController,
+                        child: ListView.builder(
+                          itemCount: searchKEY.text.isEmpty
+                              ? ListOfLeads.length
+                              : searchListOfLeads.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            ListOfLeads.sort((a, b) =>
+                                (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
+                            return Column(
+                                children:[
+                                  Card(
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: ListTile(
+                                        title: Row(
+                                          children: [
+                                            SizedBox(
+                                              width: width * 0.48,
+                                              child:
+                                              Text( searchKEY.text.isEmpty
+                                                  ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
+                                                  : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
+                                                style: TextStyle(color: StyleData.appBarColor2),
                                               ),
                                             ),
-                                          ),
+                                            Card(
+                                              child: Container(
+                                                color: Colors.white,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    ListOfLeads[index]['VerificationStatus'],
+                                                    style: TextStyle(color: Colors.orange),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    subtitle: Text(
-                                      searchKEY.text.isEmpty
-                                          ? ListOfLeads[index]['LeadID'] ?? ""
-                                          : searchListOfLeads[index]["LeadID"] ?? "",
+                                        subtitle: Text(
+                                          searchKEY.text.isEmpty
+                                              ? ListOfLeads[index]['LeadID'] ?? ""
+                                              : searchListOfLeads[index]["LeadID"] ?? "",
+                                        ),
+                                      ),
+
                                     ),
                                   ),
-
-                                ),
-                              ),
-                            ]
-                        );
-                      },
+                                ]
+                            );
+                          },
+                        ),
+                      ) :
+                      Center(
+                        child: const Text(
+                          'No Data found',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
                     ),
-                  ) :
-                  Center(
-                    child: const Text(
-                      'No Data found',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),

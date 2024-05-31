@@ -583,7 +583,6 @@ class _VisitPageViewState extends State<VisitPageView> {
                 SizedBox(
                   height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
-
                   child:ListOfLeads.isNotEmpty ?
                   Scrollbar(
                     thickness: 8.5,

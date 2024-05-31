@@ -90,7 +90,19 @@ class _QueryPageViewState extends State<QueryPageView> {
 
 
   List<String> _getAllKeyNameAndQueriesFromLead(DocumentSnapshot lead) {
-    List<dynamic> documents = lead["VerifiedBy"] == "Verified By SM" ? lead["Documents1"] :  lead["Documents"];
+    Map<String, dynamic>? leadData = lead.data() as Map<String, dynamic>?;
+
+    if (leadData == null) {
+      return [];
+    }
+
+    List<dynamic> documents;
+    if (leadData.containsKey("VerifiedBy") && leadData["VerifiedBy"] == "Verified By SM") {
+      documents = leadData.containsKey("Documents1") ? leadData["Documents1"] : [];
+    } else {
+      documents = leadData.containsKey("Documents") ? leadData["Documents"] : [];
+    }
+
     List<String> keyNameAndQueries = [];
     for (var doc in documents) {
       if (doc.containsKey("query") && doc["query"] != null && doc["query"].toString().isNotEmpty) {
@@ -101,6 +113,8 @@ class _QueryPageViewState extends State<QueryPageView> {
     }
     return keyNameAndQueries;
   }
+
+
 
   @override
   void initState() {
@@ -277,7 +291,7 @@ class _QueryPageViewState extends State<QueryPageView> {
                   }),
                 ) :
                 SizedBox(
-                  height:  MediaQuery.of(context).size.height,
+                  height:height * 0.73,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty
                       ?

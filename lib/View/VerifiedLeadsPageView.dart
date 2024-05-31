@@ -242,7 +242,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                   }),
                 ) :
                 SizedBox(
-                  height:  MediaQuery.of(context).size.height,
+                    height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty
                       ?
@@ -292,6 +292,9 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                                       searchKEY.text.isEmpty
                                           ? ListOfLeads[index]['LeadID'] ?? ""
                                           : searchListOfLeads[index]["LeadID"] ?? "",
+                                    style: TextStyle(
+                                      color: StyleData.appBarColor2
+                                    ),
                                   ),
                                 ),
 

@@ -199,7 +199,7 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                   ),
                 ),
                 SizedBox(
-                  height: height * 0.02,
+                  height: height * 0.015,
                 ),
                 _isLoading ?
                 Column(
@@ -243,7 +243,7 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                   }),
                 ) :
                 SizedBox(
-                  height:  height * 1,
+                  height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty
                       ?

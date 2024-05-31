@@ -224,10 +224,10 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     ReasonforDisinterest= docData["ReasonforDisinterest"] ?? "";
     VerificationStatus = docData['VerificationStatus'] ?? "";
     region = docData['Region'] ?? "";
-   isLoanApplicationDocument =  docData['isLoanApplicationDocument'] ;
-    isMandatoryDocument =  docData['isMandatoryDocument'] ;
-    isOptionalDocument =  docData['isOptionalDocument'] ;
-    isTechChecklist =  docData['isTechnicalChecklist'] ;
+   isLoanApplicationDocument =  docData["isLoanApplicationDocument"] ?? "";
+    isMandatoryDocument =  docData["isMandatoryDocument"] ?? "";
+    isOptionalDocument =  docData["isOptionalDocument"] ?? "";
+    documentCheck =  docData['isTechnicalChecklist'] ;
 
     if(region != null)
       {
@@ -399,13 +399,12 @@ class _DocumentPageViewState extends State<DocumentPageView> {
 
           print("Lead ID");
           print(LeadID);
-          _showAlertDialogSuccess2(context);
+        _showAlertDialogSuccess2(context);
           updateDataToVisitFirestore();
           //  Navigator.pop(context);
         } else {
           _showAlertDialogSuccess1(context);
           Navigator.pop(context);
-          print("hjdjnvfv");
           _showToast('Error: Please try again');
         }
       } else {
@@ -495,6 +494,10 @@ class _DocumentPageViewState extends State<DocumentPageView> {
       Map<String, dynamic> params = {
         'LeadID' : LeadID,
         'VerificationStatus' : 'Sent for Verification',
+        'isLoanApplicationDocument' : isLoanApplicationDocument,
+        'isMandatoryDocument' : isMandatoryDocument,
+        'isOptionalDocument' : isOptionalDocument,
+        'isTechnicalChecklist':documentCheck,
         'updatedTime':Timestamp.fromDate(now),
       };
       convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
@@ -502,7 +505,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
           print(querySnapshot.docs.isNotEmpty);
           convertedLeads.doc(querySnapshot.docs.first.id).update(params).then((value) {
             print("Data updated to Visits successfully");
-            _showAlertDialogSuccess2(context);
+         //   _showAlertDialogSuccess2(context);
             //  Navigator.pop(context);
           }).catchError((error) {
             print("Failed to update data: $error");
@@ -528,7 +531,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
         'isLoanApplicationDocument' : isLoanApplicationDocument,
         'isMandatoryDocument' : isMandatoryDocument,
         'isOptionalDocument' : isOptionalDocument,
-        'isTechnicalChecklist':isTechChecklist,
+       'isTechnicalChecklist':documentCheck,
         'updatedTime':Timestamp.fromDate(now),
       };
       convertedLeads.where('VisitID', isEqualTo: widget.visitID).get().then((querySnapshot) {
@@ -1833,63 +1836,60 @@ class _DocumentPageViewState extends State<DocumentPageView> {
                           ),
                           //
                           // SizedBox(height: height * 0.005),
-                          Visibility(
-                            visible: isTechChecklist == false,
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  value: documentCheck,
-                                  activeColor: StyleData.appBarColor,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      documentCheck = value!;
-                                    });
-                                    fetchLeadChecklistDetails();
-                                  },
-                                ),
-                                Text(
-                                  'Technical Checklist',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: documentCheck,
+                                activeColor: StyleData.appBarColor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    documentCheck = value!;
+                                  });
+                                  fetchLeadChecklistDetails();
+                                },
+                              ),
+                              Text(
+                                'Technical Checklist',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
                           ),
                           Visibility(
                               visible: documentCheck,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: mandatoryDocuments.length,
-                                  itemBuilder: (context, index) {
-                                    final document = mandatoryDocuments[index];
-                                    final documentId = document['ID'].toString();
-                                    mandatoryDocumentCount = mandatoryDocuments.length;
-              
-                                    documentCheckboxStates.putIfAbsent(documentId, () => false);
-              
-                                    return ListTile(
-                                      title: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(mandatoryDocuments[index]['Title']),
-                                          if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
-                                            Text(
-                                              uploadedFileNames[documentId] ?? '', // Display uploaded filename
-                                              style:TextStyle(color:  uploadedFileNames[documentId] == "Uploaded" ? Colors.green : Colors.red, fontSize: 12.0),
-                                            ),
-                                          Divider()
-                                        ],
-                                      ),
-                                      trailing: IconButton(
-                                          icon: Icon(Icons.attach_file),
-                                          onPressed: () {
-                                            uploadedFileNames[documentId] == "Uploaded" ? "" :  selectSourceChecklist(height, width,mandatoryDocuments[index]['Title'],documentId);
-                                          }
-                                        //mandatoryDocuments[index]
-                                      ),
-                                    );
-              
-                                  }
-                              )
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: mandatoryDocuments.length,
+                                itemBuilder: (context, index) {
+                                  final document = mandatoryDocuments[index];
+                                  final documentId = document['ID'].toString();
+                                  mandatoryDocumentCount = mandatoryDocuments.length;
+
+                                  documentCheckboxStates.putIfAbsent(documentId, () => false);
+
+                                  return ListTile(
+                                    title: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(mandatoryDocuments[index]['Title']),
+                                        if (uploadedFileNames.containsKey(documentId)) // Check if filename is available
+                                          Text(
+                                            uploadedFileNames[documentId] ?? '', // Display uploaded filename
+                                            style:TextStyle(color:  uploadedFileNames[documentId] == "Uploaded" ? Colors.green : Colors.red, fontSize: 12.0),
+                                          ),
+                                        Divider()
+                                      ],
+                                    ),
+                                    trailing: IconButton(
+                                        icon: Icon(Icons.attach_file),
+                                        onPressed: () {
+                                          uploadedFileNames[documentId] == "Uploaded" ? "" :  selectSourceChecklist(height, width,mandatoryDocuments[index]['Title'],documentId);
+                                        }
+                                      //mandatoryDocuments[index]
+                                    ),
+                                  );
+
+                                }
+                            ),
                           ),
                         ],
                       ),

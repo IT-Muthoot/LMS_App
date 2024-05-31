@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -109,31 +109,20 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  await   setupNotificationChannel();
+  await setupNotificationChannel();
   final prefs = await SharedPreferences.getInstance();
   final notificationsJson = prefs.getStringList('notifications') ?? [];
   List<NotificationModel> notifications = notificationsJson.map((json) => NotificationModel.fromJson(jsonDecode(json))).toList();
 
- //Initialize local notification
+  // Initialize local notification
   const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
   final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-  // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) async {
       if (response.payload != null) {
         final data = jsonDecode(response.payload!);
-        // Debugging: print the payload to ensure data is received correctly
-        print('Notification payload: $data');
-        final screen = data['screen'];
-        print(screen);
-        if (screen != null) {
-          // Example: If screen is 'YourTargetScreen', navigate to YourTargetScreen
-          if (screen == 'NotificationPageView') {
-            navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => NotificationPageView()));
-          }
-          // Add more conditions for other screens if needed
-        }
+        handleNotificationClick(data);
       }
     },
   );
@@ -142,52 +131,41 @@ Future<void> main() async {
     badge: true,
     sound: true,
   );
+
   // Check if app was launched by a notification
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     handleNotificationClick(initialMessage.data);
   }
+
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) {
-              final provider = NotificationProvider();
-              provider.setNotifications(notifications);
-              return provider;
-            },
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            setupFirebaseMessaging(context);
-            return MyApp();
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = NotificationProvider();
+            provider.setNotifications(notifications);
+            return provider;
           },
         ),
+      ],
+      child: Builder(
+        builder: (context) {
+          setupFirebaseMessaging(context);
+          return MyApp();
+        },
       ),
     ),
   );
-  // runApp(
-  //   MultiProvider(
-  //     providers: [
-  //       ChangeNotifierProvider(
-  //         create: (_) {
-  //           final provider = NotificationProvider();
-  //           provider.setNotifications(notifications);
-  //           return provider;
-  //         },
-  //       ),
-  //     ],
-  //     child: Builder(
-  //       builder: (context) {
-  //         setupFirebaseMessaging(context);
-  //         return MyApp();
-  //       },
-  //     ),
-  //   ),
-  // );
+  // Handle dynamic links
+  FirebaseDynamicLinks.instance.onLink;
+
+  // Handle initial dynamic link
+  final PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+  final Uri? deepLink = initialLink?.link;
+  if (deepLink != null) {
+    handleDeepLink(deepLink);
+  }
 }
 
 void handleNotificationClick(Map<String, dynamic> data) {
@@ -198,6 +176,16 @@ void handleNotificationClick(Map<String, dynamic> data) {
     }
   }
 }
+
+void handleDeepLink(Uri uri) {
+  final screen = uri.queryParameters['screen'];
+  if (screen != null) {
+    if (screen == 'NotificationPageView') {
+      navigatorKey.currentState?.push(MaterialPageRoute(builder: (_) => NotificationPageView()));
+    }
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key,}) : super(key: key);
@@ -219,16 +207,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
-   //   navigatorObservers: <NavigatorObserver>[observer],
+      //   navigatorObservers: <NavigatorObserver>[observer],
       builder: FlutterSmartDialog.init(),
       title: 'HomeFin Express',
       theme: ThemeData(
         useMaterial3: true,
       ),
       home:
-   SplashView(Token: FCMToken.toString()),
-  //  SaveData(),
+      SplashView(Token: FCMToken.toString()),
+      //  SaveData(),
     );
   }
 }
-

@@ -42,7 +42,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
   void fetchdata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
     SharedPreferences pref = await SharedPreferences.getInstance();
-  //  var userId = pref.getString("token");
+    //  var userId = pref.getString("token");
     var userId = pref.getString("userID");
     setState(() {
       userType = pref.getString("logintype");
@@ -54,7 +54,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-         // print(value.docs[i].data());
+          // print(value.docs[i].data());
         }
       });
     } else {
@@ -63,7 +63,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-        //  print(value.docs[i].data());
+          //  print(value.docs[i].data());
         }
       });
     }
@@ -83,30 +83,30 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfUsers = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-         // print(value.docs[i].data());
-         //     log(value.docs[i].data().toString());
+          // print(value.docs[i].data());
+          //     log(value.docs[i].data().toString());
           // print("hgdhgjd");
           // print(ListOfUsers[i]['EmployeeName']);
           if( pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode'])
-            {
-              setState(() {
-            //    print("jhkjlkada");
-                employeeName = ListOfUsers[i]['EmployeeName'];
-                branchCode = ListOfUsers[i]['branchCode'];
-                pref.setString("branchcode", ListOfUsers[i]['branchCode']);
-                pref.setString("employeeName", ListOfUsers[i]['EmployeeName']);
+          {
+            setState(() {
+              //    print("jhkjlkada");
+              employeeName = ListOfUsers[i]['EmployeeName'];
+              branchCode = ListOfUsers[i]['branchCode'];
+              pref.setString("branchcode", ListOfUsers[i]['branchCode']);
+              pref.setString("employeeName", ListOfUsers[i]['EmployeeName']);
 
-                pref.setString("managerName", ListOfUsers[i]['ManagerName']);
-                pref.setString("ManagerCode", ListOfUsers[i]['ManagerCode']);
-                pref.setString("Region", ListOfUsers[i]['Region']);
-                pref.setString("Zone", ListOfUsers[i]['Zone']);
-                pref.setString("designation", ListOfUsers[i]['designation']);
-                // print("EMployee Name");
-                // print(employeeName);
-                // print(branchCode);
-                // print(pref.getString("ManagerCode"));
-              });
-            }
+              pref.setString("managerName", ListOfUsers[i]['ManagerName']);
+              pref.setString("ManagerCode", ListOfUsers[i]['ManagerCode']);
+              pref.setString("Region", ListOfUsers[i]['Region']);
+              pref.setString("Zone", ListOfUsers[i]['Zone']);
+              pref.setString("designation", ListOfUsers[i]['designation']);
+              // print("EMployee Name");
+              // print(employeeName);
+              // print(branchCode);
+              // print(pref.getString("ManagerCode"));
+            });
+          }
         }
       });
     } else {
@@ -115,7 +115,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfUsers = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-        //  print(ListOfUsers[i]['EmployeeName']);
+          //  print(ListOfUsers[i]['EmployeeName']);
         }
       });
     }
@@ -189,7 +189,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     getUserData();
     fetchdata();
     fetchSaveddata();
-   // getdata();
+    // getdata();
     super.initState();
     Future.delayed(Duration(seconds: 2), () {
       loadData();
@@ -210,12 +210,12 @@ class _DashboardPageViewState extends State<DashboardPageView> {
         print(NotificationMsg);
       });
     });
-FirebaseMessaging.onMessageOpenedApp.listen((event) {
-  setState(() {
-    NotificationMsg = "${event.notification!.title}${event.notification!.body}";
-    print(NotificationMsg);
-  });
-});
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      setState(() {
+        NotificationMsg = "${event.notification!.title}${event.notification!.body}";
+        print(NotificationMsg);
+      });
+    });
 
   }
   void loadData() {
@@ -230,7 +230,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Scaffold(
+        child: Scaffold(
           body:SingleChildScrollView(
             child: Column(
               children: [
@@ -324,7 +324,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                         ],
                       ),
                       Row(
-                       // crossAxisAlignment: CrossAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RichText(
@@ -352,7 +352,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                               ],
                             ),
                           ),
-            
+
                           // SizedBox(
                           //   width: width * 0.1,
                           // ),
@@ -569,7 +569,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                     thumbVisibility: true,
                     controller: _scrollController,
                     child:
-            
+
                     ListView.builder(
                       controller: _scrollController,
                       itemCount: ListOfLeads.length > 4 ? 4 : ListOfLeads.length,
@@ -577,21 +577,21 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                         ListOfLeads.sort((a, b) => DateTime.parse(b['visitDate']).compareTo(DateTime.parse(a['visitDate'])));
                         return (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
                         // && ListOfLeads[index]["customerStatus"] == "Interested"
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NewLeadPageView(
-                                        isNewActivity: false,
-                                        isUpdateActivity: true,
-                                        docId: ListOfLeads[index].id,
-                                        visitId: ListOfLeads[index]["visitID"],
-                                     //   saveddocId: ListOfSavedLeads[index].id,
-                                      )
-                                  ));
-                            },
-                            child: Card(
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NewLeadPageView(
+                                      isNewActivity: false,
+                                      isUpdateActivity: true,
+                                      docId: ListOfLeads[index].id,
+                                      visitId: ListOfLeads[index]["visitID"],
+                                      //   saveddocId: ListOfSavedLeads[index].id,
+                                    )
+                                ));
+                          },
+                          child: Card(
                             elevation: 0.5,
                             child: Container(
                               color: Colors.white,
@@ -619,7 +619,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                                             Icon(Icons.calendar_month),
                                             Text("Visit Date :", style: TextStyle(fontSize: 15, color: Colors.blueGrey, )),
                                             Text(
-                                            formatDate(ListOfLeads[index]["visitDate"])
+                                                formatDate(ListOfLeads[index]["visitDate"])
                                             ),
                                           ],
                                         ),
@@ -645,7 +645,7 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                                         ),
                                       ],
                                     ),
-                                 //   (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
+                                    //   (ListOfLeads[index]["LeadID"] ?? "").length <= 1 ?
                                     Positioned(
                                       top: 10,
                                       right: 20,
@@ -683,24 +683,24 @@ FirebaseMessaging.onMessageOpenedApp.listen((event) {
                                 ),
                               ),
                             ),
-                                                  ),
-                          ) : SizedBox.shrink();
+                          ),
+                        ) : SizedBox.shrink();
                       },
                     ),
                   )
                       : Center(
-                        child: const Text(
-                                          'No results found',
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                      ),
+                    child: const Text(
+                      'No results found',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
 
 
-      )
+        )
     );
   }
   String formatDate(String dateString) {
