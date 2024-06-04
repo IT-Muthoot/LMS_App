@@ -104,9 +104,10 @@ class _ProfilePageViewState extends State<ProfilePageView> {
     ListOfLeads.forEach((lead) {
       if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
         verifiedLeads++;
-      } else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
-        pendingLeads++;
       }
+      // else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
+      //   pendingLeads++;
+      // }
       else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
         sentForVerificationLeads++;
 
@@ -122,7 +123,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
 
 
     setState(() {
-      totalLeads = verifiedLeads + pendingLeads + sentForVerificationLeads;
+      totalLeads = verifiedLeads + sentForVerificationLeads;
       ListOfConvertedLeads = ListOfLeads;
     });
   }
@@ -203,13 +204,13 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             radius: 70,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
-          PieChartSectionData(
-            value: pendingLeads.toDouble(),
-            title: '${pendingLeads.toString()} Pending',
-            color: Colors.orange,
-            radius: 70,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
-          ),
+          // PieChartSectionData(
+          //   value: pendingLeads.toDouble(),
+          //   title: '${pendingLeads.toString()} Pending',
+          //   color: Colors.orange,
+          //   radius: 70,
+          //   titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          // ),
           PieChartSectionData(
             value: sentForVerificationLeads.toDouble(),
             title: '${sentForVerificationLeads.toString()} Sent for Verification',

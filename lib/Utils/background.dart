@@ -26,6 +26,8 @@ class Background extends StatelessWidget {
                 "assets/images/top1.png",
                 color: StyleData.appBarColor2,
                 width: size.width
+              // width: double.infinity,
+              // fit: BoxFit.cover,
             ),
           ),
           Positioned(

@@ -224,10 +224,10 @@ class _DocumentPageViewState extends State<DocumentPageView> {
     ReasonforDisinterest= docData["ReasonforDisinterest"] ?? "";
     VerificationStatus = docData['VerificationStatus'] ?? "";
     region = docData['Region'] ?? "";
-   isLoanApplicationDocument =  docData["isLoanApplicationDocument"] ?? "";
-    isMandatoryDocument =  docData["isMandatoryDocument"] ?? "";
-    isOptionalDocument =  docData["isOptionalDocument"] ?? "";
-    documentCheck =  docData['isTechnicalChecklist'] ;
+    isLoanApplicationDocument = docData["isLoanApplicationDocument"]?.toLowerCase() == 'true' ? true : false;
+    isMandatoryDocument = docData["isMandatoryDocument"]?.toLowerCase() == 'true' ? true : false;
+    isOptionalDocument = docData["isOptionalDocument"]?.toLowerCase() == 'true' ? true : false;
+    documentCheck = docData['isTechnicalChecklist']?.toLowerCase() == 'true' ? true : false;
 
     if(region != null)
       {
