@@ -164,11 +164,6 @@ class _SaveDataState extends State<SaveData> {
     }
   ];
 
-
-
-
-
-
   List<Map<String, dynamic>> documentChecklist = [
     {
       "TAMILNADU": {

@@ -46,7 +46,6 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 bool _isListenerSetUp = false;
 void setupFirebaseMessaging(BuildContext context) {
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-
   if (!_isListenerSetUp) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       final Map<String, dynamic>? data = message.data;
