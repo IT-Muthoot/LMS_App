@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/ProfilePageView.dart';
@@ -56,21 +57,24 @@ class _QueryPageViewState extends State<QueryPageView> {
     try {
       QuerySnapshot querySnapshot;
 
-      // Fetching leads only with VerificationStatus "Push Back"
-      querySnapshot = await users.where("VerificationStatus", isEqualTo: "Push Back").get();
+      // Fetching leads based on userId and VerificationStatus "Push Back"
+      querySnapshot = await users
+          .where("userId", isEqualTo: userId)
+          .where("VerificationStatus", isEqualTo: "Push Back")
+          .get();
 
       userLeads = querySnapshot.docs;
 
       List<DocumentSnapshot> filteredLeads = userLeads.where((lead) {
         Map<String, dynamic> data = lead.data() as Map<String, dynamic>;
-        List<dynamic> documents = data["VerifiedBy"] == "Verified By SM" ? data["Documents1"] : data["Documents"];
+        List<dynamic> documents = data["VerifiedBy"] == "Pending with CM" ? data["Documents1"] : data["Documents"];
         return data["LeadID"].length > 1 &&
             documents.any((doc) => doc["query"] != null && doc["query"].toString().isNotEmpty);
       }).toList();
 
       for (var lead in filteredLeads) {
         Map<String, dynamic> data = lead.data() as Map<String, dynamic>;
-        List<dynamic> documents = data["VerifiedBy"] == "Verified By SM" ? data["Documents1"] : data["Documents"];
+        List<dynamic> documents = data["VerifiedBy"] == "Pending with CM" ? data["Documents1"] : data["Documents"];
         for (var doc in documents) {
           print('Document Key: ${doc['key']}');
           print('Is Checked: ${doc['isChecked']}');
@@ -89,6 +93,7 @@ class _QueryPageViewState extends State<QueryPageView> {
 
 
 
+
   List<String> _getAllKeyNameAndQueriesFromLead(DocumentSnapshot lead) {
     Map<String, dynamic>? leadData = lead.data() as Map<String, dynamic>?;
 
@@ -97,7 +102,7 @@ class _QueryPageViewState extends State<QueryPageView> {
     }
 
     List<dynamic> documents;
-    if (leadData.containsKey("VerifiedBy") && leadData["VerifiedBy"] == "Verified By SM") {
+    if (leadData.containsKey("VerifiedBy") && leadData["VerifiedBy"] == "Pending with CM") {
       documents = leadData.containsKey("Documents1") ? leadData["Documents1"] : [];
     } else {
       documents = leadData.containsKey("Documents") ? leadData["Documents"] : [];
@@ -114,6 +119,62 @@ class _QueryPageViewState extends State<QueryPageView> {
     return keyNameAndQueries;
   }
 
+  RichText buildRichTextFromLead(DocumentSnapshot lead) {
+    List<String> keyNameAndQueries = _getAllKeyNameAndQueriesFromLead(lead);
+
+    List<TextSpan> technicalDocumentSpans = [];
+    List<TextSpan> loanApplicationDocumentSpans = [];
+
+    for (int i = 0; i < keyNameAndQueries.length; i++) {
+      List<String> parts = keyNameAndQueries[i].split(': ');
+      String keyName = parts[0];
+      String query = parts[1];
+
+      TextSpan entry = TextSpan(
+        children: [
+          TextSpan(
+            text: "${i + 1}. $keyName: ",
+            style: TextStyle(color: Colors.grey),
+          ),
+          TextSpan(
+            text: "$query\n",
+            style: TextStyle(color: Colors.red),
+          ),
+        ],
+      );
+
+      if (keyName.endsWith('-checklist')) {
+        technicalDocumentSpans.add(entry);
+      } else {
+        loanApplicationDocumentSpans.add(entry);
+      }
+    }
+
+    List<TextSpan> children = [];
+
+    if (technicalDocumentSpans.isNotEmpty) {
+      children.add(TextSpan(
+        text: "Technical Document\n",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+      ));
+      children.addAll(technicalDocumentSpans);
+    }
+
+    if (loanApplicationDocumentSpans.isNotEmpty) {
+      children.add(TextSpan(
+        text: "Loan Application Document\n",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),
+      ));
+      children.addAll(loanApplicationDocumentSpans);
+    }
+
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(fontSize: 15),
+        children: children,
+      ),
+    );
+  }
 
 
   @override
@@ -160,7 +221,7 @@ class _QueryPageViewState extends State<QueryPageView> {
               ),
             ),
             title: Text(
-              "Queries",
+              "Queried",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -308,127 +369,144 @@ class _QueryPageViewState extends State<QueryPageView> {
                         ListOfLeads.sort((a, b) =>
                             (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                         return Card(
-                          child: Container(
-                            color: Colors.white,
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  title: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: width * 0.6,
-                                            child:
-                                            Text( searchKEY.text.isEmpty
-                                                ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
-                                                : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",),
-                                          ),
-                                          Card(
-                                            child: Container(
-                                              color: Colors.white,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  ListOfLeads[index]['VerificationStatus'],
-                                                  style: TextStyle(color: Colors.orange),
-                                                ),
+                          elevation: 6,
+                          child: DottedBorder(
+                            strokeWidth : 0.3,
+                            child: Container(
+                              color: Colors.white,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: width * 0.6,
+                                              child:
+                                              Text( searchKEY.text.isEmpty
+                                                  ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
+                                                  : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
+                                                style: TextStyle(color: StyleData.appBarColor2,fontSize: 18),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: width * 0.6,
-                                            child: Text(
-                                              searchKEY.text.isEmpty
-                                                  ? ListOfLeads[index]['LeadID'] ?? ""
-                                                  : searchListOfLeads[index]["LeadID"] ?? "",
-                                              style: TextStyle(color: StyleData.appBarColor2),
-                                            ),
-                                          ),
-                                          Card(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8.0),
-                                              side: BorderSide(color: Colors.grey, width: 2.0),
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => DocumentPageView(
-                                                      visitID: searchKEY.text.isEmpty
-                                                          ? ListOfLeads[index]['VisitID'] ?? ""
-                                                          : searchListOfLeads[index]["VisitID"] ?? "",
-                                                      docId: ListOfLeads[index].id,
-                                                      isNewActivity: false,
-                                                      isTechChecklist: true,
-                                                      leadID: searchKEY.text.isEmpty
-                                                          ? ListOfLeads[index]['LeadID'] ?? ""
-                                                          : searchListOfLeads[index]["LeadID"] ?? "",
-
-                                                    ),
-                                                  ),
-                                                );
-                                              },
+                                            Card(
                                               child: Container(
                                                 color: Colors.white,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    'Update',
-                                                    style: TextStyle(color: StyleData.appBarColor2),
+                                                    searchKEY.text.isEmpty
+                                                        ?   ListOfLeads[index]['VerificationStatus'] : searchListOfLeads[index]['VerificationStatus'],
+                                                    style: TextStyle(color: Colors.orange),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text("Query : ",style: TextStyle(color:StyleData.appBarColor2,fontSize: 15),),
-                                          Text(
-                                            searchKEY.text.isEmpty
-                                                ? ListOfLeads[index]['QueryBy'] ?? ""
-                                                : searchListOfLeads[index]["QueryBy"] ?? "",
-                                            style: TextStyle(color:Colors.black,fontSize: 15)
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Row(
+                                        //   children: [
+                                        //     // SizedBox(
+                                        //     //   width: width * 0.6,
+                                        //     //   child: Text(
+                                        //     //     searchKEY.text.isEmpty
+                                        //     //         ? ListOfLeads[index]['LeadID'] ?? ""
+                                        //     //         : searchListOfLeads[index]["LeadID"] ?? "",
+                                        //     //     style: TextStyle(color: StyleData.appBarColor2),
+                                        //     //   ),
+                                        //     // ),
+                                        //
+                                        //   ],
+                                        // ),
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text("Query : ",style: TextStyle(color:StyleData.appBarColor2,fontSize: 15),),
+                                                Text(
+                                                  searchKEY.text.isEmpty
+                                                      ? ListOfLeads[index]['QueryBy'] ?? ""
+                                                      : searchListOfLeads[index]["QueryBy"] ?? "",
+                                                  style: TextStyle(color:Colors.black,fontSize: 15)
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: width * 0.27,
+                                            ),
+                                            Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8.0),
+                                                side: BorderSide(color: Colors.grey, width: 2.0),
+                                              ),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => DocumentPageView(
+                                                          visitID: searchKEY.text.isEmpty
+                                                              ? ListOfLeads[index]['VisitID'] ?? ""
+                                                              : searchListOfLeads[index]["VisitID"] ?? "",
+                                                          docId: ListOfLeads[index].id,
+                                                          isNewActivity: false,
+                                                          isTechChecklist: true,
+                                                          leadID: searchKEY.text.isEmpty
+                                                              ? ListOfLeads[index]['LeadID'] ?? ""
+                                                              : searchListOfLeads[index]["LeadID"] ?? "",
+                                                          isPartiallyVerifiedLeads : false
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Text(
+                                                      'Update',
+                                                      style: TextStyle(color: StyleData.appBarColor2),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Text(
+                                        //   searchKEY.text.isEmpty
+                                        //       ? _getAllKeyNameAndQueriesFromLead(ListOfLeads[index]).join('\n') ?? ""
+                                        //       : _getAllKeyNameAndQueriesFromLead(searchListOfLeads[index]).join('\n') ?? "",
+                                        //   style: TextStyle(color:Colors.black, fontSize: 15),
+                                        // ),
+
                                         searchKEY.text.isEmpty
-                                            ? _getAllKeyNameAndQueriesFromLead(ListOfLeads[index]).join('\n') ?? ""
-                                            : _getAllKeyNameAndQueriesFromLead(searchListOfLeads[index]).join('\n') ?? "",
-                                        style: TextStyle(color:Colors.black, fontSize: 15),
-                                      ),
-
-
-
-                                    ],
+                                            ? buildRichTextFromLead(ListOfLeads[index])
+                                            : buildRichTextFromLead(searchListOfLeads[index]),
+                                    
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                // Column(
-                                //   crossAxisAlignment: CrossAxisAlignment.start,
-                                //   children: [
-                                //     Text("Query",style: TextStyle(color:StyleData.appBarColor2,fontSize: 15),),
-                                //     // Text( searchKEY.text.isEmpty
-                                //     //     ? ListOfLeads[index]['Query'] ?? ""
-                                //     //     : searchListOfLeads[index]["Query"] ?? "",),
-                                //   ],
-                                // )
-
-                              ],
+                                  // Column(
+                                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                                  //   children: [
+                                  //     Text("Query",style: TextStyle(color:StyleData.appBarColor2,fontSize: 15),),
+                                  //     // Text( searchKEY.text.isEmpty
+                                  //     //     ? ListOfLeads[index]['Query'] ?? ""
+                                  //     //     : searchListOfLeads[index]["Query"] ?? "",),
+                                  //   ],
+                                  // )
+                                    
+                                ],
+                              ),
+                                    
                             ),
-
                           ),
                         );
                       },

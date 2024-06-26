@@ -322,7 +322,7 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                                                     leadID: searchKEY.text.isEmpty
                                                         ? ListOfLeads[index]['LeadID'] ?? ""
                                                         : searchListOfLeads[index]["LeadID"] ?? "",
-
+                                                      isPartiallyVerifiedLeads : false
                                                   ),
                                                 ),
                                               );

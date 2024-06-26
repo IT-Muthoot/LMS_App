@@ -188,6 +188,13 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   ];
   String? _selectedGender;
 
+  final List<String> _propertyType = [
+    'Apartment',
+    'Villa',
+    'House',
+    'Plot',
+  ];
+  String? _selectedPropertyType;
 
 
   final List<String> purposeVisit = [
@@ -328,7 +335,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   }
 
   void checkLeadsFieldsFilled() {
-    if ( _leadAmount.text.isNotEmpty && selectedProductValue != null && selectedProdut != null) {
+    if ( _leadAmount.text.isNotEmpty && selectedProductValue != null && selectedProdut != null && _selectedPropertyType != null) {
       setState(() {
         areLeadsFieldsFilled = true;
       });
@@ -411,6 +418,7 @@ String? SalutaionID;
     _state.text = docData["state"] ?? "";
     selectedProductValue = docData["productCategory"] ?? "";
     selectedProdut = docData["products"] ?? "";
+    _selectedPropertyType = docData["propertyType"] ?? "";
     monthlyIncomeOfApplicant.text = docData["monthlyIncome"] ?? "";
     _leadAmount.text = docData["leadAmount"] ?? "";
     panCardNumber.text = docData["panCardNumber"] ?? "";
@@ -721,6 +729,7 @@ String? SalutaionID;
         'leadSource': _leadSource.text,
         'productCategory': selectedProductValue ?? "",
         'products': selectedProdut ?? "",
+        'propertyType': _selectedPropertyType ?? "",
         'CustomerProfile': _selectedCustomerProfile ?? "",
         'EmployeeCategory': _selectedEmployeeCategory ?? "",
         'monthlyIncome': monthlyIncomeOfApplicant.text,
@@ -819,6 +828,7 @@ String? SalutaionID;
         'leadSource': _leadSource.text,
         'productCategory': selectedProductValue ?? "",
         'products': selectedProdut ?? "",
+        'propertyType': _selectedPropertyType ?? "",
         'CustomerProfile': _selectedCustomerProfile ?? "",
         'EmployeeCategory': _selectedEmployeeCategory ?? "",
         'monthlyIncome': monthlyIncomeOfApplicant.text,
@@ -985,10 +995,10 @@ String? SalutaionID;
             centerTitle: true,
 
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SingleChildScrollView(
+          body: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -1221,7 +1231,7 @@ String? SalutaionID;
                                                       ),
                                                       TextFormField(
                                                         controller: _email,
-
+                          
                                                         onChanged: (value) {
                                                           setState(() {
                                                            checkCustomerFieldsFilled();
@@ -1302,10 +1312,10 @@ String? SalutaionID;
                                                           }
                                                           // Parsing the selected date
                                                           DateTime selectedDate = DateTime.parse(value);
-
+                          
                                                           // Calculating age
                                                          int age = DateTime.now().year - selectedDate.year;
-
+                          
                                                           // Checking if age falls within the specified range
                                                           if (age < 18 || age > 70) {
                                                             setState(() {
@@ -1313,10 +1323,10 @@ String? SalutaionID;
                                                             });
                                                             return 'Age should fall between 18 and 70 years old.';
                                                           }
-
+                          
                                                           return null;
                                                         },
-
+                          
                                                       ),
                                                       DropdownButtonFormField2<String>(
                                                         value: _selectedGender,
@@ -1491,7 +1501,7 @@ String? SalutaionID;
                                                         ],
                                                      //   maxLength: 30, // Setting maximum character length
                                                       ),
-
+                          
                                                       TextFormField(
                                                         controller: _addressLine2,
                                                         onChanged: (value) {
@@ -1615,14 +1625,14 @@ String? SalutaionID;
                                                           if (value.length == 6) {
                                                             final String jsonContent = await rootBundle
                                                                 .loadString('assets/jsons/citylist.json');
-
+                          
                                                             final List<dynamic> jsonData =
                                                             json.decode(jsonContent);
-
+                          
                                                             var listSearchData = jsonData
                                                                 .where((item) => item['PC'].toString().toLowerCase().contains(value.toLowerCase()))
                                                                 .toList();
-
+                          
                                                             print("Helloooooooooo");
                                                             print(listSearchData);
                                                             if (listSearchData.isNotEmpty) {
@@ -1631,7 +1641,7 @@ String? SalutaionID;
                                                                 _PostcodeList =
                                                                     listSearchData.map((e) => e).toList();
                                                               });
-
+                          
                                                               print("List Drop Data");
                                                               var districtNames = listSearchData
                                                                   .map((e) => e["D"].toString())
@@ -1641,10 +1651,10 @@ String? SalutaionID;
                                                                   .map((e) => e["DI"].toString())
                                                                   .toSet() // Convert to a set to remove duplicates
                                                                   .first; // Take the first element
-
+                          
                                                               print(districtNames);
                                                               print(districtID);
-
+                          
                                                               var stateName = listSearchData
                                                                   .map((e) => e["S"].toString())
                                                                   .toSet() // Convert to a set to remove duplicates
@@ -1653,10 +1663,10 @@ String? SalutaionID;
                                                                   .map((e) => e["SI"].toString())
                                                                   .toSet() // Convert to a set to remove duplicates
                                                                   .first; // Take the first element
-
+                          
                                                               print(stateName);
                                                               print(stateID);
-
+                          
                                                               setState(() {
                                                                 _district.text = districtNames;
                                                                 _state.text = stateName;
@@ -1699,7 +1709,7 @@ String? SalutaionID;
                                                           decoration: BoxDecoration(
                                                             //     color: StyleData.buttonColor,
                                                               borderRadius: BorderRadius.circular(10)
-
+                          
                                                           ),
                                                           maxHeight: 200,
                                                         ) ,
@@ -1728,7 +1738,7 @@ String? SalutaionID;
                                                             _saveSelectedPostCode(selectedPostCode!);
                                                           });
                                                         },
-
+                          
                                                         items: _PostcodeList.map((dynamic item) {
                                                           return DropdownMenuItem(
                                                             value: item["PO"],
@@ -1749,7 +1759,7 @@ String? SalutaionID;
                                                           fontFamily: 'Poppins',
                                                           fontWeight: FontWeight.w400,
                                                         ),
-
+                          
                                                         // items:
                                                         //     _PostcodeList.map((dynamic item) {
                                                         //   return DropdownMenuItem<dynamic>(
@@ -1919,7 +1929,7 @@ String? SalutaionID;
                                                       ),
                                                     ],
                                                   )),
-
+                          
                                             ],
                                           ),
                                         )),
@@ -2179,6 +2189,56 @@ String? SalutaionID;
                                                             filled: true,
                                                             fillColor:StyleData.textFieldColor,
                                                           ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: width * 1,
+                                                        child: DropdownButtonFormField2<String>(
+                                                          value: _selectedPropertyType,
+                                                          onChanged: (String? newValue) {
+                                                            setState(() {
+                                                              _selectedPropertyType = newValue;
+                                                              checkLeadsFieldsFilled();
+                                                            });
+                                                          },
+                                                          items: _propertyType
+                                                              .map((String item){
+                                                            return DropdownMenuItem(
+                                                              value: item,
+                                                              child: Text(
+                                                                item.toString(),
+                                                                style: const TextStyle(
+                                                                  color: Color(0xFF393939),
+                                                                  fontSize: 15,
+                                                                  fontFamily: 'Poppins',
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                          style: const TextStyle(
+                                                            color: Color(0xFF393939),
+                                                            fontSize: 15,
+                                                            fontFamily: 'Poppins',
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          //   hint: const Text('Select an option'),
+                                                          decoration: InputDecoration(
+                                                            labelText: 'Property Type *',
+                                                            hintText: 'Select an option',
+                                                            //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                                            //  border: InputBorder.none,
+                                                            focusedBorder: focus,
+                                                            enabledBorder: enb,
+                                                            filled: true,
+                                                            fillColor:StyleData.textFieldColor,
+                                                          ),
+                                                          validator: (value) {
+                                                            if (value == null || value.isEmpty) {
+                                                              return 'Please select property type';
+                                                            }
+                                                            return null;
+                                                          },
                                                         ),
                                                       ),
                                                       SizedBox(height: height * 0.02),
@@ -2444,7 +2504,7 @@ String? SalutaionID;
                                                                   hintText: 'Enter monthly income',
                                                                   //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
                                                                   // border: InputBorder.none,
-
+                          
                                                                   focusedBorder: focus,
                                                                   enabledBorder: enb,
                                                                   filled: true,
@@ -2512,192 +2572,28 @@ String? SalutaionID;
                                                                 validator: (value) {
                                                                   if (value == null || value.isEmpty) {
                                                                     return 'Pan Card Number is required';
-                                                                  } else if (!isValidPanCard(value) && value.length < 10) {
+                                                                  } else if (!isValidPanCard(value) || value.length < 10) {
                                                                     return 'Invalid Pan Card Number';
                                                                   }
                                                                   return null;
                                                                 },
                                                               ),
-
+                          
                                                               SizedBox(height: height * 0.01,),
-
+                          
                                                             ],
                                                           ),
                                                         ],
                                                       ),
                                                     )),
                                               ),
-
-
+                          
+                          
                                             ],
                                           ),
                                         )),
                                   ),
                                 ),
-                                SizedBox(
-                                  height:  height * 0.46,
-                                ),
-                                Container(
-                                  height: 55,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: StyleData.appBarColor2,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children:[
-                                      ElevatedButton(
-                                        onPressed: () {
-                                              if(isLeadsDataSaved == true && isLeadsUpdateData == false)
-                                                {
-                                                  if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 ) {
-                                                    if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
-                                                    {
-                                                    if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
-                                                      {
-                                                        CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
-
-                                                      }
-                                                    else {
-                                                      updateLeadData();
-                                                    }
-                                                    }else{
-                                                      CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
-                                                    }
-                                                  }else{
-                                                    CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
-                                                  }
-                                                  //CustomSnackBar.errorSnackBarQ("Lead details already saved", context);
-                                                }else {
-                                                if (_formKey.currentState!.validate() &&
-                                                    areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
-                                                    && areAddressFieldsFilled == true && areProfileFieldsFilled == true || isLeadsUpdateData == true ) {
-                                                  if(aadharCardNumber.text.length == 12 || panCardNumber.text.length == 10) {
-                                                    if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
-                                                      {
-                                                        if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70)
-                                                        {
-                                                          CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
-                                                        }
-                                                        else {
-                                                          setState(() {
-                                                            isClickNext = true;
-                                                          });
-                                                          updateDataToFirestore();
-                                                        }
-                                                      }else{
-                                                      CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
-                                                    }
-                                                  }else{
-                                                    CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
-                                                  }
-                                                }
-                                                else {
-                                                  CustomSnackBar.errorSnackBarQ("Please enter all the mandatory fields", context);
-                                                }
-                                              }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          elevation: 0,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.save_outlined, color: Colors.white,),
-                                            SizedBox(width: width * 0.025,),
-                                            Text(
-                                              'Save',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 55, // Adjust the height of the SizedBox to match the height of the Container
-                                        child: VerticalDivider(
-                                          thickness: 1.5,
-                                          color: Colors.black, // Set the color of the divider
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          if(isLeadsDataSaved == true || isClickNext == true )
-                                          {
-                                            if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 ) {
-                                              if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
-                                              {
-                                                if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
-                                                {
-                                                  CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
-
-                                                }
-                                                else {
-                                                  updateLeadsDataToFirestore();
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => DocumentPageView(
-                                                              docId: widget.docId,
-                                                              visitID: widget.visitId,
-                                                              isNewActivity: false,
-                                                              leadID: '',
-                                                              isTechChecklist : false
-                                                          )));
-                                                }
-                                              }else{
-                                                CustomSnackBar.errorSnackBarQ("Please enter and save valid email", context);
-                                              }
-                                            }else{
-                                              CustomSnackBar.errorSnackBarQ("Please enter and save valid Profiling details", context);
-                                            }
-                                          }else{
-                                            CustomSnackBar.errorSnackBarQ("Please save the lead details", context);
-                                          }
-                                          // if(isClickNext == true || )
-                                          //   {
-                                          //     Navigator.push(
-                                          //         context,
-                                          //         MaterialPageRoute(
-                                          //             builder: (context) => DocumentPageView(
-                                          //                 docId: widget.docId,
-                                          //                 visitID: widget.visitId,
-                                          //                 isNewActivity: false
-                                          //             )));
-                                          //   }
-                                          // else {
-                                          //   CustomSnackBar.errorSnackBarQ("Please Save the lead Details", context);
-                                          // }
-
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.transparent,
-                                          elevation: 0,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(Icons.arrow_forward, color: Colors.white,),
-                                            SizedBox(width: width * 0.025,),
-                                            Text(
-                                              'Next',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
                               ],
                             )),
                           ],
@@ -2706,10 +2602,178 @@ String? SalutaionID;
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: height * 0.03,
+              ),
+              Container(
+                height: 55,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: StyleData.appBarColor2,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children:[
+                    ElevatedButton(
+                      onPressed: () {
+                        // DateFormat formatter = DateFormat('dd-MM-yyyy');
+                        // DateTime dob = formatter.parse(_dateOfBirth.text);
+                        if(isLeadsDataSaved == true && isLeadsUpdateData == false)
+                        {
+                          if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text) ) {
+                            if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                            {
+                              if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
+                                //   int age = DateTime.now().year - dob.year;
+                                //   if (age < 18 || age > 70)
+                                  {
+                                CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
+                              }
+                              else {
+                                updateLeadData();
+                              }
+                            }else{
+                              CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
+                            }
+                          }else{
+                            CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
+                          }
+                          //CustomSnackBar.errorSnackBarQ("Lead details already saved", context);
+                        }else {
+                          if (_formKey.currentState!.validate() &&
+                              areCustomerFieldsFilled == true && areLeadsFieldsFilled == true
+                              && areAddressFieldsFilled == true && areProfileFieldsFilled == true || isLeadsUpdateData == true ) {
+                            if(aadharCardNumber.text.length == 12 &&  panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text)) {
+                              if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                              {
+                                if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
+                                {
+                                  CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
+                                }
+                                else {
+                                  setState(() {
+                                    isClickNext = true;
+                                  });
+                                  updateDataToFirestore();
+                                }
+                              }else{
+                                CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
+                              }
+                            }else{
+                              CustomSnackBar.errorSnackBarQ("Please enter valid Profiling details", context);
+                            }
+                          }
+                          else {
+                            CustomSnackBar.errorSnackBarQ("Please enter all the mandatory fields", context);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.save_outlined, color: Colors.white,),
+                          SizedBox(width: width * 0.025,),
+                          Text(
+                            'Save',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 55, // Adjust the height of the SizedBox to match the height of the Container
+                      child: VerticalDivider(
+                        thickness: 1.5,
+                        color: Colors.black, // Set the color of the divider
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // DateFormat formatter = DateFormat('dd-MM-yyyy');
+                        // DateTime dob = formatter.parse(_dateOfBirth.text);
+                        if(isLeadsDataSaved == true || isClickNext == true )
+                        {
+                          if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text) ) {
+                            if(_email.text.endsWith('.com') && !_email.text.contains(' ') && _email.text.contains('@'))
+                            {
+                              if((DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() < 18 || (DateTime.now().year - DateTime.parse(_dateOfBirth.text).year).toInt() > 70 )
+                              {
+                                CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
 
+                              }
+                              else {
+                                updateLeadsDataToFirestore();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DocumentPageView(
+                                            docId: widget.docId,
+                                            visitID: widget.visitId,
+                                            isNewActivity: false,
+                                            leadID: '',
+                                            isTechChecklist : false,
+                                            isPartiallyVerifiedLeads : false
+                                        )));
+                              }
+                            }else{
+                              CustomSnackBar.errorSnackBarQ("Please enter and save valid email", context);
+                            }
+                          }else{
+                            CustomSnackBar.errorSnackBarQ("Please enter and save valid Profiling details", context);
+                          }
+                        }else{
+                          CustomSnackBar.errorSnackBarQ("Please save the lead details", context);
+                        }
+                        // if(isClickNext == true || )
+                        //   {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => DocumentPageView(
+                        //                 docId: widget.docId,
+                        //                 visitID: widget.visitId,
+                        //                 isNewActivity: false
+                        //             )));
+                        //   }
+                        // else {
+                        //   CustomSnackBar.errorSnackBarQ("Please Save the lead Details", context);
+                        // }
 
-              ],
-            ),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.arrow_forward, color: Colors.white,),
+                          SizedBox(width: width * 0.025,),
+                          Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          
+            ],
           ),
         ),
       ),
@@ -2928,6 +2992,8 @@ String? SalutaionID;
       DateTime date = DateTime.parse(dateString);
 
       final formatter = DateFormat('yyyy-MM-dd');
+      // int age = DateTime.now().year - dob.year;
+      // if(age < 18 || age > 70 )
       return formatter.format(date);
     } catch (e) {
       print("Error parsing date: $e");

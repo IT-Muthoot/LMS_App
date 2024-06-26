@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/PendingLeadsPageView.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'PartiallyVerifiedLeadsPageView.dart';
 import 'QueriesPageView.dart';
 import 'SentForVerification.dart';
 import 'VerifiedLeadsPageView.dart';
@@ -32,6 +33,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
   String? employeeCode;
   int totalLeads = 0;
   int verifiedLeads = 0;
+  int partiallyVerifiedLeads = 0;
   int queryLeads = 0;
   int pendingLeads = 0;
   int sentForVerificationLeads = 0;
@@ -102,16 +104,20 @@ class _ProfilePageViewState extends State<ProfilePageView> {
     }
 
     ListOfLeads.forEach((lead) {
-      if (lead['VerificationStatus'] == "Verified" && lead["LeadID"].length > 1) {
+      if (lead['VerificationStatus'] == "Verified" && lead['technicalStatus'] == "Fully Uploaded"  && lead["LeadID"].length > 1) {
         verifiedLeads++;
       }
-      // else if (lead['VerificationStatus'] == "Pending" && lead["LeadID"].length > 1) {
-      //   pendingLeads++;
-      // }
-      else if (lead['VerificationStatus'] == "Sent for Verification" && lead["LeadID"].length > 1) {
+      if ((lead["VerificationStatus"] == "Sent for Verification" || lead["VerificationStatus"] == "Verified") && (lead["VerifiedBy"] == "Pending with CM" || lead["VerifiedBy"] == "Verified") &&  (lead['technicalStatus'] == "Technical Pending" || lead['technicalStatus'] == "Partially Uploaded") && lead['technicalChecklistCount'] > 0 )
+      {
+        partiallyVerifiedLeads++;
+      }
+      // if (lead["LeadID"].length > 1 && (lead["VerificationStatus"] == "Sent for Verification" || lead["VerifiedBy"] == "Pending with SM"))
+      if (lead["LeadID"].length > 1 && (lead["VerificationStatus"] == "Sent for Verification" ))
+      {
         sentForVerificationLeads++;
 
       }
+
     });
 
     ListOfLeads.forEach((lead) {
@@ -123,7 +129,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
 
 
     setState(() {
-      totalLeads = verifiedLeads + sentForVerificationLeads;
+      totalLeads =  sentForVerificationLeads + verifiedLeads;
       ListOfConvertedLeads = ListOfLeads;
     });
   }
@@ -199,8 +205,23 @@ class _ProfilePageViewState extends State<ProfilePageView> {
         sections: [
           PieChartSectionData(
             value: verifiedLeads.toDouble(),
-            title: '${verifiedLeads.toString()} Verified',
+            title: '${verifiedLeads.toString()} Verified Leads',
             color: Colors.green,
+            radius: 70,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          ),
+          PieChartSectionData(
+            value: partiallyVerifiedLeads.toDouble(),
+            title: '${partiallyVerifiedLeads.toString()} Partially Verified Leads',
+            color: Colors.orange,
+            radius: 70,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          ),
+
+          PieChartSectionData(
+            value: queryLeads.toDouble(),
+            title: '${queryLeads.toString()} Queried',
+            color: Colors.red,
             radius: 70,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
@@ -385,7 +406,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                              width: width * 0.8,
                              child: Row(
                                children: [
-                                 Text("Verified",style: TextStyle(
+                                 Text("Verified Leads",style: TextStyle(
                                    fontSize: 18,
                                    fontWeight: FontWeight.w400,
                                    color: Colors.green
@@ -396,6 +417,50 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                                      child: Padding(
                                        padding: const EdgeInsets.all(2.0),
                                        child: Text('${verifiedLeads.toString()}',style: TextStyle(
+                                           fontSize: 18,
+                                           fontWeight: FontWeight.w400,
+                                           color: Colors.green
+                                       ),),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           Icon(Icons.navigate_next)
+                         ],
+                       ),
+                     ),
+                   ),
+                   Divider(thickness: 0.75,color: Colors.grey,indent: 2,),
+                   GestureDetector(
+                     onTap: () {
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                           builder: (context) => PartiallyVerifiedLeadPageView(),
+                         ),
+                       );
+                     },
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         children: [
+                           SizedBox(
+                             width: width * 0.8,
+                             child: Row(
+                               children: [
+                                 Text("Partially Verified Leads",style: TextStyle(
+                                     fontSize: 18,
+                                     fontWeight: FontWeight.w400,
+                                     color: Colors.orange
+                                 ),),
+                                 Card(
+                                   child: Container(
+                                     color: Colors.white,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(2.0),
+                                       child: Text('${partiallyVerifiedLeads.toString()}',style: TextStyle(
                                            fontSize: 18,
                                            fontWeight: FontWeight.w400,
                                            color: Colors.green
@@ -517,7 +582,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
                              width:width * 0.8,
                              child: Row(
                                children: [
-                                 Text("Queries",style: TextStyle(
+                                 Text("Queried",style: TextStyle(
                                      fontSize: 18,
                                      fontWeight: FontWeight.w400,
                                      color: StyleData.appBarColor2

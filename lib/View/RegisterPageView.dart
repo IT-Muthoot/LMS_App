@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ReportingManagerCode = outputList1[0]['Reporting Manager Code'];
         Zone = outputList1[0]['ZONE'];
       });
-      print("Output List " + outputList1.toString());
+  //    print("Output List " + outputList1.toString());
 
     });
   }

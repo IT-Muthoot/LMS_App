@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../Utils/StyleData.dart';
+import 'ReviewPage.dart';
 
 class SentForVerification extends StatefulWidget {
   const SentForVerification({super.key});
@@ -262,42 +263,62 @@ class _SentForVerificationState extends State<SentForVerification> {
                                 (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                             return Column(
                                 children:[
-                                  Card(
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: ListTile(
-                                        title: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: width * 0.48,
-                                              child:
-                                              Text( searchKEY.text.isEmpty
-                                                  ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
-                                                  : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
-                                                style: TextStyle(color: StyleData.appBarColor2),
+                                  GestureDetector(
+                                    onTap : () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ReviewPage(LeadID:  searchKEY.text.isEmpty
+                                              ? ListOfLeads[index]['LeadID'] ?? ""
+                                              : searchListOfLeads[index]["LeadID"] ?? ""),
+                                        ),
+                                      );
+                                    },
+                                    child: Card(
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: ListTile(
+                                          title: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: width * 0.48,
+                                                child:
+                                                Text( searchKEY.text.isEmpty
+                                                    ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
+                                                    : searchListOfLeads[index]["firstName"] +" "+ searchListOfLeads[index]["lastName"]?? "",
+                                                  style: TextStyle(color: StyleData.appBarColor2),
+                                                ),
                                               ),
-                                            ),
-                                            Card(
-                                              child: Container(
-                                                color: Colors.white,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    ListOfLeads[index]['VerificationStatus'],
-                                                    style: TextStyle(color: Colors.orange),
+                                              Card(
+                                                child: Container(
+                                                  color: Colors.white,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Text(
+                                                          searchKEY.text.isEmpty ? ListOfLeads[index]['VerificationStatus'] :  searchListOfLeads[index]['VerificationStatus'],
+                                                          style: TextStyle(color: Colors.orange),
+                                                        ),
+                                                        Text(
+                                                          searchKEY.text.isEmpty ? ListOfLeads[index]['VerifiedBy'] : searchListOfLeads[index]['VerifiedBy'] ,
+                                                          style: TextStyle(color: Colors.orange),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                          // subtitle: Text(
+                                          //   searchKEY.text.isEmpty
+                                          //       ? ListOfLeads[index]['LeadID'] ?? ""
+                                          //       : searchListOfLeads[index]["LeadID"] ?? "",
+                                          // ),
                                         ),
-                                        subtitle: Text(
-                                          searchKEY.text.isEmpty
-                                              ? ListOfLeads[index]['LeadID'] ?? ""
-                                              : searchListOfLeads[index]["LeadID"] ?? "",
-                                        ),
+        
                                       ),
-
                                     ),
                                   ),
                                 ]

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_management_system/View/ProfilePageView.dart';
@@ -8,15 +7,16 @@ import 'package:shimmer/shimmer.dart';
 
 import '../Utils/StyleData.dart';
 import 'ReviewPage.dart';
+import 'documentsPageView.dart';
 
-class VerifiedLeadsPageView extends StatefulWidget {
-  const VerifiedLeadsPageView({super.key});
+class PartiallyVerifiedLeadPageView extends StatefulWidget {
+  const PartiallyVerifiedLeadPageView({super.key});
 
   @override
-  State<VerifiedLeadsPageView> createState() => _VerifiedLeadsPageViewState();
+  State<PartiallyVerifiedLeadPageView> createState() => _PartiallyVerifiedLeadPageViewState();
 }
 
-class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
+class _PartiallyVerifiedLeadPageViewState extends State<PartiallyVerifiedLeadPageView> {
 
 
   var userType;
@@ -26,6 +26,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
   var lead;
   bool _isLoading = true;
   ScrollController _scrollController = ScrollController();
+  bool isPartiallyVarifiedLeads = false;
 
   List<DocumentSnapshot> searchListOfLeads = [];
   void _runFilter(String enteredKeyword) {
@@ -54,9 +55,9 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
     if (userType == "user") {
       QuerySnapshot querySnapshot = await users.where("userId", isEqualTo: userId).get();
       userLeads = querySnapshot.docs;
-    //  print(userLeads);
+      //  print(userLeads);
       setState(() {
-        ListOfLeads = userLeads.where((lead) => (lead["VerificationStatus"] == "Verified" && lead['technicalStatus'] == "Fully Uploaded")).toList();
+        ListOfLeads = userLeads.where((lead) => ((lead["VerificationStatus"] == "Sent for Verification" || lead["VerificationStatus"] == "Verified") && (lead["VerifiedBy"] == "Pending with CM" || lead["VerifiedBy"] == "Verified") &&  (lead['technicalStatus'] == "Technical Pending" || lead['technicalStatus'] == "Partially Uploaded") && lead['technicalChecklistCount'] > 0 )).toList();
       });
 
     } else {
@@ -68,13 +69,13 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
   }
 
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
-  fetchLeadsdata();
-  Future.delayed(Duration(seconds: 2), () {
-    loadData();
-  });
+    fetchLeadsdata();
+    Future.delayed(Duration(seconds: 2), () {
+      loadData();
+    });
     super.initState();
   }
   void loadData() {
@@ -103,7 +104,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
               padding: const EdgeInsets.all(19.0),
               child: InkWell(
                 onTap: () {
-                Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 child: Icon(
                   Icons.arrow_back_ios_new_outlined,
@@ -113,7 +114,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
               ),
             ),
             title: Text(
-              "Verified Leads",
+              "Partially Verified Leads",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -244,7 +245,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                   }),
                 ) :
                 SizedBox(
-                    height: height * 0.73,
+                  height: height * 0.73,
                   width: MediaQuery.of(context).size.width,
                   child:ListOfLeads.isNotEmpty
                       ?
@@ -261,29 +262,26 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                         ListOfLeads.sort((a, b) =>
                             (b['createdDateTime'] as Timestamp).compareTo(a['createdDateTime'] as Timestamp));
                         return Column(
-                          children:[
-                            GestureDetector(
-                              onTap : () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ReviewPage(LeadID:  searchKEY.text.isEmpty
-                                        ? ListOfLeads[index]['LeadID'] ?? ""
-                                        : searchListOfLeads[index]["LeadID"] ?? ""),
-                                  ),
-                                );
-                        },
-                              child: Card(
-                                elevation: 3,
-                                child: DottedBorder(
-                                  strokeWidth : 0.2,
+                            children:[
+                              GestureDetector(
+                                onTap : () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReviewPage(LeadID:  searchKEY.text.isEmpty
+                                          ? ListOfLeads[index]['LeadID'] ?? ""
+                                          : searchListOfLeads[index]["LeadID"] ?? ""),
+                                    ),
+                                  );
+                                },
+                                child: Card(
                                   child: Container(
                                     color: Colors.white,
                                     child: ListTile(
                                       title: Row(
                                         children: [
                                           SizedBox(
-                                            width: width * 0.7,
+                                            width: width * 0.65,
                                             child:
                                             Text( searchKEY.text.isEmpty
                                                 ? ListOfLeads[index]['firstName'] +" "+ ListOfLeads[index]['lastName'] ?? ""
@@ -297,37 +295,69 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                                           ),
                                           Column(
                                             children: [
-                                              Icon(
-                                                Icons.remove_red_eye,
-                                                size: 25,
-                                                color: StyleData.appBarColor2,
+                                              Card(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                  side: BorderSide(color: Colors.grey, width: 2.0),
+                                                ),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => DocumentPageView(
+                                                          visitID: searchKEY.text.isEmpty
+                                                              ? ListOfLeads[index]['VisitID'] ?? ""
+                                                              : searchListOfLeads[index]["VisitID"] ?? "",
+                                                          docId: ListOfLeads[index].id,
+                                                          isNewActivity: false,
+                                                          isTechChecklist: true,
+                                                          leadID: searchKEY.text.isEmpty
+                                                              ? ListOfLeads[index]['LeadID'] ?? ""
+                                                              : searchListOfLeads[index]["LeadID"] ?? "",
+                                                          isPartiallyVerifiedLeads : true
+
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    color: Colors.white,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Text(
+                                                        'Update',
+                                                        style: TextStyle(color: StyleData.appBarColor2),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            Text( "View"),
 
                                             ],
                                           ),
-                                      // SizedBox(
-                                      //   width: width * 0.01,
-                                      // ),
-                                      //     Card(
-                                      //       child: Container(
-                                      //         color: Colors.white,
-                                      //         child: Padding(
-                                      //           padding: const EdgeInsets.all(8.0),
-                                      //           child: Text(
-                                      //             searchKEY.text.isEmpty
-                                      //                 ?  ListOfLeads[index]['VerificationStatus'] : searchListOfLeads[index]['VerificationStatus'] ,
-                                      //             style: TextStyle(color: Colors.green),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //     ),
+                                          // SizedBox(
+                                          //   width: width * 0.01,
+                                          // ),
+                                          //     Card(
+                                          //       child: Container(
+                                          //         color: Colors.white,
+                                          //         child: Padding(
+                                          //           padding: const EdgeInsets.all(8.0),
+                                          //           child: Text(
+                                          //             searchKEY.text.isEmpty
+                                          //                 ?  ListOfLeads[index]['VerificationStatus'] : searchListOfLeads[index]['VerificationStatus'] ,
+                                          //             style: TextStyle(color: Colors.green),
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
                                         ],
                                       ),
                                       // subtitle: Text(
-                                      //     searchKEY.text.isEmpty
-                                      //         ? ListOfLeads[index]['LeadID'] ?? ""
-                                      //         : searchListOfLeads[index]["LeadID"] ?? "",
+                                      //   searchKEY.text.isEmpty
+                                      //       ? ListOfLeads[index]['LeadID'] ?? ""
+                                      //       : searchListOfLeads[index]["LeadID"] ?? "",
                                       //   style: TextStyle(
                                       //     fontSize: 13,
                                       //   ),
@@ -337,8 +367,7 @@ class _VerifiedLeadsPageViewState extends State<VerifiedLeadsPageView> {
                                   ),
                                 ),
                               ),
-                            ),
-                          ]
+                            ]
                         );
                       },
                     ),

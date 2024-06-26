@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -40,7 +43,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+  //  print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         List<DocumentSnapshot> filteredList = value.docs.where((doc) => (doc["LeadID"] as String).length > 1).toList();
@@ -130,6 +133,58 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
       return " --";
     }
   }
+
+
+  Future<void> getToken()
+  async {
+    var headers = {
+      'X-PrettyPrint': '1',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
+    };
+    var data = {
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+      // 'username': 'salesappuser@muthoothomefin.com',
+      // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      'grant_type': 'password',
+      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+    };
+    var dio = Dio();
+    var response = await dio.request(
+      //   'https://muthootltd.my.salesforce.com/services/oauth2/token',
+      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
+      options: Options(
+        method: 'POST',
+        headers: headers,
+      ),
+      data: data,
+    );
+
+    String? accessToken;
+    if (response.statusCode == 200) {
+
+      String jsonResponse = json.encode(response.data);
+      Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+      accessToken = jsonMap['access_token'];
+
+      // Store the access token locally
+      saveAccessToken(accessToken!);
+      print("AccessToken");
+      print(accessToken);
+    }
+  }
+  Future<void> saveAccessToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('access_token', token);
+    print("Stored Access token");
+    print(token);
+  }
+
 
   @override
   void initState() {
@@ -297,7 +352,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                 },
                 child:  Icon(Icons.home, size: 30,color: Colors.white,),),
           ),
-          title: Text("Lead Details",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
+          title: Text("All Leads",style: TextStyle(color: Colors.white,fontSize: 18,fontFamily: StyleData.boldFont),),
           centerTitle: true,
       actions: [
         Padding(
@@ -416,7 +471,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                              child: GestureDetector(
                                onTap: () {
                               //  commented for first phase
-                                 if(ListOfLeads[index]["VerificationStatus"] == "Pending" || ListOfLeads[index]["VerificationStatus"] == "Push Back")
+                                 if(ListOfLeads[index]["VerificationStatus"] == "Pending" || ListOfLeads[index]["VerificationStatus"] == "Push Back" || ListOfLeads[index]["VerificationStatus"] == "Verified")
                                  Navigator.push(
                                      context,
                                    MaterialPageRoute(
@@ -425,7 +480,8 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                          leadID: ListOfLeads[index]["LeadID"],
                                            isNewActivity: false,
                                          visitID: ListOfLeads[index]["VisitID"],
-                                         isTechChecklist : istechnicalChecklist
+                                         isTechChecklist : istechnicalChecklist,
+                                           isPartiallyVerifiedLeads : false
                                        ))
                                      // MaterialPageRoute(
                                      //     builder: (context) => DocumentChecklistPageView(
@@ -449,15 +505,34 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                            fontWeight: FontWeight.bold,
                                          ),
                                        ),
-                                       Text(
-                                         searchKEY.text.isEmpty
-                                             ? ListOfLeads[index]["VerificationStatus"] ?? ""
-                                             : searchListOfLeads[index]["VerificationStatus"] ?? "",
-                                         style: TextStyle(
-                                           color: ListOfLeads[index]["VerificationStatus"] == 'Verified' ? Colors.green : ListOfLeads[index]["VerificationStatus"] == 'Pending' ?  Colors.red :  Colors.amber ,
-                                           fontSize: 14.0,
-                                           fontFamily: 'Poppins',
-                                         ),
+                                       Row(
+                                         children: [
+                                           Text(
+                                             searchKEY.text.isEmpty
+                                                 ? ListOfLeads[index]["VerificationStatus"] ?? ""
+                                                 : searchListOfLeads[index]["VerificationStatus"] ?? "",
+                                             style: TextStyle(
+                                               color: ListOfLeads[index]["VerificationStatus"] == 'Verified' ? Colors.green : ListOfLeads[index]["VerificationStatus"] == 'Pending' ?  Colors.red :  Colors.amber ,
+                                               fontSize: 14.0,
+                                               fontFamily: 'Poppins',
+                                             ),
+                                           ),
+                                           // Text(
+                                           //   searchKEY.text.isEmpty
+                                           //       ? (ListOfLeads[index]["technicalStatus"] != null
+                                           //       ? ListOfLeads[index]["technicalStatus"]
+                                           //       : "")
+                                           //       : (searchListOfLeads[index]["technicalStatus"] != null
+                                           //       ? searchListOfLeads[index]["technicalStatus"]
+                                           //       : ""),
+                                           //   style: TextStyle(
+                                           //     color: Colors.green,
+                                           //     fontSize: 14.0,
+                                           //     fontFamily: 'Poppins',
+                                           //   ),
+                                           // ),
+
+                                         ],
                                        ),
                                      ],
                                    ),

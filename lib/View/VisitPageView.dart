@@ -83,7 +83,7 @@ class _VisitPageViewState extends State<VisitPageView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+   // print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {
@@ -143,7 +143,7 @@ class _VisitPageViewState extends State<VisitPageView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+   // print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {

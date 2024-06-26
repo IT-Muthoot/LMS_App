@@ -83,23 +83,35 @@ class _FormPageViewState extends State<FormPageView> {
   String? fetchMobileNumber;
 
 //Dropdowns fetching from firebase
-  getDropDownLeadData() {
-    FirebaseFirestore.instance
-        .collection("leadSource")
-        .doc('leadSource')
-        .get()
-        .then((value) {
-      for (var element in value.data()!['leadSource']) {
-        setState(() {
-          _leadSourceList
-              .add(DropDownData(element['id'], element['title']));
-        });
-      }
-    });
-  }
+//   getDropDownLeadData() {
+//     FirebaseFirestore.instance
+//         .collection("leadSource")
+//         .doc('leadSource')
+//         .get()
+//         .then((value) {
+//       for (var element in value.data()!['leadSource']) {
+//         setState(() {
+//           _leadSourceList
+//               .add(DropDownData(element['id'], element['title']));
+//         });
+//       }
+//     });
+//   }
   String? _selectedLeadSource;
-  final List<DropDownData> _leadSourceList = [];
+  // final List<DropDownData> _leadSourceList = [];
   final List<DropDownData> _leadDSAList = [];
+
+  final List<Map<String, dynamic>> _leadSourceList = [
+    {"title": "DSA", "id": 1},
+    {"title": "Connector", "id": 2},
+    {"title": "Marketing Campaign", "id": 3},
+    {"title": "Employee Referral", "id": 4},
+    {"title": "Builder", "id": 5},
+    {"title": "Customer Referral", "id": 6},
+    {"title": "Direct Sourcing", "id": 7},
+  ];
+
+
 
   getDropDownConnectorData() {
     FirebaseFirestore.instance
@@ -228,7 +240,7 @@ class _FormPageViewState extends State<FormPageView> {
       "Latitude": (latitude?.toString()?.isNotEmpty == true ? latitude.toString() : "19.024651"),
       "Longitude": (longitude?.toString()?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
     });
-    print(data);
+   // print(data);
     var dio = Dio();
     var response = await dio.request(
     //  'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
@@ -239,7 +251,7 @@ class _FormPageViewState extends State<FormPageView> {
         ),
       data: data,
     );
-    print(data);
+  //  print(data);
     if (response.statusCode == 200) {
       print("Printing Token 2");
       print(json.encode(response.data));
@@ -352,7 +364,7 @@ class _FormPageViewState extends State<FormPageView> {
     if (pickedTime != null) {
       setState(() {
         // Format time with AM/PM
-        String formattedTime = pickedTime.hour > 12
+        String formattedTime = pickedTime.hour >= 12
             ? '${pickedTime.hourOfPeriod}:${pickedTime.minute} PM'
             : '${pickedTime.hourOfPeriod}:${pickedTime.minute} AM';
 
@@ -601,7 +613,7 @@ async {
     'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
     'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
     'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-    'password': 'Karthikrishna@1YSRHLEtF4pMRkpOd6aSCeVHDB'
+    'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
   };
   var dio = Dio();
   var response = await dio.request(
@@ -641,7 +653,7 @@ async {
   getToken();
     fetchLeads();
     getDropDownSalutationData();
-    getDropDownLeadData();
+   // getDropDownLeadData();
     getDropDownConnectorData();
     getDropDownDSAData();
     getDropDownCampaignData();
@@ -724,11 +736,11 @@ async {
                                 return null;
                               },
                               items: _leadSourceList
-                                  .map((DropDownData item){
-                                return DropdownMenuItem(
-                                  value: item.title,
+                                  .map((item){
+                                return DropdownMenuItem<String>(
+                                  value: item['title'],
                                   child: Text(
-                                    item.title,
+                                    item['title'],
                                     style: const TextStyle(
                                       color: Color(0xFF393939),
                                       fontSize: 15,

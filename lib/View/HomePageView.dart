@@ -58,7 +58,7 @@ class _HomePageViewState extends State<HomePageView> {
 
       if (querySnapshot.docs.isNotEmpty) {
         var userId = querySnapshot.docs.first.id;
-        print("User ID: $userId");
+      //  print("User ID: $userId");
 
         // Update the user document with the FCM token
         await users.doc(userId).update({"FCMToken": fcmToken});

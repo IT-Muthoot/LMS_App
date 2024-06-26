@@ -47,7 +47,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+  //  print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {
@@ -76,7 +76,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+  //  print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {
@@ -129,14 +129,14 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     setState(() {
       userType = pref.getString("logintype");
     });
-    print(userType);
+  //  print(userType);
     if (userType == "user") {
       users.where("userId", isEqualTo: userId).get().then((value) {
         setState(() {
           ListOfSavedLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+       //   print(value.docs[i].data());
         }
       });
     } else {
@@ -145,7 +145,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfSavedLeads = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+       //   print(value.docs[i].data());
         }
       });
     }
@@ -167,7 +167,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfNotification = value.docs.cast<Map<dynamic, String>>();
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+        //  print(value.docs[i].data());
         }
       });
     } else {
@@ -176,7 +176,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfNotification = value.docs.cast<Map<dynamic, String>>();
         });
         for (var i = 0; value.docs.length > i; i++) {
-          print(value.docs[i].data());
+       //   print(value.docs[i].data());
         }
       });
     }
@@ -410,7 +410,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Visit Form',
+                                          'New Visit',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,
@@ -466,7 +466,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                           height: 5,
                                         ),
                                         Text(
-                                          'Applicant details',
+                                          'All Leads',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,

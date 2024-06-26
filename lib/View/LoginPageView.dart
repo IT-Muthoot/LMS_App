@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } finally {
       Navigator.pop(context); // Disabling the loader
-      print(response.statusMessage);
+    //  print(response.statusMessage);
     }
   }
 
@@ -340,7 +340,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           .where("password", isEqualTo: passwordController.text)
                           .get()
                           .then((value)  {
-                           print('Query snapshot: ${value.docs}');
+                         //  print('Query snapshot: ${value.docs}');
                       if (value.docs.isNotEmpty) {
                             //  pref.setString("token", credential.user!.uid);
                               pref.setString("logintype",
