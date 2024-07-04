@@ -107,16 +107,17 @@ class _ProfilePageViewState extends State<ProfilePageView> {
       if (lead['VerificationStatus'] == "Verified" && lead['technicalStatus'] == "Fully Uploaded"  && lead["LeadID"].length > 1) {
         verifiedLeads++;
       }
-      if ((lead["VerificationStatus"] == "Sent for Verification" || lead["VerificationStatus"] == "Verified") && (lead["VerifiedBy"] == "Pending with CM" || lead["VerifiedBy"] == "Verified") &&  (lead['technicalStatus'] == "Technical Pending" || lead['technicalStatus'] == "Partially Uploaded") && lead['technicalChecklistCount'] > 0 )
-      {
-        partiallyVerifiedLeads++;
-      }
-      // if (lead["LeadID"].length > 1 && (lead["VerificationStatus"] == "Sent for Verification" || lead["VerifiedBy"] == "Pending with SM"))
       if (lead["LeadID"].length > 1 && (lead["VerificationStatus"] == "Sent for Verification" ))
       {
         sentForVerificationLeads++;
 
       }
+      if ((lead["VerificationStatus"] == "Sent for Verification" || lead["VerificationStatus"] == "Verified") && (lead["VerifiedBy"] == "Pending with CM" || lead["VerifiedBy"] == "Verified") &&  (lead['technicalStatus'] == "Technical Pending" || lead['technicalStatus'] == "Partially Uploaded") && lead['technicalChecklistCount'] > 0 )
+      {
+        partiallyVerifiedLeads++;
+      }
+      // if (lead["LeadID"].length > 1 && (lead["VerificationStatus"] == "Sent for Verification" || lead["VerifiedBy"] == "Pending with SM"))
+
 
     });
 
@@ -153,7 +154,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Color(0xff973232),
+                foregroundColor: Color(0xff973232),
               ),
             ),
           ),
@@ -207,14 +208,14 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             value: verifiedLeads.toDouble(),
             title: '${verifiedLeads.toString()} Verified Leads',
             color: Colors.green,
-            radius: 70,
+            radius: 40,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
           PieChartSectionData(
             value: partiallyVerifiedLeads.toDouble(),
-            title: '${partiallyVerifiedLeads.toString()} Partially Verified Leads',
+            title: '${partiallyVerifiedLeads.toString()} Partially Verified',
             color: Colors.orange,
-            radius: 70,
+            radius: 40,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
 
@@ -222,7 +223,7 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             value: queryLeads.toDouble(),
             title: '${queryLeads.toString()} Queried',
             color: Colors.red,
-            radius: 70,
+            radius: 40,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
           // PieChartSectionData(
@@ -236,10 +237,12 @@ class _ProfilePageViewState extends State<ProfilePageView> {
             value: sentForVerificationLeads.toDouble(),
             title: '${sentForVerificationLeads.toString()} Sent for Verification',
             color: Colors.amber,
-            radius: 70,
+            radius: 40,
             titleStyle: TextStyle(fontSize: 12, color: Colors.black),
           ),
+
         ],
+        centerSpaceRadius: 70,
       ),
     );
   }

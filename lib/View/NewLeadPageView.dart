@@ -239,7 +239,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Color(0xff973232),
+                foregroundColor: Color(0xff973232),
               ),
             ),
           ),
@@ -2827,7 +2827,7 @@ String? SalutaionID;
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -2965,7 +2965,7 @@ String? SalutaionID;
                         // );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),

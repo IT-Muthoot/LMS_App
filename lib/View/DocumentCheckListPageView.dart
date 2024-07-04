@@ -805,7 +805,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),

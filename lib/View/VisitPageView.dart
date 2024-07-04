@@ -239,7 +239,7 @@ class _VisitPageViewState extends State<VisitPageView> {
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: Color(0xff973232),
+                foregroundColor: Color(0xff973232),
               ),
             ),
           ),

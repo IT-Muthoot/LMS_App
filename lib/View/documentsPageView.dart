@@ -499,8 +499,8 @@ String? technicalDocumentStatus;
    // print(data);
     var dio = Dio();
     var response = await dio.request(
-   // 'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
-      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
+    'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
+   //   'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -567,21 +567,21 @@ String? technicalDocumentStatus;
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      // 'grant_type': 'password',
-      // 'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      // 'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      // 'username': 'salesappuser@muthoothomefin.com',
-      // 'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
       'grant_type': 'password',
-      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
+      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
+      'username': 'salesappuser@muthoothomefin.com',
+      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      // 'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
     };
     var dio = Dio();
     var response = await dio.request(
-   //   'https://muthootltd.my.salesforce.com/services/oauth2/token',
-      'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
+      'https://muthootltd.my.salesforce.com/services/oauth2/token',
+    //  'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
       options: Options(
         method: 'POST',
         headers: headers,
@@ -2504,7 +2504,12 @@ String? technicalDocumentStatus;
                 children:[
                   ElevatedButton(
                     onPressed: () {
-                      updateLeadData1();
+                      if (documentCheck && !isAnyMandatoryDocumentUploaded()) {
+                        showError("Please upload at least one technical document.");
+                      } else {
+                        updateLeadData1();
+                      }
+
                       // Navigator.push(
                       //     context,
                       // MaterialPageRoute(
@@ -2547,7 +2552,7 @@ String? technicalDocumentStatus;
                 children:[
                   ElevatedButton(
                     onPressed: () {
-                      // if(
+                      if(
                       // applicationFormClicked == true && bankPassbookClicked == true &&
                       // dateOfBirthClicked == true &&
                       // loginFeeChequeClicked == true &&
@@ -2556,22 +2561,27 @@ String? technicalDocumentStatus;
                       // residenceProofClicked == true &&
                       // salarySlipClicked == true &&
                       // signatureProofClicked == true
-                      // applicationForm ==  "Uploaded" && bankPassbook ==  "Uploaded" && dateOfBirthProof ==  "Uploaded" &&
-                      // loginFeeCheque ==  "Uploaded" &&
-                      // passportSizePhoto ==  "Uploaded" &&
-                      // photoIdProof ==  "Uploaded" &&
-                      // residenceProof == "Uploaded" &&
-                      // salarySlip == "Uploaded" &&
-                      // signatureProof == "Uploaded"
-                      // )
-                      //   {
-                      //     updateLeadData();
-                      //   }
-                      // else
-                      //   {
-                      //     CustomSnackBar.errorSnackBarQ("Please upload all the Mandatory Document", context);
-                      //   }
-                      updateLeadData();
+                          // &&
+                          applicationForm ==  "Uploaded" && bankPassbook ==  "Uploaded" && dateOfBirthProof ==  "Uploaded" &&
+                          loginFeeCheque ==  "Uploaded" &&
+                          passportSizePhoto ==  "Uploaded" &&
+                          photoIdProof ==  "Uploaded" &&
+                          residenceProof == "Uploaded" &&
+                          salarySlip == "Uploaded" &&
+                          signatureProof == "Uploaded"
+                      )
+                        {
+                          if (documentCheck && !isAnyMandatoryDocumentUploaded()) {
+                            showError("Please upload at least one technical document.");
+                          } else {
+                            updateLeadData();
+                          }
+                        }
+                      else
+                        {
+                          CustomSnackBar.errorSnackBarQ("Please upload all the Mandatory Document", context);
+                        }
+
 
                     },
                     style: ElevatedButton.styleFrom(
@@ -2929,14 +2939,13 @@ String? technicalDocumentStatus;
         });
   }
 
-  void uploadOnDMSChecklist(var pickedFile, String title,String documentId,String documentId1) async {
+  void uploadOnDMSChecklist(var pickedFile, String title, String documentId, String documentId1) async {
     print("bhjkjhlknl");
     print(pickedFile);
     Dialogs.materialDialog(
         msg: 'Are you sure you want to upload this document?',
         title: "Alert",
-        msgStyle:
-        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        msgStyle: TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
         titleStyle: const TextStyle(color: Colors.white),
         color: StyleData.appBarColor2,
         context: context,
@@ -2958,8 +2967,7 @@ String? technicalDocumentStatus;
                     "File": await MultipartFile.fromFile(
                       pickedFile!.path,
                       filename: pickedFile.name,
-                      //    contentType: MediaType("pdf", "jpg"), //add this
-                      contentType:  _getContentType(pickedFile.name), //add this
+                      contentType: _getContentType(pickedFile.name), // add this
                     ),
                     "Title": widget.visitID,
                     "Description": "Document Verification",
@@ -2982,7 +2990,6 @@ String? technicalDocumentStatus;
                         (X509Certificate cert, String host, int port) => true;
                   };
                   dio.options.headers['Content-Type'] = 'multipart/form-data';
-                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
 
                   var response = await dio.post(
                     ApiUrls().uploadDoc,
@@ -2999,48 +3006,52 @@ String? technicalDocumentStatus;
                   print(response);
                   var data = json.decode(response.toString());
                   print(data);
-                  FirebaseFirestore.instance
-                      .collection("convertedLeads")
-                      .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
-                      .get()
-                      .then((QuerySnapshot snapshot) {
-                    if (snapshot.docs.isNotEmpty) {
-                      // If there's a matching document, set the value
-                      FirebaseFirestore.instance
-                          .collection("convertedLeads")
-                          .doc(snapshot.docs[0].id)
-                          .set({
-                        '$title-checklist': data["docId"].toString(),
-                      },
-                          SetOptions(merge: true));
-
-                      setState(()  {
-                        documentUploaded = true;
-                        uploadedFileNames[documentId] = pickedFile.name;
-                        uploadedFilePath[documentId] =  pickedFile.path;
-                        checklistName = title;
-                        uploadedDocumentCount++;
-                        documentUploaded1 = true;
-                        uploadedFileNames1[documentId1] = pickedFile.name;
-                        uploadedFilePath1[documentId1] =  pickedFile.path;
-                        checklistName1 = title;
-                        uploadedDocumentCount1++;
-                      });
-                      saveUploadedFileName(pickedFile.name,documentId);
-                      saveUploadedFileName1(pickedFile.name,documentId1);
-                    } else {
-                      CustomSnackBar.errorSnackBarQ("No such document found", context);
-                    }
-                  })
-                      .catchError((error) {
-                    CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
-                    print("Error: $error");
-                  });
 
                   SmartDialog.dismiss();
+                  if (data["status"] == 0) {
+                    CustomSnackBar.errorSnackBarQ(data["message"], context);
+                  } else {
+                    FirebaseFirestore.instance
+                        .collection("convertedLeads")
+                        .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
+                        .get()
+                        .then((QuerySnapshot snapshot) {
+                      if (snapshot.docs.isNotEmpty) {
+                        // If there's a matching document, set the value
+                        FirebaseFirestore.instance
+                            .collection("convertedLeads")
+                            .doc(snapshot.docs[0].id)
+                            .set({
+                          '$title-checklist': data["docId"].toString(),
+                        },
+                            SetOptions(merge: true));
+
+                        setState(() {
+                          documentUploaded = true;
+                          uploadedFileNames[documentId] = pickedFile.name;
+                          uploadedFilePath[documentId] = pickedFile.path;
+                          checklistName = title;
+                          uploadedDocumentCount++;
+                          documentUploaded1 = true;
+                          uploadedFileNames1[documentId1] = pickedFile.name;
+                          uploadedFilePath1[documentId1] = pickedFile.path;
+                          checklistName1 = title;
+                          uploadedDocumentCount1++;
+                        });
+                        saveUploadedFileName(pickedFile.name, documentId);
+                        saveUploadedFileName1(pickedFile.name, documentId1);
+                      } else {
+                        CustomSnackBar.errorSnackBarQ("No such document found", context);
+                      }
+                    })
+                        .catchError((error) {
+                      CustomSnackBar.errorSnackBarQ("Something went wrong, Please Try Again", context);
+                      print("Error: $error");
+                    });
+                  }
                 } catch (e) {
                   SmartDialog.dismiss();
-                  CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                  CustomSnackBar.errorSnackBarQ("Something went wrong, Please Try Again", context);
                   debugPrint(e.toString());
                 }
               },
@@ -3086,14 +3097,13 @@ String? technicalDocumentStatus;
 
 
 
+
   void uploadOnDMS(var pickedFile, String title) async {
-    //New Implementation for saving application PDF
-print("bhjkjhlknl");
+    print("bhjkjhlknl");
     Dialogs.materialDialog(
         msg: 'Are you sure you want to upload this document?',
         title: "Alert",
-        msgStyle:
-        TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
+        msgStyle: TextStyle(color: Colors.grey, fontFamily: StyleData.boldFont),
         titleStyle: const TextStyle(color: Colors.white),
         color: StyleData.appBarColor2,
         context: context,
@@ -3108,15 +3118,14 @@ print("bhjkjhlknl");
             child: InkWell(
               onTap: () async {
                 Navigator.pop(context);
-              SmartDialog.showLoading(msg: "Uploading Document");
+                SmartDialog.showLoading(msg: "Uploading Document");
                 var dio = Dio();
                 try {
                   FormData formData = FormData.fromMap({
                     "File": await MultipartFile.fromFile(
                       pickedFile!.path,
                       filename: pickedFile.name,
-                  //    contentType: MediaType("pdf", "jpg"), //add this
-                      contentType:  _getContentType(pickedFile.name), //add this
+                      contentType: _getContentType(pickedFile.name), // add this
                     ),
                     "Title": widget.visitID,
                     "Description": "Document Verification",
@@ -3139,7 +3148,6 @@ print("bhjkjhlknl");
                         (X509Certificate cert, String host, int port) => true;
                   };
                   dio.options.headers['Content-Type'] = 'multipart/form-data';
-                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
 
                   var response = await dio.post(
                     ApiUrls().uploadDoc,
@@ -3157,57 +3165,49 @@ print("bhjkjhlknl");
                   print(response);
                   var data = json.decode(response.toString());
                   print(data);
-                  FirebaseFirestore.instance
-                      .collection("convertedLeads")
-                      .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
-                      .get()
-                      .then((QuerySnapshot snapshot) {
-                    if (snapshot.docs.isNotEmpty) {
-                      // If there's a matching document, set the value
-                      FirebaseFirestore.instance
-                          .collection("convertedLeads")
-                          .doc(snapshot.docs[0].id) // Use the ID of the first matching document
-                          .set({
-      title: data["docId"].toString(),
-    },
-        SetOptions(merge: true));
-                    } else {
-                      // Handle case where no matching document is found
-                      // Perhaps show an error message or take appropriate action
-                    }
-                  })
-                      .catchError((error) {
-                    // Handle errors
-                    print("Error: $error");
-                  });
-                  // FirebaseFirestore.instance
-                  //     .collection("convertedLeads")
-                  //     .doc(widget.docId)
-                  //     .set({
-                  //   title: data["docId"].toString(),
-                  // },
-                  //     SetOptions(merge: true));
+
                   SmartDialog.dismiss();
-                  if(data["docId"].toString().isNotEmpty)
-                    {
+                  if (data["status"] == 0) {
+                    CustomSnackBar.errorSnackBarQ(data["message"], context);
+                  } else {
+                    FirebaseFirestore.instance
+                        .collection("convertedLeads")
+                        .where("VisitID", isEqualTo: widget.visitID) // Check if visitID matches
+                        .get()
+                        .then((QuerySnapshot snapshot) {
+                      if (snapshot.docs.isNotEmpty) {
+                        // If there's a matching document, set the value
+                        FirebaseFirestore.instance
+                            .collection("convertedLeads")
+                            .doc(snapshot.docs[0].id) // Use the ID of the first matching document
+                            .set({
+                          title: data["docId"].toString(),
+                        },
+                            SetOptions(merge: true));
+                      } else {
+                        // Handle case where no matching document is found
+                        // Perhaps show an error message or take appropriate action
+                      }
+                    })
+                        .catchError((error) {
+                      // Handle errors
+                      print("Error: $error");
+                    });
+
+                    if (data["docId"].toString().isNotEmpty) {
                       if (applicationFormClicked) {
                         print(ApplicationDocID);
                         setState(() {
-                          applicationForm ="Uploaded";
+                          applicationForm = "Uploaded";
                         });
-
                       } else if (bankPassbookClicked) {
                         setState(() {
                           bankPassbook = "Uploaded";
                         });
-
-                      }
-                      else if (dateOfBirthClicked) {
+                      } else if (dateOfBirthClicked) {
                         setState(() {
                           dateOfBirthProof = "Uploaded";
                         });
-                        // SharedPreferences prefs = await SharedPreferences.getInstance();
-                        // await prefs.setString("dateOfBirthProof", "Uploaded");
                       } else if (loginFeeChequeClicked) {
                         setState(() {
                           loginFeeCheque = "Uploaded";
@@ -3228,34 +3228,30 @@ print("bhjkjhlknl");
                         setState(() {
                           salarySlip = "Uploaded";
                         });
-
                       } else if (signatureProofClicked) {
                         setState(() {
                           signatureProof = "Uploaded";
                         });
-
                       } else if (copyOfPropertyClicked) {
                         setState(() {
                           copyOfProperty = "Uploaded";
                         });
-
-                      }else if (totalWorkExpClicked) {
+                      } else if (totalWorkExpClicked) {
                         setState(() {
                           totalWorkExp = "Uploaded";
                         });
-                      }else if (qualificationProofClicked) {
+                      } else if (qualificationProofClicked) {
                         setState(() {
                           qualificationProof = "Uploaded";
                         });
                       }
+                    } else {
+                      CustomSnackBar.errorSnackBarQ("Something went wrong, Please Try Again", context);
                     }
-                  else
-                    {
-                      CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
-                    }
+                  }
                 } catch (e) {
                   SmartDialog.dismiss();
-                  CustomSnackBar.errorSnackBarQ("Something went wrong,Please Try Again", context);
+                  CustomSnackBar.errorSnackBarQ("Something went wrong, Please Try Again", context);
                   debugPrint(e.toString());
                 }
               },
@@ -3297,6 +3293,7 @@ print("bhjkjhlknl");
           )
         ]);
   }
+
   void updateLeadData1() async {
     //New Implementation for saving application PDF
     print("bhjkjhlknl");
@@ -3481,7 +3478,7 @@ print("bhjkjhlknl");
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
@@ -3544,7 +3541,7 @@ print("bhjkjhlknl");
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
@@ -3608,7 +3605,7 @@ print("bhjkjhlknl");
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -3623,6 +3620,23 @@ print("bhjkjhlknl");
       },
     );
   }
+  bool isAnyMandatoryDocumentUploaded() {
+    for (var document in mandatoryDocuments) {
+      final documentId = document['ID'].toString();
+      final documentTitle = document['Title'];
+      if (uploadedFileNames.containsKey(documentId) || uploadedFileNames[documentId] == "Uploaded") {
+        return true;
+      }
+    }
+    return false;
+  }
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor:StyleData.appBarColor3,
+    ));
+  }
+
 }
 MediaType _getContentType(String fileName) {
   String extension = fileName.split('.').last.toLowerCase();

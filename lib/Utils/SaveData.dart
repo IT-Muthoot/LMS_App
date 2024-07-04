@@ -25,301 +25,88 @@ class _SaveDataState extends State<SaveData> {
   ];
 
   List<Map<String, dynamic>> employeeMapping = [
-    {
-      "EMP_CODE": "MD00001",
-      "NAME": "Ramesh Chandra Regar",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "BHIL024",
-      "BRANCH": "BHILWARA",
-      "REGION CODE": "RO0006",
-      "REGION": "RAJASTHAN",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1567",
-      "Reporting Manager Name": "NITISH GOSWAMI",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00002",
-      "NAME": "Akash Dubey",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "VIRA999",
-      "BRANCH": "MUMBAI - VIRAR",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1528",
-      "Reporting Manager Name": "Sunil Shipurkar",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00003",
-      "NAME": "Gunju Rajesh",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "VIJA050",
-      "BRANCH": "VIJAYAWADA",
-      "REGION CODE": "RO0007",
-      "REGION": "TAP",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1616",
-      "Reporting Manager Name": "DAVID NELATURI",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00004",
-      "NAME": "Avinash Brijnarayan Vishwakarma",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "THAN037",
-      "BRANCH": "MUMBAI - THANE",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1449",
-      "Reporting Manager Name": "Kanhai jee",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00010",
-      "NAME": "Arkanti Kiran",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "KURN116",
-      "BRANCH": "KURNOOL",
-      "REGION CODE": "RO0007",
-      "REGION": "TAP",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1580",
-      "Reporting Manager Name": "NALLAMALLA SIVUDU",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00011",
-      "NAME": "Mutyala Vikram",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "NELL069",
-      "BRANCH": "NELLORE",
-      "REGION CODE": "RO0007",
-      "REGION": "TAP",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1398",
-      "Reporting Manager Name": "IQBAL SHAIK",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00013",
-      "NAME": "Sanjay Patil",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "NASI016",
-      "BRANCH": "NASIK",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1690",
-      "Reporting Manager Name": "Mohammad Khan",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00014",
-      "NAME": "Vicky Thorat",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "PIMP092",
-      "BRANCH": "PIMPRI",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1595",
-      "Reporting Manager Name": "PRASHANT PAWAR",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00015",
-      "NAME": "Shoeb Bagwan",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "SOLA019",
-      "BRANCH": "SOLAPUR",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1138",
-      "Reporting Manager Name": "Fahim Shaikh",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00016",
-      "NAME": "Gali Vijay",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "VIJA050",
-      "BRANCH": "VIJAYAWADA",
-      "REGION CODE": "RO0007",
-      "REGION": "TAP",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1616",
-      "Reporting Manager Name": "DAVID NELATURI",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00019",
-      "NAME": "Jagdish Laxman Sathe",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "KALY037",
-      "BRANCH": "MUMBAI - KALYAN",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1388",
-      "Reporting Manager Name": "SANTOSH DESHMUKH",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00020",
-      "NAME": "Rakesh Joshi",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "JODH014",
-      "BRANCH": "JODHPUR",
-      "REGION CODE": "RO0006",
-      "REGION": "RAJASTHAN",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1649",
-      "Reporting Manager Name": "Mukesh Suthar",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00021",
-      "NAME": "Anil Kumar",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "YAMU057",
-      "BRANCH": "YAMUNANAGAR",
-      "REGION CODE": "RO0008",
-      "REGION": "PCH",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1289",
-      "Reporting Manager Name": "SANJEEV KUMAR",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00022",
-      "NAME": "Ravi Saini",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "KANP018",
-      "BRANCH": "KANPUR",
-      "REGION CODE": "RO0012",
-      "REGION": "UTTAR PRADESH",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1192",
-      "Reporting Manager Name": "ANIL MISHRA",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00023",
-      "NAME": "Madhusudan",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "TUMK053",
-      "BRANCH": "BANGALORE-TUMKUR",
-      "REGION CODE": "RO0010",
-      "REGION": "KARNATAKA",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1123",
-      "Reporting Manager Name": "Arun a",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00024",
-      "NAME": "Gurwinder Singh",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "CHAN057",
-      "BRANCH": "CHANDIGARH",
-      "REGION CODE": "RO0008",
-      "REGION": "PCH",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1682",
-      "Reporting Manager Name": "MANI SINGH",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00025",
-      "NAME": "Vishal Arwade",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "AHME008",
-      "BRANCH": "AHMEDNAGAR",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1263",
-      "Reporting Manager Name": "ROHIT JADHAV",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00028",
-      "NAME": "Aakash Devidas Jagtap",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "NASI016",
-      "BRANCH": "NASIK",
-      "REGION CODE": "RO0003",
-      "REGION": "ROM",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1690",
-      "Reporting Manager Name": "Mohammad Khan",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00031",
-      "NAME": "Pankaj Sharma",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "SIKA047",
-      "BRANCH": "SIKAR",
-      "REGION CODE": "RO0006",
-      "REGION": "RAJASTHAN",
-      "ZONE CODE": "ZO0003",
-      "ZONE": "NORTH",
-      "Reporting Manager Code": "MO1484",
-      "Reporting Manager Name": "PRITAM SHEKHAWAT",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00032",
-      "NAME": "Sangram Singh Gurjar",
-      "DSGN_NAME": "Relationship Officer",
-      "BRANCH CODE": "GWAL026",
-      "BRANCH": "GWALIOR",
-      "REGION CODE": "RO0004",
-      "REGION": "MADHYA PRADESH",
-      "ZONE CODE": "ZO0002",
-      "ZONE": "WEST",
-      "Reporting Manager Code": "MO1669",
-      "Reporting Manager Name": "Ashutosh Sharma",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    },
-    {
-      "EMP_CODE": "MD00033",
-      "NAME": "Vetriventhan M",
-      "DSGN_NAME": "Relationship Manager",
-      "BRANCH CODE": "MADU086",
-      "BRANCH": "MADURAI",
-      "REGION CODE": "RO0011",
-      "REGION": "TAMILNADU",
-      "ZONE CODE": "ZO0001",
-      "ZONE": "SOUTH",
-      "Reporting Manager Code": "MO1563",
-      "Reporting Manager Name": "DHANAPANDIAN K",
-      "Reporting_DESIGNATION": "SALES MANAGER"
-    }
+      {
+        "EMP_CODE": "MD00048",
+        "NAME": "Manju Varghese",
+        "DSGN_NAME": "Relationship Manager",
+        "BRANCH CODE": "KOCH001",
+        "BRANCH": "KOCHI",
+        "REGION CODE": "RO0001",
+        "REGION": "KERALA",
+        "ZONE CODE": "ZO0001",
+        "Zone": "SOUTH",
+        "Reporting Manager Code": "MO1309",
+        "Reporting Manager Name": "SAFDER G"
+      },
+      {
+        "EMP_CODE": "MD00051",
+        "NAME": "Rupesh Metkar",
+        "DSGN_NAME": "Relationship Manager",
+        "BRANCH CODE": "NAGP010",
+        "BRANCH": "Nagpur",
+        "REGION CODE": "ZO0002",
+        "REGION": "ROM",
+        "ZONE CODE": "ZO0002",
+        "Zone": "WEST",
+        "Reporting Manager Code": "MO1756",
+        "Reporting Manager Name": "Kiran Ambade"
+      },
+      {
+        "EMP_CODE": "MD00055",
+        "NAME": "Raghu Rathnagiri",
+        "DSGN_NAME": "Relationship Manager",
+        "BRANCH CODE": "BANG053",
+        "BRANCH": "Bangalore",
+        "REGION CODE": "RO0010",
+        "REGION": "KARNATAKA",
+        "ZONE CODE": "ZO0001",
+        "Zone": "SOUTH",
+        "Reporting Manager Code": "MO1101",
+        "Reporting Manager Name": "Rahul R"
+      },
+      {
+        "EMP_CODE": "MD00056",
+        "NAME": "Amit Tiwari",
+        "DSGN_NAME": "Relationship Officer",
+        "BRANCH CODE": "BHOP013",
+        "BRANCH": "Bhopal",
+        "REGION CODE": "ZO0002",
+        "REGION": "MADHYA PRADESH",
+        "ZONE CODE": "ZO0002",
+        "Zone": "WEST",
+        "Reporting Manager Code": "MO1696",
+        "Reporting Manager Name": "Ramanand Lohiya"
+      },
+      {
+        "EMP_CODE": "MD00059",
+        "NAME": "Sanjeev Kumar",
+        "DSGN_NAME": "Relationship Officer",
+        "BRANCH CODE": "YAMU057",
+        "BRANCH": "Yamunanagar",
+        "REGION CODE": "RO0003",
+        "REGION": "PCH",
+        "ZONE CODE": "ZO0003",
+        "Zone": "NORTH",
+        "Reporting Manager Code": "MO1289",
+        "Reporting Manager Name": "Sanjeev Kumar"
+      },
+      {
+        "EMP_CODE": "MD00061",
+        "NAME": "Arun Malik",
+        "DSGN_NAME": "Relationship Officer",
+        "BRANCH CODE": "KARN064",
+        "BRANCH": "Karnal",
+        "REGION CODE": "RO0001",
+        "REGION": "PCH",
+        "ZONE CODE": "ZO0003",
+        "Zone": "NORTH",
+        "Reporting Manager Code": "MO1590",
+        "Reporting Manager Name": "Paramjeet Singh"
+      }
+
+
   ];
+
 
 
   // {
@@ -382,6 +169,66 @@ class _SaveDataState extends State<SaveData> {
   //   ]
   // }
 
+  //
+  // List<Map<String, dynamic>> technicalChecklist = [
+  //   {
+  //     "KERALA": {
+  //       "Home Loan": {
+  //         "Home Extension": {
+  //           "APARTMENT": {
+  //             "Mandatory": [
+  //               {"ID": 1, "Title": "Title Deed"},
+  //               {"ID": 2, "Title": "Location Sketch"},
+  //               {"ID": 3, "Title": "Approved Building plan & Permit"},
+  //               {"ID": 4, "Title": "Construction Estimate"},
+  //               {"ID": 5, "Title": "Land Tax receipt"}
+  //             ],
+  //             "Non Mandatory": [
+  //               {"ID": 1, "Title": "Possession Certificate"},
+  //               {"ID": 2, "Title": "Survey sketch"},
+  //               {"ID": 3, "Title": "Thandaper account statement"},
+  //               {"ID": 4, "Title": "E C"}
+  //             ]
+  //           },
+  //         },
+  //         "Home Improvement/Rennovation": {
+  //           "APARTMENT": {
+  //             "Mandatory": [
+  //               {"ID": 1, "Title": "Title Deed"},
+  //               {"ID": 2, "Title": "Location Sketch"},
+  //               {"ID": 3, "Title": "Approved Building plan & Permit"},
+  //               {"ID": 4, "Title": "Construction Estimate"},
+  //               {"ID": 5, "Title": "Land Tax receipt"}
+  //             ],
+  //             "Non Mandatory": [
+  //               {"ID": 1, "Title": "Possession Certificate"},
+  //               {"ID": 2, "Title": "Survey sketch"},
+  //               {"ID": 3, "Title": "Thandaper account statement"},
+  //               {"ID": 4, "Title": "E C"}
+  //             ]
+  //           }
+  //         },
+  //         "Self-Construction": {
+  //           "APARTMENT": {
+  //             "Mandatory": [
+  //               {"ID": 1, "Title": "Title Deed"},
+  //               {"ID": 2, "Title": "Location Sketch"},
+  //               {"ID": 3, "Title": "Approved Building plan & Permit"},
+  //               {"ID": 4, "Title": "Construction Estimate"},
+  //               {"ID": 5, "Title": "Land Tax receipt"}
+  //             ],
+  //             "Non Mandatory": [
+  //               {"ID": 1, "Title": "Possession Certificate"},
+  //               {"ID": 2, "Title": "Survey sketch"},
+  //               {"ID": 3, "Title": "Thandaper account statement"},
+  //               {"ID": 4, "Title": "E C"}
+  //             ]
+  //           }
+  //         }
+  //       },
+  //     }
+  //   },//Kerala
+  // ];
 
   List<Map<String, dynamic>> technicalChecklist  = [
     {
@@ -390,11 +237,11 @@ class _SaveDataState extends State<SaveData> {
           "Purchase Directly From Builder/Authority": {
             "Apartment": {
               "Mandatory": [
-                {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"}
+                {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
+                {"ID": 2, "Title": "NA order / Receipt"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Approved Plan and commencement certificate"},
-                {"ID": 2, "Title": "NA order / Receipt"}
               ]
             },
             "Villa": {
@@ -419,7 +266,7 @@ class _SaveDataState extends State<SaveData> {
             },
             "Plot": {
               "Mandatory": [
-                {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"}
+                {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Electricity Bill (PDD)"},
@@ -578,6 +425,9 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
                 {"ID": 2, "Title": "Architect Estimate"},
                 {"ID": 3, "Title": "Layout copy/Brochure"}
+              ],
+              "Non Mandatory": [
+                {"ID": 1, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by buyer"}
               ]
             },
             "House": {
@@ -585,6 +435,9 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
                 {"ID": 2, "Title": "Architect Estimate"},
                 {"ID": 3, "Title": "Layout copy/Brochure"}
+              ],
+              "Non Mandatory": [
+                {"ID": 1, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by buyer"}
               ]
             }
           }
@@ -1559,7 +1412,6 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Survey sketch"},
                 {"ID": 3, "Title": "Thandaper account statement"},
                 {"ID": 4, "Title": "E C"},
-                {"ID": 5, "Title": "Possession Certificate"},
               ]
             },
             "House": {
@@ -1576,7 +1428,6 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Survey sketch"},
                 {"ID": 3, "Title": "Thandaper account statement"},
                 {"ID": 4, "Title": "E C"},
-                {"ID": 5, "Title": "Possession Certificate"},
               ]
             },
             "Plot": {
@@ -1593,7 +1444,6 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Survey sketch"},
                 {"ID": 3, "Title": "Thandaper account statement"},
                 {"ID": 4, "Title": "E C"},
-                {"ID": 5, "Title": "Possession Certificate"},
               ]
             }
           },
@@ -1718,6 +1568,21 @@ class _SaveDataState extends State<SaveData> {
             }
           },
           "Home Extension": {
+            "APARTMENT": {
+              "Mandatory": [
+                {"ID": 1, "Title": "Title Deed"},
+                {"ID": 2, "Title": "Location Sketch"},
+                {"ID": 3, "Title": "Approved Building plan & Permit"},
+                {"ID": 4, "Title": "Construction Estimate"},
+                {"ID": 5, "Title": "Land Tax receipt"}
+              ],
+              "Non Mandatory": [
+                {"ID": 1, "Title": "Possession Certificate"},
+                {"ID": 2, "Title": "Survey sketch"},
+                {"ID": 3, "Title": "Thandaper account statement"},
+                {"ID": 4, "Title": "E C"}
+              ]
+            },
             "Villa": {
               "Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -1750,6 +1615,21 @@ class _SaveDataState extends State<SaveData> {
             }
           },
           "Home Improvement/Rennovation": {
+            "APARTMENT": {
+              "Mandatory": [
+                {"ID": 1, "Title": "Title Deed"},
+                {"ID": 2, "Title": "Location Sketch"},
+                {"ID": 3, "Title": "Approved Building plan & Permit"},
+                {"ID": 4, "Title": "Construction Estimate"},
+                {"ID": 5, "Title": "Land Tax receipt"}
+              ],
+              "Non Mandatory": [
+                {"ID": 1, "Title": "Possession Certificate"},
+                {"ID": 2, "Title": "Survey sketch"},
+                {"ID": 3, "Title": "Thandaper account statement"},
+                {"ID": 4, "Title": "E C"}
+              ]
+            },
             "Villa": {
               "Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -1782,6 +1662,21 @@ class _SaveDataState extends State<SaveData> {
             }
           },
           "Self-Construction": {
+            "APARTMENT": {
+              "Mandatory": [
+                {"ID": 1, "Title": "Title Deed"},
+                {"ID": 2, "Title": "Location Sketch"},
+                {"ID": 3, "Title": "Approved Building plan & Permit"},
+                {"ID": 4, "Title": "Construction Estimate"},
+                {"ID": 5, "Title": "Land Tax receipt"}
+              ],
+              "Non Mandatory": [
+                {"ID": 1, "Title": "Possession Certificate"},
+                {"ID": 2, "Title": "Survey sketch"},
+                {"ID": 3, "Title": "Thandaper account statement"},
+                {"ID": 4, "Title": "E C"}
+              ]
+            },
             "Villa": {
               "Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -3164,7 +3059,7 @@ class _SaveDataState extends State<SaveData> {
           "Balance Transfer": {
             "Apartment": {
               "Mandatory": [
-                {"ID": 1, "Title": "Sale deed"},
+                {"ID": 1, "Title": "Title deed"},
                 {"ID": 2, "Title": "Khatha"},
               ],
               "Non Mandatory": [
@@ -3342,7 +3237,6 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Title deed"},
                 {"ID": 3, "Title": "Khatha"},
                 {"ID": 4, "Title": "Layout plan"},
-                {"ID": 5, "Title": "Estimate"},
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Survey sketch"},
@@ -3356,7 +3250,6 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Title deed"},
                 {"ID": 3, "Title": "Khatha"},
                 {"ID": 4, "Title": "Layout plan"},
-                {"ID": 5, "Title": "Estimate"},
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Survey sketch"},
@@ -3886,8 +3779,7 @@ class _SaveDataState extends State<SaveData> {
               "Mandatory": [
                 {"ID": 1, "Title": "Sale deed"},
                 {"ID": 2, "Title": "Plan approval / Architect plan"},
-                {"ID": 3, "Title": "Property tax"},
-                {"ID": 4, "Title": "Estimation"},
+                {"ID": 3, "Title": "Property tax"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -3900,8 +3792,7 @@ class _SaveDataState extends State<SaveData> {
               "Mandatory": [
                 {"ID": 1, "Title": "Sale deed"},
                 {"ID": 2, "Title": "Plan approval / Architect plan"},
-                {"ID": 3, "Title": "Property tax"},
-                {"ID": 4, "Title": "Estimation"},
+                {"ID": 3, "Title": "Property tax"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -3914,8 +3805,7 @@ class _SaveDataState extends State<SaveData> {
               "Mandatory": [
                 {"ID": 1, "Title": "Sale deed"},
                 {"ID": 2, "Title": "Plan approval / Architect plan"},
-                {"ID": 3, "Title": "Property tax"},
-                {"ID": 4, "Title": "Estimation"},
+                {"ID": 3, "Title": "Property tax"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Location Sketch"},
@@ -4454,7 +4344,6 @@ class _SaveDataState extends State<SaveData> {
               "Mandatory": [
                 {"ID": 1, "Title": "Title Deed"},
                 {"ID": 2, "Title": "Agreement to sell"},
-                {"ID": 3, "Title": "Property tax"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Route Map/Key Plan"},
@@ -4464,8 +4353,7 @@ class _SaveDataState extends State<SaveData> {
             "Villa": {
               "Mandatory": [
                 {"ID": 1, "Title": "Title Deed"},
-                {"ID": 2, "Title": "Agreement to sell"},
-                {"ID": 3, "Title": "Property tax"}
+                {"ID": 2, "Title": "Agreement to sell"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Route Map/Key Plan"},
@@ -4475,8 +4363,7 @@ class _SaveDataState extends State<SaveData> {
             "House": {
               "Mandatory": [
                 {"ID": 1, "Title": "Title Deed"},
-                {"ID": 2, "Title": "Agreement to sell"},
-                {"ID": 3, "Title": "Property tax"}
+                {"ID": 2, "Title": "Agreement to sell"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Route Map/Key Plan"},
@@ -4486,8 +4373,7 @@ class _SaveDataState extends State<SaveData> {
             "Plot": {
               "Mandatory": [
                 {"ID": 1, "Title": "Title Deed"},
-                {"ID": 2, "Title": "Agreement to sell"},
-                {"ID": 3, "Title": "Property tax"}
+                {"ID": 2, "Title": "Agreement to sell"}
               ],
               "Non Mandatory": [
                 {"ID": 1, "Title": "Route Map/Key Plan"},
@@ -5214,7 +5100,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 5, "Title": "Mauka patwari/pointer plan required case to case basis"},
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Architect Estimate and Map with proposed area Details (before disbursal)"},
+                {"ID": 1, "Title": "Land conversion letter"},
                 {"ID": 2, "Title": "Society layout plan(Incase where numbering of Plots is seen in sale deed)"}
               ]
             },
@@ -5227,7 +5113,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 5, "Title": "Mauka patwari/pointer plan required case to case basis"},
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Architect Estimate and Map with proposed area Details (before disbursal)"},
+                {"ID": 1, "Title": "Land conversion letter"},
                 {"ID": 2, "Title": "Society layout plan(Incase where numbering of Plots is seen in sale deed)"}
               ]
             }
@@ -5637,7 +5523,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5648,7 +5534,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5659,7 +5545,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5670,7 +5556,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5683,7 +5569,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5695,7 +5581,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5707,7 +5593,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5719,7 +5605,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5732,7 +5618,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5746,7 +5632,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5760,7 +5646,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5774,7 +5660,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5788,7 +5674,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5799,7 +5685,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5810,7 +5696,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5823,7 +5709,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5834,7 +5720,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5845,7 +5731,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5858,7 +5744,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5869,7 +5755,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5880,7 +5766,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5893,7 +5779,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5904,7 +5790,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -5918,7 +5804,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5932,7 +5818,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5946,7 +5832,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5960,7 +5846,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5973,7 +5859,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -5987,7 +5873,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6001,7 +5887,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6015,7 +5901,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6028,7 +5914,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6042,7 +5928,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6056,7 +5942,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6070,7 +5956,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6083,7 +5969,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6097,7 +5983,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6111,7 +5997,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6125,7 +6011,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6138,7 +6024,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6152,7 +6038,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6166,7 +6052,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6180,7 +6066,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6193,7 +6079,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6207,7 +6093,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6221,7 +6107,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6235,7 +6121,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6248,7 +6134,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6262,7 +6148,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6276,7 +6162,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6290,7 +6176,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6303,7 +6189,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6317,7 +6203,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6331,7 +6217,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6345,7 +6231,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6387,7 +6273,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6398,7 +6284,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6409,7 +6295,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6420,7 +6306,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6433,7 +6319,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6445,7 +6331,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6457,7 +6343,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6469,7 +6355,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6482,7 +6368,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6496,7 +6382,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6510,7 +6396,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6524,7 +6410,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6538,7 +6424,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6549,7 +6435,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6560,7 +6446,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6573,7 +6459,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6584,7 +6470,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6595,7 +6481,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6608,7 +6494,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6619,7 +6505,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6630,7 +6516,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6643,7 +6529,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6654,7 +6540,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -6668,7 +6554,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6682,7 +6568,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6696,7 +6582,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6710,7 +6596,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6723,7 +6609,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6737,7 +6623,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6751,7 +6637,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6765,7 +6651,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6778,7 +6664,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6792,7 +6678,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6806,7 +6692,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6820,7 +6706,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6833,7 +6719,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6847,7 +6733,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6861,7 +6747,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6875,7 +6761,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6888,7 +6774,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6902,7 +6788,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6916,7 +6802,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6930,7 +6816,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6943,7 +6829,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6957,7 +6843,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6971,7 +6857,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6985,7 +6871,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -6998,7 +6884,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7012,7 +6898,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7026,7 +6912,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7040,7 +6926,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7053,7 +6939,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7067,7 +6953,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7081,7 +6967,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7095,7 +6981,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7137,7 +7023,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7148,7 +7034,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7159,7 +7045,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7170,7 +7056,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7183,7 +7069,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7195,7 +7081,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7207,7 +7093,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7219,7 +7105,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7232,7 +7118,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7246,7 +7132,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7260,7 +7146,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7274,7 +7160,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7288,7 +7174,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7299,7 +7185,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7310,7 +7196,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7323,7 +7209,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7334,7 +7220,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7345,7 +7231,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7358,7 +7244,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7369,7 +7255,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7380,7 +7266,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7393,7 +7279,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7404,7 +7290,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7418,7 +7304,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7432,7 +7318,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7446,7 +7332,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7460,7 +7346,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7473,7 +7359,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7487,7 +7373,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7501,7 +7387,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7515,7 +7401,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7528,7 +7414,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7542,7 +7428,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7556,7 +7442,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7570,7 +7456,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7583,7 +7469,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7597,7 +7483,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7611,7 +7497,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7625,7 +7511,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7638,7 +7524,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7652,7 +7538,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7666,7 +7552,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7680,7 +7566,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7693,7 +7579,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7707,7 +7593,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7721,7 +7607,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7735,7 +7621,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7748,7 +7634,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7762,7 +7648,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7776,7 +7662,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7790,7 +7676,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7803,7 +7689,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7817,7 +7703,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7831,7 +7717,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7845,7 +7731,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7887,7 +7773,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7898,7 +7784,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7909,7 +7795,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7920,7 +7806,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Building plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "CC / OC, Rera Certificate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -7933,7 +7819,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7945,7 +7831,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7957,7 +7843,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7969,7 +7855,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Seller Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7982,7 +7868,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -7996,7 +7882,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8010,7 +7896,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8024,7 +7910,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8038,7 +7924,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8049,7 +7935,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8060,7 +7946,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8073,7 +7959,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8084,7 +7970,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8095,7 +7981,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8108,7 +7994,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8119,7 +8005,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8130,7 +8016,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8143,7 +8029,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8154,7 +8040,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 2, "Title": "Plan"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Estimate"},
                 {"ID": 3, "Title": "Layout if applicable"}
               ]
@@ -8168,7 +8054,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8182,7 +8068,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8196,7 +8082,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8210,7 +8096,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8223,7 +8109,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8237,7 +8123,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8251,7 +8137,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8265,7 +8151,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8278,7 +8164,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8292,7 +8178,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8306,7 +8192,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8320,7 +8206,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8333,7 +8219,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8347,7 +8233,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8361,7 +8247,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8375,7 +8261,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8388,7 +8274,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8402,7 +8288,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8416,7 +8302,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8430,7 +8316,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8443,7 +8329,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8457,7 +8343,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8471,7 +8357,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8485,7 +8371,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8498,7 +8384,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8512,7 +8398,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8526,7 +8412,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8540,7 +8426,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8553,7 +8439,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 1, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8567,7 +8453,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8581,7 +8467,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8595,7 +8481,7 @@ class _SaveDataState extends State<SaveData> {
                 {"ID": 4, "Title": "Title document"}
               ],
               "Non Mandatory": [
-                {"ID": 1, "Title": "Land diversion order ( NA Order/ Zone certificate / Gaothan certificate /  Land use certificate etc )"},
+                {"ID": 1, "Title": "Land diversion order ( NA Order/ ZONE CODE certificate / Gaothan certificate /  Land use certificate etc )"},
                 {"ID": 2, "Title": "Ebill / PTR"},
                 {"ID": 3, "Title": "CC / OC if applicable"},
                 {"ID": 4, "Title": "Layout if applicable"}
@@ -8631,765 +8517,6 @@ class _SaveDataState extends State<SaveData> {
 
 
 
-
-  List<Map<String, dynamic>> documentChecklist = [
-    {
-      "TAMILNADU": {
-        "Home Loan": {
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Plan approval/Actual plan"},
-              {"ID": 3, "Title": "Estimate"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed in favour of seller"},
-              {"ID": 2, "Title": "Sale agreement"},
-              {"ID": 3, "Title": "Plan approval"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Construction agreement if flat"},
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed in favour of seller"},
-              {"ID": 2, "Title": "Sale agreement"},
-              {"ID": 3, "Title": "Property tax receipt"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Construction agreement if flat"},
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale agreement"},
-              {"ID": 2, "Title": "Layout approval"},
-              {"ID": 3, "Title": "Plan approval/Actual plan"},
-              {"ID": 4, "Title": "Estimate"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "FMB or TSLR/Patta"},
-              {"ID": 2, "Title": "Seller sale deed"},
-              {"ID": 3, "Title": "survery sketch"},
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Plan approval/Actual plan"},
-              {"ID": 3, "Title": "Estimate"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"}
-            ]
-          },
-          "Home Extension": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Plan approval/Actual plan"},
-              {"ID": 3, "Title": "Estimate"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax receipt"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Construction agreement if flat"},
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax receipt"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Construction agreement if flat"},
-            ]
-          },
-          "Balance Transfer - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax receipt"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Construction agreement if flat"},
-            ]
-          },
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Plan approval/Actual plan"}
-            ],
-            "Non Mandatory": [
-              {"ID": 1, "Title": "Lay out"},
-              {"ID": 2, "Title": "FMB or TSLR/Patta"},
-              {"ID": 3, "Title": "survery sketch"},
-              {"ID": 4, "Title": "Property tax/EB"},
-            ]
-          }
-        }
-      }
-    },
-    {
-      "KARNATAKA": {
-        "Home Loan": {
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Khatha"},
-              {"ID": 3, "Title": "Approved / Working plan"},
-              {"ID": 4, "Title": "Estimation"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale agreement"},
-              {"ID": 2, "Title": "Title deed"},
-              {"ID": 3, "Title": "Khatha"},
-              {"ID": 4, "Title": "Approved plan"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale agreement"},
-              {"ID": 2, "Title": "Title deed"},
-              {"ID": 3, "Title": "Khatha"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale agreement"},
-              {"ID": 2, "Title": "Title deed"},
-              {"ID": 3, "Title": "Khatha"},
-              {"ID": 4, "Title": "Layout plan"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Khatha"}
-            ]
-          },
-          "Home Extension": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Khatha"},
-              {"ID": 3, "Title": "Approved / Working plan"},
-              {"ID": 4, "Title": "Estimation"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Khatha"},
-              {"ID": 3, "Title": "Approved / Working plan"},
-              {"ID": 4, "Title": "Estimation"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Khatha"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "TAP": {
-        "Home Loan": {
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Plan approval / Architect plan"},
-              {"ID": 3, "Title": "Estimation"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement of Sale"},
-              {"ID": 2, "Title": "Link document"},
-              {"ID": 3, "Title": "Plan approval / Architect plan"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement of Sale"},
-              {"ID": 2, "Title": "Link document"},
-              {"ID": 3, "Title": "Property tax"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement of Sale"},
-              {"ID": 2, "Title": "Link document"},
-              {"ID": 3, "Title": "Estimation"},
-              {"ID": 4, "Title": "Plan approval / Architect plan"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Link document"},
-              {"ID": 3, "Title": "Estimation"},
-              {"ID": 4, "Title": "Property tax"}
-            ]
-          },
-          "Home Extension": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Link document"},
-              {"ID": 3, "Title": "Estimation for Extension"},
-              {"ID": 4, "Title": "Plan approval / Architect plan"},
-              {"ID": 5, "Title": "Property tax"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax"}
-            ]
-          },
-          "Balance Transfer - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax"}
-            ]
-          },
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Property tax"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "GUJARAT": {
-        "Home Loan": {
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement for sale/Allotment letter"},
-              {"ID": 2, "Title": "Construction Permission"},
-              {"ID": 3, "Title": "Approved lay out/Building plan"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement for sale"},
-              {"ID": 2, "Title": "Tax bill"},
-              {"ID": 3, "Title": "Electricity bill"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Approved lay out/Building plan/Draft plan"},
-              {"ID": 3, "Title": "Estimate"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Tax bill"},
-              {"ID": 3, "Title": "Electricity bill"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Construction Permission"},
-              {"ID": 3, "Title": "Approved lay out/Building plan"},
-              {"ID": 4, "Title": "Estimate"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Construction Permission"},
-              {"ID": 3, "Title": "Approved lay out/Building plan"},
-              {"ID": 4, "Title": "Estimate"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "MADHYA PRADESH": {
-        "Home Loan": {
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission by Municipal / DA"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "Diversion Order"},
-              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 6, "Title": "Detailed Estimate/ Architect Plan"},
-              {"ID": 7, "Title": "Latest Property Tax paid receipt"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
-              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
-              {"ID": 4, "Title": "Diversion Order"},
-              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 6, "Title": "RERA Registration copy if applicable"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
-              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
-              {"ID": 4, "Title": "Diversion Order"},
-              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 6, "Title": "Latest Property Tax paid receipt"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "Diversion order"},
-              {"ID": 5, "Title": "Latest Property Tax paid receipt"},
-              {"ID": 6, "Title": "T&CP Layout/ Builder Layout if applicable"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "Diversion Order"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "Detailed Estimate"},
-              {"ID": 7, "Title": "Latest Property Tax paid receipt"}
-            ]
-          },
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal/ Arcitect Plan"},
-              {"ID": 2, "Title": "Construction permission"},
-              {"ID": 3, "Title": "Agreement to sale / Draft Agreement/ Sale Deed"},
-              {"ID": 4, "Title": "Diversion Order"},
-              {"ID": 5, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 6, "Title": "Latest Property Tax Paid Receipt/ E-bill"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "RAJASTHAN": {
-        "Home Loan": {
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Estimate for construction with proposed construction plan"},
-              {"ID": 3, "Title": "Layout plan"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Estimate for extension with proposed construction plan"},
-              {"ID": 3, "Title": "Layout plan"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Sale agreement"},
-              {"ID": 3, "Title": "Layout plan"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Sale agreement"},
-              {"ID": 3, "Title": "Layout plan"},
-              {"ID": 4, "Title": "Floor Plan"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Sale agreement"},
-              {"ID": 3, "Title": "Proposed estimate for construction"},
-              {"ID": 4, "Title": "Layout plan of scheme"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title deed"},
-              {"ID": 2, "Title": "Layout plan"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "UTTAR PRADESH": {
-        "Home Loan": {
-          "Self-Construction/ Improvement/Extension": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Applicant’s sale deed"},
-              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 3, "Title": "Detailed Estimate/ Architect Plan"},
-              {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan/floor plan by approved architect"},
-              {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
-              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 4, "Title": "RERA Registration copy if applicable"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by approved architect"},
-              {"ID": 2, "Title": "Agreement to sale / Draft Agreement/ Seller Deed"},
-              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 4, "Title": "E-bill/Latest Property Tax paid receipt"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Applicant’s sale deed"},
-              {"ID": 2, "Title": "E-bill/Latest Property Tax paid receipt"},
-              {"ID": 3, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 4, "Title": "Layout plan if applicable"},
-              {"ID": 5, "Title": "Detailed Estimate &map"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Agreement to Sale"},
-              {"ID": 3, "Title": "Society layout plan (In case where numbering of Plots is seen in sale deed)"},
-              {"ID": 4, "Title": "Architect drawn Map & Estimate"},
-              {"ID": 5, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
-              {"ID": 6, "Title": "Mauka patwari/pointer plan required case to case basis"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement to sale / Draft Agreement/ Sale Deed"},
-              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 3, "Title": "Latest Property Tax Paid Receipt/ E-bill"}
-            ]
-          },
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Applicant’s sale deed"},
-              {"ID": 2, "Title": "T&CP Layout/ Builder Layout if applicable"},
-              {"ID": 3, "Title": "Latest Property Tax paid receipt"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "ROM": {
-        "Home Loan": {
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA"},
-              {"ID": 3, "Title": "Agreement to sale / Draft Agreement"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "RERA Registration copy if applicable"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Copy of seller sale deed"},
-              {"ID": 4, "Title": "Agreement to sale / Draft Agreement"},
-              {"ID": 5, "Title": "N.A. Order / Property Card /Zone Certificate"},
-              {"ID": 6, "Title": "Layout plan if applicable"},
-              {"ID": 7, "Title": "Latest Tax paid receipt"}
-            ]
-          },
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan"},
-              {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "Detailed Estimate"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan for proposed area"},
-              {"ID": 2, "Title": "Construction permission by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "Detailed Estimate for proposed area"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Refinance": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA / Architect plan"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "Detailed Estimate"}
-            ]
-          },
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sanction building plan by Municipal / DA if applicable"},
-              {"ID": 2, "Title": "Construction permission / Regularization order by Municipal / DA if applicable"},
-              {"ID": 3, "Title": "Applicant’s sale deed"},
-              {"ID": 4, "Title": "N.A. Order / Property Card / Zone Certificate"},
-              {"ID": 5, "Title": "Layout plan if applicable"},
-              {"ID": 6, "Title": "Latest Tax paid receipt"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "DNCR": {
-        "Home Loan": {
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Agreement to Sale"},
-              {"ID": 3, "Title": "Colony layout plan (In case where numbering of Plots is seen in sale deed, )"},
-              {"ID": 4, "Title": "Architect building plan & construction Estimate)"},
-              {"ID": 5, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
-              {"ID": 6, "Title": "Mauka patwari/pointer plan required case to case basis"}
-            ]
-          },
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Architect building plan & construction Estimate"},
-              {"ID": 3, "Title": "Architect drawn/Hand made route sketch of the property from the nearest landmark duly signed by seller & buyer"},
-              {"ID": 4, "Title": "Mauka patwari/pointer plan required case to case basis."}
-            ]
-          },
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
-              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
-              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
-              {"ID": 2, "Title": "Approved Plan and commencement certificate"},
-              {"ID": 3, "Title": "NA order"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Top-Up": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Electrcity Bill or Latest utility bill"},
-              {"ID": 3, "Title": "Architect/Hand made route sketch of the property from the nearest landmark duly signed by applicant"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "PCH": {
-        "Home Loan": {
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title Document"},
-              {"ID": 2, "Title": "ATS"},
-              {"ID": 3, "Title": "Estimate and Map Req. during initiation"}
-            ]
-          },
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title Document"},
-              {"ID": 2, "Title": "ATS"},
-              {"ID": 3, "Title": "HTA if Applicable"}
-            ]
-          },
-          "Self-Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Title Document"},
-              {"ID": 2, "Title": "Estimate and Map Req. during initiation"}
-            ]
-          },
-          "Home Improvement/Rennovation": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Construction Map and Renovation Estimate"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Electricity Bill"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale Deed"},
-              {"ID": 2, "Title": "Electricity Bill"}
-            ]
-          }
-        }
-      }
-    },
-    {
-      "MUMBAI": {
-        "Home Loan": {
-          "Purchase Directly From Builder/Authority": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Draft/Agreement to sale/Allotment letter"},
-              {"ID": 2, "Title": "Approved Plan and commencement certificate"},
-              {"ID": 3, "Title": "NA order"},
-              {"ID": 4, "Title": "Namuna 8A"},
-              {"ID": 5, "Title": "Fore Boundary Certificate"},
-              {"ID": 6, "Title": "Gaothan Certificate"}
-            ]
-          },
-          "Resale Purchase": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement to sale/Draft Agreement/Allotment Letter"},
-              {"ID": 2, "Title": "Approved Plan and Commencement certificate"},
-              {"ID": 3, "Title": "NA order"},
-              {"ID": 4, "Title": "Namuna 8A"},
-              {"ID": 5, "Title": "Fore Boundary Certificate"},
-              {"ID": 6, "Title": "Gaothan Certificate"}
-            ]
-          },
-          "Plot Purchase+Construction": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Sale deed"},
-              {"ID": 2, "Title": "Registered Architect Plan Copy"},
-              {"ID": 3, "Title": "NA order and Layout plan"},
-              {"ID": 4, "Title": "Registered Architect Estimate"},
-              {"ID": 5, "Title": "Namuna 8A"},
-              {"ID": 6, "Title": "Fore Boundary Certificate"},
-              {"ID": 7, "Title": "Gaothan Certificate"}
-            ]
-          },
-          "Balance Transfer": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
-              {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
-              {"ID": 3, "Title": "NA order"},
-              {"ID": 4, "Title": "Namuna 8A"},
-              {"ID": 5, "Title": "Fore Boundary Certificate"},
-              {"ID": 6, "Title": "Gaothan Certificate"}
-            ]
-          }
-        },
-        "Non-Home Loan": {
-          "Normal - Loan Against Residential Property": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement to sale/Allotment Letter"},
-              {"ID": 2, "Title": "Approved Plan and Commencement certificate or Tax Receipt"},
-              {"ID": 3, "Title": "NA order"},
-              {"ID": 4, "Title": "Namuna 8A"},
-              {"ID": 5, "Title": "Fore Boundary Certificate"},
-              {"ID": 6, "Title": "Gaothan Certificate"}
-            ]
-          },
-          "Top-Up": {
-            "Mandatory": [
-              {"ID": 1, "Title": "Agreement to Sale/Allotment Letter"},
-              {"ID": 2, "Title": "Ebill"}
-            ]
-          }
-        }
-      }
-    }
-  ];
-
   // void pushData() async {
   //   FirebaseFirestore.instance
   //       .collection("technicalChecklist")
@@ -9397,6 +8524,7 @@ class _SaveDataState extends State<SaveData> {
   //       .update({"technicalChecklist": FieldValue.arrayUnion(technicalChecklist)});
   //   print("hi");
   // }
+
   void pushData() async {
     FirebaseFirestore.instance
         .collection("employeeMapping")
@@ -9405,7 +8533,9 @@ class _SaveDataState extends State<SaveData> {
       "employeeMapping": FieldValue.arrayUnion(employeeMapping)
     }, SetOptions(merge: true));
     print("hi");
+
   }
+
 
   @override
   Widget build(BuildContext context) {
