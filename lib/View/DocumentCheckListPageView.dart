@@ -67,7 +67,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
       };
       leadsCollection.where('LeadID', isEqualTo: widget.leadId).get().then((querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
-          print(querySnapshot.docs.isNotEmpty);
+       //   print(querySnapshot.docs.isNotEmpty);
           leadsCollection.doc(querySnapshot.docs.first.id).update(params).then((value) {
             print("Data updated to Leads successfully");
             _showAlertDialogSuccess2(context);
@@ -168,7 +168,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
             if(key == uppercaseRegion) {
               setState(() {
                 mandatoryDocuments = value[productCategory][purposeOfLoan]['Mandatory'];
-                log(mandatoryDocuments.toString());
+             //   log(mandatoryDocuments.toString());
               });
             }
           });
@@ -547,7 +547,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                             maxHeight: 640,
                             maxWidth: 820,
                             imageQuality: 60);
-                        print(pickedFile);
+                     //   print(pickedFile);
                         if (pickedFile != null) {
                           uploadOnDMS(pickedFile,title,documentId);
                         } else {
@@ -594,7 +594,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                           allowMultiple: false,
                         );
                         //  pickedFiles?.files.first
-                        print(pickedFiles!.files.first.name);
+                     //   print(pickedFiles!.files.first.name);
                         uploadOnDMS(pickedFiles!.files.first, title,documentId);
                       },
                       trailing: Icon(

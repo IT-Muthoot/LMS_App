@@ -356,7 +356,7 @@ String? technicalDocumentStatus;
       setState(() {
         isTechChecklistNotExisting = true;  // Error occurred, set to true
       });
-      log('Error fetching data: $e');
+     // log('Error fetching data: $e');
     }
   }
 
