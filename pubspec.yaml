@@ -64,7 +64,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   open_file: ^3.3.2
   flutter_smart_dialog: ^4.9.6
-#  freerasp: ^6.5.1
+  freerasp: ^6.5.1
   connectivity_plus: ^6.0.2
 #  device_preview: ^1.1.0
   fl_chart: ^0.67.0
