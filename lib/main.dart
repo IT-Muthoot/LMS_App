@@ -1,7 +1,6 @@
 
 
 import 'dart:convert';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -72,7 +71,16 @@ void setupFirebaseMessaging(BuildContext context) {
           priority: Priority.high,
           showWhen: false,
         );
-        const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+        const DarwinNotificationDetails iosPlatformChannelSpecifics = DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        );
+        // const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+        // const NotificationDetails platformChannelSpecifics1 = NotificationDetails(iOS: iosPlatformChannelSpecifics);
+        // Combine platform-specific notification details
+        const NotificationDetails platformChannelSpecifics = NotificationDetails(
+            android: androidPlatformChannelSpecifics, iOS: iosPlatformChannelSpecifics);
         await flutterLocalNotificationsPlugin.show(
           0,
           title,
@@ -115,7 +123,9 @@ Future<void> main() async {
 
   // Initialize local notification
   const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+  const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings();
+
+  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) async {
@@ -137,46 +147,46 @@ Future<void> main() async {
     handleNotificationClick(initialMessage.data);
   }
 
-  // runApp(
-  //   MultiProvider(
-  //     providers: [
-  //       ChangeNotifierProvider(
-  //         create: (_) {
-  //           final provider = NotificationProvider();
-  //           provider.setNotifications(notifications);
-  //           return provider;
-  //         },
-  //       ),
-  //     ],
-  //     child: Builder(
-  //       builder: (context) {
-  //         setupFirebaseMessaging(context);
-  //         return MyApp();
-  //       },
-  //     ),
-  //   ),
-  // );
-
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) =>  MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) {
-              final provider = NotificationProvider();
-              provider.setNotifications(notifications);
-              return provider;
-            },
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            setupFirebaseMessaging(context);
-            return MyApp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = NotificationProvider();
+            provider.setNotifications(notifications);
+            return provider;
           },
         ),
+      ],
+      child: Builder(
+        builder: (context) {
+          setupFirebaseMessaging(context);
+          return MyApp();
+        },
       ),
-  ));
+    ),
+  );
+
+  // runApp(DevicePreview(
+  //   enabled: !kReleaseMode,
+  //   builder: (context) =>  MultiProvider(
+  //       providers: [
+  //         ChangeNotifierProvider(
+  //           create: (_) {
+  //             final provider = NotificationProvider();
+  //             provider.setNotifications(notifications);
+  //             return provider;
+  //           },
+  //         ),
+  //       ],
+  //       child: Builder(
+  //         builder: (context) {
+  //           setupFirebaseMessaging(context);
+  //           return MyApp();
+  //         },
+  //       ),
+  //     ),
+  // ));
 
   //
   // Handle dynamic links

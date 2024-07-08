@@ -66,12 +66,12 @@ dependencies:
   flutter_smart_dialog: ^4.9.6
 #  freerasp: ^6.5.1
   connectivity_plus: ^6.0.2
-  device_preview: ^1.1.0
+#  device_preview: ^1.1.0
   fl_chart: ^0.67.0
   shimmer: ^3.0.0
   firebase_messaging: ^14.7.15
   firebase_analytics: ^10.8.5
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.2.1+1
   provider: ^6.1.2
   firebase_dynamic_links: ^5.3.0
 
