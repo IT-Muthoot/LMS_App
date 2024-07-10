@@ -24,88 +24,164 @@ class _SaveDataState extends State<SaveData> {
     {"title": "Sr.", "id": 11},
   ];
 
-  List<Map<String, dynamic>> employeeMapping = [
-      {
-        "EMP_CODE": "MD00048",
-        "NAME": "Manju Varghese",
-        "DSGN_NAME": "Relationship Manager",
-        "BRANCH CODE": "KOCH001",
-        "BRANCH": "KOCHI",
-        "REGION CODE": "RO0001",
-        "REGION": "KERALA",
-        "ZONE CODE": "ZO0001",
-        "Zone": "SOUTH",
-        "Reporting Manager Code": "MO1309",
-        "Reporting Manager Name": "SAFDER G"
-      },
-      {
-        "EMP_CODE": "MD00051",
-        "NAME": "Rupesh Metkar",
-        "DSGN_NAME": "Relationship Manager",
-        "BRANCH CODE": "NAGP010",
-        "BRANCH": "Nagpur",
-        "REGION CODE": "ZO0002",
-        "REGION": "ROM",
-        "ZONE CODE": "ZO0002",
-        "Zone": "WEST",
-        "Reporting Manager Code": "MO1756",
-        "Reporting Manager Name": "Kiran Ambade"
-      },
-      {
-        "EMP_CODE": "MD00055",
-        "NAME": "Raghu Rathnagiri",
-        "DSGN_NAME": "Relationship Manager",
-        "BRANCH CODE": "BANG053",
-        "BRANCH": "Bangalore",
-        "REGION CODE": "RO0010",
-        "REGION": "KARNATAKA",
-        "ZONE CODE": "ZO0001",
-        "Zone": "SOUTH",
-        "Reporting Manager Code": "MO1101",
-        "Reporting Manager Name": "Rahul R"
-      },
-      {
-        "EMP_CODE": "MD00056",
-        "NAME": "Amit Tiwari",
-        "DSGN_NAME": "Relationship Officer",
-        "BRANCH CODE": "BHOP013",
-        "BRANCH": "Bhopal",
-        "REGION CODE": "ZO0002",
-        "REGION": "MADHYA PRADESH",
-        "ZONE CODE": "ZO0002",
-        "Zone": "WEST",
-        "Reporting Manager Code": "MO1696",
-        "Reporting Manager Name": "Ramanand Lohiya"
-      },
-      {
-        "EMP_CODE": "MD00059",
-        "NAME": "Sanjeev Kumar",
-        "DSGN_NAME": "Relationship Officer",
-        "BRANCH CODE": "YAMU057",
-        "BRANCH": "Yamunanagar",
-        "REGION CODE": "RO0003",
-        "REGION": "PCH",
-        "ZONE CODE": "ZO0003",
-        "Zone": "NORTH",
-        "Reporting Manager Code": "MO1289",
-        "Reporting Manager Name": "Sanjeev Kumar"
-      },
-      {
-        "EMP_CODE": "MD00061",
-        "NAME": "Arun Malik",
-        "DSGN_NAME": "Relationship Officer",
-        "BRANCH CODE": "KARN064",
-        "BRANCH": "Karnal",
-        "REGION CODE": "RO0001",
-        "REGION": "PCH",
-        "ZONE CODE": "ZO0003",
-        "Zone": "NORTH",
-        "Reporting Manager Code": "MO1590",
-        "Reporting Manager Name": "Paramjeet Singh"
-      }
-
-
+  List<Map<String, dynamic>> employeeMapping =
+  [
+    {
+      "EMP_CODE": "MD00062",
+      "NAME": "Anil Bharti",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "JODH014",
+      "BRANCH": "Jodhpur",
+      "REGION CODE": "RO0006",
+      "REGION": "RAJASTHAN",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1649",
+      "Reporting Manager Name": "Mukesh Suthar",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00068",
+      "NAME": "Sukhdev Kumar",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "SIRS090",
+      "BRANCH": "Sirsa",
+      "REGION CODE": "RO0001",
+      "REGION": "PCH",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1386",
+      "Reporting Manager Name": "VIVEK KUMAR",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00069",
+      "NAME": "Somvir Malik",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "ROHT094",
+      "BRANCH": "Rohtak",
+      "REGION CODE": "RO0001",
+      "REGION": "PCH",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1471",
+      "Reporting Manager Name": "MAHESH .",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00070",
+      "NAME": "Panera Pratik Masaribhai",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "JUNA042",
+      "BRANCH": "Junagadh",
+      "REGION CODE": "RO0005",
+      "REGION": "GUJARAT",
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1656",
+      "Reporting Manager Name": "Chintan Dave",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00071",
+      "NAME": "Pooja Sharma",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "LUCK078",
+      "BRANCH": "Lucknow",
+      "REGION CODE": "RO0012",
+      "REGION": "UTTAR PRADESH",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1760",
+      "Reporting Manager Name": "VIBHOR AWASTHI",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00072",
+      "NAME": "Pawan Kumar",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "AJME022",
+      "BRANCH": "Ajmer",
+      "REGION CODE": "RO0006",
+      "REGION": "RAJASTHAN",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1617",
+      "Reporting Manager Name": "KAMAL CHOUHAN",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00073",
+      "NAME": "Tilak Tomar",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "KANP018",
+      "BRANCH": "Kanpur",
+      "REGION CODE": "RO0012",
+      "REGION": "UTTAR PRADESH",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1758",
+      "Reporting Manager Name": "ANKIT DWIVEDI",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00074",
+      "NAME": "Vijay Rakshe",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "SOLA019",
+      "BRANCH": "Solapur",
+      "REGION CODE": "ZO0002",
+      "REGION": "ROM",
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1138",
+      "Reporting Manager Name": "Fahim Shaikh",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00076",
+      "NAME": "Sunakshi",
+      "DSGN_NAME": "Relationship Manager",
+      "BRANCH CODE": "PATI077",
+      "BRANCH": "Patiala",
+      "REGION CODE": "RO0001",
+      "REGION": "PCH",
+      "ZONE CODE": "ZO0003",
+      "ZONE": "NORTH",
+      "Reporting Manager Code": "MO1316",
+      "Reporting Manager Name": "SATKARJEET SINGH",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00077",
+      "NAME": "Vivek Sharma",
+      "DSGN_NAME": "Relationship Officer",
+      "BRANCH CODE": "GWAL026",
+      "BRANCH": "Gwalior",
+      "REGION CODE": "RO0004",
+      "REGION": "MADHYA PRADESH",
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1538",
+      "Reporting Manager Name": "AVINASH JADON",
+      "DSGN_NAME": "SALES MANAGER"
+    },
+    {
+      "EMP_CODE": "MD00078",
+      "NAME": "Narayan Sitaram Bandekar",
+      "DSGN_NAME": "Relationship Manager",
+      "BRANCH CODE": "KALY037",
+      "BRANCH": "MUMBAI - KALYAN",
+      "REGION CODE": "RO0002",
+      "REGION": "MUMBAI",
+      "ZONE CODE": "ZO0002",
+      "ZONE": "WEST",
+      "Reporting Manager Code": "MO1388",
+      "Reporting Manager Name": "SANTOSH DESHMUKH",
+      "DSGN_NAME": "SALES MANAGER"
+    }
   ];
+
 
 
 
