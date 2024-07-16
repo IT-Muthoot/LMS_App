@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lead_management_system/Model/apiurls.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -144,15 +145,14 @@ class _SplashViewState extends State<SplashView> {
         };
         var data = {
           'grant_type': 'password',
-          'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-          'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-          'username': 'salesappuser@muthoothomefin.com',
-          // 'password': 'Karthikrishna@12y7630AbZERemUschpI8nDyy4d'
-          'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+          'client_id': ApiUrls().clientIdUAT,
+          'client_secret': ApiUrls().clientSecretUAT,
+          'username': ApiUrls().userNameUAT,
+          'password': ApiUrls().passwordUAT
         };
         var dio = Dio();
         var response = await dio.request(
-          'https://muthootltd.my.salesforce.com/services/oauth2/token',
+          ApiUrls().accessTokenUAT,
           options: Options(
             method: 'POST',
             headers: headers,

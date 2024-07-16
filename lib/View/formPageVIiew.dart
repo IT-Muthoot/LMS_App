@@ -16,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/Response/DropDownModel.dart';
+import '../Model/apiurls.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 import 'VisitPageView.dart';
@@ -243,8 +244,7 @@ class _FormPageViewState extends State<FormPageView> {
    // print(data);
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/apexrest/VisitApi/',
-  // 'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/',
+   ApiUrls().visitCreationUAT,
         options: Options(
           method: 'POST',
           headers: headers,
@@ -605,10 +605,10 @@ async {
   };
   var data = {
     'grant_type': 'password',
-    'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-    'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-    'username': 'salesappuser@muthoothomefin.com',
-    'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+    'client_id': ApiUrls().clientIdUAT,
+    'client_secret': ApiUrls().clientSecretUAT,
+    'username': ApiUrls().userNameUAT,
+    'password': ApiUrls().passwordUAT
     // 'grant_type': 'password',
     // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
     // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
@@ -617,8 +617,7 @@ async {
   };
   var dio = Dio();
   var response = await dio.request(
-   //'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
-    'https://muthootltd.my.salesforce.com/services/oauth2/token',
+    ApiUrls().accessTokenUAT,
     options: Options(
       method: 'POST',
       headers: headers,

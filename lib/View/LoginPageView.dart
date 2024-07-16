@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Model/apiurls.dart';
 import 'ForgotPasswordView.dart';
 import 'HomePageView.dart';
 import 'RegisterPageView.dart';
@@ -49,14 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
     };
     var data = {
       'grant_type': 'password',
-      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      'username': 'salesappuser@muthoothomefin.com',
-      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      'client_id': ApiUrls().clientIdUAT,
+      'client_secret': ApiUrls().clientSecretUAT,
+      'username': ApiUrls().userNameUAT,
+      'password': ApiUrls().passwordUAT
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/oauth2/token',
+      ApiUrls().accessTokenUAT,
       options: Options(
         method: 'POST',
         headers: headers,

@@ -44,6 +44,7 @@ class DocumentPageView extends StatefulWidget {
 class _DocumentPageViewState extends State<DocumentPageView> {
   bool isVerification = false;
   XFile? pickedFile;
+  String? accessToken;
 
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
@@ -466,7 +467,7 @@ String? technicalDocumentStatus;
         "PropertyType": propertyType,
         "ConsentForCrif": isCrifCheck,
         "ConsentForKyc": isKycCheck,
-        "IsDocumentCollected": true,
+      //  "IsDocumentCollected": true,
         "isDirectLeads": true,
         "Createdby": employeeName,
         "CreatedbyCode": employeeCode
@@ -499,8 +500,7 @@ String? technicalDocumentStatus;
    // print(data);
     var dio = Dio();
     var response = await dio.request(
-    'https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/',
-   //   'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/',
+   ApiUrls().leadCreationUAT,
       options: Options(
         method: 'POST',
         headers: headers,
@@ -568,10 +568,10 @@ String? technicalDocumentStatus;
     };
     var data = {
       'grant_type': 'password',
-      'client_id': '3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf',
-      'client_secret': '4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84',
-      'username': 'salesappuser@muthoothomefin.com',
-      'password': 'Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq'
+      'client_id': ApiUrls().clientIdUAT,
+      'client_secret': ApiUrls().clientSecretUAT,
+      'username': ApiUrls().userNameUAT,
+      'password': ApiUrls().passwordUAT
       // 'grant_type': 'password',
       // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
       // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
@@ -580,8 +580,7 @@ String? technicalDocumentStatus;
     };
     var dio = Dio();
     var response = await dio.request(
-      'https://muthootltd.my.salesforce.com/services/oauth2/token',
-    //  'https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token',
+      ApiUrls().accessTokenUAT,
       options: Options(
         method: 'POST',
         headers: headers,
@@ -2961,7 +2960,28 @@ String? technicalDocumentStatus;
               onTap: () async {
                 Navigator.pop(context);
                 SmartDialog.showLoading(msg: "Uploading Document");
+                var headers = {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'AuthToken': ApiUrls().AuthToken
+                };
                 var dio = Dio();
+                var response = await dio.request(
+                  ApiUrls().authGenerate,
+                  options: Options(
+                    method: 'GET',
+                    headers: headers,
+                  ),
+                );
+
+                if (response.statusCode == 200) {
+                  print(json.encode(response.data));
+                  String jsonResponse = json.encode(response.data);
+                  Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+                  accessToken = jsonMap['access_token'];
+                }
+                else {
+                  print(response.statusMessage);
+                }
                 try {
                   FormData formData = FormData.fromMap({
                     "File": await MultipartFile.fromFile(
@@ -2989,8 +3009,9 @@ String? technicalDocumentStatus;
                     client.badCertificateCallback =
                         (X509Certificate cert, String host, int port) => true;
                   };
-                  dio.options.headers['Content-Type'] = 'multipart/form-data';
-
+                  // dio.options.headers['Content-Type'] = 'multipart/form-data';
+                  dio.options.headers['AuthToken'] =  ApiUrls().AuthToken;
+                  dio.options.headers['Authorization'] = 'Bearer ${accessToken ?? ''}';
                   var response = await dio.post(
                     ApiUrls().uploadDoc,
                     data: formData,
@@ -3119,7 +3140,28 @@ String? technicalDocumentStatus;
               onTap: () async {
                 Navigator.pop(context);
                 SmartDialog.showLoading(msg: "Uploading Document");
+                var headers = {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'AuthToken': ApiUrls().AuthToken
+                };
                 var dio = Dio();
+                var response = await dio.request(
+                  ApiUrls().authGenerate,
+                  options: Options(
+                    method: 'GET',
+                    headers: headers,
+                  ),
+                );
+
+                if (response.statusCode == 200) {
+                  print(json.encode(response.data));
+                  String jsonResponse = json.encode(response.data);
+                  Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+                  accessToken = jsonMap['access_token'];
+                }
+                else {
+                  print(response.statusMessage);
+                }
                 try {
                   FormData formData = FormData.fromMap({
                     "File": await MultipartFile.fromFile(
@@ -3147,8 +3189,9 @@ String? technicalDocumentStatus;
                     client.badCertificateCallback =
                         (X509Certificate cert, String host, int port) => true;
                   };
-                  dio.options.headers['Content-Type'] = 'multipart/form-data';
-
+                  // dio.options.headers['Content-Type'] = 'multipart/form-data';
+                  dio.options.headers['AuthToken'] =  ApiUrls().AuthToken;
+                  dio.options.headers['Authorization'] = 'Bearer ${accessToken ?? ''}';
                   var response = await dio.post(
                     ApiUrls().uploadDoc,
                     data: formData,

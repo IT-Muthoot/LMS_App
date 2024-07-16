@@ -44,6 +44,7 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
   Map<String, bool> documentCheckboxStates = {};
   Map<String, String> uploadedFileNames = {};
   var checklistData;
+  String? accessToken;
 
 
 
@@ -631,9 +632,31 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: InkWell(
               onTap: () async {
+                var headers = {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'AuthToken': ApiUrls().AuthToken
+                };
+               var dio = Dio();
+                var response = await dio.request(
+                  ApiUrls().authGenerate,
+                  options: Options(
+                    method: 'GET',
+                    headers: headers,
+                  ),
+                );
+
+                if (response.statusCode == 200) {
+                  print(json.encode(response.data));
+                  String jsonResponse = json.encode(response.data);
+                  Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+                  accessToken = jsonMap['access_token'];
+                }
+                else {
+                  print(response.statusMessage);
+                }
                 Navigator.pop(context);
                 SmartDialog.showLoading(msg: "Uploading Document");
-                var dio = Dio();
+              //  var dio = Dio();
                 try {
                   FormData formData = FormData.fromMap({
                     "File": await MultipartFile.fromFile(
@@ -662,8 +685,9 @@ class _DocumentChecklistPageViewState extends State<DocumentChecklistPageView> {
                     client.badCertificateCallback =
                         (X509Certificate cert, String host, int port) => true;
                   };
-                  dio.options.headers['Content-Type'] = 'multipart/form-data';
-                  // dio.options.headers['Host'] = '6cpduvi80d.execute-api.ap-south-1.amazonaws.com';
+                  // dio.options.headers['Content-Type'] = 'multipart/form-data';
+                  dio.options.headers['AuthToken'] =  ApiUrls().AuthToken;
+                  dio.options.headers['Authorization'] = 'Bearer ${accessToken ?? ''}';
 
                   var response = await dio.post(
                     ApiUrls().uploadDoc,
