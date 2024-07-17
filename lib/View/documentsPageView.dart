@@ -467,7 +467,7 @@ String? technicalDocumentStatus;
         "PropertyType": propertyType,
         "ConsentForCrif": isCrifCheck,
         "ConsentForKyc": isKycCheck,
-      //  "IsDocumentCollected": true,
+        "IsDocumentCollected": true,
         "isDirectLeads": true,
         "Createdby": employeeName,
         "CreatedbyCode": employeeCode
@@ -507,6 +507,7 @@ String? technicalDocumentStatus;
       ),
       data: data,
     );
+    print(data);
     try {
       if (response.statusCode == 200) {
         //  Navigator.pop(context);
