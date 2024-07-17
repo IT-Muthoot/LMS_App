@@ -145,14 +145,14 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
     };
     var data = {
       'grant_type': 'password',
-      'client_id': ApiUrls().clientIdUAT,
-      'client_secret': ApiUrls().clientSecretUAT,
-      'username': ApiUrls().userNameUAT,
-      'password': ApiUrls().passwordUAT
+      'client_id': ApiUrls().clientIdProduction,
+      'client_secret': ApiUrls().clientSecretProduction,
+      'username': ApiUrls().userNameProduction,
+      'password': ApiUrls().passwordProduction
     };
     var dio = Dio();
     var response = await dio.request(
-      ApiUrls().accessTokenUAT,
+      ApiUrls().accessTokenProduction,
       options: Options(
         method: 'POST',
         headers: headers,
