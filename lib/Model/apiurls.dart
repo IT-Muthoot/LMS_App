@@ -34,6 +34,4 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
   String clientSecretProduction = "4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84";
   String userNameProduction = "salesappuser@muthoothomefin.com";
   String passwordProduction = "Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq";
-
-
 }

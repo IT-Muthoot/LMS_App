@@ -245,8 +245,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: SplashView(Token: FCMToken.toString()),
- //SaveData(),
+      home:
+      SplashView(Token: FCMToken.toString()),
+   //  SaveData(),
     );
   }
 }
