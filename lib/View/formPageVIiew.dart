@@ -2104,7 +2104,7 @@ async {
             elevation: 0, // No shadow
             content: Container(
               height:200,
-              width: 190,
+              width: 200,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -2112,7 +2112,7 @@ async {
                     child:
                     Container(
                       height: 80,
-                      width: 60,
+                      width: 65,
                       decoration: BoxDecoration(
                           color: Colors.green,
                           shape: BoxShape.circle
