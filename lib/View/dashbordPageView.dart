@@ -235,7 +235,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
             child: Column(
               children: [
                 Container(
-                  height: height * 0.089,
+                  height: height * 0.092,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: StyleData.buttonColor,
