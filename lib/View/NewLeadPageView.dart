@@ -10,6 +10,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:lead_management_system/Model/apiurls.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +67,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   bool areFieldsFilled = false;
   bool consentCRIF = false;
   bool consentKYC = false;
+  bool consentAccountAgregator = false;
   var userType;
   List<DocumentSnapshot> ListOfLeads = [];
   List<Map<dynamic, dynamic>> ListOfDSANames = [];
@@ -114,6 +116,8 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   bool isLeadsDataSaved = false;
   bool isLeadsUpdateData = false;
   bool isClickNext = false;
+  String? selfieImageURl;
+  String? selfieCapturedDateTime;
 
   final List<String> _residentialType= [
     'Self owned',
@@ -479,6 +483,8 @@ String? SalutaionID;
         DSAConnectorCode1 = docData["DSAConnectorCode"] ?? "";
         visitID = docData["visitID"] ?? "";
         BranchCode1 = docData["EmployeeBranchCode"] ?? "";
+        selfieImageURl = docData["selfie"] ?? "";
+        selfieCapturedDateTime = docData["SelfieDateTime"] ?? "";
           print(visitID);
       //   if (visitID != null) {
       // // Call function to get lead details
@@ -502,6 +508,76 @@ String? SalutaionID;
       setState(() {
         isFetching = false;
       });
+    }
+  }
+
+  // Account Aggregator
+
+  Future<void> callAARedirectionLink() async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var data = {
+      "fiuID": ApiUrls().fiuID,
+      "redirection_key": ApiUrls().redirection_key,
+      "userId": ApiUrls().userId,
+    };
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        ApiUrls().authAccAggregatorUAT,
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = response.data; // Already a map
+        var token = responseData['token'];
+        print('Token: $token');
+
+        var headers = {
+          'Authorization': 'Bearer ${token ?? ""}',
+          'Content-Type': 'application/json'
+        };
+        var data = json.encode({
+          "clienttrnxid": ApiUrls().clienttrnxid,
+          "fiuID": ApiUrls().fiuID,
+          "userId": ApiUrls().userId,
+          "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
+          // "aaCustomerMobile": "8971560421",
+          "aaCustomerMobile": "8921051758",
+          "sessionId": ApiUrls().sessionId,
+          "Integrated_trigger_sms_email": "Y",
+          "fipid": "fipuat@citybank",
+          "useCaseid": "226"
+        });
+        var dio = Dio();
+        var response1 = await dio.request(
+          'https://uatapp.finduit.in/api/FIU/RedirectAA',
+          options: Options(
+            method: 'POST',
+            headers: headers,
+          ),
+          data: data,
+        );
+
+        if (response1.statusCode == 200) {
+          print(json.encode(response1.data));
+        }
+        else {
+          print(response1.statusMessage);
+        }
+
+
+
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -752,6 +828,8 @@ String? SalutaionID;
         'createdDateTime': Timestamp.fromDate(now),
         'isLeadSaved': true,
         'dsaConnectorName': DSAConnectorName,
+        'selfieImageURl' : selfieImageURl ?? "",
+      'selfieCapturedDateTime' : selfieCapturedDateTime ?? "",
         'dsaConnectoreCode': DSAConnectorCode1,
         'latitude': latitue.toString(),
         'longitude': longitude.toString(),
@@ -1039,6 +1117,45 @@ String? SalutaionID;
                                   style: TextStyle(fontSize: 18),
                                 ),
                               ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: consentAccountAgregator,
+                                  activeColor: StyleData.appBarColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      consentAccountAgregator = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Consent for Account Aggregator',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible: consentAccountAgregator,
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: () {
+                                      callAARedirectionLink();
+                                    },
+                                    icon: Icon(Icons.sms, color: Colors.grey),
+                                    label: Text(
+                                      'Send SMS',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: Colors.grey[300],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                             SizedBox(height: height * 0.03),
                             Visibility(

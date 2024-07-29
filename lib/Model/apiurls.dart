@@ -34,4 +34,18 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
   String clientSecretProduction = "4382921A497F5B4DED8F7E451E89D1228EE310F729F64641429A949D53FA1B84";
   String userNameProduction = "salesappuser@muthoothomefin.com";
   String passwordProduction = "Pass@123456F7aghs4Z5RxQ5hC2pktsSLJfq";
+
+  //Account Aggregator URL
+
+String authAccAggregatorUAT = "https://uatapp.finduit.in/api/FIU/Authentication";
+String aaRedirectionUAT = "https://uatapp.finduit.in/api/FIU/RedirectAA";
+
+String fiuID = "MUTHOOTHF_UAT";
+String redirection_key = "pGXwHizgBrMnMv";
+String userId = "MUTHOOTHF_UAT";
+String clienttrnxid = "04502d0c9c4b400388450c65fd01bd23";
+String aaCustomerHandleId = "8138842672@CAMSAA";
+String sessionId = "46f8d465-8c08-414b-8dcb-744e8c0df6cd";
+
+
 }

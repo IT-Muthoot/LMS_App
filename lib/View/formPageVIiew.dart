@@ -1,6 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+
+import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -8,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
-import 'package:lead_management_system/View/dashbordPageView.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +52,9 @@ class _FormPageViewState extends State<FormPageView> {
 
   bool isLeadSourceSelected = false;
 
+  String? globalImageUrl;
+
+
 
   //Textfields
   TextEditingController textEditingController = TextEditingController();
@@ -76,6 +86,13 @@ class _FormPageViewState extends State<FormPageView> {
       borderRadius: BorderRadius.circular(10),
       borderSide:  const BorderSide(color: Color(0xff298b28))
   );
+
+  File? startimage;
+  File? startimage1;
+  Position? currentposition;
+  String? currentAddress;
+  bool _isVisible = false;
+
 
 
   List<DocumentSnapshot> ListOfLeads = [];
@@ -241,7 +258,7 @@ class _FormPageViewState extends State<FormPageView> {
       "Latitude": (latitude?.toString()?.isNotEmpty == true ? latitude.toString() : "19.024651"),
       "Longitude": (longitude?.toString()?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
     });
-   // print(data);
+    print(data);
     var dio = Dio();
     var response = await dio.request(
    ApiUrls().visitCreationProduction,
@@ -267,8 +284,8 @@ class _FormPageViewState extends State<FormPageView> {
       });
 
       Navigator.pop(context);
-      // addDataToFirestore();
-      addDataToFirestore();
+     addDataToFirestore();
+
      // _showAlertDialogSuccess(context);
     }
     else {
@@ -467,7 +484,7 @@ class _FormPageViewState extends State<FormPageView> {
 
     } else {
       // If mobile number doesn't exist, show custom message
-      visitCreation();
+       visitCreation();
     }
   }
 
@@ -475,6 +492,10 @@ class _FormPageViewState extends State<FormPageView> {
   // adding visit data to the lead creation collection
   CollectionReference leadsCreation = FirebaseFirestore.instance.collection("LeadCreation");
   Future<void> addDataToFirestore() async {
+    // Upload image to Firebase Storage
+
+    Fluttertoast.showToast(msg: 'Image uploaded successfully');
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -491,6 +512,8 @@ class _FormPageViewState extends State<FormPageView> {
     await SharedPreferences.getInstance();
     var userId = pref.getString("userID");
     DateTime now = DateTime.now();
+
+
     print("Hello");
     Map<String, dynamic> params = {
       'salutation': _selectedSalutation,
@@ -519,6 +542,8 @@ class _FormPageViewState extends State<FormPageView> {
       'LeadID' : "-",
       'visitID': visitID,
       'userId': userId,
+      'selfie': globalImageUrl,
+      'SelfieDateTime' : currentDateTime,
       'EmployeeName': pref.getString("employeeName"),
       'EmployeeCode':  pref.getString("employeeCode"),
       'EmployeeBranchCode': pref.getString("branchcode"),
@@ -543,6 +568,7 @@ class _FormPageViewState extends State<FormPageView> {
     });
 
   }
+
 
 //fetching the location infomation
   TextEditingController locationController = TextEditingController();
@@ -649,6 +675,7 @@ async {
 @override
   void initState() {
     // TODO: implement initState
+
   getToken();
     fetchLeads();
     getDropDownSalutationData();
@@ -661,6 +688,82 @@ async {
     requestLocationPermission();
    // getAccessToken();
   }
+
+
+  Map<String, dynamic> docData = {};
+  String? currentDateTime;
+
+  Future<void> getStartImage(ImageSource source) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Please enable Your Location Service');
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Fluttertoast.showToast(msg: 'Location permissions are denied');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Fluttertoast.showToast(
+          msg: 'Location permissions are permanently denied, we cannot request permissions.');
+      return;
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      Placemark place = placemarks[0];
+      Placemark place1 = placemarks[1];
+      setState(() {
+        currentposition = position;
+        currentDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        currentAddress =
+        "${place1.name},${place.street},${place.subLocality},${place1.thoroughfare}, ${place.postalCode},${place.locality},${place1.administrativeArea},${place.country}";
+      });
+
+      final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35,
+          preferredCameraDevice: CameraDevice.front );
+      if (pickedFile == null) return;
+
+      final imageTemporary = File(pickedFile.path);
+
+      setState(() {
+        this.startimage = imageTemporary;
+        _isVisible = true;
+      });
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference storageReference = FirebaseStorage.instance.ref().child('images/$fileName');
+      UploadTask uploadTask = storageReference.putFile(imageTemporary);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Get the image URL
+      String? imageUrl = await taskSnapshot.ref.getDownloadURL();
+      setState(() {
+        globalImageUrl = imageUrl;
+      });
+
+print("gloabal url");
+      print(globalImageUrl);
+
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -2033,6 +2136,70 @@ async {
                               ],
                             ),
                           ),
+                          SizedBox(height:  height * 0.01),
+                          Visibility(
+                            visible: isLeadSourceSelected == true,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                InkWell(
+                                  onTap: () {
+                                    getStartImage(ImageSource.camera);
+                                  },
+                                  child: ClipOval(
+                                    child: Container(
+                                      color: StyleData.appBarColor2,
+                                      width: 70, // Adjust the width
+                                      height: 70, // Adjust the height
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                          size: 35, // Adjust the icon size
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height:  height * 0.01), // Space between icon and text
+                                Text(
+                                  'Capture Selfie',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                _isVisible
+                                    ? Stack(
+                                  children: [
+                                    Image.file(
+                                      startimage!,
+                                      width: MediaQuery.of(context).size.width * 0.8,
+                                      height: MediaQuery.of(context).size.width * 0.8,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      left: 10,
+                                      child: Container(
+                                        color: Colors.black54,
+                                        child: Text(
+                                          '${currentDateTime}\nLat: ${currentposition?.latitude}, Long: ${currentposition?.longitude}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                                    : Container(),
+
+                              ],
+                            ),
+                          ),
                           SizedBox(
                             height:  height * 0.36,
                           ),
@@ -2053,13 +2220,17 @@ async {
                         if (_formKey.currentState!.validate() &&
                             areCustomerFieldsFilled == true && areVisitFieldsFilled == true
                              && areOtherFieldsFilled == true) {
-                           // visitCreation();
-                          if(customerNumber.text.length < 10)
-                            {
-                              CustomSnackBar.errorSnackBarQ("Please enter valid Mobile Number", context);
+                          if(startimage != null) {
+                            //  visitCreation();
+                            if (customerNumber.text.length < 10) {
+                              CustomSnackBar.errorSnackBarQ(
+                                  "Please enter valid Mobile Number", context);
                             }
-                          else {
-                            fetchAllCustomerMobile(customerNumber.text);
+                            else {
+                              fetchAllCustomerMobile(customerNumber.text);
+                            }
+                          }else{
+                            CustomSnackBar.errorSnackBarQ("Please Capture Selfie", context);
                           }
         
                         }
