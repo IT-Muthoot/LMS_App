@@ -119,6 +119,10 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? selfieImageURl;
   String? selfieCapturedDateTime;
 
+  var sessionId;
+  var consentHandle;
+  var consentStatusMsg;
+
   final List<String> _residentialType= [
     'Self owned',
     'Parent owned',
@@ -547,8 +551,8 @@ String? SalutaionID;
           "fiuID": ApiUrls().fiuID,
           "userId": ApiUrls().userId,
           "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-          // "aaCustomerMobile": "8971560421",
-          "aaCustomerMobile": "8921051758",
+          "aaCustomerMobile": "8971560421",
+         //  "aaCustomerMobile": "8921051758",
           "sessionId": ApiUrls().sessionId,
           "Integrated_trigger_sms_email": "Y",
           "fipid": "fipuat@citybank",
@@ -556,7 +560,7 @@ String? SalutaionID;
         });
         var dio = Dio();
         var response1 = await dio.request(
-          'https://uatapp.finduit.in/api/FIU/RedirectAA',
+          ApiUrls().aaRedirectionUAT,
           options: Options(
             method: 'POST',
             headers: headers,
@@ -566,6 +570,89 @@ String? SalutaionID;
 
         if (response1.statusCode == 200) {
           print(json.encode(response1.data));
+          var responseData = response1.data;
+          var sessionId = responseData['sessionId'];
+          var consentHandle1 = responseData['consentHandle'];
+          print('ConsentHandle: $consentHandle');
+          print('SessionId: $sessionId');
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('sessionId', sessionId);
+          await prefs.setString('consentHandle', consentHandle1);
+          setState(() {
+            consentHandle = consentHandle1;
+          });
+
+        }
+        else {
+          print(response1.statusMessage);
+        }
+
+
+
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> getConsentStatus() async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var data = {
+      "fiuID": ApiUrls().fiuID,
+      "redirection_key": ApiUrls().redirection_key,
+      "userId": ApiUrls().userId,
+    };
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        ApiUrls().authAccAggregatorUAT,
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var responseData = response.data; // Already a map
+        var token = responseData['token'];
+        print('Token: $token');
+print(prefs.getString('consentHandle').toString());
+print(prefs.getString('sessionId').toString());
+        var headers = {
+          'Authorization': 'Bearer ${token ?? ""}',
+          'Content-Type': 'application/json'
+        };
+        var data = json.encode({
+          "consentHandle": prefs.getString('consentHandle').toString(),
+          "fiuID": "MUTHOOTHF_UAT",
+          "sessionId": prefs.getString('sessionId').toString()
+        });
+        print(data);
+        var dio = Dio();
+        var response1 = await dio.request(
+          ApiUrls().getConsentStatus,
+          options: Options(
+            method: 'POST',
+            headers: headers,
+          ),
+          data: data,
+        );
+
+        if (response1.statusCode == 200) {
+          var response1Data = response1.data; // Assuming response1.data is already a map
+          var consentDetails = response1Data['consentDetails'];
+          var consentStatus = consentDetails != null ? consentDetails['consentStatus'] : null;
+          print('ConsentStatus: $consentStatus');
+          setState(() {
+            consentStatusMsg = consentStatus;
+          });
+          _showAlertConsent(context);
         }
         else {
           print(response1.statusMessage);
@@ -1135,28 +1222,59 @@ String? SalutaionID;
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Visibility(
-                                visible: consentAccountAgregator,
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextButton.icon(
-                                    onPressed: () {
-                                      callAARedirectionLink();
-                                    },
-                                    icon: Icon(Icons.sms, color: Colors.grey),
-                                    label: Text(
-                                      'Send SMS',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: Colors.grey[300],
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children : [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Visibility(
+                                      visible: consentAccountAgregator,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: TextButton.icon(
+                                          onPressed: () {
+                                            callAARedirectionLink();
+                                          },
+                                          icon: Icon(Icons.sms, color: Colors.grey),
+                                          label: Text(
+                                            'Send SMS',
+                                            style: TextStyle(color: StyleData.appBarColor2),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.grey[300],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                  Visibility(
+                                      visible : consentHandle != null,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Visibility(
+                                        visible: consentAccountAgregator,
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton.icon(
+                                            onPressed: () {
+                                              getConsentStatus();
+                                            },
+                                            icon: Icon(Icons.output_outlined, color: Colors.grey),
+                                            label: Text(
+                                              'Consent Status',
+                                              style: TextStyle(color: StyleData.appBarColor2),
+                                            ),
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: Colors.grey[300],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                            ]
                             ),
+
                             SizedBox(height: height * 0.03),
                             Visibility(
                               visible: consentCRIF == true && consentKYC == true,
@@ -3092,6 +3210,63 @@ String? SalutaionID;
                   ),
                 ],
               ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAlertConsent(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0, // No shadow
+          content: Container(
+            height:100,
+            width: 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Center(
+                //   child:
+                //   Container(
+                //     height: 80,
+                //     width: 60,
+                //     decoration: BoxDecoration(
+                //         color: Colors.green,
+                //         shape: BoxShape.circle
+                //     ),
+                //     child: Center(
+                //       child: Icon(Icons.data_saver_off_rounded,color: Colors.white,),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(height: 8),
+                Text('Consent Status', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
+                Text(consentStatusMsg, textAlign: TextAlign.center,style: TextStyle(color: StyleData.appBarColor2,fontWeight: FontWeight.bold,)),
+                SizedBox(height: 15),
+                SizedBox(
+                  height: 25,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    child: Text('OK', style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
             ),
           ),
         );

@@ -39,6 +39,7 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
 
 String authAccAggregatorUAT = "https://uatapp.finduit.in/api/FIU/Authentication";
 String aaRedirectionUAT = "https://uatapp.finduit.in/api/FIU/RedirectAA";
+String getConsentStatus = "https://uatapp.finduit.in/api/Consent/GetConsentStatus";
 
 String fiuID = "MUTHOOTHF_UAT";
 String redirection_key = "pGXwHizgBrMnMv";
