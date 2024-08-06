@@ -1,7 +1,6 @@
 
 
 import 'dart:convert';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -148,46 +147,46 @@ Future<void> main() async {
     handleNotificationClick(initialMessage.data);
   }
 
-  // runApp(
-  //   MultiProvider(
-  //     providers: [
-  //       ChangeNotifierProvider(
-  //         create: (_) {
-  //           final provider = NotificationProvider();
-  //           provider.setNotifications(notifications);
-  //           return provider;
-  //         },
-  //       ),
-  //     ],
-  //     child: Builder(
-  //       builder: (context) {
-  //         setupFirebaseMessaging(context);
-  //         return MyApp();
-  //       },
-  //     ),
-  //   ),
-  // );
-
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) =>  MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) {
-              final provider = NotificationProvider();
-              provider.setNotifications(notifications);
-              return provider;
-            },
-          ),
-        ],
-        child: Builder(
-          builder: (context) {
-            setupFirebaseMessaging(context);
-            return MyApp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) {
+            final provider = NotificationProvider();
+            provider.setNotifications(notifications);
+            return provider;
           },
         ),
+      ],
+      child: Builder(
+        builder: (context) {
+          setupFirebaseMessaging(context);
+          return MyApp();
+        },
       ),
-  ));
+    ),
+  );
+
+  // runApp(DevicePreview(
+  //   enabled: !kReleaseMode,
+  //   builder: (context) =>  MultiProvider(
+  //       providers: [
+  //         ChangeNotifierProvider(
+  //           create: (_) {
+  //             final provider = NotificationProvider();
+  //             provider.setNotifications(notifications);
+  //             return provider;
+  //           },
+  //         ),
+  //       ],
+  //       child: Builder(
+  //         builder: (context) {
+  //           setupFirebaseMessaging(context);
+  //           return MyApp();
+  //         },
+  //       ),
+  //     ),
+  // ));
 
   //
   // Handle dynamic links
@@ -247,8 +246,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:
-    SplashView(Token: FCMToken.toString()),
-  // SaveData(),
+   SplashView(Token: FCMToken.toString()),
+ // SaveData(),
     );
   }
 }

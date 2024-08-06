@@ -77,6 +77,7 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _employeeName = TextEditingController();
   TextEditingController _employeeCode = TextEditingController();
   TextEditingController _builderName = TextEditingController();
+  TextEditingController _crmLeadId = TextEditingController();
 
   UnderlineInputBorder enb =  UnderlineInputBorder(
       borderRadius: BorderRadius.circular(10),
@@ -119,6 +120,7 @@ class _FormPageViewState extends State<FormPageView> {
   // final List<DropDownData> _leadSourceList = [];
   final List<DropDownData> _leadDSAList = [];
 
+
   final List<Map<String, dynamic>> _leadSourceList = [
     {"title": "DSA", "id": 1},
     {"title": "Connector", "id": 2},
@@ -127,6 +129,7 @@ class _FormPageViewState extends State<FormPageView> {
     {"title": "Builder", "id": 5},
     {"title": "Customer Referral", "id": 6},
     {"title": "Direct Sourcing", "id": 7},
+    {"title": "Cross-Sell", "id": 8},
   ];
 
 
@@ -526,6 +529,7 @@ class _FormPageViewState extends State<FormPageView> {
       'customerName':_customerName.text,
       'CustomerMobile':_customerMobileNumber.text,
       'builderName':_builderName.text,
+      'CRMLeadID':_crmLeadId.text,
       'leadSource': _selectedLeadSource,
       'dsaName': _selectedDSA,
       'connectorName': _selectedConnector,
@@ -1559,6 +1563,45 @@ print("gloabal url");
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter builder name';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Visibility(
+                            visible: _selectedLeadSource == "Cross-Sell",
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: height * 0.01,
+                                ),
+                                SizedBox(
+                                  width: width * 0.95,
+                                  child: TextFormField(
+                                    controller: _crmLeadId,
+                                    keyboardType: TextInputType.number,
+                                    // onChanged: (value) {
+                                    //   setState(() {
+                                    //     checkCustomerFieldsFilled();
+                                    //   });
+                                    // },
+                                    //focusNode: _customerNameFocus,
+                                    decoration: InputDecoration(
+                                      labelText: 'CRM Lead ID',
+                                      hintText: '',
+
+                                      //  prefixIcon: Icon(Icons.person, color: HexColor("#7c8880"),),
+                                      focusedBorder: focus,
+                                      enabledBorder: enb,
+                                      filled: true,
+                                      fillColor: StyleData.textFieldColor,
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter CRM Lead ID';
                                       }
                                       return null;
                                     },

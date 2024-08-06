@@ -81,6 +81,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   List<dynamic> _PostcodeList = [];
   String? selectedPostCode;
   String? visitID;
+  String? CRMLeadId;
 
   String? selectedProductType;
   bool isDateOfBirth = false;
@@ -489,7 +490,10 @@ String? SalutaionID;
         BranchCode1 = docData["EmployeeBranchCode"] ?? "";
         selfieImageURl = docData["selfie"] ?? "";
         selfieCapturedDateTime = docData["SelfieDateTime"] ?? "";
+        CRMLeadId = docData["CRMLeadID"] ?? "";
           print(visitID);
+          print("CRMID");
+          print(docData["CRMLeadID"]);
       //   if (visitID != null) {
       // // Call function to get lead details
       //    getLeadDetails();
@@ -914,6 +918,7 @@ print(prefs.getString('sessionId').toString());
         'Designation': pref.getString("designation"),
         'createdDateTime': Timestamp.fromDate(now),
         'isLeadSaved': true,
+        'CRMLeadId': CRMLeadId,
         'dsaConnectorName': DSAConnectorName,
         'selfieImageURl' : selfieImageURl ?? "",
       'selfieCapturedDateTime' : selfieCapturedDateTime ?? "",
@@ -1188,6 +1193,7 @@ print(prefs.getString('sessionId').toString());
                                 ),
                               ],
                             ),
+
                             Row(
                               children: [
                                 Checkbox(
@@ -1205,75 +1211,76 @@ print(prefs.getString('sessionId').toString());
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: consentAccountAgregator,
-                                  activeColor: StyleData.appBarColor,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      consentAccountAgregator = value!;
-                                    });
-                                  },
-                                ),
-                                Text(
-                                  'Consent for Account Aggregator',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children : [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Visibility(
-                                      visible: consentAccountAgregator,
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: TextButton.icon(
-                                          onPressed: () {
-                                            callAARedirectionLink();
-                                          },
-                                          icon: Icon(Icons.sms, color: Colors.grey),
-                                          label: Text(
-                                            'Send SMS',
-                                            style: TextStyle(color: StyleData.appBarColor2),
-                                          ),
-                                          style: TextButton.styleFrom(
-                                            backgroundColor: Colors.grey[300],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                      visible : consentHandle != null,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Visibility(
-                                        visible: consentAccountAgregator,
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: TextButton.icon(
-                                            onPressed: () {
-                                              getConsentStatus();
-                                            },
-                                            icon: Icon(Icons.output_outlined, color: Colors.grey),
-                                            label: Text(
-                                              'Consent Status',
-                                              style: TextStyle(color: StyleData.appBarColor2),
-                                            ),
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: Colors.grey[300],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                            ]
-                            ),
+                            //Account Aggregator
+                            // Row(
+                            //   children: [
+                            //     Checkbox(
+                            //       value: consentAccountAgregator,
+                            //       activeColor: StyleData.appBarColor,
+                            //       onChanged: (value) {
+                            //         setState(() {
+                            //           consentAccountAgregator = value!;
+                            //         });
+                            //       },
+                            //     ),
+                            //     Text(
+                            //       'Consent for Account Aggregator',
+                            //       style: TextStyle(fontSize: 18),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //     mainAxisAlignment: MainAxisAlignment.end,
+                            //     children : [
+                            //       Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: Visibility(
+                            //           visible: consentAccountAgregator,
+                            //           child: Align(
+                            //             alignment: Alignment.centerRight,
+                            //             child: TextButton.icon(
+                            //               onPressed: () {
+                            //                 callAARedirectionLink();
+                            //               },
+                            //               icon: Icon(Icons.sms, color: Colors.grey),
+                            //               label: Text(
+                            //                 'Send SMS',
+                            //                 style: TextStyle(color: StyleData.appBarColor2),
+                            //               ),
+                            //               style: TextButton.styleFrom(
+                            //                 backgroundColor: Colors.grey[300],
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       Visibility(
+                            //           visible : consentHandle != null,
+                            //         child: Padding(
+                            //           padding: const EdgeInsets.all(8.0),
+                            //           child: Visibility(
+                            //             visible: consentAccountAgregator,
+                            //             child: Align(
+                            //               alignment: Alignment.centerRight,
+                            //               child: TextButton.icon(
+                            //                 onPressed: () {
+                            //                   getConsentStatus();
+                            //                 },
+                            //                 icon: Icon(Icons.output_outlined, color: Colors.grey),
+                            //                 label: Text(
+                            //                   'Consent Status',
+                            //                   style: TextStyle(color: StyleData.appBarColor2),
+                            //                 ),
+                            //                 style: TextButton.styleFrom(
+                            //                   backgroundColor: Colors.grey[300],
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            // ]
+                            // ),
 
                             SizedBox(height: height * 0.03),
                             Visibility(

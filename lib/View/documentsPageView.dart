@@ -95,6 +95,7 @@ class _DocumentPageViewState extends State<DocumentPageView> {
   String? scheduledTime;
   String? stateID;
   String? districtID;
+  String? CRMLeadID;
   String? ReasonforDisinterest;
   String? propertyType;
   bool? isKycCheck;
@@ -250,6 +251,7 @@ String? technicalDocumentStatus;
     ManagerName = docData["ManagerName"] ?? "";
     isKycCheck = docData["ConsentKYC"] ?? "";
     isCrifCheck = docData["ConsentCRIF"] ?? "";
+    CRMLeadID = docData["CRMLeadId"] ?? "";
     DSAConnectorCode = docData["dsaConnectoreCode"] ?? "";
     DSAConnectorName = docData["dsaConnectorName"] ?? "";
     CustomerStatus = docData["CustomerStatus"] ?? "";
@@ -412,6 +414,9 @@ String? technicalDocumentStatus;
       },
     );
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("Access Token");
+    print(prefs.getString('access_token'));
+
     prefs.getString('access_token');
     var headers = {
       'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
@@ -419,6 +424,7 @@ String? technicalDocumentStatus;
       'Content-Type': 'application/json',
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
+    print(headers);
     SharedPreferences pref =
     await SharedPreferences.getInstance();
     if( CustomerStatus == "Interested" ) {
@@ -467,6 +473,7 @@ String? technicalDocumentStatus;
         "PropertyType": propertyType,
         "ConsentForCrif": isCrifCheck,
         "ConsentForKyc": isKycCheck,
+        "CRMLeadId": "677899090",
         "IsDocumentCollected": true,
         "isDirectLeads": true,
         "Createdby": employeeName,
@@ -496,11 +503,12 @@ String? technicalDocumentStatus;
         "CreatedbyCode": employeeCode
       });
     }
-
-   // print(data);
+    log('data: $data');
+   print(data);
     var dio = Dio();
     var response = await dio.request(
-   ApiUrls().leadCreationProduction,
+   // ApiUrls().leadCreationProduction,
+   ApiUrls().leadCreationUAT,
       options: Options(
         method: 'POST',
         headers: headers,
@@ -568,20 +576,21 @@ String? technicalDocumentStatus;
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      'grant_type': 'password',
-      'client_id': ApiUrls().clientIdProduction,
-      'client_secret': ApiUrls().clientSecretProduction,
-      'username': ApiUrls().userNameProduction,
-      'password': ApiUrls().passwordProduction
       // 'grant_type': 'password',
-      // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      // 'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+      // 'client_id': ApiUrls().clientIdProduction,
+      // 'client_secret': ApiUrls().clientSecretProduction,
+      // 'username': ApiUrls().userNameProduction,
+      // 'password': ApiUrls().passwordProduction
+      'grant_type': 'password',
+      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
     };
     var dio = Dio();
     var response = await dio.request(
-      ApiUrls().accessTokenProduction,
+      // ApiUrls().accessTokenProduction,
+      ApiUrls().accessTokenUAT,
       options: Options(
         method: 'POST',
         headers: headers,
