@@ -2226,12 +2226,12 @@ print("gloabal url");
                                       bottom: 10,
                                       left: 10,
                                       child: Container(
-                                        color: Colors.black54,
+                                        // color: Colors.white,
                                         child: Text(
                                           '${currentDateTime}\nLat: ${currentposition?.latitude}, Long: ${currentposition?.longitude}',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ),

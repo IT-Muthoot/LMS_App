@@ -47,6 +47,4 @@ String userId = "MUTHOOTHF_UAT";
 String clienttrnxid = "04502d0c9c4b400388450c65fd01bd23";
 String aaCustomerHandleId = "8138842672@CAMSAA";
 String sessionId = "46f8d465-8c08-414b-8dcb-744e8c0df6cd";
-
-
 }
