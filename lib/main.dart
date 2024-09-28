@@ -12,6 +12,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Model/NotificationData.dart';
+import 'Utils/ChangeNotifier.dart';
 import 'Utils/SaveData.dart';
 import 'View/NotificationPageView.dart';
 import 'View/SplashView.dart';
@@ -147,6 +148,26 @@ Future<void> main() async {
     handleNotificationClick(initialMessage.data);
   }
 
+  // runApp(
+  //   MultiProvider(
+  //     providers: [
+  //       ChangeNotifierProvider(
+  //         create: (_) {
+  //           final provider = NotificationProvider();
+  //           provider.setNotifications(notifications);
+  //           return provider;
+  //         },
+  //       ),
+  //     ],
+  //     child: Builder(
+  //       builder: (context) {
+  //         setupFirebaseMessaging(context);
+  //         return MyApp();
+  //       },
+  //     ),
+  //   ),
+  // );
+
   runApp(
     MultiProvider(
       providers: [
@@ -157,6 +178,20 @@ Future<void> main() async {
             return provider;
           },
         ),
+        ChangeNotifierProvider(
+          create: (_) {
+            final connectorProvider = ConnectorProvider();
+            connectorProvider.getDropDownConnectorData();  // Fetch data on app start
+            return connectorProvider;
+          },
+        ),
+        // ChangeNotifierProvider(
+        //   create: (_) {
+        //     final connectorProvider = ConnectorProvider();
+        //     connectorProvider.getDropDownDSAData();  // Fetch data on app start
+        //     return connectorProvider;
+        //   },
+        // ),
       ],
       child: Builder(
         builder: (context) {
@@ -166,6 +201,7 @@ Future<void> main() async {
       ),
     ),
   );
+
 
   // runApp(DevicePreview(
   //   enabled: !kReleaseMode,
@@ -246,8 +282,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home:
- SplashView(Token: FCMToken.toString()),
- //SaveData(),
+   SplashView(Token: FCMToken.toString()),
+   //SaveData(),
     );
   }
 }

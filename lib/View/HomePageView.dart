@@ -47,8 +47,38 @@ class _HomePageViewState extends State<HomePageView> {
 
   }
 
+  // Future<void> updateUserData(String employeeCode, String fcmToken) async {
+  //   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //   print("Employee Code: $employeeCode");
+  //
+  //   try {
+  //     var querySnapshot = await users
+  //         .where("EmployeeCode", isEqualTo: employeeCode.toUpperCase())
+  //         .get();
+  //
+  //     if (querySnapshot.docs.isNotEmpty) {
+  //       var userId = querySnapshot.docs.first.id;
+  //     //  print("User ID: $userId");
+  //
+  //       // Update the user document with the FCM token
+  //       await users.doc(userId).update({"FCMToken": fcmToken});
+  //       print("User data updated successfully");
+  //     } else {
+  //       print("User with EmployeeCode $employeeCode not found");
+  //     }
+  //   } catch (error) {
+  //     print("Error updating user data: $error");
+  //   }
+  // }
+
+  List employeeList = [];
+  List outputList1 = [];
+  var branchName;
+
+
   Future<void> updateUserData(String employeeCode, String fcmToken) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
+    SharedPreferences pref = await SharedPreferences.getInstance();
     print("Employee Code: $employeeCode");
 
     try {
@@ -57,12 +87,49 @@ class _HomePageViewState extends State<HomePageView> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var userId = querySnapshot.docs.first.id;
-      //  print("User ID: $userId");
+        var userDoc = querySnapshot.docs.first;
+        var userId = userDoc.id;
+
+        // Fetch EmployeeName, branchCode, Region
+        var employeeName = userDoc['EmployeeName'];
+        var employeeCode = userDoc['EmployeeCode'];
+        var branchCode = userDoc['branchCode'];
+        var region = userDoc['Region'];
+
+        // Store the values in SharedPreferences
+        await pref.setString("employeeName", employeeName);
+        await pref.setString("empCode", employeeCode);
+        await pref.setString("branchCode", branchCode);
+        await pref.setString("region", region);
+
+        print("Employee Name: $employeeName");
+        print("Employee Code: $employeeCode");
+        print("Branch Code: $branchCode");
+        print("Region: $region");
 
         // Update the user document with the FCM token
         await users.doc(userId).update({"FCMToken": fcmToken});
         print("User data updated successfully");
+
+        FirebaseFirestore.instance
+            .collection("employeeMapping")
+            .doc("employeeMapping")
+            .get()
+            .then((value) async {
+          for (var element in value.data()!["employeeMapping"]) {
+            setState(() {
+              employeeList.add(element);
+            });
+          }
+
+          setState(()  {
+            outputList1 =
+                employeeList.where((o) => o['EMP_CODE'] == employeeCode).toList();
+            branchName = outputList1[0]['BRANCH'];
+            print('Branch Name $branchName');
+          });
+          _storeBranchName(branchName);
+        });
       } else {
         print("User with EmployeeCode $employeeCode not found");
       }
@@ -70,6 +137,17 @@ class _HomePageViewState extends State<HomePageView> {
       print("Error updating user data: $error");
     }
   }
+
+  Future<void> _storeBranchName(String branchName) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString("branchName", branchName);
+  }
+
+
+
+
+
+
 
 
 

@@ -27,7 +27,7 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
   String clientIdUAT = "3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R";
   String clientSecretUAT = "E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE";
   String userNameUAT = "itkrishnaprasad@muthootgroup.com.dev2";
-  String passwordUAT = "Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ";
+  String passwordUAT = "Muthoot@123psHRYkQwhAutEGemnXrS5cOu";
 
  // Production Token Credentials
   String clientIdProduction = "3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf";
@@ -39,7 +39,9 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
 
 String authAccAggregatorUAT = "https://uatapp.finduit.in/api/FIU/Authentication";
 String aaRedirectionUAT = "https://uatapp.finduit.in/api/FIU/RedirectAA";
-String getConsentStatus = "https://uatapp.finduit.in/api/Consent/GetConsentStatus";
+// String getConsentStatus = "https://uatapp.finduit.in/api/Consent/GetConsentStatus";
+String getConsentStatus = "https://uatapp.finduit.in/api/fidata/GetConsentData";
+
 
 String fiuID = "MUTHOOTHF_UAT";
 String redirection_key = "pGXwHizgBrMnMv";

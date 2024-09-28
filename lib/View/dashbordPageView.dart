@@ -18,6 +18,7 @@ import 'LoginPageView.dart';
 import 'ApplicantDetailsView.dart';
 import 'NewLeadPageView.dart';
 import 'VisitPageView.dart';
+import 'dsaConnectorCreation.dart';
 
 class DashboardPageView extends StatefulWidget {
   const DashboardPageView({super.key});
@@ -83,10 +84,6 @@ class _DashboardPageViewState extends State<DashboardPageView> {
           ListOfUsers = value.docs;
         });
         for (var i = 0; value.docs.length > i; i++) {
-          // print(value.docs[i].data());
-          //     log(value.docs[i].data().toString());
-          // print("hgdhgjd");
-          // print(ListOfUsers[i]['EmployeeName']);
           if( pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode'])
           {
             setState(() {
@@ -101,10 +98,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
               pref.setString("Region", ListOfUsers[i]['Region']);
               pref.setString("Zone", ListOfUsers[i]['Zone']);
               pref.setString("designation", ListOfUsers[i]['designation']);
-              // print("EMployee Name");
-              // print(employeeName);
-              // print(branchCode);
-              // print(pref.getString("ManagerCode"));
+
             });
           }
         }
@@ -120,6 +114,75 @@ class _DashboardPageViewState extends State<DashboardPageView> {
       });
     }
   }
+
+//   void getUserData() async {
+//     CollectionReference users = FirebaseFirestore.instance.collection('users');
+//     CollectionReference employeeMapping = FirebaseFirestore.instance.collection('employeeMapping');
+//     SharedPreferences pref = await SharedPreferences.getInstance();
+//     var userId = pref.getString("token");
+//
+//     setState(() {
+//       userType = pref.getString("logintype");
+//     });
+//
+//     if (userType == "user") {
+//       users.where("userId", isEqualTo: userId).get().then((value) {
+//         setState(() {
+//           ListOfUsers = value.docs;
+//         });
+//         for (var i = 0; value.docs.length > i; i++) {
+//           if (pref.getString("employeeCode") == ListOfUsers[i]['EmployeeCode']) {
+//             setState(() {
+//               employeeName = ListOfUsers[i]['EmployeeName'];
+//               branchCode = ListOfUsers[i]['branchCode'];
+//               pref.setString("branchcode", ListOfUsers[i]['branchCode']);
+//               pref.setString("employeeName", ListOfUsers[i]['EmployeeName']);
+//               pref.setString("managerName", ListOfUsers[i]['ManagerName']);
+//               pref.setString("ManagerCode", ListOfUsers[i]['ManagerCode']);
+//               pref.setString("Region", ListOfUsers[i]['Region']);
+//               pref.setString("Zone", ListOfUsers[i]['Zone']);
+//               pref.setString("designation", ListOfUsers[i]['designation']);
+//             });
+//             print("BranchCode");
+//             print(pref.getString("branchcode"));
+//             // Fetch all matching documents from employeeMapping
+//             employeeMapping
+//                 .where("EMP_CODE", isEqualTo: ListOfUsers[i]['EmployeeCode'])
+//                 .get()
+//                 .then((mappingSnapshot) {
+//               if (mappingSnapshot.docs.isNotEmpty) {
+//                 // Handle multiple matching documents
+//                 for (var doc in mappingSnapshot.docs) {
+//                   // Example: Choose the first one or apply a specific logic to choose
+//                   var branchName = doc['BRANCH'];
+//                   print("BranchName");
+// print(branchName);
+//                   // You can apply additional logic here to pick the most relevant branchName
+//                   // For example, based on date, priority, etc.
+//
+//                   // Set the chosen branchName in SharedPreferences
+//                   pref.setString("branchName", branchName);
+//
+//                   // Break if you only want to handle the first matching document
+//                   break;
+//                 }
+//               }
+//             });
+//           }
+//         }
+//       });
+//     } else {
+//       users.get().then((value) {
+//         setState(() {
+//           ListOfUsers = value.docs;
+//         });
+//         for (var i = 0; value.docs.length > i; i++) {
+//           //  print(ListOfUsers[i]['EmployeeName']);
+//         }
+//       });
+//     }
+//   }
+
 
   void fetchSaveddata() async {
     CollectionReference users = FirebaseFirestore.instance.collection('convertedLeads');
@@ -181,6 +244,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
       });
     }
   }
+
 
   bool _isLoading = true;
   @override
@@ -479,6 +543,78 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: height * 0.015,),
+                SizedBox(
+                  width: width * 2,
+                  child:Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DSAConnectorCreationPage(),
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                color:  Colors.white,
+                                child: Container(
+                                  width: width * 0.4,
+                                  height: height * 0.15,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        SizedBox(
+                                          height: 60,
+                                          child: Image.asset(
+                                            'assets/images/connector.png',
+                                            width: 60,
+                                            height: 40,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          'Add Connector',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w300,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width * 0.015,
                             ),
                           ],
                         ),

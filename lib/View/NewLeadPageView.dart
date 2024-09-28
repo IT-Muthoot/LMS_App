@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,16 +16,17 @@ import 'package:intl/intl.dart';
 import 'package:lead_management_system/Model/apiurls.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:material_dialogs/dialogs.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http_parser/http_parser.dart';
 
 
 import '../Model/DatabaseHelper.dart';
 import '../Model/Response/DropDownModel.dart';
-import '../Model/leadDataModel.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
-import 'ApplicantDetailsView.dart';
 import 'documentsPageView.dart';
 
 class NewLeadPageView extends StatefulWidget {
@@ -123,6 +127,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   var sessionId;
   var consentHandle;
   var consentStatusMsg;
+  var smsSentTimeStamp;
 
   final List<String> _residentialType= [
     'Self owned',
@@ -197,6 +202,15 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   ];
   String? _selectedGender;
 
+  String? _selectedReasonForNoSMS;
+
+  final List<String> _reasonNoSMS= [
+    'Bank Not Listed',
+    'Exception/Approval From NSM',
+    'Customer has keypad mobile'
+  ];
+  String? _selectedReason;
+
   final List<String> _propertyType = [
     'Apartment',
     'Villa',
@@ -204,7 +218,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
     'Plot',
   ];
   String? _selectedPropertyType;
-
+  var pdfBase64;
 
   final List<String> purposeVisit = [
     'Document Pick up',
@@ -214,6 +228,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
   String? reasonDisInterest;
 
   String? selectedProductValue;
+  String? selectedAccountAggregator;
   final List<DropDownProductData> _productsList = [];
 // final List<DropDownData> _productsList = [];
   String? selectedProdut;
@@ -438,6 +453,9 @@ String? SalutaionID;
     _selectedCustomerProfile = docData["CustomerProfile"] ?? "";
     consentKYC = docData["ConsentKYC"] ?? "";
     consentCRIF = docData["ConsentCRIF"] ?? "";
+    consentAccountAgregator = docData["ConsentAccountAggregator"] ?? "";
+    consentStatusMsg = docData["ConsentStatus"] ?? "";
+    consentHandle = docData["consentHandle"] ?? "";
     isLeadsDataSaved = docData["isLeadSaved"] ?? "";
     print("hgjhghgh");
     print(isLeadsDataSaved);
@@ -522,6 +540,7 @@ String? SalutaionID;
   // Account Aggregator
 
   Future<void> callAARedirectionLink() async {
+    SmartDialog.showLoading(msg: 'Loading...');
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -555,8 +574,8 @@ String? SalutaionID;
           "fiuID": ApiUrls().fiuID,
           "userId": ApiUrls().userId,
           "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-          "aaCustomerMobile": "8971560421",
-         //  "aaCustomerMobile": "8921051758",
+         // "aaCustomerMobile": customerNumber.text,
+           "aaCustomerMobile": "8971560421",
           "sessionId": ApiUrls().sessionId,
           "Integrated_trigger_sms_email": "Y",
           "fipid": "fipuat@citybank",
@@ -573,25 +592,27 @@ String? SalutaionID;
         );
 
         if (response1.statusCode == 200) {
+          SmartDialog.dismiss();
           print(json.encode(response1.data));
           var responseData = response1.data;
+          print(responseData.toString());
           var sessionId = responseData['sessionId'];
           var consentHandle1 = responseData['consentHandle'];
+          smsSentTimeStamp = responseData['timestamp'];
           print('ConsentHandle: $consentHandle');
           print('SessionId: $sessionId');
+          print('SessionId: $smsSentTimeStamp');
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('sessionId', sessionId);
           await prefs.setString('consentHandle', consentHandle1);
+          await prefs.setString('smsSentTimeStamp', smsSentTimeStamp);
           setState(() {
             consentHandle = consentHandle1;
           });
-
         }
         else {
           print(response1.statusMessage);
         }
-
-
 
       } else {
         print(response.statusMessage);
@@ -601,7 +622,88 @@ String? SalutaionID;
     }
   }
 
+  void _showPdf(BuildContext context, String base64String) async {
+    try {
+      Uint8List pdfBytes = base64Decode(base64String);
+
+      if (await Permission.storage.request().isGranted) {
+        Directory? downloadsDir = await getExternalStorageDirectory();
+        if (downloadsDir != null) {
+          String filePath = '${downloadsDir.path}/consent.pdf';
+          File file = File(filePath);
+          await file.writeAsBytes(pdfBytes, flush: true);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('PDF downloaded successfully to $filePath')),
+          );
+
+          // Provide options to view or open the PDF
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('PDF Option'),
+              content: Text('Choose an action:'),
+              actions: [
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.of(context).pop();
+                //     _viewPdf(context, filePath);
+                //   },
+                //   child: Text('View PDF'),
+                // ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    OpenFile.open(filePath);
+                  },
+                  child: Text('Open with External Viewer', style: TextStyle(color: StyleData.appBarColor2),),
+                ),
+              ],
+            ),
+          );
+        } else {
+          throw Exception('Failed to get downloads directory.');
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Storage permission denied.')),
+        );
+      }
+    } catch (e) {
+      print('Error downloading PDF: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error downloading PDF: $e')),
+      );
+    }
+  }
+
+// Function to view PDF directly within the app
+  void _viewPdf(BuildContext context, String filePath) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PdfViewerPage(filePath: filePath),
+      ),
+    );
+  }
+
+
+  Future<File> createPdfFromBase64(String base64String, String fileName) async {
+    // Get directory to store the file temporarily
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$fileName';
+
+    // Decode the base64 string to bytes
+    List<int> bytes = base64Decode(base64String);
+
+    // Create the PDF file and write the bytes
+    File pdfFile = File(filePath);
+    await pdfFile.writeAsBytes(bytes);
+
+    return pdfFile;
+  }
+
   Future<void> getConsentStatus() async {
+    SmartDialog.showLoading(msg: 'Loading...');
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -623,22 +725,21 @@ String? SalutaionID;
 
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        var responseData = response.data; // Already a map
+        var responseData = response.data;
         var token = responseData['token'];
-        print('Token: $token');
-print(prefs.getString('consentHandle').toString());
-print(prefs.getString('sessionId').toString());
+        var sessionID = responseData['sessionId'];
+
         var headers = {
           'Authorization': 'Bearer ${token ?? ""}',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         };
         var data = json.encode({
-          "consentHandle": prefs.getString('consentHandle').toString(),
+          // "consentHandle": prefs.getString('consentHandle').toString(),
+          "consentHandle": consentHandle,
           "fiuID": "MUTHOOTHF_UAT",
-          "sessionId": prefs.getString('sessionId').toString()
+          "sessionId": sessionID,
         });
-        print(data);
-        var dio = Dio();
+
         var response1 = await dio.request(
           ApiUrls().getConsentStatus,
           options: Options(
@@ -649,21 +750,54 @@ print(prefs.getString('sessionId').toString());
         );
 
         if (response1.statusCode == 200) {
-          var response1Data = response1.data; // Assuming response1.data is already a map
-          var consentDetails = response1Data['consentDetails'];
-          var consentStatus = consentDetails != null ? consentDetails['consentStatus'] : null;
-          print('ConsentStatus: $consentStatus');
+
+          var response1Data = response1.data;
+          print(response1Data);
+          var consentStatusNotification =
+              response1Data['consentStatusNotification'] ?? response1Data['ConsentStatusNotification'];
+          var consentStatus = consentStatusNotification != null ? consentStatusNotification['consentStatus'] : null;
+
           setState(() {
-            consentStatusMsg = consentStatus;
+            consentStatusMsg = consentStatus ?? "Unknown status";
           });
-          _showAlertConsent(context);
-        }
-        else {
+
+          // Fetch documents in Firestore based on VisitID
+          var collection = FirebaseFirestore.instance.collection('convertedLeads');
+          var querySnapshot = await collection.where('VisitID', isEqualTo: visitID).get();
+          for (var doc in querySnapshot.docs) {
+            await doc.reference.update({
+              'ConsentStatusMsg': consentStatusMsg,
+              'consentHandle': consentHandle,
+              // 'consentHandle': prefs.getString('consentHandle').toString(),
+            });
+          }
+
+          // Access pdfBase64
+          var data = response1Data['data'];
+          if (data != null && data.isNotEmpty) {
+            var firstDataItem = data[0];
+            var dataDetail = firstDataItem['dataDetail'];
+            pdfBase64 = dataDetail != null ? dataDetail['pdfbase64'] : null;
+
+            if (pdfBase64 != null) {
+              // Step 3: Convert the base64 to PDF file
+              File pdfFile = await createPdfFromBase64(pdfBase64, 'consent_document.pdf');
+              print('PDF file created at: ${pdfFile.path}');
+
+              // Step 4: Upload the PDF file to DMS
+              await uploadPdfFileToDMS(pdfFile);
+              SmartDialog.dismiss();
+            } else {
+              print('pdfbase64 is null');
+            }
+          } else {
+            print('Data is null or empty');
+          }
+          SmartDialog.dismiss();
+          _showAlertConsent(context, pdfBase64);
+        } else {
           print(response1.statusMessage);
         }
-
-
-
       } else {
         print(response.statusMessage);
       }
@@ -671,6 +805,87 @@ print(prefs.getString('sessionId').toString());
       print(e.toString());
     }
   }
+  String? accessToken;
+  Future<void> uploadPdfFileToDMS(File pdfFile) async {
+    try {
+      var headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'AuthToken': ApiUrls().AuthToken
+      };
+      var dio = Dio();
+      var response = await dio.request(
+        ApiUrls().authGenerate,
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print(json.encode(response.data));
+        String jsonResponse = json.encode(response.data);
+        Map<String, dynamic> jsonMap = json.decode(jsonResponse);
+        accessToken = jsonMap['access_token'];
+      }
+      else {
+        print(response.statusMessage);
+      }
+      FormData formData = FormData.fromMap({
+        "File": await MultipartFile.fromFile(
+          pdfFile.path,
+          filename: pdfFile.path.split('/').last,
+          contentType: MediaType('application', 'pdf'),
+        ),
+        "Title": widget.visitId,
+        "Description": "Document Verification",
+        "Tags": "HomeFin",
+        "IsPasswordProtected": "0",
+        "Password": "0",
+        "LUSR": "HomeFin",
+      });
+
+      // Add SSL Bypass for self-signed certificates
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      };
+
+      dio.options.headers['AuthToken'] = ApiUrls().AuthToken;
+      dio.options.headers['Authorization'] = 'Bearer ${accessToken ?? ''}';
+
+      var response1 = await dio.post(
+        ApiUrls().uploadDoc,
+        data: formData,
+        onSendProgress: (int sent, int total) {
+          debugPrint("sent: ${sent.toString()}, total: ${total.toString()}");
+        },
+      );
+
+      var data = json.decode(response1.toString());
+      print(data);
+
+      // Update Firestore with document ID
+      var snapshot = await FirebaseFirestore.instance
+          .collection("convertedLeads")
+          .where("VisitID", isEqualTo: widget.visitId)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        FirebaseFirestore.instance
+            .collection("convertedLeads")
+            .doc(snapshot.docs[0].id)
+            .set({
+          'Bank_Statement': data["docId"].toString(),
+        }, SetOptions(merge: true));
+      } else {
+        CustomSnackBar.errorSnackBarQ("No such document found", context);
+      }
+    } catch (e) {
+      SmartDialog.dismiss();
+      CustomSnackBar.errorSnackBarQ("Something went wrong, please try again", context);
+      debugPrint(e.toString());
+    }
+  }
+
 
   List<DocumentSnapshot> ListOfSavedLeads = [];
 
@@ -904,6 +1119,12 @@ print(prefs.getString('sessionId').toString());
         'panCardNumber': panCardNumber.text,
         'ConsentCRIF': consentCRIF,
         'ConsentKYC': consentKYC,
+        'ConsentAccountAggregator': consentAccountAgregator,
+        'selectedAccountAggregator': selectedAccountAggregator,
+        'AASmsSendDate': smsSentTimeStamp ?? "",
+        'ConsentStatus': consentStatusMsg ?? "",
+        'consentHandle': consentHandle ?? "",
+        'selectedAAReason': _selectedReason ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
@@ -1006,6 +1227,10 @@ print(prefs.getString('sessionId').toString());
         'panCardNumber': panCardNumber.text,
         'ConsentCRIF': consentCRIF,
         'ConsentKYC': consentKYC,
+        'ConsentAccountAggregator': consentAccountAgregator,
+        // 'ConsentStatus': consentStatusMsg ?? "",
+        'consentHandle': consentHandle ?? "",
+        'selectedAccountAggregator': selectedAccountAggregator ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
@@ -1211,76 +1436,181 @@ print(prefs.getString('sessionId').toString());
                                 ),
                               ],
                             ),
-                            //Account Aggregator
-                            // Row(
-                            //   children: [
-                            //     Checkbox(
-                            //       value: consentAccountAgregator,
-                            //       activeColor: StyleData.appBarColor,
-                            //       onChanged: (value) {
-                            //         setState(() {
-                            //           consentAccountAgregator = value!;
-                            //         });
-                            //       },
-                            //     ),
-                            //     Text(
-                            //       'Consent for Account Aggregator',
-                            //       style: TextStyle(fontSize: 18),
-                            //     ),
-                            //   ],
-                            // ),
-                            // Row(
-                            //     mainAxisAlignment: MainAxisAlignment.end,
-                            //     children : [
-                            //       Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Visibility(
-                            //           visible: consentAccountAgregator,
-                            //           child: Align(
-                            //             alignment: Alignment.centerRight,
-                            //             child: TextButton.icon(
-                            //               onPressed: () {
-                            //                 callAARedirectionLink();
-                            //               },
-                            //               icon: Icon(Icons.sms, color: Colors.grey),
-                            //               label: Text(
-                            //                 'Send SMS',
-                            //                 style: TextStyle(color: StyleData.appBarColor2),
-                            //               ),
-                            //               style: TextButton.styleFrom(
-                            //                 backgroundColor: Colors.grey[300],
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //       Visibility(
-                            //           visible : consentHandle != null,
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.all(8.0),
-                            //           child: Visibility(
-                            //             visible: consentAccountAgregator,
-                            //             child: Align(
-                            //               alignment: Alignment.centerRight,
-                            //               child: TextButton.icon(
-                            //                 onPressed: () {
-                            //                   getConsentStatus();
-                            //                 },
-                            //                 icon: Icon(Icons.output_outlined, color: Colors.grey),
-                            //                 label: Text(
-                            //                   'Consent Status',
-                            //                   style: TextStyle(color: StyleData.appBarColor2),
-                            //                 ),
-                            //                 style: TextButton.styleFrom(
-                            //                   backgroundColor: Colors.grey[300],
-                            //                 ),
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            // ]
-                            // ),
+                           // Account Aggregator
+
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: consentAccountAgregator,
+                                  activeColor: StyleData.appBarColor,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      consentAccountAgregator = value!;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Consent for Account Aggregator',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                              visible:  consentAccountAgregator == true ,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                    value: 'Send SMS',
+                                    groupValue: selectedAccountAggregator, // Ensure this is the same variable
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedAccountAggregator = value; // Update selectedProductValue
+                                      });
+                                    },
+                                    activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
+                                  ),
+                                  Text(
+                                    'Send SMS',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                               visible: selectedAccountAggregator == "Send SMS",
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children : [
+                                    SizedBox(
+                                        width : width * 0.05
+                                    ),
+                                    Visibility(
+                                        visible : (selectedAccountAggregator == "Send SMS" && (consentStatusMsg == "Pending" || consentStatusMsg == null) ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton.icon(
+                                            onPressed: () {
+                                              callAARedirectionLink();
+                                            },
+                                            icon: Icon(Icons.sms, color: Colors.grey),
+                                            label: Text(
+                                              'Send SMS',
+                                              style: TextStyle(color: StyleData.appBarColor2),
+                                            ),
+                                            style: TextButton.styleFrom(
+                                              backgroundColor: Colors.grey[300],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible : consentHandle != null || consentStatusMsg != null,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Visibility(
+                                          visible: consentAccountAgregator,
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton.icon(
+                                              onPressed: () {
+                                                getConsentStatus();
+                                              },
+                                              icon: Icon(Icons.output_outlined, color: Colors.grey),
+                                              label: Text(
+                                                'Consent Status',
+                                                style: TextStyle(color: StyleData.appBarColor2),
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                backgroundColor: Colors.grey[300],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+                            Visibility(
+                              visible:  consentAccountAgregator == true,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Radio(
+                                    value: 'Reason for Not Sending SMS',
+                                    groupValue: selectedAccountAggregator, // Same variable
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedAccountAggregator = value; // Update selectedProductValue
+                                      });
+                                    },
+                                    activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
+                                  ),
+                                  Text(
+                                    'Reason for Not Sending SMS',
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                              visible : selectedAccountAggregator == "Reason for Not Sending SMS",
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: width * 0.05),
+                                  Expanded(
+                                    child: DropdownButtonFormField2<String>(
+                                      value: _selectedReason,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _selectedReason = newValue;
+                                        });
+                                      },
+                                      validator: (String? value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Select Reason';
+                                        }
+                                        return null;
+                                      },
+                                      items: _reasonNoSMS.map((String item) {
+                                        return DropdownMenuItem(
+                                          value: item,
+                                          child: Text(
+                                            item.toString(),
+                                            style: const TextStyle(
+                                              color: Color(0xFF393939),
+                                              fontSize: 15,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      style: const TextStyle(
+                                        color: Color(0xFF393939),
+                                        fontSize: 15,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      decoration: InputDecoration(
+                                        labelText: 'Reason *',
+                                        hintText: 'Select an option',
+                                        focusedBorder: focus,
+                                        enabledBorder: enb,
+                                        filled: true,
+                                        fillColor: StyleData.textFieldColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
 
                             SizedBox(height: height * 0.03),
                             Visibility(
@@ -2893,12 +3223,26 @@ print(prefs.getString('sessionId').toString());
                                 {
                                   CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
                                 }
-                                else {
-                                  setState(() {
-                                    isClickNext = true;
-                                  });
-                                  updateDataToFirestore();
+                                if (consentAccountAgregator == true) {
+                                  if (selectedAccountAggregator == "Send SMS" && consentHandle != null) {
+                                    // This is the valid case, proceed to next step
+                                    setState(() {
+                                      isClickNext = true;
+                                    });
+                                    updateDataToFirestore();
+                                  } else if (selectedAccountAggregator == "Reason for Not Sending SMS" && _selectedReason == null) {
+                                    // Invalid case for "Reason for Not Sending SMS" without a selected reason
+                                    CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
+                                  } else {
+                                    // Other invalid case for "Send SMS" without consentHandle or other conditions
+                                    CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
+                                  }
+                                } else {
+                                  // Handle the case where consentAccountAgregator == false
+                                  CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
                                 }
+
+
                               }else{
                                 CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
                               }
@@ -2942,6 +3286,7 @@ print(prefs.getString('sessionId').toString());
                       onPressed: () {
                         // DateFormat formatter = DateFormat('dd-MM-yyyy');
                         // DateTime dob = formatter.parse(_dateOfBirth.text);
+                        getConsentStatus();
                         if(isLeadsDataSaved == true || isClickNext == true )
                         {
                           if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text) ) {
@@ -3224,7 +3569,7 @@ print(prefs.getString('sessionId').toString());
     );
   }
 
-  void _showAlertConsent(BuildContext context) {
+  void _showAlertConsent(BuildContext context, String? pdfBase64) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -3235,28 +3580,31 @@ print(prefs.getString('sessionId').toString());
           backgroundColor: Colors.white,
           elevation: 0, // No shadow
           content: Container(
-            height:100,
+            height: pdfBase64 != null ? 200 : 100,
             width: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Center(
-                //   child:
-                //   Container(
-                //     height: 80,
-                //     width: 60,
-                //     decoration: BoxDecoration(
-                //         color: Colors.green,
-                //         shape: BoxShape.circle
-                //     ),
-                //     child: Center(
-                //       child: Icon(Icons.data_saver_off_rounded,color: Colors.white,),
-                //     ),
-                //   ),
-                // ),
+                if (pdfBase64 != null)
+                  GestureDetector(
+                    onTap: () {
+                      _showPdf(context, pdfBase64);
+                    },
+                    child: Container(
+                      height: 80,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Icon(Icons.picture_as_pdf, color: Colors.white),
+                      ),
+                    ),
+                  ),
                 SizedBox(height: 8),
-                Text('Consent Status', textAlign: TextAlign.center,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.bold)),
-                Text(consentStatusMsg, textAlign: TextAlign.center,style: TextStyle(color: StyleData.appBarColor2,fontWeight: FontWeight.bold,)),
+                Text('Consent Status', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+                Text(consentStatusMsg ?? "No status available", textAlign: TextAlign.center, style: TextStyle(color: StyleData.appBarColor2, fontWeight: FontWeight.bold)),
                 SizedBox(height: 15),
                 SizedBox(
                   height: 25,
@@ -3281,6 +3629,7 @@ print(prefs.getString('sessionId').toString());
     );
   }
 
+
   bool isValidPanCard(String panNumber) {
     RegExp panRegExp = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]$');
     return panRegExp.hasMatch(panNumber);
@@ -3299,7 +3648,12 @@ print(prefs.getString('sessionId').toString());
       return " --";
     }
   }
+
 }
+
+
+
+
 class UppercaseTextInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
@@ -3309,3 +3663,22 @@ class UppercaseTextInputFormatter extends TextInputFormatter {
     );
   }
 }
+
+class PdfViewerPage extends StatelessWidget {
+  final String filePath;
+
+  const PdfViewerPage({Key? key, required this.filePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+      ),
+      body: PDFView(
+        filePath: filePath,
+      ),
+    );
+  }
+}
+

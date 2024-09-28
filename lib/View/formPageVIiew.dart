@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-
-import 'package:dotted_border/dotted_border.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
@@ -15,18 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:image/image.dart' as img;
 import 'package:intl/intl.dart';
 import 'package:lead_management_system/View/HomePageView.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../Model/Response/DropDownModel.dart';
 import '../Model/apiurls.dart';
+import '../Utils/ChangeNotifier.dart';
 import '../Utils/CustomeSnackBar.dart';
 import '../Utils/StyleData.dart';
 import 'VisitPageView.dart';
+import 'package:path/path.dart' as path;
 
 
 
@@ -55,7 +55,6 @@ class _FormPageViewState extends State<FormPageView> {
   String? globalImageUrl;
 
 
-
   //Textfields
   TextEditingController textEditingController = TextEditingController();
   TextEditingController firstName = TextEditingController();
@@ -79,13 +78,13 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController _builderName = TextEditingController();
   TextEditingController _crmLeadId = TextEditingController();
 
-  UnderlineInputBorder enb =  UnderlineInputBorder(
+  UnderlineInputBorder enb = UnderlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide:   const BorderSide(color:  Colors.black38)
+      borderSide: const BorderSide(color: Colors.black38)
   );
-  UnderlineInputBorder focus =  UnderlineInputBorder(
+  UnderlineInputBorder focus = UnderlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide:  const BorderSide(color: Color(0xff298b28))
+      borderSide: const BorderSide(color: Color(0xff298b28))
   );
 
   File? startimage;
@@ -93,7 +92,7 @@ class _FormPageViewState extends State<FormPageView> {
   Position? currentposition;
   String? currentAddress;
   bool _isVisible = false;
-
+  CameraController? _controller;
 
 
   List<DocumentSnapshot> ListOfLeads = [];
@@ -116,7 +115,9 @@ class _FormPageViewState extends State<FormPageView> {
 //       }
 //     });
 //   }
+//   final List<DropDownData> _leadSourceList = [];
   String? _selectedLeadSource;
+
   // final List<DropDownData> _leadSourceList = [];
   final List<DropDownData> _leadDSAList = [];
 
@@ -133,39 +134,79 @@ class _FormPageViewState extends State<FormPageView> {
   ];
 
 
+  // getDropDownConnectorData() {
+  //   FirebaseFirestore.instance
+  //       .collection("connectorName")
+  //       .doc('connectorName')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.data()!['connectorName']) {
+  //       setState(() {
+  //         _leadConnectorList
+  //             .add(DropDownData(int.parse(element['id']), element['title']));
+  //       });
+  //     }
+  //   });
+  // }
 
-  getDropDownConnectorData() {
-    FirebaseFirestore.instance
+  Future<List<DropDownData>> getDropDownConnectorData() async {
+    var document = await FirebaseFirestore.instance
         .collection("connectorName")
         .doc('connectorName')
-        .get()
-        .then((value) {
-      for (var element in value.data()!['connectorName']) {
-        setState(() {
-          _leadConnectorList
-              .add(DropDownData(int.parse(element['id']), element['title']));
-        });
-      }
+        .get();
+
+    List<DropDownData> tempList = [];
+    for (var element in document.data()!['connectorName']) {
+      tempList.add(DropDownData(int.parse(element['id']), element['title']));
+    }
+    return tempList;
+  }
+
+  Future<void> _fetchConnectorData() async {
+    List<DropDownData> data = await getDropDownConnectorData();
+    setState(() {
+      _leadConnectorList.clear();
+      _leadConnectorList.addAll(data);
     });
   }
+
   String? _selectedConnector;
   final List<DropDownData> _leadConnectorList = [];
   String? ConnectorCode;
 
-  getDropDownDSAData() {
-    FirebaseFirestore.instance
+  // getDropDownDSAData() {
+  //   FirebaseFirestore.instance
+  //       .collection("dsaName")
+  //       .doc('dsaName')
+  //       .get()
+  //       .then((value) {
+  //     for (var element in value.data()!['dsaName']) {
+  //       setState(() {
+  //         _leadDSAList
+  //             .add(DropDownData(int.parse(element['id']), element['title']));
+  //       });
+  //     }
+  //   });
+  // }
+
+  getDropDownDSAData() async {
+    var document = await FirebaseFirestore.instance
         .collection("dsaName")
         .doc('dsaName')
-        .get()
-        .then((value) {
-      for (var element in value.data()!['dsaName']) {
-        setState(() {
-          _leadDSAList
-              .add(DropDownData(int.parse(element['id']), element['title']));
-        });
-      }
+        .get();
+
+    List<DropDownData> tempList = [];
+    for (var element in document.data()!['dsaName']) {
+      tempList.add(DropDownData(int.parse(element['id']), element['title']));
+    }
+
+    setState(() {
+      _leadDSAList.clear(); // Clear the existing list
+      _leadDSAList.addAll(tempList); // Add new items to the existing list
     });
   }
+
+
   String? _selectedDSA;
   String? selectedDSACode;
   String? selectedDSACode1;
@@ -187,6 +228,7 @@ class _FormPageViewState extends State<FormPageView> {
       }
     });
   }
+
   String? _selectedCampaign;
   final List<DropDownData> _leadCampaignList = [];
 
@@ -204,11 +246,12 @@ class _FormPageViewState extends State<FormPageView> {
       }
     });
   }
+
   final List<DropDownData> _salutationList = [];
   String? _selectedSalutation;
 
   final List<String> purposeVisit = [
- //   'Document Pick up',
+    //   'Document Pick up',
     'Lead Capture',
   ];
   String? selectedPurpose;
@@ -239,12 +282,12 @@ class _FormPageViewState extends State<FormPageView> {
     );
     print("Printing Token");
     SharedPreferences prefs = await SharedPreferences.getInstance();
-     prefs.getString('access_token');
+    prefs.getString('access_token');
     print(prefs.getString('access_token'));
     var headers = {
-    //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
-      'Authorization':  'Bearer ${prefs.getString('access_token') ?? ''}',
-    //  'Authorization':  'Bearer 00DBl000000BtkL!AQEAQFmo5RMkh7ViBWHS35EPX9gPCPYVCDKI08CBXrvmvPpbYgknhcxYlJML6Dl1ZJg5N0uOCZJy4OH_9OVq7mT6tvQF9UBf',
+      //  'Authorization':  'Bearer ${widget.accessToken ?? ''}',
+      'Authorization': 'Bearer ${prefs.getString('access_token') ?? ''}',
+      //  'Authorization':  'Bearer 00DBl000000BtkL!AQEAQFmo5RMkh7ViBWHS35EPX9gPCPYVCDKI08CBXrvmvPpbYgknhcxYlJML6Dl1ZJg5N0uOCZJy4OH_9OVq7mT6tvQF9UBf',
       'Content-Type': 'application/json',
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
@@ -258,20 +301,25 @@ class _FormPageViewState extends State<FormPageView> {
       "ScheduledVisit": _dateController.text,
       // "Latitude": latitude.toString(),
       // "Longitude": longitude.toString(),
-      "Latitude": (latitude?.toString()?.isNotEmpty == true ? latitude.toString() : "19.024651"),
-      "Longitude": (longitude?.toString()?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
+      "Latitude": (latitude
+          ?.toString()
+          ?.isNotEmpty == true ? latitude.toString() : "19.024651"),
+      "Longitude": (longitude
+          ?.toString()
+          ?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
     });
     print(data);
     var dio = Dio();
     var response = await dio.request(
-   ApiUrls().visitCreationProduction,
-        options: Options(
-          method: 'POST',
-          headers: headers,
-        ),
+      // ApiUrls().visitCreationProduction,
+      ApiUrls().visitCreationUAT,
+      options: Options(
+        method: 'POST',
+        headers: headers,
+      ),
       data: data,
     );
-  //  print(data);
+    //  print(data);
     if (response.statusCode == 200) {
       print("Printing Token 2");
       print(json.encode(response.data));
@@ -287,9 +335,9 @@ class _FormPageViewState extends State<FormPageView> {
       });
 
       Navigator.pop(context);
-     addDataToFirestore();
+      addDataToFirestore();
 
-     // _showAlertDialogSuccess(context);
+      // _showAlertDialogSuccess(context);
     }
     else {
       Navigator.pop(context);
@@ -310,9 +358,10 @@ class _FormPageViewState extends State<FormPageView> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: Colors.blue, // Your custom yellow color
+            primaryColor: Colors.blue,
+            // Your custom yellow color
             hintColor: Color(0xff973232),
-            colorScheme: ColorScheme.light(primary: Color(0xff973232) ),
+            colorScheme: ColorScheme.light(primary: Color(0xff973232)),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -350,7 +399,8 @@ class _FormPageViewState extends State<FormPageView> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: Color(0xff973232), // Your custom yellow color
+            primaryColor: Color(0xff973232),
+            // Your custom yellow color
             hintColor: Colors.blueGrey.shade200,
             colorScheme: ColorScheme.light(primary: Color(0xff973232)),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
@@ -391,7 +441,8 @@ class _FormPageViewState extends State<FormPageView> {
         _timeController.text = formattedTime;
 
         // Check if both date and time are filled
-        if (_dateController.text.isNotEmpty && _timeController.text.isNotEmpty) {
+        if (_dateController.text.isNotEmpty &&
+            _timeController.text.isNotEmpty) {
           areVisitFieldsFilled = true;
         } else {
           areVisitFieldsFilled = false;
@@ -419,8 +470,8 @@ class _FormPageViewState extends State<FormPageView> {
 
   void checkAddressFieldsFilled() {
     if (_addressLine1.text.isNotEmpty &&
-        _addressLine2.text.isNotEmpty  && _addressLine3.text.isNotEmpty &&
-    _city.text.isNotEmpty  && _pincode.text.isNotEmpty) {
+        _addressLine2.text.isNotEmpty && _addressLine3.text.isNotEmpty &&
+        _city.text.isNotEmpty && _pincode.text.isNotEmpty) {
       setState(() {
         areAddressFieldsFilled = true;
       });
@@ -433,7 +484,7 @@ class _FormPageViewState extends State<FormPageView> {
 
   void checkOtherFieldsFilled() {
     if (selectedPurpose != null &&
-        selectedCustomerStatus != null ) {
+        selectedCustomerStatus != null) {
       setState(() {
         areOtherFieldsFilled = true;
       });
@@ -446,22 +497,40 @@ class _FormPageViewState extends State<FormPageView> {
 
 
 //fetching the visits details from leadcreation collection
-  void fetchLeads() async {
-    CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
+//   void fetchLeads() async {
+//     CollectionReference users = FirebaseFirestore.instance.collection('LeadCreation');
+//
+//     users.get().then((value) {
+//       setState(() {
+//         ListOfLeads = value.docs;
+//       });
+//       for (var i = 0; value.docs.length > i; i++) {
+//     //    print(value.docs[i].data());
+//       }
+//     });
+//   }
 
-    users.get().then((value) {
+  Future<void> fetchLeads() async {
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection(
+          'LeadCreation');
+      QuerySnapshot querySnapshot = await users.get();
+
       setState(() {
-        ListOfLeads = value.docs;
+        ListOfLeads = querySnapshot.docs;
       });
-      for (var i = 0; value.docs.length > i; i++) {
-    //    print(value.docs[i].data());
-      }
-    });
+
+      // for (var i = 0; i < querySnapshot.docs.length; i++) {
+      //
+      // }
+    } catch (e) {
+      print("Failed to fetch leads: $e");
+    }
   }
 
 
-  //to check if the customer already existing
   bool isCustomerMobileExist = false;
+
   void fetchAllCustomerMobile(String mobileNumber) {
     List<String> allCustomerMobiles = [];
 
@@ -471,29 +540,22 @@ class _FormPageViewState extends State<FormPageView> {
         allCustomerMobiles.add(customerMobile);
       }
     }
-
-    // Check if mobileNumber exists in allCustomerMobiles
     bool isMobileExists = allCustomerMobiles.contains(mobileNumber);
-
-    // Now allCustomerMobiles contains the CustomerMobile values
     print("All Customer Mobiles: $allCustomerMobiles");
-
-    // Use isMobileExists as needed in your code
     print("Mobile Number $mobileNumber exists: $isMobileExists");
 
     if (isMobileExists) {
-      // If mobile number exists, call visitCreation()
       CustomSnackBar.errorSnackBarQ("Mobile number already Exists", context);
-
     } else {
-      // If mobile number doesn't exist, show custom message
-       visitCreation();
+      visitCreation();
     }
   }
 
 
   // adding visit data to the lead creation collection
-  CollectionReference leadsCreation = FirebaseFirestore.instance.collection("LeadCreation");
+  CollectionReference leadsCreation = FirebaseFirestore.instance.collection(
+      "LeadCreation");
+
   Future<void> addDataToFirestore() async {
     // Upload image to Firebase Storage
 
@@ -526,32 +588,43 @@ class _FormPageViewState extends State<FormPageView> {
       'customerNumber': customerNumber.text,
       'visitDate': _dateController.text,
       'visitTime': _timeController.text,
-      'customerName':_customerName.text,
-      'CustomerMobile':_customerMobileNumber.text,
-      'builderName':_builderName.text,
-      'CRMLeadID':_crmLeadId.text,
+      'customerName': _customerName.text,
+      'CustomerMobile': _customerMobileNumber.text,
+      'builderName': _builderName.text,
+      'CRMLeadID': _crmLeadId.text,
       'leadSource': _selectedLeadSource,
       'dsaName': _selectedDSA,
       'connectorName': _selectedConnector,
       'compaignName': _selectedCampaign,
-      'purposeVisit' : selectedPurpose,
-      'customerStatus' : selectedCustomerStatus,
-      'ReasonforDisinterest' : _reasonNotInterested.text,
-      'DSAConnectorCode' : _selectedLeadSource == 'DSA' ? selectedDSACode1 : _selectedLeadSource == 'Connector' ? ConnectorCode1 : _selectedLeadSource == 'Employee Referral' ? _employeeCode.text : _selectedLeadSource == 'Customer Referral' ? _customerMobileNumber.text : "" ,
-      'referralEmpCode' : _employeeCode.text,
-      'referralEmpName' : _employeeName.text,
-      'latitude' : (latitude?.toString()?.isNotEmpty == true ? latitude.toString() : "19.024651"),
-      'longitude' :(longitude?.toString()?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
+      'purposeVisit': selectedPurpose,
+      'customerStatus': selectedCustomerStatus,
+      'ReasonforDisinterest': _reasonNotInterested.text,
+      'DSAConnectorCode': _selectedLeadSource == 'DSA'
+          ? selectedDSACode1
+          : _selectedLeadSource == 'Connector'
+          ? ConnectorCode1
+          : _selectedLeadSource == 'Employee Referral'
+          ? _employeeCode.text
+          : _selectedLeadSource == 'Customer Referral' ? _customerMobileNumber
+          .text : "",
+      'referralEmpCode': _employeeCode.text,
+      'referralEmpName': _employeeName.text,
+      'latitude': (latitude
+          ?.toString()
+          ?.isNotEmpty == true ? latitude.toString() : "19.024651"),
+      'longitude': (longitude
+          ?.toString()
+          ?.isNotEmpty == true ? longitude.toString() : "72.8447167"),
       'address': locationController.text,
-      'LeadID' : "-",
+      'LeadID': "-",
       'visitID': visitID,
       'userId': userId,
       'selfie': globalImageUrl,
-      'SelfieDateTime' : currentDateTime,
+      'SelfieDateTime': currentDateTime,
       'EmployeeName': pref.getString("employeeName"),
-      'EmployeeCode':  pref.getString("employeeCode"),
+      'EmployeeCode': pref.getString("employeeCode"),
       'EmployeeBranchCode': pref.getString("branchcode"),
-      'createdDateTime':Timestamp.fromDate(now),
+      'createdDateTime': Timestamp.fromDate(now),
     };
     // if (_selectedLeadSource == 'DSA') {
     //   params['DSAConnectorCode'] = _selectedDSACode;
@@ -570,7 +643,6 @@ class _FormPageViewState extends State<FormPageView> {
       print("Failed to add data: $error");
       // Handle error if needed
     });
-
   }
 
 
@@ -578,10 +650,12 @@ class _FormPageViewState extends State<FormPageView> {
   TextEditingController locationController = TextEditingController();
   String latitude = '';
   String longitude = '';
+
   void getLocation() async {
     print("Getting location");
     try {
-      Position position = await   Geolocator.getCurrentPosition(forceAndroidLocationManager: true,
+      Position position = await Geolocator.getCurrentPosition(
+          forceAndroidLocationManager: true,
           desiredAccuracy: LocationAccuracy.lowest);
 
       List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -589,9 +663,11 @@ class _FormPageViewState extends State<FormPageView> {
 
       if (placemarks != null && placemarks.isNotEmpty) {
         Placemark firstPlacemark = placemarks.first;
-        String address = "${firstPlacemark.subThoroughfare} ${firstPlacemark.thoroughfare}, "
+        String address = "${firstPlacemark.subThoroughfare} ${firstPlacemark
+            .thoroughfare}, "
             "${firstPlacemark.subLocality}, ${firstPlacemark.locality}, "
-            "${firstPlacemark.administrativeArea} ${firstPlacemark.postalCode}, "
+            "${firstPlacemark.administrativeArea} ${firstPlacemark
+            .postalCode}, "
             "${firstPlacemark.country}";
 
         setState(() {
@@ -634,20 +710,20 @@ async {
     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
   };
   var data = {
-    'grant_type': 'password',
-    'client_id': ApiUrls().clientIdProduction,
-    'client_secret': ApiUrls().clientSecretProduction,
-    'username': ApiUrls().userNameProduction,
-    'password': ApiUrls().passwordProduction
     // 'grant_type': 'password',
-    // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-    // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-    // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-    // 'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+    // 'client_id': ApiUrls().clientIdProduction,
+    // 'client_secret': ApiUrls().clientSecretProduction,
+    // 'username': ApiUrls().userNameProduction,
+    // 'password': ApiUrls().passwordProduction
+    'grant_type': 'password',
+    'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+    'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+    'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+    'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
   };
   var dio = Dio();
   var response = await dio.request(
-    ApiUrls().accessTokenProduction,
+    ApiUrls().accessTokenUAT,
     options: Options(
       method: 'POST',
       headers: headers,
@@ -674,19 +750,31 @@ async {
     print("Stored Access token");
     print(token);
   }
-
+  Future<void> _fetchData() async {
+    List<DropDownData> data = await getDropDownDSAData();
+    setState(() {
+      // Creating a new list to avoid modifying the final list directly
+      _leadDSAList.clear();
+      _leadDSAList.addAll(data);
+    });
+  }
 
 @override
   void initState() {
     // TODO: implement initState
-
+  //getDropDownDSAData();
+  _fetchData();
+  _fetchConnectorData();
+  getDropDownSalutationData();
+  getDropDownCampaignData();
   getToken();
     fetchLeads();
-    getDropDownSalutationData();
+
+ // getDropDownLeadData();
    // getDropDownLeadData();
-    getDropDownConnectorData();
-    getDropDownDSAData();
-    getDropDownCampaignData();
+   // getDropDownConnectorData();
+
+
     super.initState();
   getLocation();
     requestLocationPermission();
@@ -694,19 +782,153 @@ async {
   }
 
 
+
+
+
+
   Map<String, dynamic> docData = {};
   String? currentDateTime;
+
+
+//   Future<void> getStartImage(ImageSource source) async {
+//     bool serviceEnabled;
+//     LocationPermission permission;
+//
+//     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//     if (!serviceEnabled) {
+//       Fluttertoast.showToast(msg: 'Please enable Your Location Service');
+//       return;
+//     }
+//
+//     permission = await Geolocator.checkPermission();
+//     if (permission == LocationPermission.denied) {
+//       permission = await Geolocator.requestPermission();
+//       if (permission == LocationPermission.denied) {
+//         Fluttertoast.showToast(msg: 'Location permissions are denied');
+//         return;
+//       }
+//     }
+//
+//     if (permission == LocationPermission.deniedForever) {
+//       Fluttertoast.showToast(
+//           msg: 'Location permissions are permanently denied, we cannot request permissions.');
+//       return;
+//     }
+//
+//     Position position = await Geolocator.getCurrentPosition(
+//         desiredAccuracy: LocationAccuracy.high);
+//
+//     try {
+//       List<Placemark> placemarks =
+//       await placemarkFromCoordinates(position.latitude, position.longitude);
+//
+//       Placemark place = placemarks[0];
+//       Placemark place1 = placemarks[1];
+//       setState(() {
+//         currentposition = position;
+//         currentDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+//         currentAddress =
+//         "${place1.name},${place.street},${place.subLocality},${place1.thoroughfare}, ${place.postalCode},${place.locality},${place1.administrativeArea},${place.country}";
+//       });
+//
+//       final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35,);
+//       // final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35, preferredCameraDevice: CameraDevice.front );
+//
+//       if (pickedFile == null) return;
+//
+//       final imageTemporary = File(pickedFile.path);
+//
+//       setState(() {
+//         this.startimage = imageTemporary;
+//         _isVisible = true;
+//       });
+//       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+//       Reference storageReference = FirebaseStorage.instance.ref().child('images/$fileName');
+//       UploadTask uploadTask = storageReference.putFile(imageTemporary);
+//       TaskSnapshot taskSnapshot = await uploadTask;
+//
+//       // Get the image URL
+//       String? imageUrl = await taskSnapshot.ref.getDownloadURL();
+//       setState(() {
+//         globalImageUrl = imageUrl;
+//       });
+//
+// print("gloabal url");
+//       print(globalImageUrl);
+//
+//     } on PlatformException catch (e) {
+//       print('Failed to pick image: $e');
+//     }
+//   }
+
+  Future<void> showImageSourceOptions() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      barrierColor: Colors.blueGrey.withOpacity(0.7),
+      backgroundColor: Colors.black,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+          leading: CircleAvatar(
+            backgroundColor: StyleData.background,
+            child: const Center(
+              child: Icon(Icons.camera, color: Colors.black),
+            ),
+          ),
+            title: const Text("Take Camera",
+                style: TextStyle(color: Colors.white60)),
+                onTap: () {
+                  Navigator.pop(context);
+                  getStartImage(ImageSource.camera); // Capture from camera
+                },
+              ),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: StyleData.background,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                title: const Text(
+                  "Select From Gallery",
+                  style: TextStyle(color: Colors.white60),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  getStartImage(ImageSource.gallery); // Select from gallery
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Future<void> getStartImage(ImageSource source) async {
     bool serviceEnabled;
     LocationPermission permission;
 
+    // Check if location service is enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       Fluttertoast.showToast(msg: 'Please enable Your Location Service');
       return;
     }
 
+    // Check and request location permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -722,15 +944,18 @@ async {
       return;
     }
 
+    // Get current position
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
     try {
+      // Get the address based on latitude and longitude
       List<Placemark> placemarks =
       await placemarkFromCoordinates(position.latitude, position.longitude);
 
       Placemark place = placemarks[0];
       Placemark place1 = placemarks[1];
+
       setState(() {
         currentposition = position;
         currentDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
@@ -738,8 +963,8 @@ async {
         "${place1.name},${place.street},${place.subLocality},${place1.thoroughfare}, ${place.postalCode},${place.locality},${place1.administrativeArea},${place.country}";
       });
 
-      final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35,
-          preferredCameraDevice: CameraDevice.front );
+      // Pick an image from the camera or gallery
+      final pickedFile = await ImagePicker().pickImage(source: source, imageQuality: 35);
       if (pickedFile == null) return;
 
       final imageTemporary = File(pickedFile.path);
@@ -748,6 +973,8 @@ async {
         this.startimage = imageTemporary;
         _isVisible = true;
       });
+
+      // Upload the image to Firebase
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference storageReference = FirebaseStorage.instance.ref().child('images/$fileName');
       UploadTask uploadTask = storageReference.putFile(imageTemporary);
@@ -759,8 +986,8 @@ async {
         globalImageUrl = imageUrl;
       });
 
-print("gloabal url");
-      print(globalImageUrl);
+      print("Global URL: $globalImageUrl");
+      print("Latitude: ${position.latitude}, Longitude: ${position.longitude}");
 
     } on PlatformException catch (e) {
       print('Failed to pick image: $e');
@@ -769,10 +996,19 @@ print("gloabal url");
 
 
 
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final connectorProvider = Provider.of<ConnectorProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         // Navigate to ApplicantDetailsView when back button is pressed
@@ -856,6 +1092,22 @@ print("gloabal url");
                                   ),
                                 );
                               }).toList(),
+                              //     .map((DropDownData item) {
+                              //   return DropdownMenuItem(
+                              //     value: item.title,
+                              //     child: Text(
+                              //       item.title.length > 25
+                              //           ? item.title.substring(0, 26) + '.'
+                              //           : item.title,
+                              //       style: const TextStyle(
+                              //         color: Color(0xFF393939),
+                              //         fontSize: 15,
+                              //         fontFamily: 'Poppins',
+                              //         fontWeight: FontWeight.w400,
+                              //       ),
+                              //     ),
+                              //   );
+                              // }).toList(),
                               style: const TextStyle(
                                 color: Color(0xFF393939),
                                 fontSize: 15,
@@ -1583,6 +1835,10 @@ print("gloabal url");
                                   child: TextFormField(
                                     controller: _crmLeadId,
                                     keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      LengthLimitingTextInputFormatter(10),
+                                    ],
                                     // onChanged: (value) {
                                     //   setState(() {
                                     //     checkCustomerFieldsFilled();
@@ -2187,7 +2443,8 @@ print("gloabal url");
                               children: <Widget>[
                                 InkWell(
                                   onTap: () {
-                                    getStartImage(ImageSource.camera);
+                                   // getStartImage(ImageSource.camera);
+                                    showImageSourceOptions();
                                   },
                                   child: ClipOval(
                                     child: Container(
@@ -2213,7 +2470,8 @@ print("gloabal url");
                                     fontSize: 16,
                                   ),
                                 ),
-                                _isVisible
+                              //  _isVisible
+                                _isVisible && startimage != null
                                     ? Stack(
                                   children: [
                                     Image.file(
@@ -2230,7 +2488,7 @@ print("gloabal url");
                                         child: Text(
                                           '${currentDateTime}\nLat: ${currentposition?.latitude}, Long: ${currentposition?.longitude}',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           fontWeight: FontWeight.w600,
                                           ),
                                         ),
