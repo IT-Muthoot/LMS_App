@@ -89,6 +89,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   String? selectedProductType;
   bool isDateOfBirth = false;
+  String? consentDocument;
 
   //textfields
   TextEditingController textEditingController = TextEditingController();
@@ -455,6 +456,7 @@ String? SalutaionID;
     consentCRIF = docData["ConsentCRIF"] ?? "";
     consentAccountAgregator = docData["ConsentAccountAggregator"] ?? "";
     consentStatusMsg = docData["ConsentStatus"] ?? "";
+    selectedAccountAggregator = docData["selectedAccountAggregator"] ?? "";
     consentHandle = docData["consentHandle"] ?? "";
     isLeadsDataSaved = docData["isLeadSaved"] ?? "";
     print("hgjhghgh");
@@ -574,8 +576,8 @@ String? SalutaionID;
           "fiuID": ApiUrls().fiuID,
           "userId": ApiUrls().userId,
           "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-         // "aaCustomerMobile": customerNumber.text,
-           "aaCustomerMobile": "8971560421",
+          "aaCustomerMobile": customerNumber.text,
+         //   "aaCustomerMobile": "8971560421",
           "sessionId": ApiUrls().sessionId,
           "Integrated_trigger_sms_email": "Y",
           "fipid": "fipuat@citybank",
@@ -766,7 +768,7 @@ String? SalutaionID;
           var querySnapshot = await collection.where('VisitID', isEqualTo: visitID).get();
           for (var doc in querySnapshot.docs) {
             await doc.reference.update({
-              'ConsentStatusMsg': consentStatusMsg,
+              'ConsentStatus': consentStatusMsg,
               'consentHandle': consentHandle,
               // 'consentHandle': prefs.getString('consentHandle').toString(),
             });
@@ -786,15 +788,16 @@ String? SalutaionID;
 
               // Step 4: Upload the PDF file to DMS
               await uploadPdfFileToDMS(pdfFile);
+              _showAlertConsent(context, pdfBase64);
               SmartDialog.dismiss();
             } else {
               print('pdfbase64 is null');
             }
           } else {
+            SmartDialog.dismiss();
+            _showAlertConsent(context, pdfBase64);
             print('Data is null or empty');
           }
-          SmartDialog.dismiss();
-          _showAlertConsent(context, pdfBase64);
         } else {
           print(response1.statusMessage);
         }
@@ -805,6 +808,8 @@ String? SalutaionID;
       print(e.toString());
     }
   }
+
+
   String? accessToken;
   Future<void> uploadPdfFileToDMS(File pdfFile) async {
     try {
@@ -862,6 +867,9 @@ String? SalutaionID;
 
       var data = json.decode(response1.toString());
       print(data);
+      setState(() {
+        consentDocument = data["docId"].toString();
+      });
 
       // Update Firestore with document ID
       var snapshot = await FirebaseFirestore.instance
@@ -876,6 +884,7 @@ String? SalutaionID;
             .set({
           'Bank_Statement': data["docId"].toString(),
         }, SetOptions(merge: true));
+
       } else {
         CustomSnackBar.errorSnackBarQ("No such document found", context);
       }
@@ -1125,6 +1134,7 @@ String? SalutaionID;
         'ConsentStatus': consentStatusMsg ?? "",
         'consentHandle': consentHandle ?? "",
         'selectedAAReason': _selectedReason ?? "",
+        'Bank_Statement':consentDocument ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
@@ -1231,6 +1241,7 @@ String? SalutaionID;
         // 'ConsentStatus': consentStatusMsg ?? "",
         'consentHandle': consentHandle ?? "",
         'selectedAccountAggregator': selectedAccountAggregator ?? "",
+        'Bank_Statement':consentDocument ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
@@ -1607,6 +1618,7 @@ String? SalutaionID;
                                       ),
                                     ),
                                   ),
+                                  SizedBox(width: width * 0.05),
                                 ],
                               ),
                             ),
@@ -1614,7 +1626,7 @@ String? SalutaionID;
 
                             SizedBox(height: height * 0.03),
                             Visibility(
-                              visible: consentCRIF == true && consentKYC == true,
+                              visible: consentCRIF == true && consentKYC == true && consentAccountAgregator == true ,
                                 child: Column(
                               children: [
                                 Card(
@@ -3224,7 +3236,7 @@ String? SalutaionID;
                                   CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
                                 }
                                 if (consentAccountAgregator == true) {
-                                  if (selectedAccountAggregator == "Send SMS" && consentHandle != null) {
+                                  if (selectedAccountAggregator == "Send SMS" && consentHandle != null || selectedAccountAggregator == "Reason for Not Sending SMS" && _selectedReason != null ) {
                                     // This is the valid case, proceed to next step
                                     setState(() {
                                       isClickNext = true;
@@ -3286,7 +3298,7 @@ String? SalutaionID;
                       onPressed: () {
                         // DateFormat formatter = DateFormat('dd-MM-yyyy');
                         // DateTime dob = formatter.parse(_dateOfBirth.text);
-                        getConsentStatus();
+
                         if(isLeadsDataSaved == true || isClickNext == true )
                         {
                           if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text) ) {
@@ -3305,6 +3317,7 @@ String? SalutaionID;
                                         builder: (context) => DocumentPageView(
                                             docId: widget.docId,
                                             visitID: widget.visitId,
+                                            consentHandle: consentHandle ?? "",
                                             isNewActivity: false,
                                             leadID: '',
                                             isTechChecklist : false,

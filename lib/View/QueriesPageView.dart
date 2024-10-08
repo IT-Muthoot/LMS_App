@@ -455,6 +455,7 @@ class _QueryPageViewState extends State<QueryPageView> {
                                                               ? ListOfLeads[index]['VisitID'] ?? ""
                                                               : searchListOfLeads[index]["VisitID"] ?? "",
                                                           docId: ListOfLeads[index].id,
+                                                          consentHandle: ListOfLeads[index]["consentHandle"] ?? "",
                                                           isNewActivity: false,
                                                           isTechChecklist: true,
                                                           leadID: searchKEY.text.isEmpty

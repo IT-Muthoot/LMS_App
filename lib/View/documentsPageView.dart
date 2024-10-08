@@ -33,8 +33,9 @@ class DocumentPageView extends StatefulWidget {
   final String visitID;
   final String docId;
   final String leadID;
+  final String consentHandle;
   const DocumentPageView({Key? key,
-    required this.visitID,required this.docId,required this.isNewActivity,required this.isTechChecklist,required this.leadID, required this.isPartiallyVerifiedLeads})
+    required this.visitID,required this.docId,required this.isNewActivity,required this.isTechChecklist,required this.leadID, required this.isPartiallyVerifiedLeads,required this.consentHandle})
       : super(key: key);
 
   @override
@@ -259,7 +260,6 @@ String? technicalDocumentStatus;
     isKycCheck = docData["ConsentKYC"] ?? "";
     isCrifCheck = docData["ConsentCRIF"] ?? "";
     isAccountAggragator = docData["ConsentAccountAggregator"] ?? "";
-    AAStatus = docData["ConsentStatus"] ?? "";
     AAConsentHandle = docData["consentHandle"] ?? "";
     selectedAAReason = docData["selectedAAReason"] ?? "";
     selectedAccountAggregator = docData["selectedAccountAggregator"] ?? "";
@@ -302,7 +302,7 @@ String? technicalDocumentStatus;
       technicalDocumentStatus = 'Partially Uploaded';
     }
     print(technicalDocumentStatus);
- 
+
 
     if(region != null)
       {
@@ -313,6 +313,87 @@ String? technicalDocumentStatus;
       {
 
       }
+  }
+
+  Future<void> getConsentStatus() async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var data = {
+      "fiuID": ApiUrls().fiuID,
+      "redirection_key": ApiUrls().redirection_key,
+      "userId": ApiUrls().userId,
+    };
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        ApiUrls().authAccAggregatorUAT,
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+
+      if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var responseData = response.data;
+        var token = responseData['token'];
+        var sessionID = responseData['sessionId'];
+
+        var headers = {
+          'Authorization': 'Bearer ${token ?? ""}',
+          'Content-Type': 'application/json',
+        };
+        var data = json.encode({
+          // "consentHandle": prefs.getString('consentHandle').toString(),
+          "consentHandle": widget.consentHandle,
+          "fiuID": "MUTHOOTHF_UAT",
+          "sessionId": sessionID,
+        });
+
+        var response1 = await dio.request(
+          ApiUrls().getConsentStatus,
+          options: Options(
+            method: 'POST',
+            headers: headers,
+          ),
+          data: data,
+        );
+
+        if (response1.statusCode == 200) {
+
+          var response1Data = response1.data;
+          print(response1Data);
+          var consentStatusNotification =
+              response1Data['consentStatusNotification'] ?? response1Data['ConsentStatusNotification'];
+          var consentStatus = consentStatusNotification != null ? consentStatusNotification['consentStatus'] : null;
+
+          setState(() {
+            AAStatus = consentStatus ?? "Unknown status";
+          });
+
+          // Fetch documents in Firestore based on VisitID
+          var collection = FirebaseFirestore.instance.collection('convertedLeads');
+          var querySnapshot = await collection.where('VisitID', isEqualTo: widget.visitID).get();
+          for (var doc in querySnapshot.docs) {
+            await doc.reference.update({
+              'ConsentStatus': AAStatus,
+              //  'consentHandle': consentHandle,
+              // 'consentHandle': prefs.getString('consentHandle').toString(),
+            });
+          }
+        } else {
+          print(response1.statusMessage);
+          print(AAStatus);
+          print("ConsentMessage Updated Successfully");
+        }
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> _fetchDataFromFirestore() async {
@@ -439,6 +520,7 @@ String? technicalDocumentStatus;
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     print(headers);
+    DateTime now = DateTime.now();
     SharedPreferences pref =
     await SharedPreferences.getInstance();
     if( CustomerStatus == "Interested" ) {
@@ -491,7 +573,14 @@ String? technicalDocumentStatus;
         "IsDocumentCollected": true,
         "isDirectLeads": true,
         "Createdby": employeeName,
-        "CreatedbyCode": employeeCode
+        "CreatedbyCode": employeeCode,
+       "AAconsent": isAccountAggragator,
+       "AASmsStatus" : selectedAccountAggregator == "Send SMS" ? "Success" : "failed",
+       "AAconsentHandleID":AAConsentHandle!.isNotEmpty ? AAConsentHandle : "null" ,
+       "AASmsSendDate":  (AASmsSendDate!.isNotEmpty) ? AASmsSendDate : Timestamp.fromDate(now).toDate().toIso8601String(),
+       "AAConsentReceivedDate": Timestamp.fromDate(now).toDate().toIso8601String(),
+       "AAConsentStatus": AAStatus ?? "",
+       "ReasonforNotSMS": ReasonforNotSMS ?? ""
       });
     } else {
       data = json.encode({
@@ -590,16 +679,16 @@ String? technicalDocumentStatus;
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      // 'grant_type': 'password',
-      // 'client_id': ApiUrls().clientIdProduction,
-      // 'client_secret': ApiUrls().clientSecretProduction,
-      // 'username': ApiUrls().userNameProduction,
-      // 'password': ApiUrls().passwordProduction
       'grant_type': 'password',
-      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+      'client_id': ApiUrls().clientIdUAT,
+      'client_secret': ApiUrls().clientSecretUAT,
+      'username': ApiUrls().userNameUAT,
+      'password': ApiUrls().passwordUAT
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
+      // 'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CDE',
+      // 'username': 'itkrishnaprasad@muthootgroup.com',
+      // 'password': 'Karthikrishna@123yEL7T0NoeWfMSqvdRifQW5Js3'
     };
     var dio = Dio();
     var response = await dio.request(
@@ -625,6 +714,10 @@ String? technicalDocumentStatus;
       print(accessToken);
     }
   }
+
+
+
+
   Future<void> saveAccessToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('access_token', token);
@@ -910,6 +1003,7 @@ String? technicalDocumentStatus;
     getLeadDetails();
    updateDocumentStatus();
     getDropDownDocumentData();
+    getConsentStatus();
   //  checkApplicationFormStatus();
 
   }

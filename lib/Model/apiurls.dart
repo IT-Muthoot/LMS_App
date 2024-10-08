@@ -14,9 +14,12 @@ class ApiUrls {
 
  // UAT URL
 
-  String accessTokenUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token";
-  String visitCreationUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/";
-  String leadCreationUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/";
+  // String accessTokenUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/oauth2/token";
+  String accessTokenUAT = "https://test.salesforce.com/services/oauth2/token";
+ // String visitCreationUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/VisitApi/";
+  String visitCreationUAT = "https://muthootltd--uat.sandbox.my.salesforce.com/services/apexrest/VisitApi/";
+ // String leadCreationUAT = "https://muthootltd--muthootdo.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/";
+  String leadCreationUAT = "https://muthootltd--uat.sandbox.my.salesforce.com/services/apexrest/LeadCreationTest/";
 
   //Production URL
 String accessTokenProduction = "https://muthootltd.my.salesforce.com/services/oauth2/token";
@@ -24,10 +27,15 @@ String visitCreationProduction = "https://muthootltd.my.salesforce.com/services/
 String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/apexrest/LeadCreationTest/";
 
 //UAT Token Credentials
-  String clientIdUAT = "3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R";
-  String clientSecretUAT = "E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE";
-  String userNameUAT = "itkrishnaprasad@muthootgroup.com.dev2";
-  String passwordUAT = "Muthoot@123psHRYkQwhAutEGemnXrS5cOu";
+//   String clientIdUAT = "3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R";
+//   String clientSecretUAT = "E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE";
+//   String userNameUAT = "itkrishnaprasad@muthootgroup.com.dev2";
+//   String passwordUAT = "Muthoot@123psHRYkQwhAutEGemnXrS5cOu";
+
+  String clientIdUAT = "3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ";
+  String clientSecretUAT = "ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD";
+  String userNameUAT = "itkrishnaprasad@muthootgroup.com";
+  String passwordUAT = "Karthikrishna@123yEL7T0NoeWfMSqvdRifQW5Js3";
 
  // Production Token Credentials
   String clientIdProduction = "3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf";

@@ -480,6 +480,7 @@ class _ApplicantDetailsViewState extends State<ApplicantDetailsView> {
                                          leadID: ListOfLeads[index]["LeadID"],
                                            isNewActivity: false,
                                          visitID: ListOfLeads[index]["VisitID"],
+                                           consentHandle: ListOfLeads[index]["consentHandle"] ?? "",
                                          isTechChecklist : istechnicalChecklist,
                                            isPartiallyVerifiedLeads : false
                                        ))

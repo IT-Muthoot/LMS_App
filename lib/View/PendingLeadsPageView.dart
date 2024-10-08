@@ -316,6 +316,7 @@ class _PendingLeadsPageViewState extends State<PendingLeadsPageView> {
                                                     visitID: searchKEY.text.isEmpty
                                                         ? ListOfLeads[index]['VisitID'] ?? ""
                                                         : searchListOfLeads[index]["VisitID"] ?? "",
+                                                      consentHandle: ListOfLeads[index]["consentHandle"] ?? "",
                                                     docId: ListOfLeads[index].id,
                                                     isNewActivity: false,
                                                     isTechChecklist: true,
