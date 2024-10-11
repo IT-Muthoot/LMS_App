@@ -29,7 +29,10 @@ import 'VisitPageView.dart';
 import 'package:path/path.dart' as path;
 
 
-
+final List<DropDownData> leadDSAList = [];
+final List<DropDownData> leadConnectorList = [];
+final List<DropDownData> leadCampaignList = [];
+final List<DropDownData> salList = [];
 class FormPageView extends StatefulWidget {
   // String? accessToken;
   FormPageView({Key? key,
@@ -119,7 +122,7 @@ class _FormPageViewState extends State<FormPageView> {
   String? _selectedLeadSource;
 
   // final List<DropDownData> _leadSourceList = [];
-  final List<DropDownData> _leadDSAList = [];
+
 
 
   final List<Map<String, dynamic>> _leadSourceList = [
@@ -149,29 +152,69 @@ class _FormPageViewState extends State<FormPageView> {
   //   });
   // }
 
-  Future<List<DropDownData>> getDropDownConnectorData() async {
-    var document = await FirebaseFirestore.instance
-        .collection("connectorName")
-        .doc('connectorName')
-        .get();
+  getDropDownDSAData() async {
+    if(leadDSAList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("dsaName")
+          .doc('dsaName')
+          .get();
 
-    List<DropDownData> tempList = [];
-    for (var element in document.data()!['connectorName']) {
-      tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['dsaName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadDSAList.clear(); // Clear the existing list
+        leadDSAList.addAll(tempList); // Add new items to the existing list
+      });
     }
-    return tempList;
+
   }
 
+  getDropDownConnectorData() async {
+    if(leadConnectorList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("connectorName")
+          .doc('connectorName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['connectorName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadConnectorList.clear(); // Clear the existing list
+        leadConnectorList.addAll(tempList); // Add new items to the existing list
+      });
+    }
+
+  }
+
+  // Future<List<DropDownData>> getDropDownConnectorData() async {
+  //   var document = await FirebaseFirestore.instance
+  //       .collection("connectorName")
+  //       .doc('connectorName')
+  //       .get();
+  //
+  //   List<DropDownData> tempList = [];
+  //   for (var element in document.data()!['connectorName']) {
+  //     tempList.add(DropDownData(int.parse(element['id']), element['title']));
+  //   }
+  //   return tempList;
+  // }
+  //
   Future<void> _fetchConnectorData() async {
     List<DropDownData> data = await getDropDownConnectorData();
     setState(() {
-      _leadConnectorList.clear();
-      _leadConnectorList.addAll(data);
+      leadConnectorList.clear();
+      leadConnectorList.addAll(data);
     });
   }
 
   String? _selectedConnector;
-  final List<DropDownData> _leadConnectorList = [];
+
   String? ConnectorCode;
 
   // getDropDownDSAData() {
@@ -189,22 +232,25 @@ class _FormPageViewState extends State<FormPageView> {
   //   });
   // }
 
-  getDropDownDSAData() async {
-    var document = await FirebaseFirestore.instance
-        .collection("dsaName")
-        .doc('dsaName')
-        .get();
-
-    List<DropDownData> tempList = [];
-    for (var element in document.data()!['dsaName']) {
-      tempList.add(DropDownData(int.parse(element['id']), element['title']));
-    }
-
-    setState(() {
-      _leadDSAList.clear(); // Clear the existing list
-      _leadDSAList.addAll(tempList); // Add new items to the existing list
-    });
-  }
+  // getDropDownDSAData() async {
+  //   if(leadDSAList.isEmpty){
+  //     var document = await FirebaseFirestore.instance
+  //         .collection("dsaName")
+  //         .doc('dsaName')
+  //         .get();
+  //
+  //     List<DropDownData> tempList = [];
+  //     for (var element in document.data()!['dsaName']) {
+  //       tempList.add(DropDownData(int.parse(element['id']), element['title']));
+  //     }
+  //
+  //     setState(() {
+  //       leadDSAList.clear(); // Clear the existing list
+  //       leadDSAList.addAll(tempList); // Add new items to the existing list
+  //     });
+  //   }
+  //
+  // }
 
 
   String? _selectedDSA;
@@ -312,7 +358,7 @@ class _FormPageViewState extends State<FormPageView> {
     var dio = Dio();
     var response = await dio.request(
       // ApiUrls().visitCreationProduction,
-      ApiUrls().visitCreationUAT,
+      ApiUrls().visitCreationProduction,
       options: Options(
         method: 'POST',
         headers: headers,
@@ -710,20 +756,20 @@ async {
     'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
   };
   var data = {
-    // 'grant_type': 'password',
-    // 'client_id': ApiUrls().clientIdProduction,
-    // 'client_secret': ApiUrls().clientSecretProduction,
-    // 'username': ApiUrls().userNameProduction,
-    // 'password': ApiUrls().passwordProduction
     'grant_type': 'password',
-    'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-    'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-    'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-    'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
+    'client_id': ApiUrls().clientIdProduction,
+    'client_secret': ApiUrls().clientSecretProduction,
+    'username': ApiUrls().userNameProduction,
+    'password': ApiUrls().passwordProduction
+    // 'grant_type': 'password',
+    // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+    // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+    // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+    // 'password': 'Karthikrishna@127jb7htnfs8WigpiW5SOP6I7qZ'
   };
   var dio = Dio();
   var response = await dio.request(
-    ApiUrls().accessTokenUAT,
+    ApiUrls().accessTokenProduction,
     options: Options(
       method: 'POST',
       headers: headers,
@@ -751,12 +797,34 @@ async {
     print(token);
   }
   Future<void> _fetchData() async {
-    List<DropDownData> data = await getDropDownDSAData();
-    setState(() {
-      // Creating a new list to avoid modifying the final list directly
-      _leadDSAList.clear();
-      _leadDSAList.addAll(data);
-    });
+    // List<DropDownData> data = await getDropDownDSAData();
+    // setState(() {
+    //   // Creating a new list to avoid modifying the final list directly
+    //   _leadDSAList.clear();
+    //   _leadDSAList.addAll(data);
+    // });
+
+    try{
+      var document = await FirebaseFirestore.instance
+          .collection("dsaName")
+          .doc('dsaName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['dsaName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+      print("DATA ----");
+      setState(() {
+        leadDSAList.clear(); // Clear the existing list
+        leadDSAList.addAll(tempList); // Add new items to the existing list
+      });
+    }catch(e){
+      print(e);
+
+    }
+
+
   }
 
 @override
@@ -764,7 +832,7 @@ async {
     // TODO: implement initState
   //getDropDownDSAData();
   _fetchData();
-  _fetchConnectorData();
+  //_fetchConnectorData();
   getDropDownSalutationData();
   getDropDownCampaignData();
   getToken();
@@ -1144,7 +1212,7 @@ async {
                                         color: Color(0xFF393939), // Changed text color to match second dropdown
                                       ),
                                     ),
-                                    items: _leadDSAList.map((DropDownData item) {
+                                    items: leadDSAList.map((DropDownData item) {
                                       return DropdownMenuItem(
                                         value: item.title,
                                         child: Text(
@@ -1164,7 +1232,7 @@ async {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         _selectedDSA = newValue;
-                                        DropDownData selectedDSAData = _leadDSAList.firstWhere(
+                                        DropDownData selectedDSAData = leadDSAList.firstWhere(
                                               (item) => item.title == newValue,
                                         );
                                         print('DSAID: ${selectedDSAData.id}');
@@ -1198,7 +1266,7 @@ async {
                                       maxHeight: 200,
                                     ),
                                     selectedItemBuilder: (BuildContext context) {
-                                      return _leadDSAList.map<Widget>((DropDownData item) {
+                                      return leadDSAList.map<Widget>((DropDownData item) {
                                         return Text(
                                           item.title,
                                           style: const TextStyle(fontSize: 13, color: Colors.black),
@@ -1367,7 +1435,7 @@ async {
                                         color: Color(0xFF393939), // Changed text color to match second dropdown
                                       ),
                                     ),
-                                    items: _leadConnectorList
+                                    items: leadConnectorList
                                         .map((DropDownData item){
                                       return DropdownMenuItem(
                                         value: item.title,
@@ -1388,7 +1456,7 @@ async {
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         _selectedConnector = newValue;
-                                        DropDownData selectedConnectorData = _leadConnectorList.firstWhere(
+                                        DropDownData selectedConnectorData = leadConnectorList.firstWhere(
                                               (item) => item.title == newValue,
         
                                         );
@@ -1432,7 +1500,7 @@ async {
                                       maxHeight: 200,
                                     ),
                                     selectedItemBuilder: (BuildContext context) {
-                                      return _leadConnectorList.map<Widget>((DropDownData item) {
+                                      return leadConnectorList.map<Widget>((DropDownData item) {
                                         return Text(
                                           item.title,
                                           style: const TextStyle(fontSize: 14, color: Colors.black),
@@ -1598,7 +1666,7 @@ async {
                                       }
                                       return null;
                                     },
-                                    items: _leadCampaignList
+                                    items: leadCampaignList
                                         .map((DropDownData item){
                                       return DropdownMenuItem(
                                         value: item.title,
@@ -1938,7 +2006,7 @@ async {
                                                       ),
                                                       maxHeight: 200,
                                                     ) ,
-                                                    items: _salutationList
+                                                    items: salList
                                                         .map((DropDownData item){
                                                       return DropdownMenuItem(
                                                         value: item.title,
@@ -2521,7 +2589,7 @@ async {
                         if (_formKey.currentState!.validate() &&
                             areCustomerFieldsFilled == true && areVisitFieldsFilled == true
                              && areOtherFieldsFilled == true) {
-                          if(startimage != null) {
+                          //if(startimage != null) {
                             //  visitCreation();
                             if (customerNumber.text.length < 10) {
                               CustomSnackBar.errorSnackBarQ(
@@ -2530,9 +2598,10 @@ async {
                             else {
                               fetchAllCustomerMobile(customerNumber.text);
                             }
-                          }else{
-                            CustomSnackBar.errorSnackBarQ("Please Capture Selfie", context);
-                          }
+                        //  }
+                          // else{
+                          //   CustomSnackBar.errorSnackBarQ("Please Capture Selfie", context);
+                          // }
         
                         }
                         else {

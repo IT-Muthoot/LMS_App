@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lead_management_system/Model/Response/DropDownModel.dart';
 import 'package:lead_management_system/Utils/StyleData.dart';
 import 'package:lead_management_system/View/ApplicantDetailsView.dart';
 import 'package:lead_management_system/View/VisitPageView.dart';
@@ -21,6 +22,8 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
+
+
 
   int activeIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -150,11 +153,10 @@ class _HomePageViewState extends State<HomePageView> {
 
 
 
-
-
   @override
   void initState() {
     // TODO: implement initState
+
     initialize();
     super.initState();
   }
@@ -207,7 +209,7 @@ class _HomePageViewState extends State<HomePageView> {
             },
           ),
 
-          body:  _screens[activeIndex],
+          body:_screens[activeIndex],
         ),
 
       ),

@@ -49,20 +49,20 @@ class _LoginScreenState extends State<LoginScreen> {
       'Cookie': 'BrowserId=qnhrXMyBEe6lOh9ncfvoTw; CookieConsentPolicy=0:1; LSKey-c\$CookieConsentPolicy=0:1'
     };
     var data = {
-      // 'grant_type': 'password',
-      // 'client_id': ApiUrls().clientIdProduction,
-      // 'client_secret': ApiUrls().clientSecretProduction,
-      // 'username': ApiUrls().userNameProduction,
-      // 'password': ApiUrls().passwordProduction
       'grant_type': 'password',
-      'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
-      'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
-      'username': 'itkrishnaprasad@muthootgroup.com.dev2',
-      'password': 'Muthoot@123psHRYkQwhAutEGemnXrS5cOu'
+      'client_id': ApiUrls().clientIdProduction,
+      'client_secret': ApiUrls().clientSecretProduction,
+      'username': ApiUrls().userNameProduction,
+      'password': ApiUrls().passwordProduction
+      // 'grant_type': 'password',
+      // 'client_id': '3MVG9ct5lb5FGJTNKeeA63nutsPt.67SWB9mzXh9na.RBlkmz2FxM4KH31kKmHWMWQHD1y2apE9qmtoRtiQ9R',
+      // 'client_secret': 'E9DDAF90143A7B4C6CA622463EFDA17843174AB347FD74A6905F853CD2406BDE',
+      // 'username': 'itkrishnaprasad@muthootgroup.com.dev2',
+      // 'password': 'Muthoot@123psHRYkQwhAutEGemnXrS5cOu'
     };
     var dio = Dio();
     var response = await dio.request(
-      ApiUrls().accessTokenUAT,
+      ApiUrls().accessTokenProduction,
       options: Options(
         method: 'POST',
         headers: headers,

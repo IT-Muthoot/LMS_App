@@ -539,88 +539,88 @@ String? SalutaionID;
 
   // Account Aggregator
 
-  Future<void> callAARedirectionLink() async {
-    SmartDialog.showLoading(msg: 'Loading...');
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var data = {
-      "fiuID": ApiUrls().fiuID,
-      "redirection_key": ApiUrls().redirection_key,
-      "userId": ApiUrls().userId,
-    };
-    var dio = Dio();
-    try {
-      var response = await dio.request(
-        ApiUrls().authAccAggregatorUAT,
-        options: Options(
-          method: 'POST',
-          headers: headers,
-        ),
-        data: data,
-      );
-
-      if (response.statusCode == 200) {
-        var responseData = response.data; // Already a map
-        var token = responseData['token'];
-        print('Token: $token');
-
-        var headers = {
-          'Authorization': 'Bearer ${token ?? ""}',
-          'Content-Type': 'application/json'
-        };
-        var data = json.encode({
-          "clienttrnxid": ApiUrls().clienttrnxid,
-          "fiuID": ApiUrls().fiuID,
-          "userId": ApiUrls().userId,
-          "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-         // "aaCustomerMobile": customerNumber.text,
-           "aaCustomerMobile": "8971560421",
-          "sessionId": ApiUrls().sessionId,
-          "Integrated_trigger_sms_email": "Y",
-          "fipid": "fipuat@citybank",
-          "useCaseid": "226"
-        });
-        var dio = Dio();
-        var response1 = await dio.request(
-          ApiUrls().aaRedirectionUAT,
-          options: Options(
-            method: 'POST',
-            headers: headers,
-          ),
-          data: data,
-        );
-
-        if (response1.statusCode == 200) {
-          SmartDialog.dismiss();
-          print(json.encode(response1.data));
-          var responseData = response1.data;
-          print(responseData.toString());
-          var sessionId = responseData['sessionId'];
-          var consentHandle1 = responseData['consentHandle'];
-          smsSentTimeStamp = responseData['timestamp'];
-          print('ConsentHandle: $consentHandle');
-          print('SessionId: $sessionId');
-          print('SessionId: $smsSentTimeStamp');
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('sessionId', sessionId);
-          await prefs.setString('consentHandle', consentHandle1);
-          await prefs.setString('smsSentTimeStamp', smsSentTimeStamp);
-          setState(() {
-            consentHandle = consentHandle1;
-          });
-        }
-        else {
-          print(response1.statusMessage);
-        }
-
-      } else {
-        print(response.statusMessage);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // Future<void> callAARedirectionLink() async {
+  //   SmartDialog.showLoading(msg: 'Loading...');
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var data = {
+  //     "fiuID": ApiUrls().fiuID,
+  //     "redirection_key": ApiUrls().redirection_key,
+  //     "userId": ApiUrls().userId,
+  //   };
+  //   var dio = Dio();
+  //   try {
+  //     var response = await dio.request(
+  //       ApiUrls().authAccAggregatorUAT,
+  //       options: Options(
+  //         method: 'POST',
+  //         headers: headers,
+  //       ),
+  //       data: data,
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       var responseData = response.data; // Already a map
+  //       var token = responseData['token'];
+  //       print('Token: $token');
+  //
+  //       var headers = {
+  //         'Authorization': 'Bearer ${token ?? ""}',
+  //         'Content-Type': 'application/json'
+  //       };
+  //       var data = json.encode({
+  //         "clienttrnxid": ApiUrls().clienttrnxid,
+  //         "fiuID": ApiUrls().fiuID,
+  //         "userId": ApiUrls().userId,
+  //         "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
+  //        // "aaCustomerMobile": customerNumber.text,
+  //          "aaCustomerMobile": "8971560421",
+  //         "sessionId": ApiUrls().sessionId,
+  //         "Integrated_trigger_sms_email": "Y",
+  //         "fipid": "fipuat@citybank",
+  //         "useCaseid": "226"
+  //       });
+  //       var dio = Dio();
+  //       var response1 = await dio.request(
+  //         ApiUrls().aaRedirectionUAT,
+  //         options: Options(
+  //           method: 'POST',
+  //           headers: headers,
+  //         ),
+  //         data: data,
+  //       );
+  //
+  //       if (response1.statusCode == 200) {
+  //         SmartDialog.dismiss();
+  //         print(json.encode(response1.data));
+  //         var responseData = response1.data;
+  //         print(responseData.toString());
+  //         var sessionId = responseData['sessionId'];
+  //         var consentHandle1 = responseData['consentHandle'];
+  //         smsSentTimeStamp = responseData['timestamp'];
+  //         print('ConsentHandle: $consentHandle');
+  //         print('SessionId: $sessionId');
+  //         print('SessionId: $smsSentTimeStamp');
+  //         SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         await prefs.setString('sessionId', sessionId);
+  //         await prefs.setString('consentHandle', consentHandle1);
+  //         await prefs.setString('smsSentTimeStamp', smsSentTimeStamp);
+  //         setState(() {
+  //           consentHandle = consentHandle1;
+  //         });
+  //       }
+  //       else {
+  //         print(response1.statusMessage);
+  //       }
+  //
+  //     } else {
+  //       print(response.statusMessage);
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   void _showPdf(BuildContext context, String base64String) async {
     try {
@@ -702,109 +702,109 @@ String? SalutaionID;
     return pdfFile;
   }
 
-  Future<void> getConsentStatus() async {
-    SmartDialog.showLoading(msg: 'Loading...');
-    var headers = {
-      'Content-Type': 'application/json',
-    };
-    var data = {
-      "fiuID": ApiUrls().fiuID,
-      "redirection_key": ApiUrls().redirection_key,
-      "userId": ApiUrls().userId,
-    };
-    var dio = Dio();
-    try {
-      var response = await dio.request(
-        ApiUrls().authAccAggregatorUAT,
-        options: Options(
-          method: 'POST',
-          headers: headers,
-        ),
-        data: data,
-      );
-
-      if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var responseData = response.data;
-        var token = responseData['token'];
-        var sessionID = responseData['sessionId'];
-
-        var headers = {
-          'Authorization': 'Bearer ${token ?? ""}',
-          'Content-Type': 'application/json',
-        };
-        var data = json.encode({
-          // "consentHandle": prefs.getString('consentHandle').toString(),
-          "consentHandle": consentHandle,
-          "fiuID": "MUTHOOTHF_UAT",
-          "sessionId": sessionID,
-        });
-
-        var response1 = await dio.request(
-          ApiUrls().getConsentStatus,
-          options: Options(
-            method: 'POST',
-            headers: headers,
-          ),
-          data: data,
-        );
-
-        if (response1.statusCode == 200) {
-
-          var response1Data = response1.data;
-          print(response1Data);
-          var consentStatusNotification =
-              response1Data['consentStatusNotification'] ?? response1Data['ConsentStatusNotification'];
-          var consentStatus = consentStatusNotification != null ? consentStatusNotification['consentStatus'] : null;
-
-          setState(() {
-            consentStatusMsg = consentStatus ?? "Unknown status";
-          });
-
-          // Fetch documents in Firestore based on VisitID
-          var collection = FirebaseFirestore.instance.collection('convertedLeads');
-          var querySnapshot = await collection.where('VisitID', isEqualTo: visitID).get();
-          for (var doc in querySnapshot.docs) {
-            await doc.reference.update({
-              'ConsentStatusMsg': consentStatusMsg,
-              'consentHandle': consentHandle,
-              // 'consentHandle': prefs.getString('consentHandle').toString(),
-            });
-          }
-
-          // Access pdfBase64
-          var data = response1Data['data'];
-          if (data != null && data.isNotEmpty) {
-            var firstDataItem = data[0];
-            var dataDetail = firstDataItem['dataDetail'];
-            pdfBase64 = dataDetail != null ? dataDetail['pdfbase64'] : null;
-
-            if (pdfBase64 != null) {
-              // Step 3: Convert the base64 to PDF file
-              File pdfFile = await createPdfFromBase64(pdfBase64, 'consent_document.pdf');
-              print('PDF file created at: ${pdfFile.path}');
-
-              // Step 4: Upload the PDF file to DMS
-              await uploadPdfFileToDMS(pdfFile);
-              SmartDialog.dismiss();
-            } else {
-              print('pdfbase64 is null');
-            }
-          } else {
-            print('Data is null or empty');
-          }
-          SmartDialog.dismiss();
-          _showAlertConsent(context, pdfBase64);
-        } else {
-          print(response1.statusMessage);
-        }
-      } else {
-        print(response.statusMessage);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // Future<void> getConsentStatus() async {
+  //   SmartDialog.showLoading(msg: 'Loading...');
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //   };
+  //   var data = {
+  //     "fiuID": ApiUrls().fiuID,
+  //     "redirection_key": ApiUrls().redirection_key,
+  //     "userId": ApiUrls().userId,
+  //   };
+  //   var dio = Dio();
+  //   try {
+  //     var response = await dio.request(
+  //       ApiUrls().authAccAggregatorUAT,
+  //       options: Options(
+  //         method: 'POST',
+  //         headers: headers,
+  //       ),
+  //       data: data,
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       var responseData = response.data;
+  //       var token = responseData['token'];
+  //       var sessionID = responseData['sessionId'];
+  //
+  //       var headers = {
+  //         'Authorization': 'Bearer ${token ?? ""}',
+  //         'Content-Type': 'application/json',
+  //       };
+  //       var data = json.encode({
+  //         // "consentHandle": prefs.getString('consentHandle').toString(),
+  //         "consentHandle": consentHandle,
+  //         "fiuID": "MUTHOOTHF_UAT",
+  //         "sessionId": sessionID,
+  //       });
+  //
+  //       var response1 = await dio.request(
+  //         ApiUrls().getConsentStatus,
+  //         options: Options(
+  //           method: 'POST',
+  //           headers: headers,
+  //         ),
+  //         data: data,
+  //       );
+  //
+  //       if (response1.statusCode == 200) {
+  //
+  //         var response1Data = response1.data;
+  //         print(response1Data);
+  //         var consentStatusNotification =
+  //             response1Data['consentStatusNotification'] ?? response1Data['ConsentStatusNotification'];
+  //         var consentStatus = consentStatusNotification != null ? consentStatusNotification['consentStatus'] : null;
+  //
+  //         setState(() {
+  //           consentStatusMsg = consentStatus ?? "Unknown status";
+  //         });
+  //
+  //         // Fetch documents in Firestore based on VisitID
+  //         var collection = FirebaseFirestore.instance.collection('convertedLeads');
+  //         var querySnapshot = await collection.where('VisitID', isEqualTo: visitID).get();
+  //         for (var doc in querySnapshot.docs) {
+  //           await doc.reference.update({
+  //             'ConsentStatusMsg': consentStatusMsg,
+  //             'consentHandle': consentHandle,
+  //             // 'consentHandle': prefs.getString('consentHandle').toString(),
+  //           });
+  //         }
+  //
+  //         // Access pdfBase64
+  //         var data = response1Data['data'];
+  //         if (data != null && data.isNotEmpty) {
+  //           var firstDataItem = data[0];
+  //           var dataDetail = firstDataItem['dataDetail'];
+  //           pdfBase64 = dataDetail != null ? dataDetail['pdfbase64'] : null;
+  //
+  //           if (pdfBase64 != null) {
+  //             // Step 3: Convert the base64 to PDF file
+  //             File pdfFile = await createPdfFromBase64(pdfBase64, 'consent_document.pdf');
+  //             print('PDF file created at: ${pdfFile.path}');
+  //
+  //             // Step 4: Upload the PDF file to DMS
+  //             await uploadPdfFileToDMS(pdfFile);
+  //             SmartDialog.dismiss();
+  //           } else {
+  //             print('pdfbase64 is null');
+  //           }
+  //         } else {
+  //           print('Data is null or empty');
+  //         }
+  //         SmartDialog.dismiss();
+  //         _showAlertConsent(context, pdfBase64);
+  //       } else {
+  //         print(response1.statusMessage);
+  //       }
+  //     } else {
+  //       print(response.statusMessage);
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
   String? accessToken;
   Future<void> uploadPdfFileToDMS(File pdfFile) async {
     try {
@@ -1438,178 +1438,178 @@ String? SalutaionID;
                             ),
                            // Account Aggregator
 
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: consentAccountAgregator,
-                                  activeColor: StyleData.appBarColor,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      consentAccountAgregator = value!;
-                                    });
-                                  },
-                                ),
-                                Text(
-                                  'Consent for Account Aggregator',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            Visibility(
-                              visible:  consentAccountAgregator == true ,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Radio(
-                                    value: 'Send SMS',
-                                    groupValue: selectedAccountAggregator, // Ensure this is the same variable
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedAccountAggregator = value; // Update selectedProductValue
-                                      });
-                                    },
-                                    activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
-                                  ),
-                                  Text(
-                                    'Send SMS',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Visibility(
-                               visible: selectedAccountAggregator == "Send SMS",
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children : [
-                                    SizedBox(
-                                        width : width * 0.05
-                                    ),
-                                    Visibility(
-                                        visible : (selectedAccountAggregator == "Send SMS" && (consentStatusMsg == "Pending" || consentStatusMsg == null) ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: TextButton.icon(
-                                            onPressed: () {
-                                              callAARedirectionLink();
-                                            },
-                                            icon: Icon(Icons.sms, color: Colors.grey),
-                                            label: Text(
-                                              'Send SMS',
-                                              style: TextStyle(color: StyleData.appBarColor2),
-                                            ),
-                                            style: TextButton.styleFrom(
-                                              backgroundColor: Colors.grey[300],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible : consentHandle != null || consentStatusMsg != null,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Visibility(
-                                          visible: consentAccountAgregator,
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: TextButton.icon(
-                                              onPressed: () {
-                                                getConsentStatus();
-                                              },
-                                              icon: Icon(Icons.output_outlined, color: Colors.grey),
-                                              label: Text(
-                                                'Consent Status',
-                                                style: TextStyle(color: StyleData.appBarColor2),
-                                              ),
-                                              style: TextButton.styleFrom(
-                                                backgroundColor: Colors.grey[300],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ]
-                              ),
-                            ),
-                            Visibility(
-                              visible:  consentAccountAgregator == true,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Radio(
-                                    value: 'Reason for Not Sending SMS',
-                                    groupValue: selectedAccountAggregator, // Same variable
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedAccountAggregator = value; // Update selectedProductValue
-                                      });
-                                    },
-                                    activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
-                                  ),
-                                  Text(
-                                    'Reason for Not Sending SMS',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Visibility(
-                              visible : selectedAccountAggregator == "Reason for Not Sending SMS",
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(width: width * 0.05),
-                                  Expanded(
-                                    child: DropdownButtonFormField2<String>(
-                                      value: _selectedReason,
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _selectedReason = newValue;
-                                        });
-                                      },
-                                      validator: (String? value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Select Reason';
-                                        }
-                                        return null;
-                                      },
-                                      items: _reasonNoSMS.map((String item) {
-                                        return DropdownMenuItem(
-                                          value: item,
-                                          child: Text(
-                                            item.toString(),
-                                            style: const TextStyle(
-                                              color: Color(0xFF393939),
-                                              fontSize: 15,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      style: const TextStyle(
-                                        color: Color(0xFF393939),
-                                        fontSize: 15,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      decoration: InputDecoration(
-                                        labelText: 'Reason *',
-                                        hintText: 'Select an option',
-                                        focusedBorder: focus,
-                                        enabledBorder: enb,
-                                        filled: true,
-                                        fillColor: StyleData.textFieldColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Checkbox(
+                            //       value: consentAccountAgregator,
+                            //       activeColor: StyleData.appBarColor,
+                            //       onChanged: (value) {
+                            //         setState(() {
+                            //           consentAccountAgregator = value!;
+                            //         });
+                            //       },
+                            //     ),
+                            //     Text(
+                            //       'Consent for Account Aggregator',
+                            //       style: TextStyle(fontSize: 18),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Visibility(
+                            //   visible:  consentAccountAgregator == true ,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     children: [
+                            //       Radio(
+                            //         value: 'Send SMS',
+                            //         groupValue: selectedAccountAggregator, // Ensure this is the same variable
+                            //         onChanged: (value) {
+                            //           setState(() {
+                            //             selectedAccountAggregator = value; // Update selectedProductValue
+                            //           });
+                            //         },
+                            //         activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
+                            //       ),
+                            //       Text(
+                            //         'Send SMS',
+                            //         style: TextStyle(fontSize: 16),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Visibility(
+                            //    visible: selectedAccountAggregator == "Send SMS",
+                            //   child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.start,
+                            //       children : [
+                            //         SizedBox(
+                            //             width : width * 0.05
+                            //         ),
+                            //         Visibility(
+                            //             visible : (selectedAccountAggregator == "Send SMS" && (consentStatusMsg == "Pending" || consentStatusMsg == null) ),
+                            //           child: Padding(
+                            //             padding: const EdgeInsets.all(8.0),
+                            //             child: Align(
+                            //               alignment: Alignment.centerRight,
+                            //               child: TextButton.icon(
+                            //                 onPressed: () {
+                            //                   callAARedirectionLink();
+                            //                 },
+                            //                 icon: Icon(Icons.sms, color: Colors.grey),
+                            //                 label: Text(
+                            //                   'Send SMS',
+                            //                   style: TextStyle(color: StyleData.appBarColor2),
+                            //                 ),
+                            //                 style: TextButton.styleFrom(
+                            //                   backgroundColor: Colors.grey[300],
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //         Visibility(
+                            //           visible : consentHandle != null || consentStatusMsg != null,
+                            //           child: Padding(
+                            //             padding: const EdgeInsets.all(8.0),
+                            //             child: Visibility(
+                            //               visible: consentAccountAgregator,
+                            //               child: Align(
+                            //                 alignment: Alignment.centerRight,
+                            //                 child: TextButton.icon(
+                            //                   onPressed: () {
+                            //                     getConsentStatus();
+                            //                   },
+                            //                   icon: Icon(Icons.output_outlined, color: Colors.grey),
+                            //                   label: Text(
+                            //                     'Consent Status',
+                            //                     style: TextStyle(color: StyleData.appBarColor2),
+                            //                   ),
+                            //                   style: TextButton.styleFrom(
+                            //                     backgroundColor: Colors.grey[300],
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ]
+                            //   ),
+                            // ),
+                            // Visibility(
+                            //   visible:  consentAccountAgregator == true,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     children: [
+                            //       Radio(
+                            //         value: 'Reason for Not Sending SMS',
+                            //         groupValue: selectedAccountAggregator, // Same variable
+                            //         onChanged: (value) {
+                            //           setState(() {
+                            //             selectedAccountAggregator = value; // Update selectedProductValue
+                            //           });
+                            //         },
+                            //         activeColor: StyleData.appBarColor, // Use your StyleData.appBarColor
+                            //       ),
+                            //       Text(
+                            //         'Reason for Not Sending SMS',
+                            //         style: TextStyle(fontSize: 18),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            // Visibility(
+                            //   visible : selectedAccountAggregator == "Reason for Not Sending SMS",
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     children: [
+                            //       SizedBox(width: width * 0.05),
+                            //       Expanded(
+                            //         child: DropdownButtonFormField2<String>(
+                            //           value: _selectedReason,
+                            //           onChanged: (String? newValue) {
+                            //             setState(() {
+                            //               _selectedReason = newValue;
+                            //             });
+                            //           },
+                            //           validator: (String? value) {
+                            //             if (value == null || value.isEmpty) {
+                            //               return 'Select Reason';
+                            //             }
+                            //             return null;
+                            //           },
+                            //           items: _reasonNoSMS.map((String item) {
+                            //             return DropdownMenuItem(
+                            //               value: item,
+                            //               child: Text(
+                            //                 item.toString(),
+                            //                 style: const TextStyle(
+                            //                   color: Color(0xFF393939),
+                            //                   fontSize: 15,
+                            //                   fontFamily: 'Poppins',
+                            //                   fontWeight: FontWeight.w400,
+                            //                 ),
+                            //               ),
+                            //             );
+                            //           }).toList(),
+                            //           style: const TextStyle(
+                            //             color: Color(0xFF393939),
+                            //             fontSize: 15,
+                            //             fontFamily: 'Poppins',
+                            //             fontWeight: FontWeight.w400,
+                            //           ),
+                            //           decoration: InputDecoration(
+                            //             labelText: 'Reason *',
+                            //             hintText: 'Select an option',
+                            //             focusedBorder: focus,
+                            //             enabledBorder: enb,
+                            //             filled: true,
+                            //             fillColor: StyleData.textFieldColor,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
 
 
                             SizedBox(height: height * 0.03),
@@ -3223,26 +3223,12 @@ String? SalutaionID;
                                 {
                                   CustomSnackBar.errorSnackBarQ("Age should fall between 18 and 70 years old.", context);
                                 }
-                                if (consentAccountAgregator == true) {
-                                  if (selectedAccountAggregator == "Send SMS" && consentHandle != null) {
-                                    // This is the valid case, proceed to next step
-                                    setState(() {
-                                      isClickNext = true;
-                                    });
-                                    updateDataToFirestore();
-                                  } else if (selectedAccountAggregator == "Reason for Not Sending SMS" && _selectedReason == null) {
-                                    // Invalid case for "Reason for Not Sending SMS" without a selected reason
-                                    CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
-                                  } else {
-                                    // Other invalid case for "Send SMS" without consentHandle or other conditions
-                                    CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
-                                  }
-                                } else {
-                                  // Handle the case where consentAccountAgregator == false
-                                  CustomSnackBar.errorSnackBarQ("Consent for Account Aggregator", context);
+                                    else {
+                                  setState(() {
+                                    isClickNext = true;
+                                  });
+                                  updateDataToFirestore();
                                 }
-
-
                               }else{
                                 CustomSnackBar.errorSnackBarQ("Please enter valid email", context);
                               }
@@ -3286,7 +3272,7 @@ String? SalutaionID;
                       onPressed: () {
                         // DateFormat formatter = DateFormat('dd-MM-yyyy');
                         // DateTime dob = formatter.parse(_dateOfBirth.text);
-                        getConsentStatus();
+                     //   getConsentStatus();
                         if(isLeadsDataSaved == true || isClickNext == true )
                         {
                           if(aadharCardNumber.text.length == 12 && panCardNumber.text.length == 10 && isValidPanCard(panCardNumber.text) ) {
