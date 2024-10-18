@@ -1218,7 +1218,7 @@ async {
                                         color: Color(0xFF393939), // Changed text color to match second dropdown
                                       ),
                                     ),
-                                    items: _leadDSAList.map((DropDownData item) {
+                                    items: leadDSAList.map((DropDownData item) {
                                       return DropdownMenuItem(
                                         value: item.title,
                                         child: Text(
@@ -1441,7 +1441,7 @@ async {
                                         color: Color(0xFF393939), // Changed text color to match second dropdown
                                       ),
                                     ),
-                                    items: _leadConnectorList
+                                    items: leadConnectorList
                                         .map((DropDownData item){
                                       return DropdownMenuItem(
                                         value: item.title,
@@ -1672,7 +1672,7 @@ async {
                                       }
                                       return null;
                                     },
-                                    items: _leadCampaignList
+                                    items: leadCampaignList
                                         .map((DropDownData item){
                                       return DropdownMenuItem(
                                         value: item.title,
@@ -2012,7 +2012,7 @@ async {
                                                       ),
                                                       maxHeight: 200,
                                                     ) ,
-                                                    items: _salutationList
+                                                    items: salList
                                                         .map((DropDownData item){
                                                       return DropdownMenuItem(
                                                         value: item.title,

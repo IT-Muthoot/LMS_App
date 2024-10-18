@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../Model/NotificationData.dart';
+import '../Model/Response/DropDownModel.dart';
 import 'LoginPageView.dart';
 import 'ApplicantDetailsView.dart';
 import 'NewLeadPageView.dart';
@@ -245,6 +246,85 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     }
   }
 
+  getDropDownDSAData() async {
+    if(leadDSAList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("dsaName")
+          .doc('dsaName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['dsaName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadDSAList.clear(); // Clear the existing list
+        leadDSAList.addAll(tempList); // Add new items to the existing list
+
+      });
+    }else{
+      setState(() {// Add new items to the existing list
+        isFetching = false;
+      });
+    }
+
+    if(leadConnectorList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("connectorName")
+          .doc('connectorName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['connectorName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadConnectorList.clear(); // Clear the existing list
+        leadConnectorList.addAll(tempList); // Add new items to the existing list
+        isFetching = false;
+      });
+    }
+
+
+    if(leadCampaignList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("campaignName")
+          .doc('campaignName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['campaignName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadCampaignList.clear(); // Clear the existing list
+        leadCampaignList.addAll(tempList); // Add new items to the existing list
+      });
+    }
+
+    if(salList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("salutation")
+          .doc('salutation')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['salutation']) {
+        tempList.add(DropDownData(element['id'], element['title']));
+      }
+
+      setState(() {
+        salList.clear(); // Clear the existing list
+        salList.addAll(tempList); // Add new items to the existing list
+      });
+    }
+  }
+
+  bool isFetching = true;
+
 
 
 
@@ -428,7 +508,15 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                   ),
                 ),
                 SizedBox(height: height * 0.02,),
-                SizedBox(
+                isFetching ? SizedBox(
+                    height: 300,
+                    child: Center(
+                        child: CircularProgressIndicator(
+                          color: StyleData.buttonColor,
+                          strokeWidth: 5.0,
+                        )
+                    )
+                ) : SizedBox(
                   width: width * 2,
                   child:Padding(
                     padding: const EdgeInsets.all(8.0),
