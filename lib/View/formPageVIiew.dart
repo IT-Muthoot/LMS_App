@@ -29,7 +29,10 @@ import 'VisitPageView.dart';
 import 'package:path/path.dart' as path;
 
 
-
+final List<DropDownData> leadDSAList = [];
+final List<DropDownData> leadConnectorList = [];
+final List<DropDownData> leadCampaignList = [];
+final List<DropDownData> salList = [];
 class FormPageView extends StatefulWidget {
   // String? accessToken;
   FormPageView({Key? key,
@@ -149,26 +152,26 @@ class _FormPageViewState extends State<FormPageView> {
   //   });
   // }
 
-  Future<List<DropDownData>> getDropDownConnectorData() async {
-    var document = await FirebaseFirestore.instance
-        .collection("connectorName")
-        .doc('connectorName')
-        .get();
-
-    List<DropDownData> tempList = [];
-    for (var element in document.data()!['connectorName']) {
-      tempList.add(DropDownData(int.parse(element['id']), element['title']));
-    }
-    return tempList;
-  }
-
-  Future<void> _fetchConnectorData() async {
-    List<DropDownData> data = await getDropDownConnectorData();
-    setState(() {
-      _leadConnectorList.clear();
-      _leadConnectorList.addAll(data);
-    });
-  }
+  // Future<List<DropDownData>> getDropDownConnectorData() async {
+  //   var document = await FirebaseFirestore.instance
+  //       .collection("connectorName")
+  //       .doc('connectorName')
+  //       .get();
+  //
+  //   List<DropDownData> tempList = [];
+  //   for (var element in document.data()!['connectorName']) {
+  //     tempList.add(DropDownData(int.parse(element['id']), element['title']));
+  //   }
+  //   return tempList;
+  // }
+  //
+  // Future<void> _fetchConnectorData() async {
+  //   List<DropDownData> data = await getDropDownConnectorData();
+  //   setState(() {
+  //     _leadConnectorList.clear();
+  //     _leadConnectorList.addAll(data);
+  //   });
+  // }
 
   String? _selectedConnector;
   final List<DropDownData> _leadConnectorList = [];
@@ -750,13 +753,84 @@ async {
     print("Stored Access token");
     print(token);
   }
+  // Future<void> _fetchData() async {
+  //   List<DropDownData> data = await getDropDownDSAData();
+  //   setState(() {
+  //     // Creating a new list to avoid modifying the final list directly
+  //     _leadDSAList.clear();
+  //     _leadDSAList.addAll(data);
+  //   });
+  // }
+
+
+  getDropDownConnectorData() async {
+    if(leadConnectorList.isEmpty){
+      var document = await FirebaseFirestore.instance
+          .collection("connectorName")
+          .doc('connectorName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['connectorName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+
+      setState(() {
+        leadConnectorList.clear(); // Clear the existing list
+        leadConnectorList.addAll(tempList); // Add new items to the existing list
+      });
+    }
+
+  }
+
+  // getDropDownDSAData() async {
+  //   if(leadDSAList.isEmpty){
+  //     var document = await FirebaseFirestore.instance
+  //         .collection("dsaName")
+  //         .doc('dsaName')
+  //         .get();
+  //
+  //     List<DropDownData> tempList = [];
+  //     for (var element in document.data()!['dsaName']) {
+  //       tempList.add(DropDownData(int.parse(element['id']), element['title']));
+  //     }
+  //
+  //     setState(() {
+  //       leadDSAList.clear(); // Clear the existing list
+  //       leadDSAList.addAll(tempList); // Add new items to the existing list
+  //     });
+  //   }
+  //
+  // }
+
+
   Future<void> _fetchData() async {
-    List<DropDownData> data = await getDropDownDSAData();
-    setState(() {
-      // Creating a new list to avoid modifying the final list directly
-      _leadDSAList.clear();
-      _leadDSAList.addAll(data);
-    });
+    // List<DropDownData> data = await getDropDownDSAData();
+    // setState(() {
+    //   // Creating a new list to avoid modifying the final list directly
+    //   _leadDSAList.clear();
+    //   _leadDSAList.addAll(data);
+    // });
+
+    try{
+      var document = await FirebaseFirestore.instance
+          .collection("dsaName")
+          .doc('dsaName')
+          .get();
+
+      List<DropDownData> tempList = [];
+      for (var element in document.data()!['dsaName']) {
+        tempList.add(DropDownData(int.parse(element['id']), element['title']));
+      }
+      print("DATA ----");
+      setState(() {
+        leadDSAList.clear(); // Clear the existing list
+        leadDSAList.addAll(tempList); // Add new items to the existing list
+      });
+    }catch(e){
+      print(e);
+
+    }
   }
 
 @override
@@ -764,7 +838,7 @@ async {
     // TODO: implement initState
   //getDropDownDSAData();
   _fetchData();
-  _fetchConnectorData();
+ // _fetchConnectorData();
   getDropDownSalutationData();
   getDropDownCampaignData();
   getToken();
