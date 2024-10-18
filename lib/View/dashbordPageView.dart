@@ -245,7 +245,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
       });
     }
   }
-
+  bool isFetching = true;
   getDropDownDSAData() async {
     if(leadDSAList.isEmpty){
       var document = await FirebaseFirestore.instance
@@ -323,7 +323,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     }
   }
 
-  bool isFetching = true;
+
 
 
 
@@ -335,6 +335,7 @@ class _DashboardPageViewState extends State<DashboardPageView> {
     getUserData();
     fetchdata();
     fetchSaveddata();
+    getDropDownDSAData();
     // getdata();
     super.initState();
     Future.delayed(Duration(seconds: 2), () {
@@ -516,202 +517,208 @@ class _DashboardPageViewState extends State<DashboardPageView> {
                           strokeWidth: 5.0,
                         )
                     )
-                ) : SizedBox(
-                  width: width * 2,
-                  child:Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                ) :
+                    Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FormPageView(),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                color:  Colors.white,
-                                child: Container(
-                                  width: width * 0.4,
-                                  height: height * 0.15,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 10,
+                        SizedBox(
+                          width: width * 2,
+                          child:Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FormPageView(),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
                                         ),
-                                        SizedBox(
-                                          height: 60,
-                                          child: Image.asset(
-                                            'assets/images/Visit.png',
-                                            width: 60,
-                                            height: 40,
+                                        color:  Colors.white,
+                                        child: Container(
+                                          width: width * 0.4,
+                                          height: height * 0.15,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                SizedBox(
+                                                  height: 60,
+                                                  child: Image.asset(
+                                                    'assets/images/Visit.png',
+                                                    width: 60,
+                                                    height: 40,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  'New Visit',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w300,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'New Visit',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w300,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.015,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ApplicantDetailsView(),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 5,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                color:  Colors.white,
-                                child: Container(
-                                  width: width * 0.4,
-                                  height: height * 0.15,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          height: 60,
-                                          child: Image.asset(
-                                            'assets/images/leads1.png',
-                                            width: 40,
-                                            height: 40,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'All Leads',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w300,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                    SizedBox(
+                                      width: width * 0.015,
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ApplicantDetailsView(),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        color:  Colors.white,
+                                        child: Container(
+                                          width: width * 0.4,
+                                          height: height * 0.15,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                SizedBox(
+                                                  height: 60,
+                                                  child: Image.asset(
+                                                    'assets/images/leads1.png',
+                                                    width: 40,
+                                                    height: 40,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  'All Leads',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w300,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
+                        ),
+                        SizedBox(height: height * 0.015,),
+                        SizedBox(
+                          width: width * 2,
+                          child:Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => DSAConnectorCreationPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(15.0),
+                                        ),
+                                        color:  Colors.white,
+                                        child: Container(
+                                          width: width * 0.4,
+                                          height: height * 0.15,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                SizedBox(
+                                                  height: 60,
+                                                  child: Image.asset(
+                                                    'assets/images/connector.png',
+                                                    width: 60,
+                                                    height: 40,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                  'Add Connector',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w300,
+                                                    // fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.015,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ),
-                SizedBox(height: height * 0.015,),
-                SizedBox(
-                  width: width * 2,
-                  child:Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DSAConnectorCreationPage(),
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                color:  Colors.white,
-                                child: Container(
-                                  width: width * 0.4,
-                                  height: height * 0.15,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          height: 60,
-                                          child: Image.asset(
-                                            'assets/images/connector.png',
-                                            width: 60,
-                                            height: 40,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'Add Connector',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w300,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: width * 0.015,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+
                 SizedBox(height: height * 0.015,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
