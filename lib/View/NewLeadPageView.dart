@@ -547,14 +547,17 @@ String? SalutaionID;
       'Content-Type': 'application/json',
     };
     var data = {
-      "fiuID": ApiUrls().fiuID,
-      "redirection_key": ApiUrls().redirection_key,
-      "userId": ApiUrls().userId,
+      // "fiuID": ApiUrls().fiuID,
+      // "redirection_key": ApiUrls().redirection_key,
+      // "userId": ApiUrls().userId,
+      "fiuID": ApiUrls().fiuIDProd,
+      "redirection_key": ApiUrls().redirection_key_Prod,
+      "userId": ApiUrls().userIdProd,
     };
     var dio = Dio();
     try {
       var response = await dio.request(
-        ApiUrls().authAccAggregatorUAT,
+        ApiUrls().authAccAggregatorProd,
         options: Options(
           method: 'POST',
           headers: headers,
@@ -572,20 +575,35 @@ String? SalutaionID;
           'Content-Type': 'application/json'
         };
         var data = json.encode({
-          "clienttrnxid": ApiUrls().clienttrnxid,
-          "fiuID": ApiUrls().fiuID,
-          "userId": ApiUrls().userId,
-          "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-          "aaCustomerMobile": customerNumber.text,
-         //   "aaCustomerMobile": "8971560421",
-          "sessionId": ApiUrls().sessionId,
+         //  "clienttrnxid": ApiUrls().clienttrnxid,
+         //  "fiuID": ApiUrls().fiuID,
+         //  "userId": ApiUrls().userId,
+         //  "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
+         //  "aaCustomerMobile": customerNumber.text,
+         // //   "aaCustomerMobile": "8971560421",
+         //  "sessionId": ApiUrls().sessionId,
+         //  "Integrated_trigger_sms_email": "Y",
+         //  "fipid": "fipuat@citybank",
+         //  "useCaseid": "226"
+          "userId": ApiUrls().userIdProd,
+          "useCaseid": "105",
+          "sessionId": ApiUrls().sessionIdProd,
+          "redirect": null,
           "Integrated_trigger_sms_email": "Y",
-          "fipid": "fipuat@citybank",
-          "useCaseid": "226"
+          "fiuID": ApiUrls().fiuIDProd,
+          "fipid":"",
+          "clienttrnxid": ApiUrls().clienttrnxidProd,
+          "addfip": null,
+        //  "aaCustomerMobile": customerNumber.text,
+          "aaCustomerMobile": "8921051758",
+      //    "aaCustomerHandleId": ApiUrls().aaCustomerHandleIdProd,
+          "aaCustomerHandleId": "8921051758@CAMSAA",
+          "pan": ""
         });
+        print(data);
         var dio = Dio();
         var response1 = await dio.request(
-          ApiUrls().aaRedirectionUAT,
+          ApiUrls().aaRedirectionProd,
           options: Options(
             method: 'POST',
             headers: headers,
@@ -710,14 +728,14 @@ String? SalutaionID;
       'Content-Type': 'application/json',
     };
     var data = {
-      "fiuID": ApiUrls().fiuID,
-      "redirection_key": ApiUrls().redirection_key,
-      "userId": ApiUrls().userId,
+      "fiuID": ApiUrls().fiuIDProd,
+      "redirection_key": ApiUrls().redirection_key_Prod,
+      "userId": ApiUrls().userIdProd,
     };
     var dio = Dio();
     try {
       var response = await dio.request(
-        ApiUrls().authAccAggregatorUAT,
+        ApiUrls().authAccAggregatorProd,
         options: Options(
           method: 'POST',
           headers: headers,
@@ -738,12 +756,12 @@ String? SalutaionID;
         var data = json.encode({
           // "consentHandle": prefs.getString('consentHandle').toString(),
           "consentHandle": consentHandle,
-          "fiuID": "MUTHOOTHF_UAT",
+          "fiuID": ApiUrls().fiuIDProd,
           "sessionId": sessionID,
         });
 
         var response1 = await dio.request(
-          ApiUrls().getConsentStatus,
+          ApiUrls().getConsentStatusProd,
           options: Options(
             method: 'POST',
             headers: headers,
@@ -799,9 +817,11 @@ String? SalutaionID;
             print('Data is null or empty');
           }
         } else {
+          CustomSnackBar.errorSnackBarQ("Something went wrong,Please try again", context);
           print(response1.statusMessage);
         }
       } else {
+        CustomSnackBar.errorSnackBarQ("Something went wrong,Please try again", context);
         print(response.statusMessage);
       }
     } catch (e) {

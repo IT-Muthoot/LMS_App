@@ -57,4 +57,18 @@ String userId = "MUTHOOTHF_UAT";
 String clienttrnxid = "04502d0c9c4b400388450c65fd01bd23";
 String aaCustomerHandleId = "8138842672@CAMSAA";
 String sessionId = "46f8d465-8c08-414b-8dcb-744e8c0df6cd";
+
+//Account Aggregator Production URL
+
+String authAccAggregatorProd = "https://services.finduit.in/api/FIU/Authentication";
+String aaRedirectionProd = "https://services.finduit.in/api/FIU/RedirectAA";
+String getConsentStatusProd = "https://services.finduit.in/api/FIData/GetConsentData";
+
+
+  String fiuIDProd = "MUTHOOTHOMEFINANCE";
+  String redirection_key_Prod = "mYRZBfhUVFDTcH";
+  String userIdProd = "MUTHOOTHOMEFINANCE_PROD";
+  String aaCustomerHandleIdProd = "8200434701@CAMSAA";
+  String clienttrnxidProd = "376ba6e8-4243-4faf-b358-d53f61ecc8e0";
+  String sessionIdProd = "f76edc37-f207-469d-a4ae-220d92f54560";
 }
