@@ -809,6 +809,8 @@ String? SalutaionID;
               _showAlertConsent(context, pdfBase64);
               SmartDialog.dismiss();
             } else {
+              SmartDialog.dismiss();
+              _showAlertConsent(context, pdfBase64);
               print('pdfbase64 is null');
             }
           } else {
@@ -3613,12 +3615,12 @@ String? SalutaionID;
           backgroundColor: Colors.white,
           elevation: 0, // No shadow
           content: Container(
-            height: pdfBase64 != null ? 200 : 100,
+            height: pdfBase64 != null ? 200 :(pdfBase64 == null && consentStatusMsg == "ACTIVE") ? 110 : 100,
             width: 150,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (pdfBase64 != null)
+                if (pdfBase64 != null )
                   GestureDetector(
                     onTap: () {
                       _showPdf(context, pdfBase64);
@@ -3638,7 +3640,10 @@ String? SalutaionID;
                 SizedBox(height: 8),
                 Text('Consent Status', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
                 Text(consentStatusMsg ?? "No status available", textAlign: TextAlign.center, style: TextStyle(color: StyleData.appBarColor2, fontWeight: FontWeight.bold)),
-                SizedBox(height: 15),
+                SizedBox(height: 8),
+                if (pdfBase64 == null && consentStatusMsg == "ACTIVE")
+                  Text('No PDF found', textAlign: TextAlign.center, style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
                 SizedBox(
                   height: 25,
                   child: ElevatedButton(
@@ -3654,6 +3659,8 @@ String? SalutaionID;
                     child: Text('OK', style: TextStyle(color: Colors.white)),
                   ),
                 ),
+              //  SizedBox(height: 8),
+
               ],
             ),
           ),
