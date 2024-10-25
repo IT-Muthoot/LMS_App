@@ -35,7 +35,7 @@ String leadCreationProduction = "https://muthootltd.my.salesforce.com/services/a
   String clientIdUAT = "3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ";
   String clientSecretUAT = "ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CD";
   String userNameUAT = "itkrishnaprasad@muthootgroup.com";
-  String passwordUAT = "Karthikrishna@123yEL7T0NoeWfMSqvdRifQW5Js3";
+  String passwordUAT = "Krishna@19Kl401vZLHH8O5NHKUmJ9SE1";
 
  // Production Token Credentials
   String clientIdProduction = "3MVG9WZIyUMp1ZfoWDelgr4puVA8Cbw2py9NcKnfiPbsdxV6CU1HXQssNTT2XpRFqPmQ8OX.F4ZbP_ziL2rmf";

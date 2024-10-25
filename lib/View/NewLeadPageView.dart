@@ -595,7 +595,8 @@ String? SalutaionID;
           "clienttrnxid": ApiUrls().clienttrnxidProd,
           "addfip": null,
         //  "aaCustomerMobile": customerNumber.text,
-          "aaCustomerMobile": "8921051758",
+         "aaCustomerMobile": "8921051758",
+          // "aaCustomerMobile": "8971560421",
       //    "aaCustomerHandleId": ApiUrls().aaCustomerHandleIdProd,
           "aaCustomerHandleId": "8921051758@CAMSAA",
           "pan": ""
@@ -904,7 +905,7 @@ String? SalutaionID;
             .collection("convertedLeads")
             .doc(snapshot.docs[0].id)
             .set({
-          'Bank_Statement': data["docId"].toString(),
+          'Account_Aggregator_Bank_Statement': data["docId"].toString(),
         }, SetOptions(merge: true));
 
       } else {
@@ -1156,7 +1157,7 @@ String? SalutaionID;
         'ConsentStatus': consentStatusMsg ?? "",
         'consentHandle': consentHandle ?? "",
         'selectedAAReason': _selectedReason ?? "",
-        'Bank_Statement':consentDocument ?? "",
+        'Account_Aggregator_Bank_Statement':consentDocument ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
@@ -1263,7 +1264,7 @@ String? SalutaionID;
         // 'ConsentStatus': consentStatusMsg ?? "",
         'consentHandle': consentHandle ?? "",
         'selectedAccountAggregator': selectedAccountAggregator ?? "",
-        'Bank_Statement':consentDocument ?? "",
+        'Account_Aggregator_Bank_Statement':consentDocument ?? "",
         'VisitID': visitID ?? "",
         'LeadID': "-",
         'VerificationStatus': "Pending",
