@@ -207,7 +207,7 @@ class _NewLeadPageViewState extends State<NewLeadPageView> {
 
   final List<String> _reasonNoSMS= [
     'Bank Not Listed',
-    'Exception/Approval From NSM',
+    'Exception/Approval taken From NSM',
     'Customer has keypad mobile'
   ];
   String? _selectedReason;
@@ -594,11 +594,12 @@ String? SalutaionID;
           "fipid":"",
           "clienttrnxid": ApiUrls().clienttrnxidProd,
           "addfip": null,
-        //  "aaCustomerMobile": customerNumber.text,
-         "aaCustomerMobile": "8921051758",
-          // "aaCustomerMobile": "8971560421",
+         "aaCustomerMobile": customerNumber.text,
+       //  "aaCustomerMobile": "8921051758",
+        //   "aaCustomerMobile": "8971560421",
       //    "aaCustomerHandleId": ApiUrls().aaCustomerHandleIdProd,
-          "aaCustomerHandleId": "8921051758@CAMSAA",
+        //  "aaCustomerHandleId": "8921051758@CAMSAA",
+          "aaCustomerHandleId": "${customerNumber.text}@CAMSAA",
           "pan": ""
         });
         print(data);
@@ -1615,7 +1616,10 @@ String? SalutaionID;
                                         return DropdownMenuItem(
                                           value: item,
                                           child: Text(
-                                            item.toString(),
+                                          //  item.toString(),
+                                            item.toString().length > 20
+                                                ? item.substring(0, 26) + '.'
+                                                : item.toString(),
                                             style: const TextStyle(
                                               color: Color(0xFF393939),
                                               fontSize: 15,

@@ -320,14 +320,17 @@ String? technicalDocumentStatus;
       'Content-Type': 'application/json',
     };
     var data = {
-      "fiuID": ApiUrls().fiuID,
-      "redirection_key": ApiUrls().redirection_key,
-      "userId": ApiUrls().userId,
+      // "fiuID": ApiUrls().fiuID,
+      // "redirection_key": ApiUrls().redirection_key,
+      // "userId": ApiUrls().userId,
+      "fiuID": ApiUrls().fiuIDProd,
+      "redirection_key": ApiUrls().redirection_key_Prod,
+      "userId": ApiUrls().userIdProd,
     };
     var dio = Dio();
     try {
       var response = await dio.request(
-        ApiUrls().authAccAggregatorUAT,
+        ApiUrls().authAccAggregatorProd,
         options: Options(
           method: 'POST',
           headers: headers,
@@ -347,13 +350,16 @@ String? technicalDocumentStatus;
         };
         var data = json.encode({
           // "consentHandle": prefs.getString('consentHandle').toString(),
+          // "consentHandle": widget.consentHandle,
+          // "fiuID": "MUTHOOTHF_UAT",
+          // "sessionId": sessionID,
           "consentHandle": widget.consentHandle,
-          "fiuID": "MUTHOOTHF_UAT",
+          "fiuID": ApiUrls().fiuIDProd,
           "sessionId": sessionID,
         });
 
         var response1 = await dio.request(
-          ApiUrls().getConsentStatus,
+          ApiUrls().getConsentStatusProd,
           options: Options(
             method: 'POST',
             headers: headers,
@@ -610,8 +616,8 @@ String? technicalDocumentStatus;
    print(data);
     var dio = Dio();
     var response = await dio.request(
-  //  ApiUrls().leadCreationProduction,
-   ApiUrls().leadCreationUAT,
+   ApiUrls().leadCreationProduction,
+  //  ApiUrls().leadCreationUAT,
       options: Options(
         method: 'POST',
         headers: headers,
@@ -680,10 +686,10 @@ String? technicalDocumentStatus;
     };
     var data = {
       'grant_type': 'password',
-      'client_id': ApiUrls().clientIdUAT,
-      'client_secret': ApiUrls().clientSecretUAT,
-      'username': ApiUrls().userNameUAT,
-      'password': ApiUrls().passwordUAT
+      'client_id': ApiUrls().clientIdProduction,
+      'client_secret': ApiUrls().clientSecretProduction,
+      'username': ApiUrls().userNameProduction,
+      'password': ApiUrls().passwordProduction
       // 'grant_type': 'password',
       // 'client_id': '3MVG9u0ll7_j5qFxuFGIYQ4WguPM0jYjSJXprZRrAAOaI8q0BVKqxCt1dzjQ0tti3JDqnTeGjj1Dk7v9.QwnQ',
       // 'client_secret': 'ED297E5AD800E43B413260D0C4C7CFA7F49D11CE440F2EBC88220064B32D51CDE',
@@ -693,7 +699,7 @@ String? technicalDocumentStatus;
     var dio = Dio();
     var response = await dio.request(
     //   ApiUrls().accessTokenProduction,
-       ApiUrls().accessTokenUAT,
+       ApiUrls().accessTokenProduction,
       options: Options(
         method: 'POST',
         headers: headers,
