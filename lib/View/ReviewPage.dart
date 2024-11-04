@@ -250,6 +250,7 @@ class _ReviewPageState extends State<ReviewPage> {
                           buildDetailRow('Employee Category', docData!['EmployeeCategory'] ?? 'No Details'),
                           buildDetailRow('PAN Number', docData!['panCardNumber'] ?? 'No Details'),
                           buildDetailRow('Aadhar Number', docData!['aadharNumber'] ?? 'No Details'),
+                          buildDetailRow('Aadhar Number', docData!['aadharNumber'] ?? 'No Details'),
                           Divider(),
                         ],
                       ),

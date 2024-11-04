@@ -568,6 +568,7 @@ String? SalutaionID;
       if (response.statusCode == 200) {
         var responseData = response.data; // Already a map
         var token = responseData['token'];
+        var sessionID = responseData['sessionId'];
         print('Token: $token');
 
         var headers = {
@@ -575,31 +576,20 @@ String? SalutaionID;
           'Content-Type': 'application/json'
         };
         var data = json.encode({
-         //  "clienttrnxid": ApiUrls().clienttrnxid,
-         //  "fiuID": ApiUrls().fiuID,
-         //  "userId": ApiUrls().userId,
-         //  "aaCustomerHandleId": ApiUrls().aaCustomerHandleId,
-         //  "aaCustomerMobile": customerNumber.text,
-         // //   "aaCustomerMobile": "8971560421",
-         //  "sessionId": ApiUrls().sessionId,
-         //  "Integrated_trigger_sms_email": "Y",
-         //  "fipid": "fipuat@citybank",
-         //  "useCaseid": "226"
           "userId": ApiUrls().userIdProd,
           "useCaseid": "105",
-          "sessionId": ApiUrls().sessionIdProd,
+        //  "sessionId": ApiUrls().sessionIdProd,
+          "sessionId": sessionID,
           "redirect": null,
           "Integrated_trigger_sms_email": "Y",
           "fiuID": ApiUrls().fiuIDProd,
           "fipid":"",
           "clienttrnxid": ApiUrls().clienttrnxidProd,
           "addfip": null,
-         "aaCustomerMobile": customerNumber.text,
-       //  "aaCustomerMobile": "8921051758",
-        //   "aaCustomerMobile": "8971560421",
-      //    "aaCustomerHandleId": ApiUrls().aaCustomerHandleIdProd,
-        //  "aaCustomerHandleId": "8921051758@CAMSAA",
-          "aaCustomerHandleId": "${customerNumber.text}@CAMSAA",
+          "aaCustomerMobile": customerNumber.text,
+       //     "aaCustomerMobile": "8971560421",
+       //   "aaCustomerHandleId": "8971560421@CAMSAA",
+         "aaCustomerHandleId": "${customerNumber.text}@CAMSAA",
           "pan": ""
         });
         print(data);
