@@ -33,9 +33,9 @@ class DocumentPageView extends StatefulWidget {
   final String visitID;
   final String docId;
   final String leadID;
-  final String consentHandle;
+  final String? consentHandle;
   const DocumentPageView({Key? key,
-    required this.visitID,required this.docId,required this.isNewActivity,required this.isTechChecklist,required this.leadID, required this.isPartiallyVerifiedLeads,required this.consentHandle})
+    required this.visitID,required this.docId,required this.isNewActivity,required this.isTechChecklist,required this.leadID, required this.isPartiallyVerifiedLeads, this.consentHandle})
       : super(key: key);
 
   @override
@@ -259,7 +259,7 @@ String? technicalDocumentStatus;
     ManagerName = docData["ManagerName"] ?? "";
     isKycCheck = docData["ConsentKYC"] ?? "";
     isCrifCheck = docData["ConsentCRIF"] ?? "";
-    isAccountAggragator = docData["ConsentAccountAggregator"] ?? "";
+    isAccountAggragator = docData["ConsentAccountAggregator"];
     AAConsentHandle = docData["consentHandle"] ?? "";
     selectedAAReason = docData["selectedAAReason"] ?? "";
     selectedAccountAggregator = docData["selectedAccountAggregator"] ?? "";

@@ -304,22 +304,42 @@ class _PartiallyVerifiedLeadPageViewState extends State<PartiallyVerifiedLeadPag
                                                   onTap: () {
                                                     Navigator.push(
                                                       context,
+                                                      // MaterialPageRoute(
+                                                      //   builder: (context) => DocumentPageView(
+                                                      //     visitID: searchKEY.text.isEmpty
+                                                      //         ? ListOfLeads[index]['VisitID'] ?? ""
+                                                      //         : searchListOfLeads[index]["VisitID"] ?? "",
+                                                      //     docId: ListOfLeads[index].id,
+                                                      //       consentHandle: ListOfLeads[index]["consentHandle"] ?? "",
+                                                      //     isNewActivity: false,
+                                                      //     isTechChecklist: true,
+                                                      //     leadID: searchKEY.text.isEmpty
+                                                      //         ? ListOfLeads[index]['LeadID'] ?? ""
+                                                      //         : searchListOfLeads[index]["LeadID"] ?? "",
+                                                      //     isPartiallyVerifiedLeads : true
+                                                      //
+                                                      //   ),
+                                                      // ),
                                                       MaterialPageRoute(
                                                         builder: (context) => DocumentPageView(
                                                           visitID: searchKEY.text.isEmpty
                                                               ? ListOfLeads[index]['VisitID'] ?? ""
                                                               : searchListOfLeads[index]["VisitID"] ?? "",
                                                           docId: ListOfLeads[index].id,
-                                                            consentHandle: ListOfLeads[index]["consentHandle"] ?? "",
+                                                          consentHandle: (ListOfLeads[index].data() as Map<String, dynamic>?)?.containsKey("consentHandle") == true
+                                                              ? ListOfLeads[index]["consentHandle"]
+                                                              : "",
                                                           isNewActivity: false,
                                                           isTechChecklist: true,
                                                           leadID: searchKEY.text.isEmpty
                                                               ? ListOfLeads[index]['LeadID'] ?? ""
                                                               : searchListOfLeads[index]["LeadID"] ?? "",
-                                                          isPartiallyVerifiedLeads : true
-
+                                                          isPartiallyVerifiedLeads: true,
                                                         ),
                                                       ),
+
+
+
                                                     );
                                                   },
                                                   child: Container(
